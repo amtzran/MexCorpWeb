@@ -5,7 +5,9 @@ import { AppRoutingModule } from './app-routing.module';
 import { AppComponent } from './app.component';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { AuthModule } from "./modules/auth/auth.module";
-import {CustomerModule} from "./modules/customer/customer.module";
+import { CustomerModule } from "./modules/customer/customer.module";
+import { HTTP_INTERCEPTORS } from "@angular/common/http";
+import { TokenInterceptor } from "./modules/interceptors/interceptor";
 
 
 @NgModule({
@@ -20,7 +22,10 @@ import {CustomerModule} from "./modules/customer/customer.module";
     AuthModule,
     CustomerModule,
   ],
-  providers: [],
+  // Provider for Http Autorization Header
+  providers: [
+    { provide: HTTP_INTERCEPTORS, useClass: TokenInterceptor, multi: true }
+  ],
   bootstrap: [AppComponent]
 })
 export class AppModule { }

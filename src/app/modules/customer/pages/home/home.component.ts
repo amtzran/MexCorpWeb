@@ -1,4 +1,6 @@
 import { Component, OnInit } from '@angular/core';
+import {Router} from "@angular/router";
+import {AuthServiceService} from "../../../auth/services/auth-service.service";
 
 interface RoutesSide {
   name: string,
@@ -14,9 +16,15 @@ interface RoutesSide {
 })
 export class HomeComponent implements OnInit {
 
-  constructor() { }
+  constructor(
+    private router: Router,
+    private authService: AuthServiceService) { }
 
   ngOnInit(): void {
+  }
+
+  get user() {
+    return this.authService.user
   }
 
   menuRoute: RoutesSide[] = [
@@ -31,5 +39,9 @@ export class HomeComponent implements OnInit {
       icon: 'engineering'
     }
   ]
+
+  logout(){
+    this.router.navigateByUrl('/auth/login')
+  }
 
 }

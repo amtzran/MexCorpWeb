@@ -4,7 +4,7 @@
 
 export const environment = {
   production: false,
-  baseUrl: 'https://api-doormex.herokuapp.com/api'
+  baseUrl: 'https://swopyndevs.live/api'
 };
 
 /*
