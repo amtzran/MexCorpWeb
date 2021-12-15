@@ -13,6 +13,8 @@ import {CredentialsComponent} from "../../componenets/credentials/credentials.co
 })
 export class LoginComponent implements OnInit {
 
+  loading: boolean = false;
+
   myform: FormGroup = this.formBuilder.group ({
     email: ['manuel.mdz.rom@swopyn.com', [Validators.required, Validators.email] ],
     password: ['1234567890', [Validators.required, Validators.minLength(6)] ]
@@ -34,7 +36,10 @@ export class LoginComponent implements OnInit {
     this.authService.login(email, password)
       .subscribe(result => {
         if (result.access){
-          this.router.navigate(['./customer'])
+          this.loading = true;
+          setTimeout(() => {
+            this.router.navigate(['./customer'])
+          }, 1000)
         }
         else {
           this.dialog.open(CredentialsComponent, {
