@@ -30,6 +30,12 @@ const routes: Routes = [
     canLoad: [ ValidateTokenGuard ]
   },
   {
+    path: 'groups',
+    loadChildren: () => import('./modules/groups/groups.module').then(m => m.GroupsModule),
+    canActivate: [ ValidateTokenGuard ],
+    canLoad: [ ValidateTokenGuard ]
+  },
+  {
     path: '**',
     redirectTo: 'auth'
   }
