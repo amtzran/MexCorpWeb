@@ -18,7 +18,6 @@ export class AddComponent implements OnInit {
 
   //initialize Doo
   door: Door = {
-    folio: '',
     name: '',
     observations: '',
     door_type: 0,
@@ -35,7 +34,6 @@ export class AddComponent implements OnInit {
 
   // form reactive Values
   myForm: FormGroup = this.formBuilder.group({
-    folio: ['', [Validators.required]],
     name: ['', [Validators.required]],
     observations: ['', []],
     door_type: ['', []],
@@ -66,8 +64,7 @@ export class AddComponent implements OnInit {
         )
         .subscribe(door => {
           this.door = door
-          this.myForm.get('name')?.setValue(door.folio)
-          this.myForm.get('folio')?.setValue(door.name)
+          this.myForm.get('name')?.setValue(door.name)
           this.myForm.get('observations')?.setValue(door.observations)
           this.myForm.get('door_type')?.setValue(door.door_type)
         } )

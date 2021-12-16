@@ -8,7 +8,6 @@ export interface ModelDoor {
 
 export interface Door {
   id?:            number;
-  folio:          string;
   name:           string;
   observations?:  string;
   door_type:      number;

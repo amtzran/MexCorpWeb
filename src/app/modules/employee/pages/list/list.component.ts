@@ -17,7 +17,7 @@ import { ConfirmComponent} from "../../components/confirm/confirm.component";
 })
 export class ListComponent implements OnInit {
 
-  displayedColumns: string[] = ['id', 'name', 'color', 'signature', 'options'];
+  displayedColumns: string[] = ['id', 'name', 'color', 'options'];
   dataSource!: MatTableDataSource<Employee>;
   employeePaginateForm!: FormGroup;
 

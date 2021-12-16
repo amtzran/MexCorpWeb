@@ -24,13 +24,6 @@
           <div fxLayout="row"
                fxLayout.xs="column"
                fxLayoutGap="20px">
-            <mat-form-field fxFlex="100">
-              <mat-label>Folio</mat-label>
-              <input
-                matInput
-                type="text"
-                formControlName="folio">
-            </mat-form-field>
 
             <mat-form-field fxFlex="100">
               <mat-label>Acceso</mat-label>
@@ -40,6 +33,17 @@
                 formControlName="name"
               >
             </mat-form-field>
+
+            <mat-form-field fxFlex="100">
+              <mat-label>Tipo de acceso</mat-label>
+              <mat-select
+                formControlName="door_type">
+                <mat-option *ngFor="let doorType of doorTypes" [value]="doorType.id">
+                  {{ doorType.name}}
+                </mat-option>
+              </mat-select>
+            </mat-form-field>
+
           </div>
 
           <div fxLayout="row"
@@ -53,15 +57,7 @@
                         placeholder="Observaciones de accesos..."></textarea>
             </mat-form-field>
 
-            <mat-form-field fxFlex="100">
-              <mat-label>Tipo de acceso</mat-label>
-              <mat-select
-                formControlName="door_type">
-                <mat-option *ngFor="let doorType of doorTypes" [value]="doorType.id">
-                  {{ doorType.name}}
-                </mat-option>
-              </mat-select>
-            </mat-form-field>
+
 
           </div>
 
