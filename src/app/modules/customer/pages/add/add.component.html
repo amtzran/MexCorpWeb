@@ -126,7 +126,8 @@
           <div fxLayout>
             <button mat-raised-button
                     color="primary"
-                    type="submit">
+                    type="submit"
+                    [disabled]="myForm.invalid">
               <mat-icon>{{ (!customer.id) ? 'save' : 'edit' }}</mat-icon> {{ (!customer.id) ? 'Guardar' : 'Actualizar' }}
             </button>
 

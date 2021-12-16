@@ -65,6 +65,10 @@
           </button>
           <mat-menu #menu="matMenu">
             <button mat-menu-item
+                    [routerLink]="['/door/customer', row.id ]">
+              <mat-icon color="primary">login</mat-icon>Accesos
+            </button>
+            <button mat-menu-item
                     [routerLink]="['/customer', row.id ]">
               <mat-icon color="primary">edit</mat-icon>Editar
             </button>
@@ -92,5 +96,4 @@
                    [showFirstLastButtons] = "true">
     </mat-paginator>
   </div>
-<pre>
-</pre>
+

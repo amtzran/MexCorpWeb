@@ -14,12 +14,20 @@ const routes: Routes = [
   {
     path: 'customer',
     loadChildren: () => import('./modules/customer/customer.module').then(m => m.CustomerModule),
-    canActivate: [ ValidateTokenGuard],
-    canLoad: [ ValidateTokenGuard]
+    canActivate: [ ValidateTokenGuard ],
+    canLoad: [ ValidateTokenGuard ]
   },
   {
     path: 'employee',
     loadChildren: () => import('./modules/employee/employee.module').then(m => m.EmployeeModule),
+    canActivate: [ ValidateTokenGuard ],
+    canLoad: [ ValidateTokenGuard ]
+  },
+  {
+    path: 'door/customer/:customer',
+    loadChildren: () => import('./modules/door/door.module').then(m => m.DoorModule),
+    canActivate: [ ValidateTokenGuard ],
+    canLoad: [ ValidateTokenGuard ]
   },
   {
     path: '**',
