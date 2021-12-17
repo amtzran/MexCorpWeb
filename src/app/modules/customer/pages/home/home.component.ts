@@ -23,7 +23,7 @@ export class HomeComponent implements OnInit {
   ngOnInit(): void {
   }
 
-  get user() {
+ /* get user() {
     return this.authService.user
   }
 
@@ -42,6 +42,6 @@ export class HomeComponent implements OnInit {
 
   logout(){
     this.router.navigateByUrl('/auth/login')
-  }
+  }*/
 
 }

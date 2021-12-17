@@ -31,12 +31,12 @@ export class CustomerServiceService {
   }
 
   // Update Customer
-  updateCustomer(customer: Customer) : Observable<Customer> {
-    return this.http.put<Customer>(`${this.baseUrl}/customers/${customer.id}/`,customer)
+  updateCustomer(customerId: number, customer: Customer) : Observable<Customer> {
+    return this.http.put<Customer>(`${this.baseUrl}/customers/${customerId}/`,customer)
   }
 
   // Get Customer
-  getCustomerById(id: string) : Observable<Customer> {
+  getCustomerById(id: number) : Observable<Customer> {
     return this.http.get<Customer>(`${this.baseUrl}/customers/${id}`)
   }
 

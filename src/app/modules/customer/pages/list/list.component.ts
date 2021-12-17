@@ -8,7 +8,9 @@ import {FormBuilder, FormGroup} from "@angular/forms";
 import {ConfirmComponent} from "../../components/confirm/confirm.component";
 import {MatDialog} from "@angular/material/dialog";
 import {MatSnackBar} from "@angular/material/snack-bar";
-
+import {DialogAddGroupComponent} from "../../../groups/components/dialog-add-group/dialog-add-group.component";
+import {ModalResponse} from "../../../../core/utils/ModalResponse";
+import {CrudComponent} from "../../components/crud/crud.component";
 
 @Component({
   selector: 'app-list',
@@ -19,11 +21,10 @@ export class ListComponent implements AfterViewInit, OnInit {
 
   displayedColumns: string[] = ['id', 'name', 'reason_social', 'rfc', 'phone', 'options'];
   dataSource!: MatTableDataSource<Customer>;
-  customerPaginateForm!: FormGroup;
-
-  @ViewChild(MatPaginator, {static: true}) paginator!: MatPaginator;
-  totalitems: number = 0;
+  totalItems: number = 0;
   pageSize = 10;
+  customerFilterForm!: FormGroup;
+  @ViewChild(MatPaginator, {static: true}) paginator!: MatPaginator;
   @ViewChild(MatSort) sort!: MatSort;
 
   constructor( private customerService: CustomerServiceService,
@@ -33,15 +34,31 @@ export class ListComponent implements AfterViewInit, OnInit {
                ) {}
 
   ngOnInit() {
+    /*Formulario*/
+    this.loadCustomerFilterForm();
+
     // Assign the data to the data source for the table to render
     this.dataSource = new MatTableDataSource();
-    this.loadCustomerPaginateForm();
-    this.getCustomers(this.paginator);
+    this.getCustomersPaginator(this.paginator);
   }
 
   ngAfterViewInit() {
     this.dataSource.paginator = this.paginator;
     this.dataSource.sort = this.sort;
+  }
+
+  /**
+   * Get all customers and load data table.
+   * @param event
+   */
+  getCustomersPaginator(event: any){
+    const paginator: MatPaginator = event;
+    this.customerFilterForm.get('page')?.setValue(paginator.pageIndex + 1);
+    this.customerService.getCustomers(this.customerFilterForm.value)
+      .subscribe(customers => {
+        this.dataSource.data = customers.results
+        this.totalItems = customers.count;
+      } )
   }
 
   applyFilter(event: Event) {
@@ -53,23 +70,6 @@ export class ListComponent implements AfterViewInit, OnInit {
     }
   }
 
-  getCustomers(event: any){
-    const paginator: MatPaginator = event;
-    this.customerPaginateForm.get('page')?.setValue(paginator.pageIndex + 1);
-    this.customerService.getCustomers(this.customerPaginateForm.value)
-      .subscribe(customers => {
-        this.dataSource.data = customers.results
-        this.totalitems = customers.count;
-      } )
-  }
-
-  /*Método que permite iniciar los filtros de rutas*/
-  loadCustomerPaginateForm(): void{
-    this.customerPaginateForm = this.formBuilder.group({
-      page: [],
-      page_size: [this.pageSize]
-    })
-  }
 
   delete(customer: Customer){
     // Show Dialog
@@ -84,13 +84,45 @@ export class ListComponent implements AfterViewInit, OnInit {
           this.customerService.deleteCustomer(customer.id!)
             .subscribe(resp => {
               this.showSnackBar('Registro Eliminado')
-              this.getCustomers(this.paginator);
+              this.getCustomersPaginator(this.paginator);
             })
         }
       })
 
   }
 
+  /**
+   * Open dialog for add and update group.
+   * @param edit
+   * @param idCustomer
+   * @param info
+   */
+  openDialogCustomer(edit: boolean, idCustomer: number | null, info: boolean): void {
+    const dialogRef = this.dialog.open(CrudComponent, {
+      autoFocus: false,
+      disableClose: true,
+      width: '50vw',
+      data: {edit: edit, idCustomer: idCustomer, info: info}
+    });
+    dialogRef.afterClosed().subscribe(res => {
+      if (res === ModalResponse.UPDATE) {
+        this.getCustomersPaginator(this.paginator);
+      }
+    });
+  }
+
+  /*Método que permite iniciar los filtros de rutas*/
+  loadCustomerFilterForm(): void{
+    this.customerFilterForm = this.formBuilder.group({
+      page: [],
+      page_size: [this.pageSize]
+    })
+  }
+
+  /**
+   * Generate new snack bar with custom message.
+   * @param msg
+   */
   showSnackBar(msg: string) {
     this.snackBar.open(msg, 'Cerrar', {
       duration: 3000

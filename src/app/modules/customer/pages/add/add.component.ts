@@ -100,7 +100,7 @@ export class AddComponent implements OnInit {
     if (this.customer.id)
     {
       this.myForm.addControl('id', new FormControl(this.customer.id))
-      this.customerService.updateCustomer(this.myForm.value)
+      this.customerService.updateCustomer(1,this.myForm.value)
         .subscribe(customer => {
           if (customer.id) {
             this.router.navigate(['/customer'])

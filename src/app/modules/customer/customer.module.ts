@@ -9,6 +9,7 @@ import { FlexLayoutModule } from "@angular/flex-layout";
 import { AddComponent } from './pages/add/add.component';
 import { ReactiveFormsModule } from "@angular/forms";
 import { ConfirmComponent } from './components/confirm/confirm.component';
+import { CrudComponent } from './components/crud/crud.component';
 
 
 @NgModule({
@@ -16,7 +17,8 @@ import { ConfirmComponent } from './components/confirm/confirm.component';
     HomeComponent,
     ListComponent,
     AddComponent,
-    ConfirmComponent
+    ConfirmComponent,
+    CrudComponent
   ],
   imports: [
     CommonModule,

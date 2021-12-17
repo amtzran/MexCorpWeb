@@ -12,6 +12,8 @@ const routes: Routes = [
     path: '',
     component: DashboardComponent,
     loadChildren: () => import('./modules/dashboard/dashboard.module').then(m => m.DashboardModule),
+    canActivate: [ ValidateTokenGuard ],
+    canLoad: [ ValidateTokenGuard ]
   },
   /*{
     path: 'dashboard',

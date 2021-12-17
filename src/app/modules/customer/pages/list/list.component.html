@@ -1,7 +1,7 @@
 
   <mat-card  fxLayout fxLayoutAlign="center center">
     <mat-card-title>
-          <mat-card-title>Clientes</mat-card-title>
+          <mat-card-title>Mis Clientes</mat-card-title>
     </mat-card-title>
   </mat-card>
 
@@ -13,9 +13,7 @@
       </mat-form-field>
     </div>
     <div fxFlex="20" fxLayoutAlign="center center">
-      <button mat-button
-              [routerLink]="['/customer/add']"
-              color="primary">
+      <button (click)="openDialogCustomer(true, null, false)" mat-button color="primary">
         <mat-icon>person_add</mat-icon> Nuevo Cliente
       </button>
     </div>
@@ -90,8 +88,8 @@
       </tr>
     </table>
 
-    <mat-paginator #paginator [length]="totalitems"
-                   (page)="getCustomers($event)"
+    <mat-paginator #paginator [length]="totalItems"
+                   (page)="getCustomersPaginator($event)"
                    [pageSize]="pageSize"
                    [showFirstLastButtons] = "true">
     </mat-paginator>
