@@ -1,8 +1,10 @@
+<h4 mat-dialog-title class="title-subsection">{{title}}</h4>
+<mat-divider></mat-divider>
+<br>
+<mat-dialog-content class="mat-typography" [formGroup]="employeeForm">
+
 <mat-card>
-  <mat-card-title>{{ (employee.id) ? 'Editar' : 'Nuevo' }} Empleado</mat-card-title>
-  <mat-card-subtitle>{{ (employee.id) ? employee.name : 'Nuevo +' }}</mat-card-subtitle>
   <mat-card-content>
-    <form (ngSubmit)="save()" [formGroup]="myForm">
 
       <div fxLayout="row" fxLayoutGap="40px" fxLayout.xs="column">
 
@@ -69,36 +71,18 @@
 
           </div>
 
-          <br>
-
-          <div fxLayout>
-            <button mat-raised-button
-                    color="primary"
-                    type="submit"
-                    [disabled]="myForm.invalid">
-              <mat-icon>{{ (!employee.id) ? 'save' : 'edit' }}</mat-icon> {{ (!employee.id) ? 'Guardar' : 'Actualizar' }}
-            </button>
-
-            <span class="spacer"></span>
-
-            <button mat-raised-button
-                    color="warn"
-                    type="button"
-                    *ngIf="employee.id"
-                    (click)="delete()">
-              <mat-icon>delete</mat-icon>Borrar
-            </button>
-          </div>
-
         </div>
 
       </div>
 
-    </form>
   </mat-card-content>
   <mat-card-actions>
   </mat-card-actions>
 </mat-card>
+</mat-dialog-content>
 
-
-
+<mat-dialog-actions fxLayoutAlign="end">
+  <button (click)="close()" mat-stroked-button color="primary" mat-dialog-close="true">Cancelar</button>
+  <button *ngIf="!employee.idEmployee" (click)="addEmployee()" mat-flat-button color="primary" cdkFocusInitial [disabled]="employeeForm.invalid">Guardar Empleado</button>
+  <button *ngIf="employee.idEmployee && employee.edit" (click)="updateEmployee()" mat-flat-button color="primary" cdkFocusInitial>Editar</button>
+</mat-dialog-actions>
