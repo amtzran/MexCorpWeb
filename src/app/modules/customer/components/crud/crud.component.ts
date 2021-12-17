@@ -93,7 +93,10 @@ export class CrudComponent implements OnInit {
       email:[{value:null, disabled:this.customer.info}],
       address: [{value:null, disabled:this.customer.info}],
       city: [{value:null, disabled:this.customer.info}],
-      postal_code: [{value:null, disabled:this.customer.info}]
+      postal_code: [{value:null, disabled:this.customer.info}],
+      contract: [{value: 0, disabled:this.customer.info}],
+      customer_type: [{value: 0, disabled:this.customer.info}],
+      user: [{value: 1 , disabled:this.customer.info}]
     });
   }
 
@@ -122,8 +125,7 @@ export class CrudComponent implements OnInit {
       return
     }
     this._customerService.updateCustomer(this.customer.idCustomer, this.customerForm.value).subscribe(response => {
-      console.log(response);
-      this.showSnackBar('Se ha actualizado correctamente el cliente.');
+      this.showSnackBar(`Se ha actualizado correctamente el cliente: ${response.name}` );
       this.dialogRef.close(ModalResponse.UPDATE);
     })
   }

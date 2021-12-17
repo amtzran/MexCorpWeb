@@ -66,12 +66,13 @@
                     [routerLink]="['/door/customer', row.id ]">
               <mat-icon color="primary">login</mat-icon>Accesos
             </button>
-            <button mat-menu-item
-                    [routerLink]="['/customer', row.id ]">
+            <button mat-menu-item (click)="openDialogCustomer(false, row.id, true)">
+              <mat-icon color="info">visibility</mat-icon>Ver
+            </button>
+            <button mat-menu-item (click)="openDialogCustomer(true, row.id, false)">
               <mat-icon color="primary">edit</mat-icon>Editar
             </button>
-            <button mat-menu-item
-                    (click)="delete(row)">
+            <button mat-menu-item (click)="deleteCustomer(row)">
               <mat-icon color="warn">delete</mat-icon>Eliminar
             </button>
           </mat-menu>

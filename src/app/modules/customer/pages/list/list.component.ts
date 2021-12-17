@@ -70,8 +70,11 @@ export class ListComponent implements AfterViewInit, OnInit {
     }
   }
 
-
-  delete(customer: Customer){
+  /**
+   * Send envía parámetro a mi modal
+   * @param customer
+   */
+  deleteCustomer(customer: Customer){
     // Show Dialog
     const dialog = this.dialog.open(ConfirmComponent, {
       width: '250',
