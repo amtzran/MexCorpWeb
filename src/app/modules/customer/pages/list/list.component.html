@@ -62,10 +62,6 @@
             <mat-icon>more_vert</mat-icon>
           </button>
           <mat-menu #menu="matMenu">
-            <button mat-menu-item
-                    [routerLink]="['/door/customer', row.id ]">
-              <mat-icon color="primary">login</mat-icon>Accesos
-            </button>
             <button mat-menu-item (click)="openDialogCustomer(false, row.id, true)">
               <mat-icon color="info">visibility</mat-icon>Ver
             </button>
@@ -74,6 +70,10 @@
             </button>
             <button mat-menu-item (click)="deleteCustomer(row)">
               <mat-icon color="warn">delete</mat-icon>Eliminar
+            </button>
+            <button mat-menu-item
+                    [routerLink]="['/door/customer', row.id ]">
+              <mat-icon color="primary">login</mat-icon>Accesos
             </button>
           </mat-menu>
 

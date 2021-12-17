@@ -13,9 +13,7 @@
     </mat-form-field>
   </div>
   <div fxFlex="20" fxLayoutAlign="center center">
-    <button mat-button
-            [routerLink]="['/employee/add']"
-            color="primary">
+    <button (click)="openDialogEmployee(true, null, false)" mat-button color="primary">
       <mat-icon>person_add</mat-icon> Nuevo Empleado
     </button>
   </div>
@@ -52,12 +50,14 @@
           <mat-icon>more_vert</mat-icon>
         </button>
         <mat-menu #menu="matMenu">
-          <button mat-menu-item
-                  [routerLink]="['/employee', row.id ]">
+          <button mat-menu-item (click)="openDialogEmployee(false, row.id, true)">
+            <mat-icon color="info">visibility</mat-icon>Ver
+          </button>
+          <button mat-menu-item (click)="openDialogEmployee(true, row.id, false)">
             <mat-icon color="primary">edit</mat-icon>Editar
           </button>
           <button mat-menu-item
-                  (click)="delete(row)">
+                  (click)="deleteEmployee(row)">
             <mat-icon color="warn">delete</mat-icon>Eliminar
           </button>
         </mat-menu>
@@ -74,8 +74,8 @@
     </tr>
   </table>
 
-  <mat-paginator #paginator [length]="totalitems"
-                 (page)="getEmployees($event)"
+  <mat-paginator #paginator [length]="totalItems"
+                 (page)="getEmployeesPaginator($event)"
                  [pageSize]="pageSize"
                  [showFirstLastButtons] = "true">
   </mat-paginator>

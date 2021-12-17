@@ -13,7 +13,7 @@ export class EmployeeService {
   private baseUrl: string = environment.baseUrl
 
   // Get Employee
-  getEmployeeById(id: string) : Observable<Employee> {
+  getEmployeeById(id: number) : Observable<Employee> {
     return this.http.get<Employee>(`${this.baseUrl}/employees/${id}`)
   }
 
@@ -31,8 +31,8 @@ export class EmployeeService {
   }
 
   // Update Employee
-  updateEmployee(employee: Employee) : Observable<Employee> {
-    return this.http.put<Employee>(`${this.baseUrl}/employees/${employee.id}/`,employee)
+  updateEmployee(idEmployee: number,employee: Employee) : Observable<Employee> {
+    return this.http.put<Employee>(`${this.baseUrl}/employees/${idEmployee}/`,employee)
   }
 
   // Delete Employee

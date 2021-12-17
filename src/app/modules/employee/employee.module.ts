@@ -4,11 +4,12 @@ import { CommonModule } from '@angular/common';
 import { EmployeeRoutingModule } from './employee-routing.module';
 import { HomeComponent } from './pages/home/home.component';
 import { ListComponent } from './pages/list/list.component';
-import {MaterialModule} from "../../material/material.module";
+import { MaterialModule} from "../../material/material.module";
 import { ConfirmComponent } from './components/confirm/confirm.component';
-import {FlexLayoutModule} from "@angular/flex-layout";
-import {ReactiveFormsModule} from "@angular/forms";
-import { AddComponent } from './pages/add/add.component';
+import { FlexLayoutModule} from "@angular/flex-layout";
+import { ReactiveFormsModule} from "@angular/forms";
+import { CrudComponent } from './components/crud/crud.component';
+import { EmployeeComponent } from './employee.component';
 
 
 @NgModule({
@@ -16,7 +17,8 @@ import { AddComponent } from './pages/add/add.component';
     HomeComponent,
     ListComponent,
     ConfirmComponent,
-    AddComponent
+    CrudComponent,
+    EmployeeComponent
   ],
   imports: [
     CommonModule,

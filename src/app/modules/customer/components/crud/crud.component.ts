@@ -94,8 +94,8 @@ export class CrudComponent implements OnInit {
       address: [{value:null, disabled:this.customer.info}],
       city: [{value:null, disabled:this.customer.info}],
       postal_code: [{value:null, disabled:this.customer.info}],
-      contract: [{value: 0, disabled:this.customer.info}],
-      customer_type: [{value: 0, disabled:this.customer.info}],
+      contract: [{value: '', disabled:this.customer.info}, Validators.required],
+      customer_type: [{value: '', disabled:this.customer.info}, Validators.required],
       user: [{value: 1 , disabled:this.customer.info}]
     });
   }
