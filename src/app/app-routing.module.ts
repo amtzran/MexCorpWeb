@@ -1,25 +1,25 @@
-import { NgModule } from '@angular/core';
-import { RouterModule, Routes } from '@angular/router';
+import {NgModule} from '@angular/core';
+import {RouterModule, Routes} from '@angular/router';
 import {ValidateTokenGuard} from "./modules/guards/validate-token.guard";
+import {DashboardComponent} from "./modules/dashboard/dashboard.component";
 
 const routes: Routes = [
   {
     path: 'auth',
     loadChildren: () => import('./modules/auth/auth.module').then(m => m.AuthModule),
   },
+  {
+    path: '',
+    component: DashboardComponent,
+    loadChildren: () => import('./modules/dashboard/dashboard.module').then(m => m.DashboardModule),
+  },
   /*{
     path: 'dashboard',
     loadChildren: () => import('./modules/auth/protected/protected.module').then(m => m.ProtectedModule),
   },*/
-  {
+  /*{
     path: 'customer',
     loadChildren: () => import('./modules/customer/customer.module').then(m => m.CustomerModule),
-    canActivate: [ ValidateTokenGuard ],
-    canLoad: [ ValidateTokenGuard ]
-  },
-  {
-    path: 'employee',
-    loadChildren: () => import('./modules/employee/employee.module').then(m => m.EmployeeModule),
     canActivate: [ ValidateTokenGuard ],
     canLoad: [ ValidateTokenGuard ]
   },
@@ -34,7 +34,7 @@ const routes: Routes = [
     loadChildren: () => import('./modules/groups/groups.module').then(m => m.GroupsModule),
     canActivate: [ ValidateTokenGuard ],
     canLoad: [ ValidateTokenGuard ]
-  },
+  },*/
   {
     path: '**',
     redirectTo: 'auth'
@@ -45,4 +45,5 @@ const routes: Routes = [
   imports: [RouterModule.forRoot(routes)],
   exports: [RouterModule]
 })
-export class AppRoutingModule { }
+export class AppRoutingModule {
+}
