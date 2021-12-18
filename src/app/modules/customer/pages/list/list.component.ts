@@ -11,6 +11,7 @@ import {MatSnackBar} from "@angular/material/snack-bar";
 import {DialogAddGroupComponent} from "../../../catalog/groups/components/dialog-add-group/dialog-add-group.component";
 import {ModalResponse} from "../../../../core/utils/ModalResponse";
 import {CrudComponent} from "../../components/crud/crud.component";
+import {SharedService} from "../../../../shared/services/shared.service";
 
 @Component({
   selector: 'app-list',
@@ -30,7 +31,7 @@ export class ListComponent implements AfterViewInit, OnInit {
   constructor( private customerService: CustomerServiceService,
                private formBuilder: FormBuilder,
                private dialog : MatDialog,
-               private snackBar: MatSnackBar
+               private sharedService: SharedService
                ) {}
 
   ngOnInit() {
@@ -86,7 +87,7 @@ export class ListComponent implements AfterViewInit, OnInit {
         if ( result ) {
           this.customerService.deleteCustomer(customer.id!)
             .subscribe(resp => {
-              this.showSnackBar('Registro Eliminado')
+              this.sharedService.showSnackBar('Registro Eliminado')
               this.getCustomersPaginator(this.paginator);
             })
         }
@@ -119,16 +120,6 @@ export class ListComponent implements AfterViewInit, OnInit {
     this.customerFilterForm = this.formBuilder.group({
       page: [],
       page_size: [this.pageSize]
-    })
-  }
-
-  /**
-   * Generate new snack bar with custom message.
-   * @param msg
-   */
-  showSnackBar(msg: string) {
-    this.snackBar.open(msg, 'Cerrar', {
-      duration: 3000
     })
   }
 

@@ -8,7 +8,7 @@ import {Group} from "../../models/group.interface";
 import {DialogAddGroupComponent} from "../dialog-add-group/dialog-add-group.component";
 import {ModalResponse} from "../../../../../core/utils/ModalResponse";
 import {ConfirmComponent} from "../../../../employee/components/confirm/confirm.component";
-import {MatSnackBar} from "@angular/material/snack-bar";
+import {SharedService} from "../../../../../shared/services/shared.service";
 
 @Component({
   selector: 'app-table-group',
@@ -27,7 +27,7 @@ export class TableGroupComponent implements OnInit {
   groupFilterForm!: FormGroup
 
   constructor(
-    private snackBar: MatSnackBar,
+    private sharedService: SharedService,
     private _groupService: GroupService,
     private fb: FormBuilder,
     private dialog: MatDialog,
@@ -71,8 +71,7 @@ export class TableGroupComponent implements OnInit {
         if (result) {
           this._groupService.deleteGroup(group.id!)
             .subscribe(response => {
-              console.log(response);
-              this.showSnackBar('Grupo Eliminado');
+              this.sharedService.showSnackBar('Grupo Eliminado');
               this.loadGroupsPaginator(this.paginator);
             })
         }
@@ -106,16 +105,6 @@ export class TableGroupComponent implements OnInit {
     this.groupFilterForm = this.fb.group({
       page: [],
       page_size: [this.pageSize]
-    })
-  }
-
-  /**
-   * Generate new snack bar with custom message.
-   * @param msg
-   */
-  showSnackBar(msg: string) {
-    this.snackBar.open(msg, 'Cerrar', {
-      duration: 3000
     })
   }
 

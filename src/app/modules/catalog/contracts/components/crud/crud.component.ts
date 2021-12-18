@@ -5,6 +5,7 @@ import {MAT_DIALOG_DATA, MatDialogRef} from "@angular/material/dialog";
 import {EmployeeService} from "../../../../employee/services/employee.service";
 import {ModalResponse} from "../../../../../core/utils/ModalResponse";
 import {ContractService} from "../../services/contract.service";
+import {SharedService} from "../../../../../shared/services/shared.service";
 
 @Component({
   selector: 'app-crud',
@@ -29,6 +30,7 @@ export class CrudComponent implements OnInit {
     private snackBar: MatSnackBar,
     private dialogRef: MatDialogRef<CrudComponent>,
     private _contractService: ContractService,
+    private sharedService: SharedService,
     @Inject(MAT_DIALOG_DATA) public contract : {idContract: number, edit: boolean, info: boolean}
   ) { }
 
@@ -81,11 +83,11 @@ export class CrudComponent implements OnInit {
   addContract(): void {
     this.submit = true;
     if(this.contractForm.invalid){
-      this.showSnackBar('Los campos con * son obligatorios.');
+      this.sharedService.showSnackBar('Los campos con * son obligatorios.');
       return
     }
     this._contractService.addContract(this.contractForm.value).subscribe(response => {
-      this.showSnackBar('Se ha agregado correctamente el convenio.');
+      this.sharedService.showSnackBar('Se ha agregado correctamente el convenio.');
       this.dialogRef.close(ModalResponse.UPDATE);
     })
   }
@@ -96,11 +98,11 @@ export class CrudComponent implements OnInit {
   updateContract(): void {
     this.submit = true;
     if(this.contractForm.invalid){
-      this.showSnackBar('Los campos con * son obligatorios.');
+      this.sharedService.showSnackBar('Los campos con * son obligatorios.');
       return
     }
     this._contractService.updateContract(this.contract.idContract, this.contractForm.value).subscribe(response => {
-      this.showSnackBar(`Se ha actualizado correctamente el convenio: ${response.name}` );
+      this.sharedService.showSnackBar(`Se ha actualizado correctamente el convenio: ${response.name}` );
       this.dialogRef.close(ModalResponse.UPDATE);
     })
   }
@@ -113,22 +115,12 @@ export class CrudComponent implements OnInit {
     return this.contractForm.get(field)?.invalid &&
       this.contractForm.get(field)?.touched
   }
-  
+
   /**
    * Close modal.
    */
   close(): void{
     this.dialogRef.close(ModalResponse.UPDATE);
-  }
-
-  /**
-   * Generate new snack bar with custom message.
-   * @param msg
-   */
-  showSnackBar(msg: string) {
-    this.snackBar.open(msg, 'Cerrar', {
-      duration: 3000
-    })
   }
 
 }

@@ -3,7 +3,7 @@ import {FormBuilder, FormGroup, Validators} from "@angular/forms";
 import {MAT_DIALOG_DATA, MatDialogRef} from "@angular/material/dialog";
 import {GroupService} from "../../services/groups.service";
 import {ModalResponse} from "../../../../../core/utils/ModalResponse";
-import {MatSnackBar} from "@angular/material/snack-bar";
+import {SharedService} from "../../../../../shared/services/shared.service";
 
 @Component({
   selector: 'app-dialog-add-group',
@@ -24,7 +24,7 @@ export class DialogAddGroupComponent implements OnInit {
 
   constructor(
     private fb: FormBuilder,
-    private snackBar: MatSnackBar,
+    private sharedService: SharedService,
     private dialogRef: MatDialogRef<DialogAddGroupComponent>,
     private _groupService: GroupService,
     @Inject(MAT_DIALOG_DATA) public group : {idGroup: number, edit: boolean, info: boolean}
@@ -85,11 +85,11 @@ export class DialogAddGroupComponent implements OnInit {
   addGroup(): void {
     this.submit = true;
     if(this.groupForm.invalid){
-      this.showSnackBar('Los campos con * son obligatorios.');
+      this.sharedService.showSnackBar('Los campos con * son obligatorios.');
       return
     }
     this._groupService.postGroup(this.groupForm.value).subscribe(response => {
-      this.showSnackBar('Se ha agregado correctamente el grupo.');
+      this.sharedService.showSnackBar('Se ha agregado correctamente el grupo.');
       this.dialogRef.close(ModalResponse.UPDATE);
     })
   }
@@ -100,12 +100,12 @@ export class DialogAddGroupComponent implements OnInit {
   updateGroup(): void {
     this.submit = true;
     if(this.groupForm.invalid){
-      this.showSnackBar('Los campos con * son obligatorios.');
+      this.sharedService.showSnackBar('Los campos con * son obligatorios.');
       return
     }
     this._groupService.updateGroup(this.group.idGroup, this.groupForm.value).subscribe(response => {
       console.log(response);
-      this.showSnackBar('Se ha actualizado correctamente el grupo.');
+      this.sharedService.showSnackBar('Se ha actualizado correctamente el grupo.');
       this.dialogRef.close(ModalResponse.UPDATE);
     })
   }
@@ -124,16 +124,6 @@ export class DialogAddGroupComponent implements OnInit {
    */
   close(): void{
     this.dialogRef.close(ModalResponse.UPDATE);
-  }
-
-  /**
-   * Generate new snack bar with custom message.
-   * @param msg
-   */
-  showSnackBar(msg: string) {
-    this.snackBar.open(msg, 'Cerrar', {
-      duration: 3000
-    })
   }
 
 }

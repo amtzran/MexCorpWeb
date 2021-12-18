@@ -4,12 +4,12 @@ import {FormBuilder, FormGroup} from "@angular/forms";
 import {MatPaginator} from "@angular/material/paginator";
 import {MatSort} from "@angular/material/sort";
 import {MatDialog} from "@angular/material/dialog";
-import {MatSnackBar} from "@angular/material/snack-bar";
 import {ModalResponse} from "../../../../../core/utils/ModalResponse";
 import {JobTitle} from "../../models/job-title.interface";
 import {JobTitleService} from "../../services/job-title.service";
 import {ConfirmComponent} from "../confirm/confirm.component";
 import {CrudComponent} from "../crud/crud.component";
+import {SharedService} from "../../../../../shared/services/shared.service";
 
 @Component({
   selector: 'app-table',
@@ -30,7 +30,7 @@ export class TableComponent implements OnInit {
   constructor(private jobTitleService: JobTitleService,
               private formBuilder: FormBuilder,
               private dialog: MatDialog,
-              private snackBar: MatSnackBar) {
+              private sharedService: SharedService) {
   }
 
   ngOnInit(): void {
@@ -77,7 +77,7 @@ export class TableComponent implements OnInit {
         if (result) {
           this.jobTitleService.deleteJobTitle(jobTitle.id!)
             .subscribe(resp => {
-              this.showSnackBar('Registro Eliminado')
+              this.sharedService.showSnackBar('Registro Eliminado')
               this.getJobTitlePaginator(this.paginator);
             })
         }
@@ -110,12 +110,6 @@ export class TableComponent implements OnInit {
     this.jobTitlePaginateForm = this.formBuilder.group({
       page: [],
       page_size: [this.pageSize]
-    })
-  }
-
-  showSnackBar(msg: string) {
-    this.snackBar.open(msg, 'Cerrar', {
-      duration: 3000
     })
   }
 

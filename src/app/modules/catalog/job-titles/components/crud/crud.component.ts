@@ -1,9 +1,9 @@
 import {Component, Inject, OnInit} from '@angular/core';
 import {FormBuilder, FormGroup, Validators} from "@angular/forms";
-import {MatSnackBar} from "@angular/material/snack-bar";
 import {MAT_DIALOG_DATA, MatDialogRef} from "@angular/material/dialog";
 import {ModalResponse} from "../../../../../core/utils/ModalResponse";
 import {JobTitleService} from "../../services/job-title.service";
+import {SharedService} from "../../../../../shared/services/shared.service";
 
 @Component({
   selector: 'app-crud',
@@ -25,7 +25,7 @@ export class CrudComponent implements OnInit {
 
   constructor(
     private fb: FormBuilder,
-    private snackBar: MatSnackBar,
+    private sharedService: SharedService,
     private dialogRef: MatDialogRef<CrudComponent>,
     private _jobTitleService: JobTitleService,
     @Inject(MAT_DIALOG_DATA) public jobTitle : {idJobTitle: number, edit: boolean, info: boolean}
@@ -80,11 +80,11 @@ export class CrudComponent implements OnInit {
   addJobTitle(): void {
     this.submit = true;
     if(this.jobTitleForm.invalid){
-      this.showSnackBar('Los campos con * son obligatorios.');
+      this.sharedService.showSnackBar('Los campos con * son obligatorios.');
       return
     }
     this._jobTitleService.addJobTitle(this.jobTitleForm.value).subscribe(response => {
-      this.showSnackBar('Se ha agregado correctamente el Puesto.');
+      this.sharedService.showSnackBar('Se ha agregado correctamente el Puesto.');
       this.dialogRef.close(ModalResponse.UPDATE);
     })
   }
@@ -95,11 +95,11 @@ export class CrudComponent implements OnInit {
   updateJobTitle(): void {
     this.submit = true;
     if(this.jobTitleForm.invalid){
-      this.showSnackBar('Los campos con * son obligatorios.');
+      this.sharedService.showSnackBar('Los campos con * son obligatorios.');
       return
     }
     this._jobTitleService.updateJobTitle(this.jobTitle.idJobTitle, this.jobTitleForm.value).subscribe(response => {
-      this.showSnackBar(`Se ha actualizado correctamente el Puesto: ${response.name}` );
+      this.sharedService.showSnackBar(`Se ha actualizado correctamente el Puesto: ${response.name}` );
       this.dialogRef.close(ModalResponse.UPDATE);
     })
   }
@@ -118,16 +118,6 @@ export class CrudComponent implements OnInit {
    */
   close(): void{
     this.dialogRef.close(ModalResponse.UPDATE);
-  }
-
-  /**
-   * Generate new snack bar with custom message.
-   * @param msg
-   */
-  showSnackBar(msg: string) {
-    this.snackBar.open(msg, 'Cerrar', {
-      duration: 3000
-    })
   }
 
 }

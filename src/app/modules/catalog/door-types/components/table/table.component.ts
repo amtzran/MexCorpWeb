@@ -10,6 +10,7 @@ import {DoorType} from "../../models/door-type.interface";
 import {DoorTypeService} from "../../services/door-type.service";
 import {CrudComponent} from "../crud/crud.component";
 import {ConfirmComponent} from "../confirm/confirm.component";
+import {SharedService} from "../../../../../shared/services/shared.service";
 
 @Component({
   selector: 'app-table',
@@ -30,7 +31,7 @@ export class TableComponent implements OnInit {
   constructor(private doorTypeService: DoorTypeService,
               private formBuilder: FormBuilder,
               private dialog: MatDialog,
-              private snackBar: MatSnackBar) {
+              private sharedService: SharedService) {
   }
 
   ngOnInit(): void {
@@ -77,7 +78,7 @@ export class TableComponent implements OnInit {
         if (result) {
           this.doorTypeService.deleteDoorType(doorType.id!)
             .subscribe(resp => {
-              this.showSnackBar('Registro Eliminado')
+              this.sharedService.showSnackBar('Registro Eliminado')
               this.getDoorTypePaginator(this.paginator);
             })
         }
@@ -110,12 +111,6 @@ export class TableComponent implements OnInit {
     this.doorTypePaginateForm = this.formBuilder.group({
       page: [],
       page_size: [this.pageSize]
-    })
-  }
-
-  showSnackBar(msg: string) {
-    this.snackBar.open(msg, 'Cerrar', {
-      duration: 3000
     })
   }
 

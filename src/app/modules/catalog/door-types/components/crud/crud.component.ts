@@ -4,6 +4,7 @@ import {MatSnackBar} from "@angular/material/snack-bar";
 import {MAT_DIALOG_DATA, MatDialogRef} from "@angular/material/dialog";
 import {ModalResponse} from "../../../../../core/utils/ModalResponse";
 import {DoorTypeService} from "../../services/door-type.service";
+import {SharedService} from "../../../../../shared/services/shared.service";
 
 @Component({
   selector: 'app-crud',
@@ -28,6 +29,7 @@ export class CrudComponent implements OnInit {
     private snackBar: MatSnackBar,
     private dialogRef: MatDialogRef<CrudComponent>,
     private _doorTypeService: DoorTypeService,
+    private sharedService: SharedService,
     @Inject(MAT_DIALOG_DATA) public doorType : {idDoorType: number, edit: boolean, info: boolean}
   ) { }
 
@@ -80,11 +82,11 @@ export class CrudComponent implements OnInit {
   addDoorType(): void {
     this.submit = true;
     if(this.doorTypeForm.invalid){
-      this.showSnackBar('Los campos con * son obligatorios.');
+      this.sharedService.showSnackBar('Los campos con * son obligatorios.');
       return
     }
     this._doorTypeService.addDoorType(this.doorTypeForm.value).subscribe(response => {
-      this.showSnackBar('Se ha agregado correctamente el tipo deAcceso.');
+      this.sharedService.showSnackBar('Se ha agregado correctamente el tipo deAcceso.');
       this.dialogRef.close(ModalResponse.UPDATE);
     })
   }
@@ -95,11 +97,11 @@ export class CrudComponent implements OnInit {
   updateDoorType(): void {
     this.submit = true;
     if(this.doorTypeForm.invalid){
-      this.showSnackBar('Los campos con * son obligatorios.');
+      this.sharedService.showSnackBar('Los campos con * son obligatorios.');
       return
     }
     this._doorTypeService.updateDoorType(this.doorType.idDoorType, this.doorTypeForm.value).subscribe(response => {
-      this.showSnackBar(`Se ha actualizado correctamente el tipo de Acceso: ${response.name}` );
+      this.sharedService.showSnackBar(`Se ha actualizado correctamente el tipo de Acceso: ${response.name}` );
       this.dialogRef.close(ModalResponse.UPDATE);
     })
   }
@@ -118,16 +120,6 @@ export class CrudComponent implements OnInit {
    */
   close(): void{
     this.dialogRef.close(ModalResponse.UPDATE);
-  }
-
-  /**
-   * Generate new snack bar with custom message.
-   * @param msg
-   */
-  showSnackBar(msg: string) {
-    this.snackBar.open(msg, 'Cerrar', {
-      duration: 3000
-    })
   }
 
 }

@@ -7,7 +7,6 @@ import { FlexLayoutModule} from "@angular/flex-layout";
 import { ReactiveFormsModule} from "@angular/forms";
 import { HomeComponent } from './pages/home/home.component';
 import { ListComponent } from './pages/list/list.component';
-import { AddComponent } from './pages/add/add.component';
 import { ConfirmComponent } from './components/confirm/confirm.component';
 import { CrudComponent} from "./components/crud/crud.component";
 
@@ -16,7 +15,6 @@ import { CrudComponent} from "./components/crud/crud.component";
   declarations: [
     HomeComponent,
     ListComponent,
-    AddComponent,
     ConfirmComponent,
     CrudComponent
   ],

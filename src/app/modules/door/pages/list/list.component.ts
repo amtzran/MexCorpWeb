@@ -12,6 +12,7 @@ import {CustomerServiceService} from "../../../customer/services/customer-servic
 import {ModalResponse} from "../../../../core/utils/ModalResponse";
 import {ConfirmComponent} from "../../components/confirm/confirm.component";
 import {CrudComponent} from "../../components/crud/crud.component";
+import {SharedService} from "../../../../shared/services/shared.service";
 
 @Component({
   selector: 'app-list',
@@ -35,7 +36,7 @@ export class ListComponent implements OnInit {
               private customerService: CustomerServiceService,
               private formBuilder: FormBuilder,
               private dialog : MatDialog,
-              private snackBar: MatSnackBar,
+              private sharedService: SharedService,
               private activateRoute: ActivatedRoute) {
 
   }
@@ -90,7 +91,7 @@ export class ListComponent implements OnInit {
         if ( result ) {
           this.doorService.deleteDoor(door.id!)
             .subscribe(resp => {
-              this.showSnackBar('Registro Eliminado')
+              this.sharedService.showSnackBar('Registro Eliminado')
               this.getDoorsPaginator(this.paginator);
             })
         }
@@ -123,12 +124,6 @@ export class ListComponent implements OnInit {
     this.doorPaginateForm = this.formBuilder.group({
       page: [],
       page_size: [this.pageSize]
-    })
-  }
-
-  showSnackBar(msg: string) {
-    this.snackBar.open(msg, 'Cerrar', {
-      duration: 3000
     })
   }
 

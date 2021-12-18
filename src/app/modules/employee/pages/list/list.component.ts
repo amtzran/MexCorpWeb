@@ -5,11 +5,11 @@ import {MatPaginator} from "@angular/material/paginator";
 import {MatSort} from "@angular/material/sort";
 import {Employee} from "../../interfaces/employee.interface";
 import {MatDialog} from "@angular/material/dialog";
-import {MatSnackBar} from "@angular/material/snack-bar";
 import {EmployeeService} from "../../services/employee.service";
 import {ConfirmComponent} from "../../components/confirm/confirm.component";
 import {ModalResponse} from "../../../../core/utils/ModalResponse";
 import {CrudComponent} from "../../components/crud/crud.component";
+import {SharedService} from "../../../../shared/services/shared.service";
 
 @Component({
   selector: 'app-list',
@@ -29,7 +29,7 @@ export class ListComponent implements OnInit {
   constructor(private employeeService: EmployeeService,
               private formBuilder: FormBuilder,
               private dialog: MatDialog,
-              private snackBar: MatSnackBar) {
+              private sharedService: SharedService) {
   }
 
   ngOnInit(): void {
@@ -76,7 +76,7 @@ export class ListComponent implements OnInit {
         if (result) {
           this.employeeService.deleteEmployee(employee.id!)
             .subscribe(resp => {
-              this.showSnackBar('Registro Eliminado')
+              this.sharedService.showSnackBar('Registro Eliminado')
               this.getEmployeesPaginator(this.paginator);
             })
         }
@@ -109,12 +109,6 @@ export class ListComponent implements OnInit {
     this.employeePaginateForm = this.formBuilder.group({
       page: [],
       page_size: [this.pageSize]
-    })
-  }
-
-  showSnackBar(msg: string) {
-    this.snackBar.open(msg, 'Cerrar', {
-      duration: 3000
     })
   }
 
