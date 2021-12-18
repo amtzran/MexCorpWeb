@@ -36,7 +36,7 @@ export class SideNavComponent implements OnInit {
   menuCatalogs: RoutesSide[] = [
     {
       name: 'Puestos',
-      route: '/customer',
+      route: '/job-title',
       icon: 'engineering'
     },
     {
@@ -46,17 +46,17 @@ export class SideNavComponent implements OnInit {
     },
     {
       name: 'Convenios',
-      route: '/customer',
+      route: '/contract',
       icon: 'folder'
     },
     {
       name: 'Tipo Cliente',
-      route: '/customer',
+      route: '/customer-type',
       icon: 'people_alt'
     },
     {
       name: 'Tipo Acceso',
-      route: '/customer',
+      route: '/door-type',
       icon: 'security'
     },
   ]

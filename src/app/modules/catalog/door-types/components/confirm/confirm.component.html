@@ -1,0 +1,18 @@
+<h1>¿Está Seguro?</h1>
+<hr>
+<p>
+  Está seguro de borrar {{ data.name }}
+  <br>
+  ¿Desea continuar?
+</p>
+<div fxLayout="row" fxLayoutAlign="center center">
+
+  <div fxFlex="50">
+    <button mat-button (click)="delete()" color="warn">OK</button>
+  </div>
+  <div fxFlex="50">
+    <button mat-button (click)="cancel()">Cancelar</button>
+  </div>
+
+</div>
+

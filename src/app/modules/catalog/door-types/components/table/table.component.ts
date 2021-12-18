@@ -1,4 +1,15 @@
-import { Component, OnInit } from '@angular/core';
+import {Component, OnInit, ViewChild} from '@angular/core';
+import {MatTableDataSource} from "@angular/material/table";
+import {FormBuilder, FormGroup} from "@angular/forms";
+import {MatPaginator} from "@angular/material/paginator";
+import {MatSort} from "@angular/material/sort";
+import {MatDialog} from "@angular/material/dialog";
+import {MatSnackBar} from "@angular/material/snack-bar";
+import {ModalResponse} from "../../../../../core/utils/ModalResponse";
+import {DoorType} from "../../models/door-type.interface";
+import {DoorTypeService} from "../../services/door-type.service";
+import {CrudComponent} from "../crud/crud.component";
+import {ConfirmComponent} from "../confirm/confirm.component";
 
 @Component({
   selector: 'app-table',
@@ -8,9 +19,104 @@ import { Component, OnInit } from '@angular/core';
 })
 export class TableComponent implements OnInit {
 
-  constructor() { }
+  displayedColumns: string[] = ['id', 'name', 'description', 'options'];
+  dataSource!: MatTableDataSource<DoorType>;
+  totalItems: number = 0;
+  pageSize = 10;
+  doorTypePaginateForm!: FormGroup;
+  @ViewChild(MatPaginator, {static: true}) paginator!: MatPaginator;
+  @ViewChild(MatSort) sort!: MatSort;
+
+  constructor(private doorTypeService: DoorTypeService,
+              private formBuilder: FormBuilder,
+              private dialog: MatDialog,
+              private snackBar: MatSnackBar) {
+  }
 
   ngOnInit(): void {
+    /*Formulario*/
+    this.loadDoorTypeFilterForm();
+    // Assign the data to the data source for the table to render
+    this.dataSource = new MatTableDataSource();
+    this.getDoorTypePaginator(this.paginator);
+  }
+
+  ngAfterViewInit() {
+    this.dataSource.paginator = this.paginator;
+    this.dataSource.sort = this.sort;
+  }
+
+  getDoorTypePaginator(event: any) {
+    const paginator: MatPaginator = event;
+    this.doorTypePaginateForm.get('page')?.setValue(paginator.pageIndex + 1);
+    this.doorTypeService.getDoorTypes(this.doorTypePaginateForm.value)
+      .subscribe(doorTypes => {
+        this.dataSource.data = doorTypes.results
+        this.totalItems = doorTypes.count;
+      })
+  }
+
+  applyFilter(event: Event) {
+    const filterValue = (event.target as HTMLInputElement).value;
+    this.dataSource.filter = filterValue.trim().toLowerCase();
+
+    if (this.dataSource.paginator) {
+      this.dataSource.paginator.firstPage();
+    }
+  }
+
+  deleteDoorType(doorType: DoorType) {
+    // Show Dialog
+    const dialog = this.dialog.open(ConfirmComponent, {
+      width: '250',
+      data: doorType
+    })
+
+    dialog.afterClosed().subscribe(
+      (result) => {
+        if (result) {
+          this.doorTypeService.deleteDoorType(doorType.id!)
+            .subscribe(resp => {
+              this.showSnackBar('Registro Eliminado')
+              this.getDoorTypePaginator(this.paginator);
+            })
+        }
+      })
+
+  }
+
+  /**
+   * Open dialog for add and update group.
+   * @param edit
+   * @param idDoorType
+   * @param info
+   */
+  openDialogDoorType(edit: boolean, idDoorType: number | null, info: boolean): void {
+    const dialogRef = this.dialog.open(CrudComponent, {
+      autoFocus: false,
+      disableClose: true,
+      width: '50vw',
+      data: {edit: edit, idDoorType: idDoorType, info: info}
+    });
+    dialogRef.afterClosed().subscribe(res => {
+      if (res === ModalResponse.UPDATE) {
+        this.getDoorTypePaginator(this.paginator);
+      }
+    });
+  }
+
+  /* Método que permite iniciar los filtros de rutas*/
+  loadDoorTypeFilterForm(): void {
+    this.doorTypePaginateForm = this.formBuilder.group({
+      page: [],
+      page_size: [this.pageSize]
+    })
+  }
+
+  showSnackBar(msg: string) {
+    this.snackBar.open(msg, 'Cerrar', {
+      duration: 3000
+    })
   }
 
 }
