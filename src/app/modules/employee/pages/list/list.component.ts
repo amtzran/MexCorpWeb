@@ -6,10 +6,10 @@ import {MatSort} from "@angular/material/sort";
 import {Employee} from "../../interfaces/employee.interface";
 import {MatDialog} from "@angular/material/dialog";
 import {EmployeeService} from "../../services/employee.service";
-import {ConfirmComponent} from "../../components/confirm/confirm.component";
 import {ModalResponse} from "../../../../core/utils/ModalResponse";
 import {CrudComponent} from "../../components/crud/crud.component";
 import {SharedService} from "../../../../shared/services/shared.service";
+import {ConfirmComponent} from "../../../../shared/components/confirm/confirm.component";
 
 @Component({
   selector: 'app-list',

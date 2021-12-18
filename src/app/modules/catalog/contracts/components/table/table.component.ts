@@ -4,13 +4,12 @@ import {FormBuilder, FormGroup} from "@angular/forms";
 import {MatPaginator} from "@angular/material/paginator";
 import {MatSort} from "@angular/material/sort";
 import {MatDialog} from "@angular/material/dialog";
-import {MatSnackBar} from "@angular/material/snack-bar";
 import {ModalResponse} from "../../../../../core/utils/ModalResponse";
 import {Contract} from "../../models/contract.interface";
 import {ContractService} from "../../services/contract.service";
-import {ConfirmComponent} from "../confirm/confirm.component";
 import {CrudComponent} from "../crud/crud.component";
 import {SharedService} from "../../../../../shared/services/shared.service";
+import {ConfirmComponent} from "../../../../../shared/components/confirm/confirm.component";
 
 @Component({
   selector: 'app-table',

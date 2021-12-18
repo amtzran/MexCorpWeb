@@ -1,6 +1,6 @@
 import {Component, Inject, OnInit} from '@angular/core';
 import {MAT_DIALOG_DATA, MatDialogRef} from "@angular/material/dialog";
-import {JobTitle} from "../../models/job-title.interface";
+import {MessageDelete} from "../../interfaces/shared.interface";
 
 @Component({
   selector: 'app-confirm',
@@ -11,7 +11,7 @@ import {JobTitle} from "../../models/job-title.interface";
 export class ConfirmComponent implements OnInit {
 
   constructor(private dialogRef: MatDialogRef<ConfirmComponent>,
-              @Inject(MAT_DIALOG_DATA) public data: JobTitle) { }
+              @Inject(MAT_DIALOG_DATA) public data: MessageDelete) { }
 
   ngOnInit(): void {
   }

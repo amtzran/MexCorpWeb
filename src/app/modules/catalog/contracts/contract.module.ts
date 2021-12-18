@@ -6,7 +6,6 @@ import { TableComponent } from './components/table/table.component';
 import { CrudComponent } from './components/crud/crud.component';
 import {MaterialModule} from "../../../material/material.module";
 import {FlexLayoutModule} from "@angular/flex-layout";
-import { ConfirmComponent } from './components/confirm/confirm.component';
 import {ReactiveFormsModule} from "@angular/forms";
 
 
@@ -15,7 +14,6 @@ import {ReactiveFormsModule} from "@angular/forms";
     ContractComponent,
     TableComponent,
     CrudComponent,
-    ConfirmComponent
   ],
   imports: [
     CommonModule,

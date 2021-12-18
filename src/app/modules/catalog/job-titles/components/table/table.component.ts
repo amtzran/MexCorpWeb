@@ -7,9 +7,9 @@ import {MatDialog} from "@angular/material/dialog";
 import {ModalResponse} from "../../../../../core/utils/ModalResponse";
 import {JobTitle} from "../../models/job-title.interface";
 import {JobTitleService} from "../../services/job-title.service";
-import {ConfirmComponent} from "../confirm/confirm.component";
 import {CrudComponent} from "../crud/crud.component";
 import {SharedService} from "../../../../../shared/services/shared.service";
+import {ConfirmComponent} from "../../../../../shared/components/confirm/confirm.component";
 
 @Component({
   selector: 'app-table',

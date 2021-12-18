@@ -5,7 +5,6 @@ import { JobTitleRoutingModule } from './job-title-routing.module';
 import { JobTitleComponent } from './job-title.component';
 import { CrudComponent } from './components/crud/crud.component';
 import { TableComponent } from './components/table/table.component';
-import { ConfirmComponent } from './components/confirm/confirm.component';
 import {MaterialModule} from "../../../material/material.module";
 import {FlexLayoutModule} from "@angular/flex-layout";
 import {ReactiveFormsModule} from "@angular/forms";
@@ -16,7 +15,6 @@ import {ReactiveFormsModule} from "@angular/forms";
     JobTitleComponent,
     CrudComponent,
     TableComponent,
-    ConfirmComponent
   ],
   imports: [
     CommonModule,

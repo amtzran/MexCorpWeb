@@ -23,6 +23,9 @@
                 type="text"
                 formControlName="name"
               >
+              <mat-error *ngIf="fieldInvalid('name')">
+                Favor de Ingresar el Acceso
+              </mat-error>
             </mat-form-field>
 
             <mat-form-field fxFlex="100">
@@ -33,6 +36,9 @@
                   {{ doorType.name}}
                 </mat-option>
               </mat-select>
+              <mat-error *ngIf="fieldInvalid('door_type')">
+                Favor de Seleccionar el Top de acceso
+              </mat-error>
             </mat-form-field>
 
           </div>

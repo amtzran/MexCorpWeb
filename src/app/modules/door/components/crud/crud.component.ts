@@ -82,7 +82,7 @@ export class CrudComponent implements OnInit {
   loadDoorForm():void{
     this.doorForm = this.fb.group({
       name:[{value:null, disabled:this.door.info}, Validators.required],
-      observations:[{value:null, disabled:this.door.info}, Validators.required],
+      observations:[{value: '', disabled:this.door.info}],
       door_type: [{value: '', disabled:this.door.info}, Validators.required],
     });
   }
@@ -116,6 +116,15 @@ export class CrudComponent implements OnInit {
       this.sharedService.showSnackBar(`Se ha actualizado correctamente el acceso: ${response.name}` );
       this.dialogRef.close(ModalResponse.UPDATE);
     })
+  }
+
+  /**
+   * Validations
+   * @param field
+   */
+  fieldInvalid(field: string) {
+    return this.doorForm.get(field)?.invalid &&
+      this.doorForm.get(field)?.touched
   }
 
   /**

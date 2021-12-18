@@ -7,8 +7,8 @@ import {MatDialog} from "@angular/material/dialog";
 import {Group} from "../../models/group.interface";
 import {DialogAddGroupComponent} from "../dialog-add-group/dialog-add-group.component";
 import {ModalResponse} from "../../../../../core/utils/ModalResponse";
-import {ConfirmComponent} from "../../../../employee/components/confirm/confirm.component";
 import {SharedService} from "../../../../../shared/services/shared.service";
+import {ConfirmComponent} from "../../../../../shared/components/confirm/confirm.component";
 
 @Component({
   selector: 'app-table-group',

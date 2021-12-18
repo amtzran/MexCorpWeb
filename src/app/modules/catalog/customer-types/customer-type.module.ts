@@ -5,7 +5,6 @@ import { CustomerTypeRoutingModule } from './customer-type-routing.module';
 import { CustomerTypeComponent } from './customer-type.component';
 import { CrudComponent } from './components/crud/crud.component';
 import { TableComponent } from './components/table/table.component';
-import { ConfirmComponent } from './components/confirm/confirm.component';
 import {MaterialModule} from "../../../material/material.module";
 import {FlexLayoutModule} from "@angular/flex-layout";
 import {ReactiveFormsModule} from "@angular/forms";
@@ -16,7 +15,6 @@ import {ReactiveFormsModule} from "@angular/forms";
     CustomerTypeComponent,
     CrudComponent,
     TableComponent,
-    ConfirmComponent
   ],
   imports: [
     CommonModule,

@@ -5,13 +5,11 @@ import {MatSort} from "@angular/material/sort";
 import {Customer} from "../../interfaces/customer.interface";
 import {CustomerServiceService} from "../../services/customer-service.service";
 import {FormBuilder, FormGroup} from "@angular/forms";
-import {ConfirmComponent} from "../../components/confirm/confirm.component";
 import {MatDialog} from "@angular/material/dialog";
-import {MatSnackBar} from "@angular/material/snack-bar";
-import {DialogAddGroupComponent} from "../../../catalog/groups/components/dialog-add-group/dialog-add-group.component";
 import {ModalResponse} from "../../../../core/utils/ModalResponse";
 import {CrudComponent} from "../../components/crud/crud.component";
 import {SharedService} from "../../../../shared/services/shared.service";
+import {ConfirmComponent} from "../../../../shared/components/confirm/confirm.component";
 
 @Component({
   selector: 'app-list',

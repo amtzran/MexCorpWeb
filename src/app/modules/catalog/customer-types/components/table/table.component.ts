@@ -7,9 +7,9 @@ import {MatDialog} from "@angular/material/dialog";
 import {ModalResponse} from "../../../../../core/utils/ModalResponse";
 import {CustomerType} from "../../models/customer-type.interface";
 import {CustomerTypeService} from "../../services/customer-type.service";
-import {ConfirmComponent} from "../confirm/confirm.component";
 import {CrudComponent} from "../crud/crud.component";
 import {SharedService} from "../../../../../shared/services/shared.service";
+import {ConfirmComponent} from "../../../../../shared/components/confirm/confirm.component";
 
 @Component({
   selector: 'app-table',

@@ -88,8 +88,8 @@ export class CrudComponent implements OnInit {
     this.employeeForm = this.fb.group({
       name:[{value:null, disabled:this.employee.info}, Validators.required],
       color:[{value:null, disabled:this.employee.info}, Validators.required],
-      avatar:[{value:null, disabled:this.employee.info}],
-      signature:[{value:null, disabled:this.employee.info}],
+      avatar:[{value:'', disabled:this.employee.info}],
+      signature:[{value:'', disabled:this.employee.info}],
       job_center: [{value: '', disabled:this.employee.info}, Validators.required],
       job: [{value: '', disabled:this.employee.info}, Validators.required],
       user: [{value: 1, disabled:this.employee.info}],

@@ -9,8 +9,8 @@ import {ModalResponse} from "../../../../../core/utils/ModalResponse";
 import {DoorType} from "../../models/door-type.interface";
 import {DoorTypeService} from "../../services/door-type.service";
 import {CrudComponent} from "../crud/crud.component";
-import {ConfirmComponent} from "../confirm/confirm.component";
 import {SharedService} from "../../../../../shared/services/shared.service";
+import {ConfirmComponent} from "../../../../../shared/components/confirm/confirm.component";
 
 @Component({
   selector: 'app-table',

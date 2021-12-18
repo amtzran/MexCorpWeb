@@ -12,7 +12,7 @@ export interface Employee {
   color:          string;
   job_center:     number;
   job:            number;
-  user:           number;
+  user?:           number;
   avatar?:        string;
   signature?:     string;
   //created_at?:    Date;

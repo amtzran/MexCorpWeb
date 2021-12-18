@@ -7,7 +7,6 @@ import { ListComponent } from './pages/list/list.component';
 import { MaterialModule } from "../../material/material.module";
 import { FlexLayoutModule } from "@angular/flex-layout";
 import { ReactiveFormsModule } from "@angular/forms";
-import { ConfirmComponent } from './components/confirm/confirm.component';
 import { CrudComponent } from './components/crud/crud.component';
 
 
@@ -15,7 +14,6 @@ import { CrudComponent } from './components/crud/crud.component';
   declarations: [
     HomeComponent,
     ListComponent,
-    ConfirmComponent,
     CrudComponent
   ],
   imports: [

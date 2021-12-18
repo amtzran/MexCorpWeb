@@ -87,13 +87,13 @@ export class CrudComponent implements OnInit {
   loadCustomerForm():void{
     this.customerForm = this.fb.group({
       name:[{value:null, disabled:this.customer.info}, Validators.required],
-      reason_social:[{value:null, disabled:this.customer.info}],
-      rfc:[{value:null, disabled:this.customer.info}],
-      phone:[{value:null, disabled:this.customer.info}],
-      email:[{value:null, disabled:this.customer.info}],
-      address: [{value:null, disabled:this.customer.info}],
-      city: [{value:null, disabled:this.customer.info}],
-      postal_code: [{value:null, disabled:this.customer.info}],
+      reason_social:[{value:'', disabled:this.customer.info}],
+      rfc:[{value:'', disabled:this.customer.info}],
+      phone:[{value:'', disabled:this.customer.info}],
+      email:[{value:'', disabled:this.customer.info}],
+      address: [{value:'', disabled:this.customer.info}],
+      city: [{value:'', disabled:this.customer.info}],
+      postal_code: [{value:'', disabled:this.customer.info}],
       contract: [{value: '', disabled:this.customer.info}, Validators.required],
       customer_type: [{value: '', disabled:this.customer.info}, Validators.required],
       user: [{value: 1 , disabled:this.customer.info}]

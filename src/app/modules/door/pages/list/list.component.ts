@@ -6,13 +6,12 @@ import {MatSort} from "@angular/material/sort";
 import {Door} from "../../interfaces/door.interface";
 import {DoorService} from "../../services/door.service";
 import {MatDialog} from "@angular/material/dialog";
-import {MatSnackBar} from "@angular/material/snack-bar";
 import {ActivatedRoute, Router} from "@angular/router";
 import {CustomerServiceService} from "../../../customer/services/customer-service.service";
 import {ModalResponse} from "../../../../core/utils/ModalResponse";
-import {ConfirmComponent} from "../../components/confirm/confirm.component";
 import {CrudComponent} from "../../components/crud/crud.component";
 import {SharedService} from "../../../../shared/services/shared.service";
+import {ConfirmComponent} from "../../../../shared/components/confirm/confirm.component";
 
 @Component({
   selector: 'app-list',
