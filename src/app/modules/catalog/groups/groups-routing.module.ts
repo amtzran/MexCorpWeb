@@ -8,12 +8,12 @@ const routes: Routes = [{
   component: GroupComponent,
   children: [
     {
-      path: 'home',
+      path: '',
       component: TableGroupComponent
     },
     {
-      path: '',
-      redirectTo: 'home'
+      path: '**',
+      redirectTo: ''
     }
   ]
 }];

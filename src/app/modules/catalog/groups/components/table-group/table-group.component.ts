@@ -6,8 +6,8 @@ import {GroupService} from "../../services/groups.service";
 import {MatDialog} from "@angular/material/dialog";
 import {Group} from "../../models/group.interface";
 import {DialogAddGroupComponent} from "../dialog-add-group/dialog-add-group.component";
-import {ModalResponse} from "../../../../core/utils/ModalResponse";
-import {ConfirmComponent} from "../../../employee/components/confirm/confirm.component";
+import {ModalResponse} from "../../../../../core/utils/ModalResponse";
+import {ConfirmComponent} from "../../../../employee/components/confirm/confirm.component";
 import {MatSnackBar} from "@angular/material/snack-bar";
 
 @Component({

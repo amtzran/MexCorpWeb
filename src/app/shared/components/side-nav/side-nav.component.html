@@ -26,6 +26,20 @@
         <span>{{ menu.name }}</span>
       </a>
 
+      <a class="list-group-item" mat-list-item [matMenuTriggerFor]="catalogs">
+        <mat-icon mat-list-icon>edit</mat-icon>
+        <span>Catálogos</span>
+      </a>
+
+      <mat-menu #catalogs="matMenu">
+        <a *ngFor="let menu of menuCatalogs"
+           mat-menu-item
+           [routerLink]="menu.route">
+          <mat-icon mat-list-icon>{{menu.icon}}</mat-icon>
+          <span>{{menu.name}}</span>
+        </a>
+      </mat-menu>
+
     </mat-nav-list>
 
   </mat-sidenav>

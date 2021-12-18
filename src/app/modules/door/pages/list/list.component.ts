@@ -7,12 +7,11 @@ import {Door} from "../../interfaces/door.interface";
 import {DoorService} from "../../services/door.service";
 import {MatDialog} from "@angular/material/dialog";
 import {MatSnackBar} from "@angular/material/snack-bar";
-import {ConfirmComponent} from "../../../employee/components/confirm/confirm.component";
 import {ActivatedRoute, Router} from "@angular/router";
 import {CustomerServiceService} from "../../../customer/services/customer-service.service";
-import {map, Observable, switchMap} from "rxjs";
-
-;
+import {ModalResponse} from "../../../../core/utils/ModalResponse";
+import {ConfirmComponent} from "../../components/confirm/confirm.component";
+import {CrudComponent} from "../../components/crud/crud.component";
 
 @Component({
   selector: 'app-list',
@@ -24,11 +23,10 @@ export class ListComponent implements OnInit {
 
   displayedColumns: string[] = ['id', 'folio', 'name', 'observations', 'door_type','options'];
   dataSource!: MatTableDataSource<Door>;
-  doorPaginateForm!: FormGroup;
-
-  @ViewChild(MatPaginator, {static: true}) paginator!: MatPaginator;
-  totalitems: number = 0;
+  totalItems: number = 0;
   pageSize = 10;
+  doorPaginateForm!: FormGroup;
+  @ViewChild(MatPaginator, {static: true}) paginator!: MatPaginator;
   @ViewChild(MatSort) sort!: MatSort;
   idCustomer!: string | null;
   private sub : any;
@@ -38,8 +36,7 @@ export class ListComponent implements OnInit {
               private formBuilder: FormBuilder,
               private dialog : MatDialog,
               private snackBar: MatSnackBar,
-              private activateRoute: ActivatedRoute,
-              private router: Router) {
+              private activateRoute: ActivatedRoute) {
 
   }
 
@@ -48,16 +45,28 @@ export class ListComponent implements OnInit {
     this.sub = this.activateRoute.paramMap.subscribe( params => {
       this.idCustomer = params.get('customer');
     })
+
+    /*Formulario*/
+    this.loadDoorFilterForm();
+
     // Assign the data to the data source for the table to render
     this.dataSource = new MatTableDataSource();
-    this.loadDoorPaginateForm();
-    this.getDoors(this.paginator);
-
+    this.getDoorsPaginator(this.paginator);
   }
 
   ngAfterViewInit() {
     this.dataSource.paginator = this.paginator;
     this.dataSource.sort = this.sort;
+  }
+
+  getDoorsPaginator(event: any){
+    const paginator: MatPaginator = event;
+    this.doorPaginateForm.get('page')?.setValue(paginator.pageIndex + 1);
+    this.doorService.getDoors(this.doorPaginateForm.value,  this.idCustomer )
+      .subscribe(doors => {
+        this.dataSource.data = doors.results
+        this.totalItems = doors.count;
+      } )
   }
 
   applyFilter(event: Event) {
@@ -69,25 +78,7 @@ export class ListComponent implements OnInit {
     }
   }
 
-  getDoors(event: any){
-    const paginator: MatPaginator = event;
-    this.doorPaginateForm.get('page')?.setValue(paginator.pageIndex + 1);
-    this.doorService.getDoors(this.doorPaginateForm.value,  this.idCustomer )
-      .subscribe(doors => {
-        this.dataSource.data = doors.results
-        this.totalitems = doors.count;
-      } )
-  }
-
-  /* Método que permite iniciar los filtros de rutas*/
-  loadDoorPaginateForm(): void{
-    this.doorPaginateForm = this.formBuilder.group({
-      page: [],
-      page_size: [this.pageSize]
-    })
-  }
-
-  delete(door: Door){
+  deleteDoor(door: Door){
     // Show Dialog
     const dialog = this.dialog.open(ConfirmComponent, {
       width: '250',
@@ -100,11 +91,39 @@ export class ListComponent implements OnInit {
           this.doorService.deleteDoor(door.id!)
             .subscribe(resp => {
               this.showSnackBar('Registro Eliminado')
-              this.getDoors(this.paginator);
+              this.getDoorsPaginator(this.paginator);
             })
         }
       })
 
+  }
+
+  /**
+   * Open dialog for add and update group.
+   * @param edit
+   * @param idDoor
+   * @param info
+   */
+  openDialogDoor(edit: boolean, idDoor: number | null, info: boolean): void {
+    const dialogRef = this.dialog.open(CrudComponent, {
+      autoFocus: false,
+      disableClose: true,
+      width: '50vw',
+      data: {edit: edit, idDoor: idDoor, info: info, idCustomer : this.idCustomer}
+    });
+    dialogRef.afterClosed().subscribe(res => {
+      if (res === ModalResponse.UPDATE) {
+        this.getDoorsPaginator(this.paginator);
+      }
+    });
+  }
+
+  /* Método que permite iniciar los filtros de rutas*/
+  loadDoorFilterForm(): void{
+    this.doorPaginateForm = this.formBuilder.group({
+      page: [],
+      page_size: [this.pageSize]
+    })
   }
 
   showSnackBar(msg: string) {

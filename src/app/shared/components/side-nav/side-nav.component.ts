@@ -33,6 +33,34 @@ export class SideNavComponent implements OnInit {
     }
   ]
 
+  menuCatalogs: RoutesSide[] = [
+    {
+      name: 'Puestos',
+      route: '/customer',
+      icon: 'engineering'
+    },
+    {
+      name: 'Grupos de Trabajo',
+      route: '/group',
+      icon: 'group'
+    },
+    {
+      name: 'Convenios',
+      route: '/customer',
+      icon: 'folder'
+    },
+    {
+      name: 'Tipo Cliente',
+      route: '/customer',
+      icon: 'people_alt'
+    },
+    {
+      name: 'Tipo Acceso',
+      route: '/customer',
+      icon: 'security'
+    },
+  ]
+
   logout(){
     this.router.navigateByUrl('/auth/login')
   }

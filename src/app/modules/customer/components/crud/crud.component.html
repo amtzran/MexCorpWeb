@@ -134,8 +134,8 @@
 </mat-card>
 </mat-dialog-content>
 
-<mat-dialog-actions align="end">
-  <button (click)="close()" mat-stroked-button color="primary" mat-dialog-close>Cancelar</button>
+<mat-dialog-actions fxLayoutAlign="end">
+  <button (click)="close()" mat-stroked-button color="primary" mat-dialog-close="true">Cancelar</button>
   <button *ngIf="!customer.idCustomer" (click)="addCustomer()" mat-flat-button color="primary" cdkFocusInitial [disabled]="customerForm.invalid">Guardar Cliente</button>
   <button *ngIf="customer.idCustomer && customer.edit" (click)="updateCustomer()" mat-flat-button color="primary" cdkFocusInitial>Editar</button>
 </mat-dialog-actions>

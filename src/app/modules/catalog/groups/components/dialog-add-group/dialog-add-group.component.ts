@@ -2,7 +2,7 @@ import { Component, OnInit, Inject } from '@angular/core';
 import {FormBuilder, FormGroup, Validators} from "@angular/forms";
 import {MAT_DIALOG_DATA, MatDialogRef} from "@angular/material/dialog";
 import {GroupService} from "../../services/groups.service";
-import {ModalResponse} from "../../../../core/utils/ModalResponse";
+import {ModalResponse} from "../../../../../core/utils/ModalResponse";
 import {MatSnackBar} from "@angular/material/snack-bar";
 
 @Component({

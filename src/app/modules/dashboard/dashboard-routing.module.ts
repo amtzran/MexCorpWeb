@@ -19,9 +19,29 @@ const routes: Routes = [
     loadChildren: () => import('../door/door.module').then(m => m.DoorModule),
   },
   {
-    path: 'groups',
+    path: 'group',
     component: HomeComponent,
-    loadChildren: () => import('../groups/groups.module').then(m => m.GroupsModule),
+    loadChildren: () => import('../catalog/groups/groups.module').then(m => m.GroupsModule),
+  },
+  {
+    path: 'contract',
+    component: HomeComponent,
+    loadChildren: () => import('../catalog/contracts/contract.module').then(m => m.ContractModule),
+  },
+  {
+    path: 'job-title',
+    component: HomeComponent,
+    loadChildren: () => import('../catalog/job-titles/job-title.module').then(m => m.JobTitleModule),
+  },
+  {
+    path: 'customer-type',
+    component: HomeComponent,
+    loadChildren: () => import('../catalog/customer-types/customer-type.module').then(m => m.CustomerTypeModule),
+  },
+  {
+    path: 'door-type',
+    component: HomeComponent,
+    loadChildren: () => import('../catalog/door-types/door-type.module').then(m => m.DoorTypeModule),
   }
 ];
 

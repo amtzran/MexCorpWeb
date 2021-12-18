@@ -8,7 +8,7 @@ import {FormBuilder, FormGroup} from "@angular/forms";
 import {ConfirmComponent} from "../../components/confirm/confirm.component";
 import {MatDialog} from "@angular/material/dialog";
 import {MatSnackBar} from "@angular/material/snack-bar";
-import {DialogAddGroupComponent} from "../../../groups/components/dialog-add-group/dialog-add-group.component";
+import {DialogAddGroupComponent} from "../../../catalog/groups/components/dialog-add-group/dialog-add-group.component";
 import {ModalResponse} from "../../../../core/utils/ModalResponse";
 import {CrudComponent} from "../../components/crud/crud.component";
 

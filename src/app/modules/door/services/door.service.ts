@@ -30,7 +30,6 @@ export class DoorService {
 
   // Add Door
   addDoor(door: Door): Observable<Door> {
-    console.log(door)
     return this.http.post<Door>(`${this.baseUrl}/doors/`, door)
   }
 
