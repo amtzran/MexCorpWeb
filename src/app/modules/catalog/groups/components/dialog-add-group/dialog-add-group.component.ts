@@ -16,7 +16,7 @@ export class DialogAddGroupComponent implements OnInit {
   groupForm!: FormGroup;
 
   /*Titulo Modal*/
-  title: string = 'Nuevo Grupo de Trabajo';
+  title: string = 'Nuevo Grupo';
 
   /*Variables display errors modal*/
   showError!: boolean;
@@ -36,12 +36,12 @@ export class DialogAddGroupComponent implements OnInit {
     this.loadGroupForm();
 
     if(this.group.idGroup && this.group.edit){
-      this.title = 'Editar Grupo de Trabajo';
+      this.title = 'Editar Grupo';
       this.groupForm.updateValueAndValidity();
     }
 
     if(this.group.idGroup && !this.group.edit){
-      this.title = 'Información del Grupo de Trabajo';
+      this.title = 'Información del Grupo';
       this.groupForm.updateValueAndValidity();
     }
 
@@ -89,7 +89,6 @@ export class DialogAddGroupComponent implements OnInit {
       return
     }
     this._groupService.postGroup(this.groupForm.value).subscribe(response => {
-      console.log(response);
       this.showSnackBar('Se ha agregado correctamente el grupo.');
       this.dialogRef.close(ModalResponse.UPDATE);
     })
@@ -109,6 +108,15 @@ export class DialogAddGroupComponent implements OnInit {
       this.showSnackBar('Se ha actualizado correctamente el grupo.');
       this.dialogRef.close(ModalResponse.UPDATE);
     })
+  }
+
+  /**
+   * Validations
+   * @param field
+   */
+  fieldInvalid(field: string) {
+    return this.groupForm.get(field)?.invalid &&
+      this.groupForm.get(field)?.touched
   }
 
   /**

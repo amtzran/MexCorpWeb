@@ -40,7 +40,7 @@ export class SideNavComponent implements OnInit {
       icon: 'engineering'
     },
     {
-      name: 'Grupos de Trabajo',
+      name: 'Grupos',
       route: '/group',
       icon: 'group'
     },

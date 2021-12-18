@@ -72,6 +72,7 @@ export class CrudComponent implements OnInit {
       delete response.folio;
       delete response.created_at;
       delete response.updated_at;
+      delete response.customer;
       this.doorForm.setValue(response);
     })
   }

@@ -19,6 +19,9 @@
                 matInput
                 type="text"
                 formControlName="name">
+              <mat-error *ngIf="fieldInvalid('name')">
+                Favor de Ingresar el Tipo Cliente
+              </mat-error>
             </mat-form-field>
 
             <mat-form-field fxFlex="100">

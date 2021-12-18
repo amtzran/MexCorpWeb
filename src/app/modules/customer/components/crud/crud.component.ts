@@ -131,6 +131,15 @@ export class CrudComponent implements OnInit {
   }
 
   /**
+   * Validations
+   * @param field
+   */
+  fieldInvalid(field: string) {
+    return this.customerForm.get(field)?.invalid &&
+      this.customerForm.get(field)?.touched
+  }
+
+  /**
    * Close modal.
    */
   close(): void{

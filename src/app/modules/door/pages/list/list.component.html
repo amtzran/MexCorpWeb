@@ -6,17 +6,28 @@
 </mat-card>
 
 <div fxLayout="row">
-  <div fxFlex="80">
+  <div fxFlex="50">
     <mat-form-field appearance="standard">
       <mat-label>Filter</mat-label>
       <input matInput (keyup)="applyFilter($event)" placeholder="Buscar en Tabla Accesos" #input>
     </mat-form-field>
   </div>
-  <div fxFlex="20" fxLayoutAlign="center center">
+
+  <div fxFlex="25" fxLayoutAlign="center center">
     <button (click)="openDialogDoor(true, null, false)" mat-button color="primary">
       <mat-icon>phonelink_lock</mat-icon> Nuevo Acceso
     </button>
   </div>
+
+  <div fxFlex="25" fxLayoutAlign="center center">
+    <button mat-button
+            color="primary"
+            type="button"
+            [routerLink]="['../']">
+      <mat-icon>reply</mat-icon>Regresar
+    </button>
+  </div>
+
 </div>
 
 

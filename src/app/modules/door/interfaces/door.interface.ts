@@ -12,7 +12,7 @@ export interface Door {
   name:            string;
   observations?:   string;
   door_type:       number;
-  customer:       number;
+  customer?:       number;
   created_at?:  Date;
   updated_at?:  Date;
 }

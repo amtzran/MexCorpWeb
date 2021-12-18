@@ -19,6 +19,9 @@
                 matInput
                 type="text"
                 formControlName="name">
+              <mat-error *ngIf="fieldInvalid('name')">
+                Favor de Ingresar el Empleado
+              </mat-error>
             </mat-form-field>
 
             <mat-form-field fxFlex="100">
@@ -28,6 +31,9 @@
                 type="color"
                 formControlName="color"
               >
+              <mat-error *ngIf="fieldInvalid('color')">
+                Favor de elegir un color
+              </mat-error>
             </mat-form-field>
           </div>
 
@@ -50,23 +56,29 @@
                fxLayoutGap="20px">
 
             <mat-form-field fxFlex="100">
-              <mat-label>Centros de Trabajo</mat-label>
+              <mat-label>Grupo</mat-label>
               <mat-select
                 formControlName="job_center">
                 <mat-option *ngFor="let jobCenter of jobCenters" [value]="jobCenter.id">
                   {{ jobCenter.name}}
                 </mat-option>
               </mat-select>
+              <mat-error *ngIf="fieldInvalid('job_center')">
+                Favor de Seleccionar un Grupo
+              </mat-error>
             </mat-form-field>
 
             <mat-form-field fxFlex="100">
-              <mat-label>Tipos de Trabajo</mat-label>
+              <mat-label>Puesto</mat-label>
               <mat-select
                 formControlName="job">
                 <mat-option *ngFor="let job of jobs" [value]="job.id">
                   {{ job.name}}
                 </mat-option>
               </mat-select>
+              <mat-error *ngIf="fieldInvalid('job')">
+                Favor de Seleccionar un Puesto
+              </mat-error>
             </mat-form-field>
 
           </div>
