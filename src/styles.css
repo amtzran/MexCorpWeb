@@ -3,6 +3,7 @@
 html, body { height: 100%; }
 body { margin: 0; font-family: Roboto, "Helvetica Neue", sans-serif; }
 
+/*TODO: Style for Module Refactor.
 /* Clase para el Espaciado */
 .spacer {
   flex: 1 1 auto;
@@ -12,7 +13,6 @@ body { margin: 0; font-family: Roboto, "Helvetica Neue", sans-serif; }
   margin: 10px;
 }
 
-/*Disegn Table General*/
 table {
   width: 100%;
 }
@@ -22,6 +22,8 @@ table {
   width: 100%;
 }
 
-td, th {
+/*td, th {
   width: 25%;
-}
+}*/
+
+

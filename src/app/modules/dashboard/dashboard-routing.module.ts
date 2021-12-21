@@ -42,6 +42,11 @@ const routes: Routes = [
     path: 'door-type',
     component: HomeComponent,
     loadChildren: () => import('../catalog/door-types/door-type.module').then(m => m.DoorTypeModule),
+  },
+  {
+    path: 'task',
+    component: HomeComponent,
+    loadChildren: () => import('../task/task.module').then(m => m.TaskModule),
   }
 ];
 

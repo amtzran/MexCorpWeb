@@ -72,7 +72,7 @@ export class CrudComponent implements OnInit {
   loadCustomerTypeForm():void{
     this.customerTypeForm = this.fb.group({
       name:[{value:null, disabled:this.customerType.info}, Validators.required],
-      description:[{value:null, disabled:this.customerType.info}],
+      description:[{value:'', disabled:this.customerType.info}],
     });
   }
 

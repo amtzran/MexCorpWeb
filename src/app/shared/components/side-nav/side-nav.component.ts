@@ -30,6 +30,11 @@ export class SideNavComponent implements OnInit {
       name: 'Empleados',
       route: '/employee/list',
       icon: 'engineering'
+    },
+    {
+      name: 'Tareas',
+      route: '/calendar',
+      icon: 'schedule'
     }
   ]
 

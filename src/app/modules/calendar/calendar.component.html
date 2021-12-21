@@ -1,0 +1,16 @@
+<div fxLayout="row" fxLayoutAlign="start center">
+    <button mat-button (click)="test()">Regresar</button>
+</div>
+
+<div fxLayout="row" fxLayoutAlign="end center">
+  <button mat-button color="primary" (click)="openDialogCustomer(true,null,false)">Nueva Tarea</button>
+  <mat-icon mat-list-icon >task</mat-icon>
+</div>
+
+<div class='demo-app-main'>
+  <full-calendar
+    [options]='calendarOptions'
+  ></full-calendar>
+</div>
+
+

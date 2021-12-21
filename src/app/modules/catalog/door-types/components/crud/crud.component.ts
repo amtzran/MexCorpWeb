@@ -72,7 +72,7 @@ export class CrudComponent implements OnInit {
   loadDoorTypeForm():void{
     this.doorTypeForm = this.fb.group({
       name:[{value:null, disabled:this.doorType.info}, Validators.required],
-      description:[{value:null, disabled:this.doorType.info}],
+      description:[{value:'', disabled:this.doorType.info}],
     });
   }
 

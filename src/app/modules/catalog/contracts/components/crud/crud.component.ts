@@ -2,7 +2,6 @@ import {Component, Inject, OnInit} from '@angular/core';
 import {FormBuilder, FormGroup, Validators} from "@angular/forms";
 import {MatSnackBar} from "@angular/material/snack-bar";
 import {MAT_DIALOG_DATA, MatDialogRef} from "@angular/material/dialog";
-import {EmployeeService} from "../../../../employee/services/employee.service";
 import {ModalResponse} from "../../../../../core/utils/ModalResponse";
 import {ContractService} from "../../services/contract.service";
 import {SharedService} from "../../../../../shared/services/shared.service";
@@ -73,7 +72,7 @@ export class CrudComponent implements OnInit {
   loadContractForm():void{
     this.contractForm = this.fb.group({
       name:[{value:null, disabled:this.contract.info}, Validators.required],
-      description:[{value:null, disabled:this.contract.info}],
+      description:[{value:'', disabled:this.contract.info}],
     });
   }
 

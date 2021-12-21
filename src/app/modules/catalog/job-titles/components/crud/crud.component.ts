@@ -70,7 +70,7 @@ export class CrudComponent implements OnInit {
   loadJobTitleForm():void{
     this.jobTitleForm = this.fb.group({
       name:[{value:null, disabled:this.jobTitle.info}, Validators.required],
-      description:[{value:null, disabled:this.jobTitle.info}],
+      description:[{value:'', disabled:this.jobTitle.info}],
     });
   }
 

@@ -69,13 +69,13 @@ export class DialogAddGroupComponent implements OnInit {
   loadGroupForm():void{
     this.groupForm = this.fb.group({
       name:[{value:null, disabled:this.group.info}, Validators.required],
-      reason_social:[{value:null, disabled:this.group.info}],
-      rfc:[{value:null, disabled:this.group.info}],
-      phone:[{value:null, disabled:this.group.info}],
-      email:[{value:null, disabled:this.group.info}],
-      address: [{value:null, disabled:this.group.info}],
-      city: [{value:null, disabled:this.group.info}],
-      postal_code: [{value:null, disabled:this.group.info}]
+      reason_social:[{value:'', disabled:this.group.info}],
+      rfc:[{value:'', disabled:this.group.info}],
+      phone:[{value:'', disabled:this.group.info}],
+      email:[{value:'', disabled:this.group.info}],
+      address: [{value:'', disabled:this.group.info}],
+      city: [{value:'', disabled:this.group.info}],
+      postal_code: [{value:'', disabled:this.group.info}]
     });
   }
 
