@@ -67,7 +67,7 @@ export class SideNavComponent implements OnInit {
     },
     {
       name: 'Tipo Acceso',
-      route: '/door-type',
+      route: '/doors-type',
       icon: 'security'
     },
     {

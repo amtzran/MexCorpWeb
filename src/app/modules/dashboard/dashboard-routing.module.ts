@@ -6,7 +6,7 @@ const routes: Routes = [
   {
     path:'customer',
     component: HomeComponent,
-    loadChildren: () => import('../customer/customer.module').then(m => m.CustomerModule),
+    loadChildren: () => import('../customer/customers/customer.module').then(m => m.CustomerModule),
   },
   {
     path:'employee',
@@ -14,9 +14,19 @@ const routes: Routes = [
     loadChildren: () => import('../employee/employee.module').then(m => m.EmployeeModule),
   },
   {
-    path: 'door/customer/:customer',
+    path: 'doors/customer/:customer',
     component: HomeComponent,
-    loadChildren: () => import('../door/door.module').then(m => m.DoorModule),
+    loadChildren: () => import('../customer/doors/door.module').then(m => m.DoorModule),
+  },
+  {
+    path: 'contacts/customer/:customer',
+    component: HomeComponent,
+    loadChildren: () => import('../customer/contacts/contact.module').then(m => m.ContactModule),
+  },
+  {
+    path: 'comments/customer/:customer',
+    component: HomeComponent,
+    loadChildren: () => import('../customer/comments/comment.module').then(m => m.CommentModule),
   },
   {
     path: 'group',
@@ -39,7 +49,7 @@ const routes: Routes = [
     loadChildren: () => import('../catalog/customer-types/customer-type.module').then(m => m.CustomerTypeModule),
   },
   {
-    path: 'door-type',
+    path: 'doors-type',
     component: HomeComponent,
     loadChildren: () => import('../catalog/door-types/door-type.module').then(m => m.DoorTypeModule),
   },

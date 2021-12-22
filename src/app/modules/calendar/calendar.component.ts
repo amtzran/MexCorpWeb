@@ -114,6 +114,7 @@ export class CalendarComponent implements OnInit {
     });
     dialogRef.afterClosed().subscribe(res => {
       if (res === ModalResponse.UPDATE) {
+        //TODO: Add calendar Dinamic
         //this.initTaskCalendar()
         location.reload()
       }

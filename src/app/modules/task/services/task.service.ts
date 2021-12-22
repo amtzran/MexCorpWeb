@@ -3,9 +3,9 @@ import {Observable} from "rxjs";
 import {HttpClient, HttpParams} from "@angular/common/http";
 import {environment} from "../../../../environments/environment";
 import {ModelWorkType, Task} from "../models/task.interface";
-import {ModelCustomer} from "../../customer/interfaces/customer.interface";
+import {ModelCustomer} from "../../customer/customers/interfaces/customer.interface";
 import {ModelEmployee, ModelJobCenter} from "../../employee/interfaces/employee.interface";
-import {ModelDoorType} from "../../door/interfaces/door.interface";
+import {ModelDoorType} from "../../customer/doors/interfaces/door.interface";
 
 @Injectable({
   providedIn: 'root'

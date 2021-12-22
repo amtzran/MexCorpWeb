@@ -1,12 +1,12 @@
 import { Component, OnInit } from '@angular/core';
 
 @Component({
-  selector: 'app-doors-type',
-  templateUrl: './door-type.component.html',
+  selector: 'app-contact',
+  templateUrl: './comment.component.html',
   styles: [
   ]
 })
-export class DoorTypeComponent implements OnInit {
+export class CommentComponent implements OnInit {
 
   constructor() { }
 

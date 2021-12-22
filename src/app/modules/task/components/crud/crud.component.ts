@@ -1,6 +1,6 @@
 import {Component, Inject, OnInit} from '@angular/core';
 import {FormBuilder, FormControl, FormGroup, Validators} from "@angular/forms";
-import {Customer} from "../../../customer/interfaces/customer.interface";
+import {Customer} from "../../../customer/customers/interfaces/customer.interface";
 import {SharedService} from "../../../../shared/services/shared.service";
 import {MAT_DIALOG_DATA, MatDialogRef} from "@angular/material/dialog";
 import {ModalResponse} from "../../../../core/utils/ModalResponse";
@@ -8,7 +8,7 @@ import {TaskService} from "../../services/task.service";
 import {Employee, JobCenter} from "../../../employee/interfaces/employee.interface";
 import {CalendarDate, WorkType} from "../../models/task.interface";
 import {DateService} from "../../../../core/utils/date.service";
-import {DoorType} from "../../../door/interfaces/door.interface";
+import {DoorType} from "../../../customer/doors/interfaces/door.interface";
 
 @Component({
   selector: 'app-crud',

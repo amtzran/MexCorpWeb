@@ -77,7 +77,7 @@ export class CrudComponent implements OnInit {
   }
 
   /**
-   * Create employee.
+   * Create Contract.
    */
   addContract(): void {
     this.submit = true;
@@ -92,7 +92,7 @@ export class CrudComponent implements OnInit {
   }
 
   /**
-   * Update a employee.
+   * Update a Contract.
    */
   updateContract(): void {
     this.submit = true;
