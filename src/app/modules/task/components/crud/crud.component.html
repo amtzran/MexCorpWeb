@@ -26,13 +26,18 @@
             </mat-form-field>
 
             <mat-form-field fxFlex="100">
-              <mat-label>Comentarios</mat-label>
-              <input
-                matInput
-                type="text"
-                formControlName="comments"
-              >
+              <mat-label>Empleados</mat-label>
+              <mat-select
+                formControlName="employee">
+                <mat-option *ngFor="let employee of employees" [value]="employee.id">
+                  {{ employee.name }}
+                </mat-option>
+              </mat-select>
+              <mat-error *ngIf="fieldInvalid('employee')">
+                Favor de Seleccionar un Empleado
+              </mat-error>
             </mat-form-field>
+
           </div>
 
           <div fxLayout="row"
@@ -55,6 +60,7 @@
             <mat-form-field fxFlex="100">
               <mat-label>Clientes</mat-label>
               <mat-select
+                (selectionChange)="selectCustomer($event.value)"
                 formControlName="customer">
                 <mat-option *ngFor="let customer of customers" [value]="customer.id">
                   {{ customer.name}}
@@ -72,29 +78,44 @@
                fxLayoutGap="20px">
 
             <mat-form-field fxFlex="100">
-              <mat-label>Empleados</mat-label>
-              <mat-select
-                formControlName="employee">
-                <mat-option *ngFor="let employee of employees" [value]="employee.id">
-                  {{ employee.name }}
+              <mat-label>Accesos Cliente</mat-label>
+              <mat-select multiple>
+                <mat-option *ngFor="let doorType of doorTypes" [value]="doorType.id">
+                  {{ doorType.name }}
                 </mat-option>
               </mat-select>
-              <mat-error *ngIf="fieldInvalid('employee')">
-                Favor de Seleccionar un Empleado
-              </mat-error>
+             <!-- <mat-error *ngIf="fieldInvalid('door_type')">
+                Favor de Seleccionar una o mas Accesos
+              </mat-error>-->
             </mat-form-field>
+            <!--TODO: Add Control Form formControlName="door_type"-->
 
             <mat-form-field fxFlex="100">
               <mat-label>Tipos de Trabajos</mat-label>
-              <mat-select
-                formControlName="work_type">
+              <mat-select formControlName="work_type">
                 <mat-option *ngFor="let workType of workTypes" [value]="workType.id">
                   {{ workType.name }}
                 </mat-option>
               </mat-select>
-              <mat-error *ngIf="fieldInvalid('customer')">
-                Favor de Seleccionar un Cliente
+              <mat-error *ngIf="fieldInvalid('employee')">
+                Favor de Seleccionar un Tipo Trabajo
               </mat-error>
+            </mat-form-field>
+
+
+          </div>
+
+          <div fxLayout="row"
+               fxLayout.xs="column"
+               fxLayoutGap="20px">
+
+            <mat-form-field fxFlex="100">
+              <mat-label>Comentarios</mat-label>
+              <input
+                matInput
+                type="text"
+                formControlName="comments"
+              >
             </mat-form-field>
 
           </div>
@@ -122,7 +143,7 @@
                 type="time"
                 formControlName="initial_hour">
               <mat-error *ngIf="fieldInvalid('initial_hour')">
-                Favor de Ingresar la Tarea
+                Favor de Ingresar la Hora Inicial
               </mat-error>
             </mat-form-field>
 
@@ -133,7 +154,7 @@
                 type="time"
                 formControlName="final_hour">
               <mat-error *ngIf="fieldInvalid('final_hour')">
-                Favor de Ingresar la Tarea
+                Favor de Ingresar la Hora Final
               </mat-error>
             </mat-form-field>
 

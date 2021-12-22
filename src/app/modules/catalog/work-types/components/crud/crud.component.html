@@ -1,0 +1,52 @@
+<h4 mat-dialog-title class="title-subsection">{{title}}</h4>
+<mat-divider></mat-divider>
+<br>
+<mat-dialog-content class="mat-typography" [formGroup]="workTypeForm">
+
+  <mat-card>
+    <mat-card-content>
+
+      <div fxLayout="row" fxLayoutGap="40px" fxLayout.xs="column">
+
+        <div class="container" fxFlex="100" fxLayout="column" fxLayout.xs="column">
+
+          <div fxLayout="row"
+               fxLayout.xs="column"
+               fxLayoutGap="20px">
+            <mat-form-field fxFlex="100">
+              <mat-label>Tipo de Trabajo</mat-label>
+              <input
+                matInput
+                type="text"
+                formControlName="name">
+              <mat-error *ngIf="fieldInvalid('name')">
+                Favor de Ingresar el Tipo Trabajo
+              </mat-error>
+            </mat-form-field>
+
+            <mat-form-field fxFlex="100">
+              <mat-label>Descripción</mat-label>
+              <input
+                matInput
+                type="text"
+                formControlName="description"
+              >
+            </mat-form-field>
+          </div>
+
+        </div>
+
+      </div>
+
+    </mat-card-content>
+    <mat-card-actions>
+    </mat-card-actions>
+  </mat-card>
+</mat-dialog-content>
+
+<mat-dialog-actions fxLayoutAlign="end">
+  <button (click)="close()" mat-stroked-button color="primary" mat-dialog-close="true">Cancelar</button>
+  <button *ngIf="!workType.idWorkType" (click)="addWorkType()" mat-flat-button color="primary" cdkFocusInitial [disabled]="workTypeForm.invalid">Guardar Tipo de Trabajo</button>
+  <button *ngIf="workType.idWorkType && workType.edit" (click)="updateWorkType()" mat-flat-button color="primary" cdkFocusInitial>Editar</button>
+</mat-dialog-actions>
+

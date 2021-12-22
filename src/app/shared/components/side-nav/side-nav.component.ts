@@ -1,5 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import {Router} from "@angular/router";
+import {AuthServiceService} from "../../../modules/auth/services/auth-service.service";
 
 interface RoutesSide {
   name: string,
@@ -15,7 +16,12 @@ interface RoutesSide {
 })
 export class SideNavComponent implements OnInit {
 
-  constructor(private router: Router) { }
+  constructor(private router: Router,
+              private authService: AuthServiceService) { }
+
+  get user() {
+    return this.authService.user
+  }
 
   ngOnInit(): void {
   }
@@ -64,10 +70,16 @@ export class SideNavComponent implements OnInit {
       route: '/door-type',
       icon: 'security'
     },
+    {
+      name: 'Tipo Trabajo',
+      route: '/work-type',
+      icon: 'work'
+    },
   ]
 
   logout(){
     this.router.navigateByUrl('/auth/login')
+    this.authService.logout()
   }
 
 }

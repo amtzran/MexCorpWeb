@@ -1,16 +1,15 @@
-<div fxLayout="row" fxLayoutAlign="start center">
-    <button mat-button (click)="test()">Regresar</button>
+<div style="margin: 40px">
+  <div fxLayout="row" fxLayoutAlign="center center">
+    <button mat-button color="primary" (click)="openDialogTask(true,null,false,null)">
+      Nueva Tarea
+      <mat-icon mat-list-icon >task</mat-icon>
+    </button>
+
+  </div>
+
+  <div class='demo-app-main'>
+    <full-calendar #calendar
+      [options]='calendarOptions'
+    ></full-calendar>
+  </div>
 </div>
-
-<div fxLayout="row" fxLayoutAlign="end center">
-  <button mat-button color="primary" (click)="openDialogCustomer(true,null,false)">Nueva Tarea</button>
-  <mat-icon mat-list-icon >task</mat-icon>
-</div>
-
-<div class='demo-app-main'>
-  <full-calendar
-    [options]='calendarOptions'
-  ></full-calendar>
-</div>
-
-

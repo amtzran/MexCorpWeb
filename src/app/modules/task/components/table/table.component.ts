@@ -5,25 +5,7 @@ import {CalendarOptions, DateSelectArg, EventApi, EventClickArg} from "@fullcale
   selector: 'app-table',
   templateUrl: './table.component.html',
   styleUrls: ['./app.component.scss']
-  /*styles: [`
-    .demo-app-main {
-      flex-grow: 1;
-      padding: 3em;
-    }
-    html,
-    body,
-    body > * { /!* the app-root *!/
-      margin: 0;
-      padding: 0;
-      height: 100%;
-    }
-    .demo-app {
-      display: flex;
-      min-height: 100%;
-      font-family: Arial, Helvetica Neue, Helvetica, sans-serif;
-      font-size: 14px;
-    }
-  `
+  /*styles: [``
   ]*/
 })
 export class TableComponent implements OnInit {

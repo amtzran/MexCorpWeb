@@ -69,7 +69,7 @@
 
 <mat-dialog-actions fxLayoutAlign="end">
   <button (click)="close()" mat-stroked-button color="primary" mat-dialog-close="true">Cancelar</button>
-  <button *ngIf="!door.idDoor" (click)="addDoor()" mat-flat-button color="primary" cdkFocusInitial [disabled]="doorForm.invalid">Guardar Cliente</button>
+  <button *ngIf="!door.idDoor" (click)="addDoor()" mat-flat-button color="primary" cdkFocusInitial [disabled]="doorForm.invalid">Guardar Acceso</button>
   <button *ngIf="door.idDoor && door.edit" (click)="updateDoor()" mat-flat-button color="primary" cdkFocusInitial>Editar</button>
 </mat-dialog-actions>
 

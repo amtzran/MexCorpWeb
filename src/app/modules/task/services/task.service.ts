@@ -1,10 +1,11 @@
 import { Injectable } from '@angular/core';
 import {Observable} from "rxjs";
-import {HttpClient} from "@angular/common/http";
+import {HttpClient, HttpParams} from "@angular/common/http";
 import {environment} from "../../../../environments/environment";
 import {ModelWorkType, Task} from "../models/task.interface";
-import {ModelCustomer, ModelTypeCustomer} from "../../customer/interfaces/customer.interface";
+import {ModelCustomer} from "../../customer/interfaces/customer.interface";
 import {ModelEmployee, ModelJobCenter} from "../../employee/interfaces/employee.interface";
+import {ModelDoorType} from "../../door/interfaces/door.interface";
 
 @Injectable({
   providedIn: 'root'
@@ -16,7 +17,7 @@ export class TaskService {
 
   // Get Task
   getTaskById(id: number) : Observable<Task> {
-    return this.http.get<Task>(`${this.baseUrl}/contracts/${id}`)
+    return this.http.get<Task>(`${this.baseUrl}/tasks/${id}`)
   }
 
   // Get Tasks
@@ -31,13 +32,14 @@ export class TaskService {
 
   // Update Contract
   updateTask(idTask: number, task: Task) : Observable<Task> {
-    return this.http.put<Task>(`${this.baseUrl}/contracts/${idTask}/`, task)
+    console.log(idTask, task)
+    return this.http.put<Task>(`${this.baseUrl}/tasks/${idTask}/`, task)
   }
-  /*
-    // Delete Contract
-    deleteContract(id: number) : Observable<number>{
-      return this.http.delete<number>(`${this.baseUrl}/contracts/${id}`)
-    }*/
+
+ /* // Delete Task
+  deleteTask(id: number) : Observable<number>{
+    return this.http.delete<number>(`${this.baseUrl}/tasks/${id}`)
+  }*/
 
   // Get Customer
   getCustomers() : Observable<ModelCustomer> {
@@ -57,6 +59,13 @@ export class TaskService {
   // Get Work Types
   getWorkTypes() : Observable<ModelWorkType> {
     return this.http.get<ModelWorkType>(`${this.baseUrl}/work-types/`)
+  }
+
+  // Get Door Types By Customer
+  getDoorTypes(idCustomer: number) : Observable<ModelDoorType> {
+    let params = new HttpParams();
+    idCustomer ? params = params.append('customer', idCustomer) : null;
+    return this.http.get<ModelDoorType>(`${this.baseUrl}/doors/`,{params})
   }
 
 }

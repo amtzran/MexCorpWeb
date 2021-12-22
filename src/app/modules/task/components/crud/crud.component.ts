@@ -6,8 +6,9 @@ import {MAT_DIALOG_DATA, MatDialogRef} from "@angular/material/dialog";
 import {ModalResponse} from "../../../../core/utils/ModalResponse";
 import {TaskService} from "../../services/task.service";
 import {Employee, JobCenter} from "../../../employee/interfaces/employee.interface";
-import {WorkType} from "../../models/task.interface";
+import {CalendarDate, WorkType} from "../../models/task.interface";
 import {DateService} from "../../../../core/utils/date.service";
+import {DoorType} from "../../../door/interfaces/door.interface";
 
 @Component({
   selector: 'app-crud',
@@ -27,11 +28,12 @@ export class CrudComponent implements OnInit {
   showError!: boolean;
   submit!: boolean;
 
-  // Fill Selects Contracts and Type customer
+  // Fill Selects Crud
   customers: Customer[] = [];
   jobCenters: JobCenter[] = [];
   employees: Employee[] = [];
   workTypes: WorkType[] =[];
+  doorTypes:  DoorType[] =[];
 
   constructor(
     private fb: FormBuilder,
@@ -39,34 +41,22 @@ export class CrudComponent implements OnInit {
     private dialogRef: MatDialogRef<CrudComponent>,
     private _taskService: TaskService,
     private _dateService: DateService,
-    @Inject(MAT_DIALOG_DATA) public task : {idTask: number, edit: boolean, info: boolean}
+    @Inject(MAT_DIALOG_DATA) public task : {idTask: number, edit: boolean, info: boolean, calendar: CalendarDate}
   ) { }
 
   ngOnInit(): void {
 
     // Customers init
-    this._taskService.getCustomers()
-      .subscribe(customers => {
-        this.customers = customers.results
-      } )
+    this._taskService.getCustomers().subscribe(customers => {this.customers = customers.results} )
 
     // Type Customers
-    this._taskService.getJobCenters()
-      .subscribe(jobCenters => {
-        this.jobCenters = jobCenters.results
-      } )
+    this._taskService.getJobCenters().subscribe(jobCenters => {this.jobCenters = jobCenters.results} )
 
     // Type Employees
-    this._taskService.getEmployees()
-      .subscribe(employees => {
-        this.employees = employees.results
-      } )
+    this._taskService.getEmployees().subscribe(employees => {this.employees = employees.results} )
 
     // Type Customers
-    this._taskService.getWorkTypes()
-      .subscribe(workTypes => {
-        this.workTypes = workTypes.results
-      } )
+    this._taskService.getWorkTypes().subscribe(workTypes => {this.workTypes = workTypes.results} )
 
     /*Formulario*/
     this.loadTaskForm();
@@ -85,6 +75,10 @@ export class CrudComponent implements OnInit {
       this.loadTaskById();
     }
 
+    if (this.task.calendar != null){
+      this.loadTaskFormDate()
+    }
+
   }
 
   /**
@@ -92,7 +86,11 @@ export class CrudComponent implements OnInit {
    */
   loadTaskById(): void{
     this._taskService.getTaskById(this.task.idTask).subscribe(response => {
-      //delete response.id;
+      delete response.id;
+      delete response.folio;
+      delete response.start_task_hour;
+      delete response.end_task_hour;
+      delete response.status;
       //delete response.created_at;
       //delete response.updated_at;
       this.taskForm.setValue(response);
@@ -109,10 +107,30 @@ export class CrudComponent implements OnInit {
       customer:[{value:'', disabled:this.task.info}, Validators.required],
       employee:[{value:'', disabled:this.task.info}, Validators.required],
       work_type:[{value:'', disabled:this.task.info}, Validators.required],
+      //door_type:[{value: [], disabled:this.task.info}, Validators.required],
       initial_date: [{value: '', disabled:this.task.info}, Validators.required],
       final_date: [{value: '', disabled:this.task.info}, Validators.required],
       initial_hour: [{value: '', disabled:this.task.info}, Validators.required],
       final_hour: [{value: '', disabled:this.task.info}, Validators.required],
+      comments: [{value: '', disabled:this.task.info},],
+    });
+  }
+
+  /**
+   * Load the form group.
+   */
+  loadTaskFormDate():void{
+    this.taskForm = this.fb.group({
+      title:[{value:'', disabled:this.task.info}, Validators.required],
+      job_center:[{value:'', disabled:this.task.info}, Validators.required],
+      customer:[{value:'', disabled:this.task.info}, Validators.required],
+      employee:[{value:'', disabled:this.task.info}, Validators.required],
+      work_type:[{value:'', disabled:this.task.info}, Validators.required],
+      //door_type:[{value: [], disabled:this.task.info}, Validators.required],
+      initial_date: [{value: this.task.calendar.initial_date, disabled:this.task.info}, Validators.required],
+      final_date: [{value: this.task.calendar.final_date, disabled:this.task.info}, Validators.required],
+      initial_hour: [{value: this.task.calendar.initial_hour, disabled:this.task.info}, Validators.required],
+      final_hour: [{value: this.task.calendar.final_hour, disabled:this.task.info}, Validators.required],
       comments: [{value: '', disabled:this.task.info},],
     });
   }
@@ -131,9 +149,8 @@ export class CrudComponent implements OnInit {
     let finalDate = this._dateService.getFormatDataDate(this.taskForm.get('final_date')?.value)
     this.taskForm.get('final_date')?.setValue(finalDate)
     this._taskService.addTask(this.taskForm.value).subscribe(response => {
-      this.sharedService.showSnackBar('Se ha agregado correctamente la tarea.');
+      this.sharedService.showSnackBar('Se ha agregado correctamente la Tarea.');
       this.dialogRef.close(ModalResponse.UPDATE);
-
     })
   }
 
@@ -153,6 +170,29 @@ export class CrudComponent implements OnInit {
   }
 
   /**
+   * Event OnChange for get id Select
+   * @param idCustomer
+   */
+  selectCustomer(idCustomer: number): void {
+    this.loadAccess(idCustomer)
+  }
+
+  /**
+   * Function Get Type Access By id Customer
+   * @param idCustomer
+   */
+  loadAccess(idCustomer: number) {
+    this._taskService.getDoorTypes(idCustomer).subscribe(
+      doorTypesByCustomer => {
+        this.doorTypes = doorTypesByCustomer.results
+        if (this.doorTypes.length === 0) {
+          this.sharedService.showSnackBar('No ha Seleccionado ningún Cliente')
+        }
+      }
+    )
+  }
+
+  /**
    * Validations
    * @param field
    */
@@ -165,7 +205,7 @@ export class CrudComponent implements OnInit {
    * Close modal.
    */
   close(): void{
-    this.dialogRef.close(ModalResponse.UPDATE);
+    this.dialogRef.close(ModalResponse.CLOSE);
   }
 
 }

@@ -18,7 +18,7 @@ export class CrudComponent implements OnInit {
   doorForm!: FormGroup;
 
   /*Titulo Modal*/
-  title: string = 'Nueva Puerta';
+  title: string = 'Nuevo Acceso';
 
   /*Variables display errors modal*/
   showError!: boolean;

@@ -1,22 +1,33 @@
 export interface ModelTask {
-  count:    number;
-  next:     null;
+  count: number;
+  next: null;
   previous: null;
-  results:  Task[];
+  results: Task[];
 }
 
 export interface Task {
-  id:           number;
-  folio:        string;
-  title:        string;
-  job_center:   number;
-  customer:     number;
-  employee:     number;
+  id?: number;
+  folio?: string;
+  title: string;
+  job_center: number;
+  customer: number;
+  employee: number;
+  work_type: number;
   initial_date: string;
-  final_date:   string;
+  final_date: string;
   initial_hour: string;
-  final_hour:   string;
-  comments:     null | string;
+  final_hour: string;
+  start_task_hour?: string | null;
+  end_task_hour?: string | null;
+  status?: number;
+  comments: null | string;
+}
+
+export interface CalendarDate {
+  initial_date: string;
+  final_date: string;
+  initial_hour: string;
+  final_hour: string;
 }
 
 export interface Event {
@@ -28,17 +39,17 @@ export interface Event {
 
 // DataSource Work Types
 export interface ModelWorkType {
-  count:    number;
-  next:     null;
+  count: number;
+  next: null;
   previous: null;
-  results:  WorkType[];
+  results: WorkType[];
 }
 
 export interface WorkType {
-  id?:          number;
-  name:        string;
+  id?: number;
+  name: string;
   description?: string;
-  created_at?:  Date;
-  updated_at?:  Date;
+  created_at?: Date;
+  updated_at?: Date;
 }
 

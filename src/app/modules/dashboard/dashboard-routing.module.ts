@@ -44,6 +44,11 @@ const routes: Routes = [
     loadChildren: () => import('../catalog/door-types/door-type.module').then(m => m.DoorTypeModule),
   },
   {
+    path: 'work-type',
+    component: HomeComponent,
+    loadChildren: () => import('../catalog/work-types/work-type.module').then(m => m.WorkTypeModule),
+  },
+  {
     path: 'task',
     component: HomeComponent,
     loadChildren: () => import('../task/task.module').then(m => m.TaskModule),
