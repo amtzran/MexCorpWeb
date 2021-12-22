@@ -1,0 +1,65 @@
+
+<!--Start SideMenu-->
+<mat-sidenav-container fullscreen>
+
+  <mat-sidenav #sidenav mode="push">
+
+    <mat-toolbar color="primary">
+      <span>MEXCORP</span>
+
+      <span class="spacer"></span>
+
+      <button mat-icon-button
+              (click)="sidenav.toggle()">
+        <mat-icon>menu</mat-icon>
+      </button>
+    </mat-toolbar>
+
+    <mat-nav-list>
+
+      <a *ngFor="let menu of menuRoute"
+         class="list-group-item"
+         [routerLink]="menu.route"
+         mat-list-item
+         (click)="sidenav.toggle()">
+        <mat-icon mat-list-icon>{{ menu.icon }}</mat-icon>
+        <span>{{ menu.name }}</span>
+      </a>
+
+      <a class="list-group-item" mat-list-item [matMenuTriggerFor]="catalogs">
+        <mat-icon mat-list-icon>edit</mat-icon>
+        <span>Catálogos</span>
+      </a>
+
+      <mat-menu #catalogs="matMenu">
+        <a *ngFor="let menu of menuCatalogs"
+           mat-menu-item
+           [routerLink]="menu.route">
+          <mat-icon mat-list-icon>{{menu.icon}}</mat-icon>
+          <span>{{menu.name}}</span>
+        </a>
+      </mat-menu>
+
+    </mat-nav-list>
+
+  </mat-sidenav>
+
+  <mat-toolbar>
+    <button mat-icon-button
+            (click)="sidenav.toggle()">
+      <mat-icon>menu</mat-icon>
+    </button>
+
+    <span class="spacer"></span>
+
+    <button mat-button (click)="logout()">Logout</button>
+  </mat-toolbar>
+
+  <div class="container">
+    <router-outlet></router-outlet>
+  </div>
+
+</mat-sidenav-container>
+<!--End SideMenu-->
+
+

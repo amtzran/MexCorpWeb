@@ -7,12 +7,14 @@ export interface ModelDoor {
 }
 
 export interface Door {
-  id?:            number;
-  folio:          string;
-  name:           string;
-  observations?:  string;
-  door_type:      number;
-  customer:       number;
+  id?:             number;
+  folio?:          string;
+  name:            string;
+  observations?:   string;
+  door_type:       number;
+  customer?:       number;
+  created_at?:  Date;
+  updated_at?:  Date;
 }
 
 // Data Paginate

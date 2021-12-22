@@ -1,4 +1,4 @@
 export const environment = {
   production: true,
-  baseUrl: 'https://swopyndevs.live/api'
+  baseUrl: 'https://mexcorp.technology/api'
 };

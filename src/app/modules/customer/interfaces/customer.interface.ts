@@ -18,7 +18,7 @@ export interface Customer {
   postal_code?:   string;
   contract:       number;
   customer_type:  number;
-  user:           number;
+  user?:          number;
   created_at?:    Date;
   updated_at?:    Date;
 }

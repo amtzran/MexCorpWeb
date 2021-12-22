@@ -1,0 +1,89 @@
+<div class="container">
+
+  <mat-card  fxLayout fxLayoutAlign="center center" class="mat-elevation-z5">
+    <mat-card-title>
+      <mat-card-title>Mis Grupos</mat-card-title>
+    </mat-card-title>
+  </mat-card>
+
+  <div fxLayout="row">
+    <div fxFlex="80">
+      <mat-form-field appearance="standard">
+        <mat-label>Filtros</mat-label>
+        <input matInput placeholder="Buscar..." #input>
+      </mat-form-field>
+    </div>
+    <div fxFlex="20" fxLayoutAlign="center center">
+      <button (click)="openDialogGroup(true, null, false)" mat-button color="primary">
+        <mat-icon>person_add</mat-icon> Nuevo Grupo
+      </button>
+    </div>
+  </div>
+
+  <div class="mat-elevation-z8">
+    <table mat-table [dataSource]="dataSource" matSort>
+
+      <!-- ID Column -->
+      <ng-container matColumnDef="id">
+        <th mat-header-cell *matHeaderCellDef mat-sort-header> ID </th>
+        <td mat-cell *matCellDef="let row"> {{row.id}} </td>
+      </ng-container>
+
+      <!-- Name Column -->
+      <ng-container matColumnDef="name">
+        <th mat-header-cell *matHeaderCellDef mat-sort-header> Nombre </th>
+        <td mat-cell *matCellDef="let row"> {{row.name}} </td>
+      </ng-container>
+
+      <!-- Reason Social Column -->
+      <ng-container matColumnDef="social_reason">
+        <th mat-header-cell *matHeaderCellDef mat-sort-header> Razón Social</th>
+        <td mat-cell *matCellDef="let row"> {{row.reason_social}} </td>
+      </ng-container>
+
+      <!-- RFC Column -->
+      <ng-container matColumnDef="rfc">
+        <th mat-header-cell *matHeaderCellDef mat-sort-header> RFC</th>
+        <td mat-cell *matCellDef="let row"> {{row.rfc}} </td>
+      </ng-container>
+
+      <!-- Phone Column -->
+      <ng-container matColumnDef="phone">
+        <th mat-header-cell *matHeaderCellDef mat-sort-header> Teléfono</th>
+        <td mat-cell *matCellDef="let row"> {{row.phone}} </td>
+      </ng-container>
+
+      <!-- Options Column -->
+      <ng-container matColumnDef="options">
+        <th mat-header-cell *matHeaderCellDef mat-sort-header> Opciones </th>
+        <td mat-cell *matCellDef="let row">
+
+          <button mat-icon-button [matMenuTriggerFor]="menu" aria-label="Example icon-button with a menu">
+            <mat-icon>more_vert</mat-icon>
+          </button>
+          <mat-menu #menu="matMenu">
+            <button mat-menu-item (click)="openDialogGroup(false, row.id, true)">
+              <mat-icon color="info">visibility</mat-icon>Ver
+            </button>
+            <button mat-menu-item (click)="openDialogGroup(true, row.id, false)">
+              <mat-icon color="primary">edit</mat-icon>Editar
+            </button>
+            <button mat-menu-item (click)="deleteGroup(row)">
+              <mat-icon color="warn">delete</mat-icon>Eliminar
+            </button>
+          </mat-menu>
+
+        </td>
+      </ng-container>
+      <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
+      <tr mat-row *matRowDef="let row; columns: displayedColumns;"></tr>
+    </table>
+    <div *ngIf="dataSource.data.length === 0" class="alert alert-primary" role="alert"> No se encontraron datos</div>
+    <mat-paginator #paginator [length]="totalItems"
+                   (page)="loadGroupsPaginator($event)"
+                   [pageSize]="pageSize"
+                   [showFirstLastButtons] = "true">
+    </mat-paginator>
+  </div>
+
+</div>

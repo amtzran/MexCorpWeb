@@ -1,0 +1,151 @@
+<h4 mat-dialog-title class="title-subsection">{{title}}</h4>
+<mat-divider></mat-divider>
+<br>
+
+<mat-dialog-content class="mat-typography" [formGroup]="customerForm">
+<mat-card>
+
+  <mat-card-content>
+
+      <div fxLayout="row" fxLayoutGap="40px" fxLayout.xs="column">
+
+        <div class="container" fxFlex="100" fxLayout="column" fxLayout.xs="column">
+
+          <div fxLayout="row"
+               fxLayout.xs="column"
+               fxLayoutGap="20px">
+            <mat-form-field fxFlex="100">
+              <mat-label>Cliente</mat-label>
+              <input
+                matInput
+                type="text"
+                formControlName="name">
+              <mat-error *ngIf="fieldInvalid('name')">
+                Favor de Ingresar el Cliente
+              </mat-error>
+            </mat-form-field>
+
+            <mat-form-field fxFlex="100">
+              <mat-label>Razón Social</mat-label>
+              <input
+                matInput
+                type="text"
+                formControlName="reason_social"
+              >
+            </mat-form-field>
+          </div>
+
+          <div fxLayout="row"
+               fxLayout.xs="column"
+               fxLayoutGap="20px">
+
+            <mat-form-field fxFlex="100">
+              <mat-label>RFC</mat-label>
+              <input
+                matInput
+                type="text"
+                formControlName="rfc">
+            </mat-form-field>
+
+            <mat-form-field fxFlex="100">
+              <mat-label>Teléfono</mat-label>
+              <input
+                matInput
+                type="text"
+                formControlName="phone">
+            </mat-form-field>
+
+          </div>
+
+          <div fxLayout="row"
+               fxLayout.xs="column"
+               fxLayoutGap="20px">
+
+            <mat-form-field fxFlex="100">
+              <mat-label>Email</mat-label>
+              <input
+                matInput
+                type="text"
+                formControlName="email">
+            </mat-form-field>
+
+            <mat-form-field fxFlex="100">
+              <mat-label>Dirección</mat-label>
+              <input
+                matInput
+                type="text"
+                formControlName="address">
+            </mat-form-field>
+
+          </div>
+
+          <div fxLayout="row"
+               fxLayout.xs="column"
+               fxLayoutGap="20px">
+
+            <mat-form-field fxFlex="100">
+              <mat-label>Ciudad</mat-label>
+              <input
+                matInput
+                type="text"
+                formControlName="city">
+            </mat-form-field>
+
+            <mat-form-field fxFlex="100">
+              <mat-label>Código postal</mat-label>
+              <input
+                matInput
+                type="text"
+                formControlName="postal_code">
+            </mat-form-field>
+
+          </div>
+
+          <div fxLayout="row"
+               fxLayout.xs="column"
+               fxLayoutGap="20px">
+
+            <mat-form-field fxFlex="100">
+              <mat-label>Convenio</mat-label>
+              <mat-select
+                formControlName="contract">
+                <mat-option *ngFor="let contract of contracts" [value]="contract.id">
+                  {{ contract.name}}
+                </mat-option>
+              </mat-select>
+              <mat-error *ngIf="fieldInvalid('contract')">
+                Favor de Seleccionar un Convenio
+              </mat-error>
+            </mat-form-field>
+
+            <mat-form-field fxFlex="100">
+              <mat-label>Tipo de Cliente</mat-label>
+              <mat-select
+                formControlName="customer_type">
+                <mat-option *ngFor="let typeCustomer of typeCustomers" [value]="typeCustomer.id">
+                  {{ typeCustomer.name}}
+                </mat-option>
+              </mat-select>
+              <mat-error *ngIf="fieldInvalid('customer_type')">
+                Favor de Seleccionar un Tipo Cliente
+              </mat-error>
+            </mat-form-field>
+
+          </div>
+
+        </div>
+
+      </div>
+
+  </mat-card-content>
+  <mat-card-actions>
+  </mat-card-actions>
+</mat-card>
+</mat-dialog-content>
+
+<mat-dialog-actions fxLayoutAlign="end">
+  <button (click)="close()" mat-stroked-button color="primary" mat-dialog-close="true">Cancelar</button>
+  <button *ngIf="!customer.idCustomer" (click)="addCustomer()" mat-flat-button color="primary" cdkFocusInitial [disabled]="customerForm.invalid">Guardar Cliente</button>
+  <button *ngIf="customer.idCustomer && customer.edit" (click)="updateCustomer()" mat-flat-button color="primary" cdkFocusInitial>Editar</button>
+</mat-dialog-actions>
+

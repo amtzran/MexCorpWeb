@@ -1,24 +1,33 @@
 
-<mat-card  fxLayout fxLayoutAlign="center center">
+<mat-card fxLayout fxLayoutAlign="center center">
   <mat-card-title>
-    <mat-card-title>Accesos</mat-card-title>
+    <mat-card-title>Mis Accesos</mat-card-title>
   </mat-card-title>
 </mat-card>
 
 <div fxLayout="row">
-  <div fxFlex="80">
+  <div fxFlex="50">
     <mat-form-field appearance="standard">
       <mat-label>Filter</mat-label>
       <input matInput (keyup)="applyFilter($event)" placeholder="Buscar en Tabla Accesos" #input>
     </mat-form-field>
   </div>
-  <div fxFlex="20" fxLayoutAlign="center center">
-    <button mat-button
-            [routerLink]="['./add']"
-            color="primary">
+
+  <div fxFlex="25" fxLayoutAlign="center center">
+    <button (click)="openDialogDoor(true, null, false)" mat-button color="primary">
       <mat-icon>phonelink_lock</mat-icon> Nuevo Acceso
     </button>
   </div>
+
+  <div fxFlex="25" fxLayoutAlign="center center">
+    <button mat-button
+            color="primary"
+            type="button"
+            [routerLink]="['/customer']">
+      <mat-icon>reply</mat-icon>Regresar
+    </button>
+  </div>
+
 </div>
 
 
@@ -64,12 +73,14 @@
           <mat-icon>more_vert</mat-icon>
         </button>
         <mat-menu #menu="matMenu">
-          <button mat-menu-item
-                  [routerLink]="[row.id] ">
+          <button mat-menu-item (click)="openDialogDoor(false, row.id, true)">
+            <mat-icon color="info">visibility</mat-icon>Ver
+          </button>
+          <button mat-menu-item (click)="openDialogDoor(true, row.id, false)">
             <mat-icon color="primary">edit</mat-icon>Editar
           </button>
           <button mat-menu-item
-                  (click)="delete(row)">
+                  (click)="deleteDoor(row)">
             <mat-icon color="warn">delete</mat-icon>Eliminar
           </button>
         </mat-menu>
@@ -86,8 +97,8 @@
     </tr>
   </table>
 
-  <mat-paginator #paginator [length]="totalitems"
-                 (page)="getDoors($event)"
+  <mat-paginator #paginator [length]="totalItems"
+                 (page)="getDoorsPaginator($event)"
                  [pageSize]="pageSize"
                  [showFirstLastButtons] = "true">
   </mat-paginator>

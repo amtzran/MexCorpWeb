@@ -1,0 +1,100 @@
+<h4 mat-dialog-title class="title-subsection">{{title}}</h4>
+<mat-divider></mat-divider>
+<br>
+<mat-dialog-content class="mat-typography" [formGroup]="employeeForm">
+
+<mat-card>
+  <mat-card-content>
+
+      <div fxLayout="row" fxLayoutGap="40px" fxLayout.xs="column">
+
+        <div class="container" fxFlex="100" fxLayout="column" fxLayout.xs="column">
+
+          <div fxLayout="row"
+               fxLayout.xs="column"
+               fxLayoutGap="20px">
+            <mat-form-field fxFlex="100">
+              <mat-label>Empleado</mat-label>
+              <input
+                matInput
+                type="text"
+                formControlName="name">
+              <mat-error *ngIf="fieldInvalid('name')">
+                Favor de Ingresar el Empleado
+              </mat-error>
+            </mat-form-field>
+
+            <mat-form-field fxFlex="100">
+              <mat-label>Color</mat-label>
+              <input
+                matInput
+                type="color"
+                formControlName="color"
+              >
+              <mat-error *ngIf="fieldInvalid('color')">
+                Favor de elegir un color
+              </mat-error>
+            </mat-form-field>
+          </div>
+
+          <div fxLayout="row"
+               fxLayout.xs="column"
+               fxLayoutGap="20px">
+
+            <mat-form-field fxFlex="100">
+              <mat-label>Avatar</mat-label>
+              <input
+                matInput
+                type="text"
+                formControlName="avatar">
+            </mat-form-field>
+
+          </div>
+
+          <div fxLayout="row"
+               fxLayout.xs="column"
+               fxLayoutGap="20px">
+
+            <mat-form-field fxFlex="100">
+              <mat-label>Grupo</mat-label>
+              <mat-select
+                formControlName="job_center">
+                <mat-option *ngFor="let jobCenter of jobCenters" [value]="jobCenter.id">
+                  {{ jobCenter.name}}
+                </mat-option>
+              </mat-select>
+              <mat-error *ngIf="fieldInvalid('job_center')">
+                Favor de Seleccionar un Grupo
+              </mat-error>
+            </mat-form-field>
+
+            <mat-form-field fxFlex="100">
+              <mat-label>Puesto</mat-label>
+              <mat-select
+                formControlName="job">
+                <mat-option *ngFor="let job of jobs" [value]="job.id">
+                  {{ job.name}}
+                </mat-option>
+              </mat-select>
+              <mat-error *ngIf="fieldInvalid('job')">
+                Favor de Seleccionar un Puesto
+              </mat-error>
+            </mat-form-field>
+
+          </div>
+
+        </div>
+
+      </div>
+
+  </mat-card-content>
+  <mat-card-actions>
+  </mat-card-actions>
+</mat-card>
+</mat-dialog-content>
+
+<mat-dialog-actions fxLayoutAlign="end">
+  <button (click)="close()" mat-stroked-button color="primary" mat-dialog-close="true">Cancelar</button>
+  <button *ngIf="!employee.idEmployee" (click)="addEmployee()" mat-flat-button color="primary" cdkFocusInitial [disabled]="employeeForm.invalid">Guardar Empleado</button>
+  <button *ngIf="employee.idEmployee && employee.edit" (click)="updateEmployee()" mat-flat-button color="primary" cdkFocusInitial>Editar</button>
+</mat-dialog-actions>

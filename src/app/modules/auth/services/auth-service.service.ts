@@ -51,11 +51,14 @@ export class AuthServiceService {
             refresh: resp.refresh,
             access: resp.access,
           }
-
           return true
         }),
         catchError(err => of(false))
       )
+  }
+
+  logout(){
+    localStorage.clear();
   }
 
 }
