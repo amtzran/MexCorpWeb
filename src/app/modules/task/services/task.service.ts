@@ -53,7 +53,7 @@ export class TaskService {
 
   // Get Employees
   getEmployees() : Observable<ModelEmployee> {
-    return this.http.get<ModelEmployee>(`${this.baseUrl}/employees/`)
+    return this.http.get<ModelEmployee>(`${this.baseUrl}/employees/list/`)
   }
 
   // Get Work Types

@@ -1,9 +1,14 @@
+<div fxLayout="row" fxLayoutAlign="center center">
+  <button mat-button color="primary" (click)="openDialogTask(true,null,false,null)">
+    Nueva Tarea
+    <mat-icon mat-list-icon >task</mat-icon>
+  </button>
+</div>
 
-  <div class='demo-app-main'>
-    <full-calendar
-      [options]='calendarOptions'
-    ></full-calendar>
-  </div>
-
+<div class='demo-app-main'>
+  <full-calendar #calendar
+                 [options]='calendarOptions'
+  ></full-calendar>
+</div>
 
 

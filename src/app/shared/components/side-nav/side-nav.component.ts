@@ -39,7 +39,7 @@ export class SideNavComponent implements OnInit {
     },
     {
       name: 'Tareas',
-      route: '/calendar',
+      route: '/task',
       icon: 'schedule'
     }
   ]

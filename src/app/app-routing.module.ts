@@ -2,7 +2,6 @@ import {NgModule} from '@angular/core';
 import {RouterModule, Routes} from '@angular/router';
 import {ValidateTokenGuard} from "./modules/guards/validate-token.guard";
 import {DashboardComponent} from "./modules/dashboard/dashboard.component";
-import {CalendarComponent} from "./modules/calendar/calendar.component";
 
 const routes: Routes = [
   {
@@ -16,18 +15,6 @@ const routes: Routes = [
     canActivate: [ ValidateTokenGuard ],
     canLoad: [ ValidateTokenGuard ]
   },
-  {
-    path: 'calendar',
-    component: CalendarComponent,
-    loadChildren: () => import('./modules/calendar/calendar.module').then(m => m.CalendarModule),
-  },
-  /*
-  {
-    path: 'groups',
-    loadChildren: () => import('./modules/groups/groups.module').then(m => m.GroupsModule),
-    canActivate: [ ValidateTokenGuard ],
-    canLoad: [ ValidateTokenGuard ]
-  },*/
   {
     path: '**',
     redirectTo: 'auth'
