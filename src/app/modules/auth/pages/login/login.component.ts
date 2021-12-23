@@ -38,7 +38,7 @@ export class LoginComponent implements OnInit {
         if (result.access){
           this.loading = true;
           setTimeout(() => {
-            this.router.navigate(['./customer'])
+            this.router.navigate(['./dashboard/customer'])
           }, 1000)
         }
         else {
