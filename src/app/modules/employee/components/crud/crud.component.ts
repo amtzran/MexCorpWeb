@@ -75,6 +75,7 @@ export class CrudComponent implements OnInit {
   loadEmployeeById(): void{
     this._employeeService.getEmployeeById(this.employee.idEmployee).subscribe(response => {
       delete response.id;
+      delete response.user;
       //delete response.created_at;
       //delete response.updated_at;
       this.employeeForm.setValue(response);
@@ -87,12 +88,13 @@ export class CrudComponent implements OnInit {
   loadEmployeeForm():void{
     this.employeeForm = this.fb.group({
       name:[{value:null, disabled:this.employee.info}, Validators.required],
+      email:[{value:null, disabled:this.employee.info}, [Validators.required, Validators.email]],
       color:[{value:null, disabled:this.employee.info}, Validators.required],
       avatar:[{value:'', disabled:this.employee.info}],
       signature:[{value:'', disabled:this.employee.info}],
+      is_active:[{value:true, disabled:this.employee.info}],
       job_center: [{value: '', disabled:this.employee.info}, Validators.required],
       job: [{value: '', disabled:this.employee.info}, Validators.required],
-      user: [{value: 1, disabled:this.employee.info}],
     });
   }
 

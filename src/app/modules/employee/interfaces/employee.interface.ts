@@ -9,12 +9,14 @@ export interface ModelEmployee {
 export interface Employee {
   id?:            number;
   name:           string;
+  email:          string;
   color:          string;
   job_center:     number;
   job:            number;
-  user?:           number;
   avatar?:        string;
   signature?:     string;
+  is_active:     boolean;
+  user?:           number;
   //created_at?:    Date;
   //updated_at?:    Date;
 }

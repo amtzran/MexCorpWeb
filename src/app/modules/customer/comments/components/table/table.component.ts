@@ -20,7 +20,7 @@ import {CommentCustomer} from "../../models/comment.interface";
 })
 export class TableComponent implements OnInit {
 
-  displayedColumns: string[] = ['id', 'comment', 'options'];
+  displayedColumns: string[] = ['id', 'comment', 'updated_at','options'];
   dataSource!: MatTableDataSource<CommentCustomer>;
   totalItems: number = 0;
   pageSize = 10;

@@ -1,0 +1,24 @@
+<h1>¿Está Seguro?</h1>
+<hr>
+<p>
+  Está seguro de
+  <span *ngIf="data.is_active === true">
+  Desactivar :
+  </span>
+  <span *ngIf="data.is_active === false">
+  Activar :
+  </span>
+  {{ data.name }}
+  <br>
+  ¿Desea continuar?
+</p>
+<div fxLayout="row" fxLayoutAlign="center center">
+
+  <div fxFlex="50">
+    <button mat-button (click)="status()" color="warn">OK</button>
+  </div>
+  <div fxFlex="50">
+    <button mat-button (click)="cancel()">Cancelar</button>
+  </div>
+
+</div>

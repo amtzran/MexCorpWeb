@@ -15,7 +15,7 @@
 
   <div fxFlex="25" fxLayoutAlign="center center">
     <button (click)="openDialogComment(true, null, false)" mat-button color="primary">
-      <mat-icon>phonelink_lock</mat-icon> Nuevo Comentario
+      <mat-icon>comment</mat-icon> Nuevo Comentario
     </button>
   </div>
 
@@ -44,6 +44,13 @@
       <th mat-header-cell *matHeaderCellDef mat-sort-header=""> Comentario </th>
       <td mat-cell *matCellDef="let row"> {{row.comment}} </td>
     </ng-container>
+
+    <!-- Name Column -->
+    <ng-container matColumnDef="updated_at">
+      <th mat-header-cell *matHeaderCellDef mat-sort-header=""> Fecha </th>
+      <td mat-cell *matCellDef="let row"> {{row.updated_at}} </td>
+    </ng-container>
+
 
     <!-- Teléfono Column -->
     <ng-container matColumnDef="options">

@@ -10,6 +10,7 @@ import {ModalResponse} from "../../../../core/utils/ModalResponse";
 import {CrudComponent} from "../../components/crud/crud.component";
 import {SharedService} from "../../../../shared/services/shared.service";
 import {ConfirmComponent} from "../../../../shared/components/confirm/confirm.component";
+import {ActiveComponent} from "../../../../shared/components/active/active.component";
 
 @Component({
   selector: 'app-list',
@@ -18,7 +19,7 @@ import {ConfirmComponent} from "../../../../shared/components/confirm/confirm.co
 })
 export class ListComponent implements OnInit {
 
-  displayedColumns: string[] = ['id', 'name', 'color', 'options'];
+  displayedColumns: string[] = ['id', 'name', 'email', 'color', 'is_active', 'options'];
   dataSource!: MatTableDataSource<Employee>;
   totalItems: number = 0;
   pageSize = 10;
@@ -82,6 +83,21 @@ export class ListComponent implements OnInit {
         }
       })
 
+  }
+
+  status(employee: number) {
+    // Show Dialog
+    const dialog = this.dialog.open(ActiveComponent, {
+      width: '250',
+      data: employee
+    })
+    dialog.afterClosed().subscribe(
+      (result) => {
+        if (result) {
+          this.sharedService.showSnackBar('Status Actualizado')
+          this.getEmployeesPaginator(this.paginator);
+        }
+      })
   }
 
   /**

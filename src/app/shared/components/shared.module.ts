@@ -6,6 +6,7 @@ import {FooterComponent} from "./footer/footer.component";
 import {RouterModule} from "@angular/router";
 import {FlexLayoutModule} from "@angular/flex-layout";
 import {MaterialModule} from "../../material/material.module";
+import { ActiveComponent } from './active/active.component';
 
 
 
@@ -13,7 +14,8 @@ import {MaterialModule} from "../../material/material.module";
   declarations: [
     HeaderComponent,
     SideNavComponent,
-    FooterComponent
+    FooterComponent,
+    ActiveComponent
   ],
   imports: [
     CommonModule,

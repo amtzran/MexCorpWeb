@@ -42,6 +42,17 @@
                fxLayoutGap="20px">
 
             <mat-form-field fxFlex="100">
+              <mat-label>Correo</mat-label>
+              <input
+                matInput
+                type="text"
+                formControlName="email">
+              <mat-error *ngIf="fieldInvalid('email')">
+                Favor de ingresar correo correctamente
+              </mat-error>
+            </mat-form-field>
+
+            <mat-form-field fxFlex="100">
               <mat-label>Avatar</mat-label>
               <input
                 matInput

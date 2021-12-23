@@ -10,7 +10,7 @@ body { margin: 0; font-family: Roboto, "Helvetica Neue", sans-serif; }
 }
 
 .container {
-  margin: 30px;
+  margin: 15px;
 }
 
 table {
@@ -22,6 +22,18 @@ table {
   width: 100%;
 }
 
+/*
+Colors Material
+ */
+grenColor {
+  color: #66BB6A;
+}
+yellowColor {
+  color: #FFEA00;
+}
+orangeColor {
+  color: #FB8C00;
+}
 /*td, th {
   width: 25%;
 }*/
