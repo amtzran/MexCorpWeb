@@ -44,6 +44,8 @@
 
   </mat-sidenav>
 
+  <mat-sidenav-content>
+
   <mat-toolbar>
     <button mat-icon-button
             (click)="sidenav.toggle()">
@@ -55,9 +57,9 @@
     <button mat-button (click)="logout()">Logout</button>
   </mat-toolbar>
 
-  <div class="container">
     <router-outlet></router-outlet>
-  </div>
+
+  </mat-sidenav-content>
 
 </mat-sidenav-container>
 <!--End SideMenu-->
