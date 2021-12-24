@@ -45,7 +45,6 @@ export class CrudComponent implements OnInit {
   ) { }
 
   ngOnInit(): void {
-
     // Customers init
     this._taskService.getCustomers().subscribe(customers => {this.customers = customers.results} )
 

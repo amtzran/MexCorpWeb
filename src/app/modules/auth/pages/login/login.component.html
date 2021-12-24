@@ -2,7 +2,7 @@
   <mat-card class="login">
     <mat-spinner class="spinner" diameter="50" *ngIf="loading"></mat-spinner>
     <br>
-    <form [formGroup]="myform" (ngSubmit)="login()" *ngIf="!loading">
+    <form [formGroup]="myForm" (ngSubmit)="login()" *ngIf="!loading">
       <img src="./assets/logos/grupo_mex_logo.png" alt="header-logo-login">
       <h4>Ingresa tus credenciales</h4>
       <mat-form-field appearance="outline" class="input-login">
@@ -15,7 +15,7 @@
         <input type="password" matInput placeholder="Ingresa una contraseña valida." formControlName="password" autocomplete="off">
         <mat-icon matSuffix>password</mat-icon>
       </mat-form-field>
-      <button type="submit" mat-raised-button color="primary" class="input-login" [disabled]="myform.invalid">Ingresar</button>
+      <button type="submit" mat-raised-button color="primary" class="input-login" [disabled]="myForm.invalid">Ingresar</button>
       <br><br>
     </form>
   </mat-card>

@@ -15,11 +15,11 @@ export class ValidateTokenGuard implements CanActivate, CanLoad {
 
   canActivate(): Observable<boolean> | boolean {
     return true
-    /*return this.authService.validateToken()
+   /* return this.authService.validateToken()
       .pipe(
         tap( valid =>{
           if (!valid) {
-            this.router.navigateByUrl('/auth')
+            this.router.navigateByUrl('/auth').then(r => console.log(r))
           }
         })
       )*/
@@ -27,11 +27,11 @@ export class ValidateTokenGuard implements CanActivate, CanLoad {
   canLoad(): Observable<boolean> | boolean {
     return true
 
-   /* return this.authService.validateToken()
+ /* return this.authService.validateToken()
       .pipe(
         tap( valid =>{
           if (!valid) {
-            this.router.navigateByUrl('/auth')
+            this.router.navigateByUrl('/auth').then(r => console.log(r))
           }
         })
       )*/

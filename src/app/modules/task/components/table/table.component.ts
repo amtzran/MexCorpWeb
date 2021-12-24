@@ -60,7 +60,7 @@ export class TableComponent implements OnInit {
       dayMaxEvents: true,
       select: this.handleDateSelect.bind(this),
       eventClick: this.handleEventClick.bind(this),
-      timeZone: 'local',
+      //timeZone: 'local',
       locale: 'es',
       //eventsSet: this.handleEvents.bind(this)
     };
@@ -69,10 +69,12 @@ export class TableComponent implements OnInit {
   handleDateSelect(selectInfo: DateSelectArg) {
     //const title = prompt('Please enter a new title for your event');
     //const calendarApi = selectInfo.view.calendar;
+
+    let today = moment(new Date());
     const initialHour = moment(selectInfo.startStr).format('HH:mm')
     const finalHour = moment(selectInfo.endStr).format('HH:mm')
-    const initialDate = moment(selectInfo.startStr).format('YYYY-MM-DD')
-    const finalDate = moment(selectInfo.endStr).format('YYYY-MM-DD')
+    const initialDate = selectInfo.startStr
+    const finalDate = selectInfo.endStr
 
     const data: CalendarDate = {
       initial_hour : initialHour,
@@ -117,7 +119,7 @@ export class TableComponent implements OnInit {
     });
     dialogRef.afterClosed().subscribe(res => {
       if (res === ModalResponse.UPDATE) {
-        //TODO: Add calendar Dinamic
+        //TODO: Add calendar Dynamic
         //this.initTaskCalendar()
         location.reload()
       }

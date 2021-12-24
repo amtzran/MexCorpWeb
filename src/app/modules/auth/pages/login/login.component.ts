@@ -32,7 +32,7 @@ export class LoginComponent implements OnInit {
 
   login(){
 
-    const {email, password} = this.myform.value
+    const {email, password} = this.myForm.value
     this.authService.login(email, password)
       .subscribe(result => {
         if (result.access){

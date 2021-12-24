@@ -27,6 +27,7 @@ export class AuthServiceService {
         tap(resp => {
           if (resp.access){
             localStorage.setItem('access', resp.access)
+            localStorage.setItem('refresh', resp.refresh)
             this._user = {
               refresh: resp.refresh,
               access: resp.access,
@@ -40,18 +41,11 @@ export class AuthServiceService {
 
   // Method Validate Token
   validateToken(): Observable<boolean>{
-    const headers = new HttpHeaders()
-      .set('access', localStorage.getItem('access') || '')
-    const url = `${this.baseUrl}/auth/token/refresh`
-    return this.http.get<Login>(url, {headers: headers})
+    const url = `${this.baseUrl}/auth/users`
+    return this.http.get<any>(url)
       .pipe(
         map(resp => {
-          localStorage.setItem('access', resp.access)
-          this._user = {
-            refresh: resp.refresh,
-            access: resp.access,
-          }
-          return true
+          return !!resp.email;
         }),
         catchError(err => of(false))
       )
