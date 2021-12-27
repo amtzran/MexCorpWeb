@@ -2,9 +2,9 @@ import { Injectable } from '@angular/core';
 import {Observable} from "rxjs";
 import {HttpClient, HttpParams} from "@angular/common/http";
 import {environment} from "../../../../environments/environment";
-import {ModelWorkType, Task} from "../models/task.interface";
+import {CalendarDate, ModelWorkType, Task} from "../models/task.interface";
 import {ModelCustomer} from "../../customer/customers/interfaces/customer.interface";
-import {ModelEmployee, ModelJobCenter} from "../../employee/interfaces/employee.interface";
+import {Employee, ModelEmployee, ModelJobCenter} from "../../employee/interfaces/employee.interface";
 import {ModelDoorType} from "../../customer/doors/interfaces/door.interface";
 
 @Injectable({
@@ -32,10 +32,19 @@ export class TaskService {
 
   // Update Contract
   updateTask(idTask: number, task: Task) : Observable<Task> {
-    console.log(idTask, task)
     return this.http.put<Task>(`${this.baseUrl}/tasks/${idTask}/`, task)
   }
 
+  // Patch Date And Hour
+  patchTaskDateAndHour(idTask: number, date: CalendarDate) : Observable<Task> {
+    let updateFields = {
+      initial_date: date.initial_date,
+      final_date: date.final_date,
+      initial_hour: date.initial_hour,
+      final_hour: date.final_hour
+    }
+    return this.http.patch<Task>(`${this.baseUrl}/employees/update/${idTask}/`, updateFields)
+  }
  /* // Delete Task
   deleteTask(id: number) : Observable<number>{
     return this.http.delete<number>(`${this.baseUrl}/tasks/${id}`)

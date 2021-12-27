@@ -53,3 +53,7 @@ export interface WorkType {
   updated_at?: Date;
 }
 
+export interface MessageEdit {
+  id?:    number;
+  title:     string;
+}

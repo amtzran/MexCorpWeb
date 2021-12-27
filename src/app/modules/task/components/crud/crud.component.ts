@@ -1,5 +1,5 @@
 import {Component, Inject, OnInit} from '@angular/core';
-import {FormBuilder, FormControl, FormGroup, Validators} from "@angular/forms";
+import {FormBuilder, FormGroup, Validators} from "@angular/forms";
 import {Customer} from "../../../customer/customers/interfaces/customer.interface";
 import {SharedService} from "../../../../shared/services/shared.service";
 import {MAT_DIALOG_DATA, MatDialogRef} from "@angular/material/dialog";
@@ -9,6 +9,7 @@ import {Employee, JobCenter} from "../../../employee/interfaces/employee.interfa
 import {CalendarDate, WorkType} from "../../models/task.interface";
 import {DateService} from "../../../../core/utils/date.service";
 import {DoorType} from "../../../customer/doors/interfaces/door.interface";
+import {formatDate} from "@angular/common";
 
 @Component({
   selector: 'app-crud',
@@ -20,6 +21,9 @@ export class CrudComponent implements OnInit {
 
   /*Formulario*/
   taskForm!: FormGroup;
+  // Date Range
+  initialDate: string = '';
+  finalDate: string = '';
 
   /*Titulo Modal*/
   title: string = 'Nueva Tarea';
@@ -85,14 +89,20 @@ export class CrudComponent implements OnInit {
    */
   loadTaskById(): void{
     this._taskService.getTaskById(this.task.idTask).subscribe(response => {
-      delete response.id;
-      delete response.folio;
-      delete response.start_task_hour;
-      delete response.end_task_hour;
-      delete response.status;
-      //delete response.created_at;
-      //delete response.updated_at;
-      this.taskForm.setValue(response);
+      this.taskForm.patchValue({
+        title: response.title,
+        employee: response.employee,
+        job_center: response.job_center,
+        customer: response.customer,
+        //door_type: response.door_type,
+        comments: response.comments,
+        work_type: response.work_type,
+        initial_hour: response.initial_hour,
+        final_hour: response.final_hour,
+        initial_date: this._dateService.getFormatDateSetInputRangePicker(response.initial_date),
+        final_date: this._dateService.getFormatDateSetInputRangePicker(response.final_date)
+      })
+      //this.taskForm.setValue(response);
     })
   }
 
@@ -143,12 +153,12 @@ export class CrudComponent implements OnInit {
       this.sharedService.showSnackBar('Los campos con * son obligatorios.');
       return
     }
-    let initialDate = this._dateService.getFormatDataDate(this.taskForm.get('initial_date')?.value)
-    this.taskForm.get('initial_date')?.setValue(initialDate)
-    let finalDate = this._dateService.getFormatDataDate(this.taskForm.get('final_date')?.value)
-    this.taskForm.get('final_date')?.setValue(finalDate)
+    this.initialDate = this._dateService.getFormatDataDate(this.taskForm.get('initial_date')?.value)
+    this.taskForm.get('initial_date')?.setValue(this.initialDate)
+    this.finalDate = this._dateService.getFormatDataDate(this.taskForm.get('final_date')?.value)
+    this.taskForm.get('final_date')?.setValue(this.finalDate)
     this._taskService.addTask(this.taskForm.value).subscribe(response => {
-      this.sharedService.showSnackBar('Se ha agregado correctamente la Tarea.');
+      this.sharedService.showSnackBar(`Se ha agregado correctamente la Tarea: ${response.title}`);
       this.dialogRef.close(ModalResponse.UPDATE);
     })
   }
@@ -162,8 +172,12 @@ export class CrudComponent implements OnInit {
       this.sharedService.showSnackBar('Los campos con * son obligatorios.');
       return
     }
+    this.initialDate = this._dateService.getFormatDataDate(this.taskForm.get('initial_date')?.value)
+    this.taskForm.get('initial_date')?.setValue(this.initialDate)
+    this.finalDate = this._dateService.getFormatDataDate(this.taskForm.get('final_date')?.value)
+    this.taskForm.get('final_date')?.setValue(this.finalDate)
     this._taskService.updateTask(this.task.idTask, this.taskForm.value).subscribe(response => {
-      this.sharedService.showSnackBar(`Se ha actualizado correctamente la Tarea:` );
+      this.sharedService.showSnackBar(`Se ha actualizado correctamente la Tarea: ${response.title}` );
       this.dialogRef.close(ModalResponse.UPDATE);
     })
   }

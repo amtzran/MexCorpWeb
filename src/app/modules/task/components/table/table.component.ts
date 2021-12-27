@@ -1,11 +1,14 @@
 import { Component, OnInit } from '@angular/core';
 import {CalendarOptions, DateSelectArg, EventApi, EventClickArg} from "@fullcalendar/angular";
-import {CalendarDate, Event} from "../../models/task.interface";
+import {CalendarDate, Event, Task} from "../../models/task.interface";
 import {TaskService} from "../../services/task.service";
 import {MatDialog} from "@angular/material/dialog";
 import * as moment from "moment";
 import {CrudComponent} from "../crud/crud.component";
 import {ModalResponse} from "../../../../core/utils/ModalResponse";
+import {EventDropArg} from "@fullcalendar/core";
+import {ConfirmComponent} from "../../../../shared/components/confirm/confirm.component";
+import {ConfirmEditComponent} from "../confirm-edit/confirm-edit.component";
 
 @Component({
   selector: 'app-table',
@@ -63,14 +66,46 @@ export class TableComponent implements OnInit {
       //timeZone: 'local',
       locale: 'es',
       //eventsSet: this.handleEvents.bind(this)
+      eventDrop: this.handleEventDrag.bind(this)
+      //eventColor: '#378006'
     };
   }
 
-  handleDateSelect(selectInfo: DateSelectArg) {
-    //const title = prompt('Please enter a new title for your event');
-    //const calendarApi = selectInfo.view.calendar;
+  handleEventDrag(selectInfoEventDrag: EventDropArg) {
 
-    let today = moment(new Date());
+    // Show Dialog
+    const dialog = this.dialog.open(ConfirmEditComponent, {
+      width: '250',
+      data: selectInfoEventDrag.event
+    })
+
+    dialog.afterClosed().subscribe(
+      ( result ) => {
+        if ( result ) {
+
+          const initialHour = moment(selectInfoEventDrag.event.startStr).format('HH:mm')
+          const finalHour = moment(selectInfoEventDrag.event.endStr).format('HH:mm')
+          const initialDate = selectInfoEventDrag.event.startStr
+          const finalDate = selectInfoEventDrag.event.endStr
+
+          const data: CalendarDate = {
+            initial_hour : initialHour,
+            final_hour : finalHour,
+            initial_date : initialDate,
+            final_date : finalDate
+          }
+
+          this.taskService.patchTaskDateAndHour(Number(selectInfoEventDrag.event.id), data).subscribe(res => {
+            console.log(res)
+            console.log('Correctamente')
+          })
+        }
+      })
+
+  }
+
+  handleDateSelect(selectInfo: DateSelectArg) {
+
     const initialHour = moment(selectInfo.startStr).format('HH:mm')
     const finalHour = moment(selectInfo.endStr).format('HH:mm')
     const initialDate = selectInfo.startStr
@@ -99,8 +134,8 @@ export class TableComponent implements OnInit {
 
   }
 
-  handleEvents(events: EventApi[]) {
-    //this.tasks = events;
+  handleEvents(events: Event[]) {
+    this.tasks = events;
   }
 
   /**
