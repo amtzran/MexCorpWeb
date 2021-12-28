@@ -27,7 +27,7 @@ export class AuthServiceService {
         tap(resp => {
           if (resp.access){
             localStorage.setItem('access', resp.access)
-            localStorage.setItem('refresh', resp.refresh)
+            //localStorage.setItem('refresh', resp.refresh)
             this._user = {
               refresh: resp.refresh,
               access: resp.access,
@@ -45,6 +45,7 @@ export class AuthServiceService {
     return this.http.get<any>(url)
       .pipe(
         map(resp => {
+          // If exist Email is authenticated
           return !!resp.email;
         }),
         catchError(err => of(false))
