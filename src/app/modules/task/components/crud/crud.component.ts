@@ -52,10 +52,10 @@ export class CrudComponent implements OnInit {
     this._taskService.getCustomers().subscribe(customers => {this.customers = customers.data} )
 
     // Type Customers
-    this._taskService.getJobCenters().subscribe(jobCenters => {this.jobCenters = jobCenters.results} )
+    this._taskService.getJobCenters().subscribe(jobCenters => {this.jobCenters = jobCenters.data} )
 
     // Type Employees
-    this._taskService.getEmployees().subscribe(employees => {this.employees = employees.results} )
+    this._taskService.getEmployees().subscribe(employees => {this.employees = employees.data} )
 
     // Type Customers
     this._taskService.getWorkTypes().subscribe(workTypes => {this.workTypes = workTypes.results} )

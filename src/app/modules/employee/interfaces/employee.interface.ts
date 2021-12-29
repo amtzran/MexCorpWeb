@@ -1,24 +1,29 @@
 // DataSource for Customer
+import {Links} from "../../../shared/interfaces/shared.interface";
+
 export interface ModelEmployee {
-  count:    number;
-  next:     null;
-  previous: null;
-  results:  Employee[];
+  total: number;
+  next?: Links["next"];
+  previous?: Links["prev"];
+  data: Employee[];
 }
 
 export interface Employee {
-  id?:            number;
-  name:           string;
-  email:          string;
-  color:          string;
-  job_center:     number;
-  job:            number;
-  avatar?:        string;
-  signature?:     string;
-  is_active:     boolean;
-  user?:           number;
-  //created_at?:    Date;
-  //updated_at?:    Date;
+  id?: number;
+  name: string;
+  email: string | null;
+  color: string;
+  job_center_id: number;
+  job_center_name?: string;
+  job_title_id: number;
+  job_title_name?: string;
+  avatar?: string;
+  signature?: string;
+  is_active?: boolean;
+  user_id?: number;
+  user_name?: string;
+  created_at?: string;
+  updated_at?: string;
 }
 
 // Data Paginate
@@ -27,34 +32,38 @@ export interface EmployeePaginate {
   page_size: string
 }
 
+export interface EmployeeDetail {
+  data: Employee
+}
+
 // DataSource Job Center
 export interface ModelJobCenter {
-  count:    number;
-  next:     null;
+  total: number;
+  next: null;
   previous: null;
-  results:  JobCenter[];
+  data: JobCenter[];
 }
 
 export interface JobCenter {
-  id?:          number;
-  name:        string;
+  id?: number;
+  name: string;
   description: string;
-  created_at?:  Date;
-  updated_at?:  Date;
+  created_at?: Date;
+  updated_at?: Date;
 }
 
 // DataSource Type Customers
 export interface ModelJob {
-  count:    number;
-  next:     null;
+  total: number;
+  next: null;
   previous: null;
-  results:  Job[];
+  data: Job[];
 }
 
 export interface Job {
-  id?:          number;
-  name:        string;
+  id?: number;
+  name: string;
   description?: string;
-  created_at?:  Date;
-  updated_at?:  Date;
+  created_at?: Date;
+  updated_at?: Date;
 }

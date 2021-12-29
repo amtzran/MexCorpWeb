@@ -115,7 +115,8 @@
       </tr>
     </table>
 
-    <mat-paginator #paginator [length]="totalItems"
+    <mat-paginator #paginator
+                   [length]="totalItems"
                    (page)="getCustomersPaginator($event)"
                    [pageSize]="pageSize"
                    [showFirstLastButtons] = "true">

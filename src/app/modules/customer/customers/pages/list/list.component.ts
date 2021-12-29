@@ -25,7 +25,7 @@ export class ListComponent implements AfterViewInit, OnInit {
 
   displayedColumns: string[] = ['id', 'name', 'reason_social', 'rfc', 'phone', 'address', 'contract_name', 'customer_type_name','options'];
   dataSource!: MatTableDataSource<Customer>;
-  totalItems: number = 0;
+  totalItems!: number;
   pageSize = 10;
   customerFilterForm!: FormGroup;
   @ViewChild(MatPaginator, {static: true}) paginator!: MatPaginator;
@@ -38,11 +38,10 @@ export class ListComponent implements AfterViewInit, OnInit {
                ) {}
 
   ngOnInit() {
-    /*Formulario*/
-    this.loadCustomerFilterForm();
-
     // Assign the data to the data source for the table to render
     this.dataSource = new MatTableDataSource();
+    /*Formulario*/
+    this.loadCustomerFilterForm();
     this.getCustomersPaginator(this.paginator);
   }
 

@@ -3,7 +3,7 @@ import {Observable} from "rxjs";
 import {HttpClient, HttpParams} from "@angular/common/http";
 import {environment} from "../../../../environments/environment";
 import {
-  Employee,
+  Employee, EmployeeDetail,
   EmployeePaginate,
   ModelEmployee,
   ModelJob,
@@ -19,8 +19,8 @@ export class EmployeeService {
   private baseUrl: string = environment.baseUrl
 
   // Get Employee
-  getEmployeeById(id: number) : Observable<Employee> {
-    return this.http.get<Employee>(`${this.baseUrl}/employees/retrieve/${id}`)
+  getEmployeeById(id: number) : Observable<EmployeeDetail> {
+    return this.http.get<EmployeeDetail>(`${this.baseUrl}/employees/${id}`)
   }
 
   // Get Employees
@@ -28,33 +28,33 @@ export class EmployeeService {
     let params = new HttpParams();
     filter.page ? params = params.append('page', filter.page) : null;
     filter.page_size ? params = params.append('page_size', filter.page_size) : null;
-    return this.http.get<ModelEmployee>(`${this.baseUrl}/employees/list/`, {params})
+    return this.http.get<ModelEmployee>(`${this.baseUrl}/employees/`, {params})
   }
 
   // Add Employee
-  addEmployee(employee: Employee): Observable<Employee> {
-    return this.http.post<Employee>(`${this.baseUrl}/employees/create/`, employee)
+  addEmployee(employee: EmployeeDetail): Observable<EmployeeDetail> {
+    return this.http.post<EmployeeDetail>(`${this.baseUrl}/employees/`, employee)
   }
 
   // Update Employee
-  updateEmployee(idEmployee: number,employee: Employee) : Observable<Employee> {
-    return this.http.put<Employee>(`${this.baseUrl}/employees/update/${idEmployee}/`,employee)
+  updateEmployee(idEmployee: number,employee: EmployeeDetail) : Observable<EmployeeDetail> {
+    return this.http.put<EmployeeDetail>(`${this.baseUrl}/employees/${idEmployee}/`,employee)
   }
 
   // Patch Employee
   patchEmployeeStatus(idEmployee: number, status: boolean) : Observable<Employee> {
     let updateFields = {is_active: status}
-    return this.http.patch<Employee>(`${this.baseUrl}/employees/update/${idEmployee}/`, updateFields)
+    return this.http.patch<Employee>(`${this.baseUrl}/employees/${idEmployee}/`, updateFields)
   }
 
   // Delete Employee
   deleteEmployee(id: number) : Observable<number>{
-    return this.http.delete<number>(`${this.baseUrl}/employees/destroy/${id}`)
+    return this.http.delete<number>(`${this.baseUrl}/employees/${id}`)
   }
 
   // Get Job Centers
   getJobCenters() : Observable<ModelJobCenter> {
-    return this.http.get<ModelJobCenter>(`${this.baseUrl}/job-centers/`)
+    return this.http.get<ModelJobCenter>(`${this.baseUrl}/groups/`)
   }
 
   // Get Jobs

@@ -51,8 +51,8 @@ export class ListComponent implements OnInit {
     this.employeePaginateForm.get('page')?.setValue(paginator.pageIndex + 1);
     this.employeeService.getEmployees(this.employeePaginateForm.value)
       .subscribe(employees => {
-        this.dataSource.data = employees.results
-        this.totalItems = employees.count;
+        this.dataSource.data = employees.data
+        this.totalItems = employees.total;
       })
   }
 
