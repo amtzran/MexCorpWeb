@@ -196,7 +196,7 @@ export class CrudComponent implements OnInit {
   loadAccess(idCustomer: number) {
     this._taskService.getDoorTypes(idCustomer).subscribe(
       doorTypesByCustomer => {
-        this.doorTypes = doorTypesByCustomer.results
+        this.doorTypes = doorTypesByCustomer.data
         if (this.doorTypes.length === 0) {
           this.sharedService.showSnackBar('No ha Seleccionado ningún Cliente')
         }

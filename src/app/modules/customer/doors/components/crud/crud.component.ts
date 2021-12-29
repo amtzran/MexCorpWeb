@@ -40,7 +40,7 @@ export class CrudComponent implements OnInit {
     // Door Types init
     this._dooService.getDoorTypes()
       .subscribe(doorTypes => {
-        this.doorTypes = doorTypes.results
+        this.doorTypes = doorTypes.data
       } )
 
     /*Formulario*/
@@ -67,12 +67,15 @@ export class CrudComponent implements OnInit {
    */
   loadGroupById(): void{
     this._dooService.getDoorById(this.door.idDoor).subscribe(response => {
-      delete response.id;
-      delete response.folio;
-      delete response.created_at;
-      delete response.updated_at;
-      delete response.customer;
-      this.doorForm.setValue(response);
+      delete response.data.id;
+      delete response.data.folio;
+      delete response.data.created_at;
+      delete response.data.updated_at;
+      delete response.data.customer_name;
+      delete response.data.door_type_name;
+      delete response.data.is_active;
+      delete response.data.photo;
+      this.doorForm.setValue(response.data);
     })
   }
 
@@ -83,7 +86,8 @@ export class CrudComponent implements OnInit {
     this.doorForm = this.fb.group({
       name:[{value:null, disabled:this.door.info}, Validators.required],
       observations:[{value: '', disabled:this.door.info}],
-      door_type: [{value: '', disabled:this.door.info}, Validators.required],
+      door_type_id: [{value: '', disabled:this.door.info}, Validators.required],
+      customer_id: [{value: this.door.idCustomer, disabled:this.door.info}]
     });
   }
 
@@ -113,7 +117,7 @@ export class CrudComponent implements OnInit {
       return
     }
     this._dooService.updateDoor(this.door.idDoor, this.doorForm.value).subscribe(response => {
-      this.sharedService.showSnackBar(`Se ha actualizado correctamente el acceso: ${response.name}` );
+      this.sharedService.showSnackBar(`Se ha actualizado correctamente el acceso: ${response.data.name}` );
       this.dialogRef.close(ModalResponse.UPDATE);
     })
   }

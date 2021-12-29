@@ -14,11 +14,16 @@ import {ConfirmComponent} from "../../../../../shared/components/confirm/confirm
 @Component({
   selector: 'app-list',
   templateUrl: './list.component.html',
-  styles: [``]
+  styles: [`
+  .tableResponsive{
+    width: 100%;
+    overflow-x: auto;
+  }
+  `]
 })
 export class ListComponent implements AfterViewInit, OnInit {
 
-  displayedColumns: string[] = ['id', 'name', 'reason_social', 'rfc', 'phone', 'options'];
+  displayedColumns: string[] = ['id', 'name', 'reason_social', 'rfc', 'phone', 'address', 'contract_name', 'customer_type_name','options'];
   dataSource!: MatTableDataSource<Customer>;
   totalItems: number = 0;
   pageSize = 10;

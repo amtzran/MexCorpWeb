@@ -13,6 +13,12 @@ import {ConfirmComponent} from "../../../../../shared/components/confirm/confirm
 @Component({
   selector: 'app-table-group',
   templateUrl: './table-group.component.html',
+  styles: [`
+  .tableResponsive{
+    width: 100%;
+    overflow-x: auto;
+  }
+  `]
 })
 export class TableGroupComponent implements OnInit {
 

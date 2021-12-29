@@ -16,12 +16,16 @@ import {ConfirmComponent} from "../../../../../shared/components/confirm/confirm
 @Component({
   selector: 'app-list',
   templateUrl: './list.component.html',
-  styles: [
+  styles: [`
+    .tableResponsive{
+      width: 100%;
+      overflow-x: auto;
+    }`
   ]
 })
 export class ListComponent implements OnInit {
 
-  displayedColumns: string[] = ['id', 'folio', 'name', 'observations', 'door_type','options'];
+  displayedColumns: string[] = ['id', 'folio', 'name', 'observations', 'door_type_name','options'];
   dataSource!: MatTableDataSource<Door>;
   totalItems: number = 0;
   pageSize = 10;
@@ -64,8 +68,8 @@ export class ListComponent implements OnInit {
     this.doorPaginateForm.get('page')?.setValue(paginator.pageIndex + 1);
     this.doorService.getDoors(this.doorPaginateForm.value,  this.idCustomer )
       .subscribe(doors => {
-        this.dataSource.data = doors.results
-        this.totalItems = doors.count;
+        this.dataSource.data = doors.data
+        this.totalItems = doors.total;
       } )
   }
 

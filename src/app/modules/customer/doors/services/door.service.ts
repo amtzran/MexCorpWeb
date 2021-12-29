@@ -2,7 +2,7 @@ import { Injectable } from '@angular/core';
 import {HttpClient, HttpParams} from "@angular/common/http";
 import {environment} from "../../../../../environments/environment";
 import {Observable} from "rxjs";
-import {Door, DoorPaginate, ModelDoor, ModelDoorType} from "../interfaces/door.interface";
+import {Door, DoorDetail, DoorPaginate, ModelDoor, ModelDoorType} from "../interfaces/door.interface";
 
 @Injectable({
   providedIn: 'root'
@@ -22,18 +22,18 @@ export class DoorService {
   }
 
   // Get Door
-  getDoorById(id: number | null) : Observable<Door> {
-    return this.http.get<Door>(`${this.baseUrl}/doors/${id}/`)
+  getDoorById(id: number | null) : Observable<DoorDetail> {
+    return this.http.get<DoorDetail>(`${this.baseUrl}/doors/${id}/`)
   }
 
   // Add Door
-  addDoor(door: Door): Observable<Door> {
-    return this.http.post<Door>(`${this.baseUrl}/doors/`, door)
+  addDoor(door: DoorDetail): Observable<DoorDetail> {
+    return this.http.post<DoorDetail>(`${this.baseUrl}/doors/`, door)
   }
 
   // Update Door
-  updateDoor(idDoor : number, door: Door) : Observable<Door> {
-    return this.http.put<Door>(`${this.baseUrl}/doors/${idDoor}/`, door)
+  updateDoor(idDoor : number, door: DoorDetail) : Observable<DoorDetail> {
+    return this.http.put<DoorDetail>(`${this.baseUrl}/doors/${idDoor}/`, door)
   }
 
   // Delete Door

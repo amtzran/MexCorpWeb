@@ -31,12 +31,12 @@
             <mat-form-field fxFlex="100">
               <mat-label>Tipo de acceso</mat-label>
               <mat-select
-                formControlName="door_type">
+                formControlName="door_type_id">
                 <mat-option *ngFor="let doorType of doorTypes" [value]="doorType.id">
                   {{ doorType.name}}
                 </mat-option>
               </mat-select>
-              <mat-error *ngIf="fieldInvalid('door_type')">
+              <mat-error *ngIf="fieldInvalid('door_type_id')">
                 Favor de Seleccionar el Top de acceso
               </mat-error>
             </mat-form-field>
