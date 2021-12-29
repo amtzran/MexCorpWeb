@@ -13,11 +13,10 @@ import {ConfirmComponent} from "../../../../../shared/components/confirm/confirm
 @Component({
   selector: 'app-table-group',
   templateUrl: './table-group.component.html',
-  styleUrls: ['./table-group.component.css']
 })
 export class TableGroupComponent implements OnInit {
 
-  displayedColumns: string[] = ['id', 'name', 'social_reason', 'rfc', 'phone', 'options'];
+  displayedColumns: string[] = ['id', 'name', 'reason_social', 'rfc', 'phone', 'email', 'address', 'options'];
   dataSource!: MatTableDataSource<Group>;
   @ViewChild(MatPaginator, {static: true}) paginator!: MatPaginator;
   totalItems!: number;
@@ -51,8 +50,8 @@ export class TableGroupComponent implements OnInit {
     const paginator: MatPaginator = event;
     this.groupFilterForm.get('page')?.setValue(paginator.pageIndex + 1);
     this._groupService.getGroups(this.groupFilterForm.value).subscribe(response => {
-      this.dataSource.data = response.results;
-      this.totalItems = response.count;
+      this.dataSource.data = response.data;
+      this.totalItems = response.total;
     });
   }
 

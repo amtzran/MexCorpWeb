@@ -58,8 +58,8 @@ export class TableComponent implements OnInit {
     this.commentPaginateForm.get('page')?.setValue(paginator.pageIndex + 1);
     this.commentService.getComments(this.commentPaginateForm.value, Number(this.idCustomer))
       .subscribe(comments => {
-        this.dataSource.data = comments.results
-        this.totalItems = comments.count;
+        this.dataSource.data = comments.data
+        this.totalItems = comments.total;
       })
   }
 

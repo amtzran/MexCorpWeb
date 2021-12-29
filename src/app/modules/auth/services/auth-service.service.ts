@@ -25,16 +25,14 @@ export class AuthServiceService {
     return this.http.post<Login>(`${this.baseUrl}/auth/login`, body)
       .pipe(
         tap(resp => {
-          if (resp.access){
-            localStorage.setItem('access', resp.access)
+          if (resp.access_token){
+            localStorage.setItem('access_token', resp.access_token)
             //localStorage.setItem('refresh', resp.refresh)
             this._user = {
-              refresh: resp.refresh,
-              access: resp.access,
+              access: resp.access_token,
             }
           }
         }),
-        //map(resp => resp.access),
         catchError(err => of(err))
       )
   }

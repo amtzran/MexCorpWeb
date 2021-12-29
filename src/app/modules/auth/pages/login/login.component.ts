@@ -18,6 +18,8 @@ export class LoginComponent implements OnInit {
   myForm: FormGroup = this.formBuilder.group ({
     email: ['', [Validators.required, Validators.email] ],
     password: ['', [Validators.required, Validators.minLength(6)] ]
+    //email: ['manuel.mdz.rom@swopyn.com', [Validators.required, Validators.email] ],
+    //password: ['1234567890', [Validators.required, Validators.minLength(6)] ]
   })
 
   constructor(
@@ -35,7 +37,7 @@ export class LoginComponent implements OnInit {
     const {email, password} = this.myForm.value
     this.authService.login(email, password)
       .subscribe(result => {
-        if (result.access){
+        if (result.access_token){
           this.loading = true;
           setTimeout(() => {
             this.router.navigate(['./dashboard/customer'])

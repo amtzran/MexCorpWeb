@@ -51,8 +51,8 @@ export class TableComponent implements OnInit {
     this.workTypePaginateForm.get('page')?.setValue(paginator.pageIndex + 1);
     this.workTypeService.getWorkTypes(this.workTypePaginateForm.value)
       .subscribe(workTypes => {
-        this.dataSource.data = workTypes.results
-        this.totalItems = workTypes.count;
+        this.dataSource.data = workTypes.data
+        this.totalItems = workTypes.total;
       })
   }
 

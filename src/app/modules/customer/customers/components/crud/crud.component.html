@@ -67,6 +67,9 @@
                 matInput
                 type="text"
                 formControlName="email">
+              <mat-error *ngIf="fieldInvalid('email')">
+                Favor de Ingresar el Correo correctamente
+              </mat-error>
             </mat-form-field>
 
             <mat-form-field fxFlex="100">
@@ -108,12 +111,12 @@
             <mat-form-field fxFlex="100">
               <mat-label>Convenio</mat-label>
               <mat-select
-                formControlName="contract">
+                formControlName="contract_id">
                 <mat-option *ngFor="let contract of contracts" [value]="contract.id">
                   {{ contract.name}}
                 </mat-option>
               </mat-select>
-              <mat-error *ngIf="fieldInvalid('contract')">
+              <mat-error *ngIf="fieldInvalid('contract_id')">
                 Favor de Seleccionar un Convenio
               </mat-error>
             </mat-form-field>
@@ -121,12 +124,12 @@
             <mat-form-field fxFlex="100">
               <mat-label>Tipo de Cliente</mat-label>
               <mat-select
-                formControlName="customer_type">
+                formControlName="customer_type_id">
                 <mat-option *ngFor="let typeCustomer of typeCustomers" [value]="typeCustomer.id">
                   {{ typeCustomer.name}}
                 </mat-option>
               </mat-select>
-              <mat-error *ngIf="fieldInvalid('customer_type')">
+              <mat-error *ngIf="fieldInvalid('customer_type_id')">
                 Favor de Seleccionar un Tipo Cliente
               </mat-error>
             </mat-form-field>

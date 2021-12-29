@@ -2,7 +2,7 @@ import { Injectable } from '@angular/core';
 import {Observable} from "rxjs";
 import {HttpClient, HttpParams} from "@angular/common/http";
 import {environment} from "../../../../../environments/environment";
-import {Contact, ContactPaginate, ModelContact} from "../models/contact.interface";
+import {Contact, ContactDetail, ContactPaginate, ModelContact} from "../models/contact.interface";
 
 @Injectable({
   providedIn: 'root'
@@ -13,8 +13,8 @@ export class ContactService {
   private baseUrl: string = environment.baseUrl
 
   // Get Contact
-  getContactById(id: number) : Observable<Contact> {
-    return this.http.get<Contact>(`${this.baseUrl}/customer-contacts/${id}`)
+  getContactById(id: number) : Observable<ContactDetail> {
+    return this.http.get<ContactDetail>(`${this.baseUrl}/customer-contacts/${id}`)
   }
 
   // Get Contacts
@@ -27,13 +27,13 @@ export class ContactService {
   }
 
   // Add Contact
-  addContact(contact: Contact): Observable<Contact> {
-    return this.http.post<Contact>(`${this.baseUrl}/customer-contacts/`, contact)
+  addContact(contact: ContactDetail): Observable<ContactDetail> {
+    return this.http.post<ContactDetail>(`${this.baseUrl}/customer-contacts/`, contact)
   }
 
   // Update Contact
-  updateContact(idContract: number, contact: Contact) : Observable<Contact> {
-    return this.http.put<Contact>(`${this.baseUrl}/customer-contacts/${idContract}/`,contact)
+  updateContact(idContract: number, contact: ContactDetail) : Observable<ContactDetail> {
+    return this.http.put<ContactDetail>(`${this.baseUrl}/customer-contacts/${idContract}/`,contact)
   }
 
   // Delete Contact

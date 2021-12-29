@@ -9,7 +9,6 @@ import {Employee, JobCenter} from "../../../employee/interfaces/employee.interfa
 import {CalendarDate, WorkType} from "../../models/task.interface";
 import {DateService} from "../../../../core/utils/date.service";
 import {DoorType} from "../../../customer/doors/interfaces/door.interface";
-import {formatDate} from "@angular/common";
 
 @Component({
   selector: 'app-crud',
@@ -50,7 +49,7 @@ export class CrudComponent implements OnInit {
 
   ngOnInit(): void {
     // Customers init
-    this._taskService.getCustomers().subscribe(customers => {this.customers = customers.results} )
+    this._taskService.getCustomers().subscribe(customers => {this.customers = customers.data} )
 
     // Type Customers
     this._taskService.getJobCenters().subscribe(jobCenters => {this.jobCenters = jobCenters.results} )

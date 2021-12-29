@@ -51,8 +51,8 @@ export class TableComponent implements OnInit {
     this.contractPaginateForm.get('page')?.setValue(paginator.pageIndex + 1);
     this.contractService.getContracts(this.contractPaginateForm.value)
       .subscribe(contracts => {
-        this.dataSource.data = contracts.results
-        this.totalItems = contracts.count;
+        this.dataSource.data = contracts.data
+        this.totalItems = contracts.total;
       })
   }
 

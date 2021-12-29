@@ -51,8 +51,8 @@ export class TableComponent implements OnInit {
     this.customerTypePaginateForm.get('page')?.setValue(paginator.pageIndex + 1);
     this.customerTypeService.getCustomerTypes(this.customerTypePaginateForm.value)
       .subscribe(customerTypes => {
-        this.dataSource.data = customerTypes.results
-        this.totalItems = customerTypes.count;
+        this.dataSource.data = customerTypes.data
+        this.totalItems = customerTypes.total;
       })
   }
 

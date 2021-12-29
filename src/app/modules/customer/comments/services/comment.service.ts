@@ -2,7 +2,7 @@ import { Injectable } from '@angular/core';
 import {Observable} from "rxjs";
 import {HttpClient, HttpParams} from "@angular/common/http";
 import {environment} from "../../../../../environments/environment";
-import {CommentCustomer, CommentPaginate, ModelComment} from "../models/comment.interface";
+import {CommentCustomerDetail, CommentPaginate, ModelComment} from "../models/comment.interface";
 
 @Injectable({
   providedIn: 'root'
@@ -13,8 +13,8 @@ export class CommentService {
   private baseUrl: string = environment.baseUrl
 
   // Get Comment
-  getCommentById(id: number) : Observable<CommentCustomer> {
-    return this.http.get<CommentCustomer>(`${this.baseUrl}/customer-comments/${id}`)
+  getCommentById(id: number) : Observable<CommentCustomerDetail> {
+    return this.http.get<CommentCustomerDetail>(`${this.baseUrl}/customer-comments/${id}`)
   }
 
   // Get Comments
@@ -27,13 +27,13 @@ export class CommentService {
   }
 
   // Add Comment
-  addComment(comment: CommentCustomer): Observable<CommentCustomer> {
-    return this.http.post<CommentCustomer>(`${this.baseUrl}/customer-comments/`, comment)
+  addComment(comment: CommentCustomerDetail): Observable<CommentCustomerDetail> {
+    return this.http.post<CommentCustomerDetail>(`${this.baseUrl}/customer-comments/`, comment)
   }
 
   // Update Comment
-  updateComment(idComment: number, comment: CommentCustomer) : Observable<CommentCustomer> {
-    return this.http.put<CommentCustomer>(`${this.baseUrl}/customer-comments/${idComment}/`,comment)
+  updateComment(idComment: number, comment: CommentCustomerDetail) : Observable<CommentCustomerDetail> {
+    return this.http.put<CommentCustomerDetail>(`${this.baseUrl}/customer-comments/${idComment}/`,comment)
   }
 
   // Delete Comment

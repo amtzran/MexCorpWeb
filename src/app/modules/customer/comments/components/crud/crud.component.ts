@@ -60,11 +60,12 @@ export class CrudComponent implements OnInit {
    */
   loadContractById(): void{
     this._commentService.getCommentById(this.comment.idComment).subscribe(response => {
-      delete response.id;
-      delete response.customer;
-      delete response.created_at;
-      delete response.updated_at;
-      this.commentForm.setValue(response);
+      delete response.data.id;
+      delete response.data.created_at;
+      delete response.data.updated_at;
+      delete response.data.user_id;
+      delete response.data.customer_name;
+      this.commentForm.setValue(response.data);
     })
   }
 
@@ -74,6 +75,8 @@ export class CrudComponent implements OnInit {
   loadContractForm():void{
     this.commentForm = this.fb.group({
       comment:[{value:'', disabled:this.comment.info}, Validators.required],
+      customer_id: [{value: this.comment.idCustomer, disabled:this.comment.info}],
+      user_name: [{value: '', disabled:true, }]
     });
   }
 
@@ -86,7 +89,6 @@ export class CrudComponent implements OnInit {
       this.sharedService.showSnackBar('Los campos con * son obligatorios.');
       return
     }
-    this.commentForm.addControl('customer', new FormControl(this.comment.idCustomer))
     this._commentService.addComment(this.commentForm.value).subscribe(response => {
       this.sharedService.showSnackBar(`Se ha agregado correctamente el ${this.menuTitle}.`);
       this.dialogRef.close(ModalResponse.UPDATE);
@@ -103,7 +105,7 @@ export class CrudComponent implements OnInit {
       return
     }
     this._commentService.updateComment(this.comment.idComment, this.commentForm.value).subscribe(response => {
-      this.sharedService.showSnackBar(`Se ha actualizado correctamente el ${this.menuTitle}: ${response.comment}` );
+      this.sharedService.showSnackBar(`Se ha actualizado correctamente el ${this.menuTitle}: ${response.data.comment}` );
       this.dialogRef.close(ModalResponse.UPDATE);
     })
   }

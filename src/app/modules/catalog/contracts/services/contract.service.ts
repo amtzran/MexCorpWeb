@@ -2,7 +2,7 @@ import { Injectable } from '@angular/core';
 import {Observable} from "rxjs";
 import {HttpClient, HttpParams} from "@angular/common/http";
 import {environment} from "../../../../../environments/environment";
-import {Contract, ContractPaginate, ModelContract} from "../models/contract.interface";
+import {ContractDetail, ContractPaginate, ModelContract} from "../models/contract.interface";
 
 @Injectable({
   providedIn: 'root'
@@ -13,8 +13,8 @@ export class ContractService {
   private baseUrl: string = environment.baseUrl
 
   // Get Contract
-  getContractById(id: number) : Observable<Contract> {
-    return this.http.get<Contract>(`${this.baseUrl}/contracts/${id}`)
+  getContractById(id: number) : Observable<ContractDetail> {
+    return this.http.get<ContractDetail>(`${this.baseUrl}/contracts/${id}`)
   }
 
   // Get Contracts
@@ -26,13 +26,13 @@ export class ContractService {
   }
 
   // Add Contract
-  addContract(contract: Contract): Observable<Contract> {
-    return this.http.post<Contract>(`${this.baseUrl}/contracts/`, contract)
+  addContract(contract: ContractDetail): Observable<ContractDetail> {
+    return this.http.post<ContractDetail>(`${this.baseUrl}/contracts/`, contract)
   }
 
   // Update Contract
-  updateContract(idContract: number, contract: Contract) : Observable<Contract> {
-    return this.http.put<Contract>(`${this.baseUrl}/contracts/${idContract}/`,contract)
+  updateContract(idContract: number, contract: ContractDetail) : Observable<ContractDetail> {
+    return this.http.put<ContractDetail>(`${this.baseUrl}/contracts/${idContract}/`,contract)
   }
 
   // Delete Contract

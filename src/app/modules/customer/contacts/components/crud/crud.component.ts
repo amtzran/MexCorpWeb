@@ -60,11 +60,10 @@ export class CrudComponent implements OnInit {
    */
   loadContractById(): void{
     this._contactService.getContactById(this.contact.idContact).subscribe(response => {
-      delete response.id;
-      delete response.customer;
-      delete response.created_at;
-      delete response.updated_at;
-      this.contactForm.setValue(response);
+      delete response.data.id;
+      delete response.data.created_at;
+      delete response.data.updated_at;
+      this.contactForm.setValue(response.data);
     })
   }
 
@@ -75,7 +74,9 @@ export class CrudComponent implements OnInit {
     this.contactForm = this.fb.group({
       name:[{value:'', disabled:this.contact.info}, Validators.required],
       phone:[{value:'', disabled:this.contact.info}],
-      email:[{value:'', disabled:this.contact.info}, [Validators.required, Validators.email]],
+      job_title:[{value:'', disabled:this.contact.info}],
+      email:[{value:null, disabled:this.contact.info}, Validators.email],
+      customer_id: [{value: this.contact.idCustomer, disabled:this.contact.info}]
     });
   }
 
@@ -88,7 +89,6 @@ export class CrudComponent implements OnInit {
       this.sharedService.showSnackBar('Los campos con * son obligatorios.');
       return
     }
-    this.contactForm.addControl('customer', new FormControl(this.contact.idCustomer))
     this._contactService.addContact(this.contactForm.value).subscribe(response => {
       this.sharedService.showSnackBar(`Se ha agregado correctamente el ${this.menuTitle}.`);
       this.dialogRef.close(ModalResponse.UPDATE);
@@ -105,7 +105,7 @@ export class CrudComponent implements OnInit {
       return
     }
     this._contactService.updateContact(this.contact.idContact, this.contactForm.value).subscribe(response => {
-      this.sharedService.showSnackBar(`Se ha actualizado correctamente el ${this.menuTitle}: ${response.name}` );
+      this.sharedService.showSnackBar(`Se ha actualizado correctamente el ${this.menuTitle}: ${response.data.name}` );
       this.dialogRef.close(ModalResponse.UPDATE);
     })
   }

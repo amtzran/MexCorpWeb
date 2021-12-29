@@ -1,8 +1,10 @@
+import {Links} from "../../../../shared/interfaces/shared.interface";
+
 export interface GroupModel {
-  count: number;
-  next?: any;
-  previous?: any;
-  results: Group[];
+  total: number;
+  next?: Links["next"];
+  previous?: Links["prev"];
+  data: Group[];
 }
 
 export interface Group {
@@ -10,11 +12,12 @@ export interface Group {
   name: string,
   reason_social: string,
   rfc: string,
+  email: string | null,
   phone: string,
-  email: any,
-  address: any,
-  city: any,
+  address: string,
+  city: string,
   postal_code: string,
+  is_active?: boolean,
   created_at?: string,
   updated_at?: string,
 }
@@ -22,4 +25,8 @@ export interface Group {
 export interface GroupFilterModel {
   page: string,
   page_size: string
+}
+
+export interface GroupDetail {
+  data: Group
 }

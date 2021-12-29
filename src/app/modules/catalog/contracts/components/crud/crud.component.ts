@@ -59,10 +59,11 @@ export class CrudComponent implements OnInit {
    */
   loadContractById(): void{
     this._contractService.getContractById(this.contract.idContract).subscribe(response => {
-      delete response.id;
-      delete response.created_at;
-      delete response.updated_at;
-      this.contractForm.setValue(response);
+      delete response.data.id;
+      delete response.data.created_at;
+      delete response.data.updated_at;
+      delete response.data.is_active;
+      this.contractForm.setValue(response.data);
     })
   }
 
@@ -101,7 +102,7 @@ export class CrudComponent implements OnInit {
       return
     }
     this._contractService.updateContract(this.contract.idContract, this.contractForm.value).subscribe(response => {
-      this.sharedService.showSnackBar(`Se ha actualizado correctamente el convenio: ${response.name}` );
+      this.sharedService.showSnackBar(`Se ha actualizado correctamente el convenio: ${response.data.name}` );
       this.dialogRef.close(ModalResponse.UPDATE);
     })
   }

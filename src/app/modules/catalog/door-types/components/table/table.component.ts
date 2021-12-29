@@ -52,8 +52,8 @@ export class TableComponent implements OnInit {
     this.doorTypePaginateForm.get('page')?.setValue(paginator.pageIndex + 1);
     this.doorTypeService.getDoorTypes(this.doorTypePaginateForm.value)
       .subscribe(doorTypes => {
-        this.dataSource.data = doorTypes.results
-        this.totalItems = doorTypes.count;
+        this.dataSource.data = doorTypes.data
+        this.totalItems = doorTypes.total;
       })
   }
 

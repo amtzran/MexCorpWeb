@@ -3,7 +3,7 @@ import {HttpClient, HttpParams} from "@angular/common/http";
 import {environment} from "../../../../../environments/environment";
 import {Observable, switchMap} from "rxjs";
 import {
-  Customer,
+  Customer, CustomerDetail,
   CustomerPaginate,
   ModelContract, ModelCustomer, ModelTypeCustomer,
 } from "../interfaces/customer.interface";
@@ -26,18 +26,18 @@ export class CustomerServiceService {
   }
 
   // Add Customer
-  addCustomer(customer: Customer): Observable<Customer> {
-    return this.http.post<Customer>(`${this.baseUrl}/customers/`, customer)
+  addCustomer(customer: CustomerDetail): Observable<CustomerDetail> {
+    return this.http.post<CustomerDetail>(`${this.baseUrl}/customers/`, customer)
   }
 
   // Update Customer
-  updateCustomer(customerId: number, customer: Customer) : Observable<Customer> {
-    return this.http.put<Customer>(`${this.baseUrl}/customers/${customerId}/`,customer)
+  updateCustomer(customerId: number, customer: CustomerDetail) : Observable<CustomerDetail> {
+    return this.http.put<CustomerDetail>(`${this.baseUrl}/customers/${customerId}/`,customer)
   }
 
   // Get Customer
-  getCustomerById(id: number) : Observable<Customer> {
-    return this.http.get<Customer>(`${this.baseUrl}/customers/${id}`)
+  getCustomerById(id: number) : Observable<CustomerDetail> {
+    return this.http.get<CustomerDetail>(`${this.baseUrl}/customers/${id}`)
   }
 
   // DeleteCustomer

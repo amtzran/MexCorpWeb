@@ -58,8 +58,10 @@
             <mat-form-field>
               <mat-label> Correo Electrónico </mat-label>
               <input formControlName="email" matInput type="email">
+              <mat-error *ngIf="fieldInvalid('email')">
+                Favor de Ingresar el correo correctamente
+              </mat-error>
             </mat-form-field>
-
 
             <mat-form-field>
               <mat-label> Dirección </mat-label>

@@ -2,7 +2,7 @@ import { Injectable } from '@angular/core';
 import {Observable} from "rxjs";
 import {HttpClient, HttpParams} from "@angular/common/http";
 import {environment} from "../../../../../environments/environment";
-import {ModelWorkType, WorkType, WorkTypePaginate} from "../models/work-type.interface";
+import {ModelWorkType, WorkType, WorkTypeDetail, WorkTypePaginate} from "../models/work-type.interface";
 
 @Injectable({
   providedIn: 'root'
@@ -13,8 +13,8 @@ export class WorkTypeService {
   private baseUrl: string = environment.baseUrl
 
   // Get Work Type
-  getWorkTypeById(id: number) : Observable<WorkType> {
-    return this.http.get<WorkType>(`${this.baseUrl}/work-types/${id}`)
+  getWorkTypeById(id: number) : Observable<WorkTypeDetail> {
+    return this.http.get<WorkTypeDetail>(`${this.baseUrl}/work-types/${id}`)
   }
 
   // Get Work Type
@@ -26,13 +26,13 @@ export class WorkTypeService {
   }
 
   // Add Work Type
-  addWorkType(doorType: WorkType): Observable<WorkType> {
-    return this.http.post<WorkType>(`${this.baseUrl}/work-types/`, doorType)
+  addWorkType(doorType: WorkTypeDetail): Observable<WorkTypeDetail> {
+    return this.http.post<WorkTypeDetail>(`${this.baseUrl}/work-types/`, doorType)
   }
 
   // Update Work Type
-  updateWorkType(idDoorType: number, doorType: WorkType) : Observable<WorkType> {
-    return this.http.put<WorkType>(`${this.baseUrl}/work-types/${idDoorType}/`,doorType)
+  updateWorkType(idDoorType: number, doorType: WorkTypeDetail) : Observable<WorkTypeDetail> {
+    return this.http.put<WorkTypeDetail>(`${this.baseUrl}/work-types/${idDoorType}/`,doorType)
   }
 
   // Delete Work Type

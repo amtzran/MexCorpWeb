@@ -2,7 +2,7 @@ import {Injectable} from '@angular/core';
 import {Observable} from "rxjs";
 import {HttpClient, HttpParams} from "@angular/common/http";
 import {environment} from "../../../../../environments/environment";
-import {Group, GroupFilterModel, GroupModel} from "../models/group.interface";
+import {GroupDetail, GroupFilterModel, GroupModel} from "../models/group.interface";
 
 @Injectable({
   providedIn: 'root'
@@ -22,23 +22,23 @@ export class GroupService {
     let params = new HttpParams();
     filter.page ? params = params.append('page', filter.page) : null;
     filter.page_size ? params = params.append('page_size', filter.page_size) : null;
-    return this.http.get<GroupModel>(`${this.baseUrl}/job-centers/`, {params});
+    return this.http.get<GroupModel>(`${this.baseUrl}/groups/`, {params});
   }
 
   /**
    * Get retrieve a group from the database by means of rest api.
    * @param idGroup
    */
-  getGroupById(idGroup: number): Observable<Group> {
-    return this.http.get<Group>(`${ this.baseUrl }/job-centers/${idGroup}/`);
+  getGroupById(idGroup: number): Observable<GroupDetail> {
+    return this.http.get<GroupDetail>(`${ this.baseUrl }/groups/${idGroup}/`);
   }
 
   /**
    * Create a group.
    * @param group
    */
-  postGroup(group: Group): Observable<Group>{
-    return this.http.post<Group>(`${ this.baseUrl }/job-centers/`, group);
+  postGroup(group: GroupDetail): Observable<GroupDetail>{
+    return this.http.post<GroupDetail>(`${ this.baseUrl }/groups/`, group);
   }
 
   /**
@@ -46,8 +46,8 @@ export class GroupService {
    * @param groupId
    * @param group
    */
-  updateGroup(groupId: number, group: Group){
-    return this.http.patch(`${ this.baseUrl }/job-centers/${groupId}/`, group);
+  updateGroup(groupId: number, group: GroupDetail){
+    return this.http.patch(`${ this.baseUrl }/groups/${groupId}/`, group);
   }
 
   /**
@@ -55,7 +55,7 @@ export class GroupService {
    * @param idGroup
    */
   deleteGroup(idGroup: number): Observable<any>{
-    return this.http.delete<any>(`${ this.baseUrl }/job-centers/${idGroup}/`);
+    return this.http.delete<any>(`${ this.baseUrl }/groups/${idGroup}/`);
   }
 
 }

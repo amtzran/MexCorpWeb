@@ -58,8 +58,8 @@ export class TableComponent implements OnInit {
     this.contactPaginateForm.get('page')?.setValue(paginator.pageIndex + 1);
     this.contactService.getContacts(this.contactPaginateForm.value, Number(this.idCustomer))
       .subscribe(contacts => {
-        this.dataSource.data = contacts.results
-        this.totalItems = contacts.count;
+        this.dataSource.data = contacts.data
+        this.totalItems = contacts.total;
       })
   }
 

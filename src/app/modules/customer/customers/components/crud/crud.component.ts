@@ -3,7 +3,7 @@ import {FormBuilder, FormGroup, Validators} from "@angular/forms";
 import {MAT_DIALOG_DATA, MatDialogRef} from "@angular/material/dialog";
 import {ModalResponse} from "../../../../../core/utils/ModalResponse";
 import {CustomerServiceService} from "../../services/customer-service.service";
-import {Contract, TypeCustomer} from "../../interfaces/customer.interface";
+import {Contract, ContractDetail, TypeCustomer} from "../../interfaces/customer.interface";
 import {SharedService} from "../../../../../shared/services/shared.service";
 
 @Component({
@@ -41,13 +41,13 @@ export class CrudComponent implements OnInit {
     // Contracts init
     this._customerService.getContracts()
       .subscribe(contracts => {
-        this.contracts = contracts.results
+        this.contracts = contracts.data
       } )
 
     // Type Customers
     this._customerService.getTypeCustomers()
       .subscribe(typeCustomers => {
-        this.typeCustomers = typeCustomers.results
+        this.typeCustomers = typeCustomers.data
       } )
 
     /*Formulario*/
@@ -74,10 +74,15 @@ export class CrudComponent implements OnInit {
    */
   loadGroupById(): void{
     this._customerService.getCustomerById(this.customer.idCustomer).subscribe(response => {
-      delete response.id;
-      delete response.created_at;
-      delete response.updated_at;
-      this.customerForm.setValue(response);
+      delete response.data.id;
+      delete response.data.is_active;
+      delete response.data.contract_name;
+      delete response.data.customer_type_name;
+      delete response.data.user_id;
+      delete response.data.user_name;
+      delete response.data.created_at;
+      delete response.data.updated_at;
+      this.customerForm.setValue(response.data);
     })
   }
 
@@ -90,13 +95,12 @@ export class CrudComponent implements OnInit {
       reason_social:[{value:'', disabled:this.customer.info}],
       rfc:[{value:'', disabled:this.customer.info}],
       phone:[{value:'', disabled:this.customer.info}],
-      email:[{value:'', disabled:this.customer.info}],
+      email:[{value:null, disabled:this.customer.info}, Validators.email],
       address: [{value:'', disabled:this.customer.info}],
       city: [{value:'', disabled:this.customer.info}],
       postal_code: [{value:'', disabled:this.customer.info}],
-      contract: [{value: '', disabled:this.customer.info}, Validators.required],
-      customer_type: [{value: '', disabled:this.customer.info}, Validators.required],
-      user: [{value: 1 , disabled:this.customer.info}]
+      contract_id: [{value: '', disabled:this.customer.info}, Validators.required],
+      customer_type_id: [{value: '', disabled:this.customer.info}, Validators.required],
     });
   }
 
@@ -125,7 +129,7 @@ export class CrudComponent implements OnInit {
       return
     }
     this._customerService.updateCustomer(this.customer.idCustomer, this.customerForm.value).subscribe(response => {
-      this.sharedService.showSnackBar(`Se ha actualizado correctamente el cliente: ${response.name}` );
+      this.sharedService.showSnackBar(`Se ha actualizado correctamente el cliente: ${response.data.name}` );
       this.dialogRef.close(ModalResponse.UPDATE);
     })
   }

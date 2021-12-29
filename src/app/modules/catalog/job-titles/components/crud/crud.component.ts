@@ -57,10 +57,11 @@ export class CrudComponent implements OnInit {
    */
   loadJobTitleById(): void{
     this._jobTitleService.getJobTitleById(this.jobTitle.idJobTitle).subscribe(response => {
-      delete response.id;
-      delete response.created_at;
-      delete response.updated_at;
-      this.jobTitleForm.setValue(response);
+      delete response.data.id;
+      delete response.data.is_active;
+      delete response.data.created_at;
+      delete response.data.updated_at;
+      this.jobTitleForm.setValue(response.data);
     })
   }
 
@@ -99,7 +100,7 @@ export class CrudComponent implements OnInit {
       return
     }
     this._jobTitleService.updateJobTitle(this.jobTitle.idJobTitle, this.jobTitleForm.value).subscribe(response => {
-      this.sharedService.showSnackBar(`Se ha actualizado correctamente el Puesto: ${response.name}` );
+      this.sharedService.showSnackBar(`Se ha actualizado correctamente el Puesto: ${response.data.name}` );
       this.dialogRef.close(ModalResponse.UPDATE);
     })
   }

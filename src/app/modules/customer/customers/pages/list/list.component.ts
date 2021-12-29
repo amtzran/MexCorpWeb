@@ -55,8 +55,8 @@ export class ListComponent implements AfterViewInit, OnInit {
     this.customerFilterForm.get('page')?.setValue(paginator.pageIndex + 1);
     this.customerService.getCustomers(this.customerFilterForm.value)
       .subscribe(customers => {
-        this.dataSource.data = customers.results
-        this.totalItems = customers.count;
+        this.dataSource.data = customers.data
+        this.totalItems = customers.total;
       } )
   }
 

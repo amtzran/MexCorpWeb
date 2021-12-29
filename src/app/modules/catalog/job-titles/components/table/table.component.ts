@@ -51,8 +51,8 @@ export class TableComponent implements OnInit {
     this.jobTitlePaginateForm.get('page')?.setValue(paginator.pageIndex + 1);
     this.jobTitleService.getJobTitles(this.jobTitlePaginateForm.value)
       .subscribe(jobTitles => {
-        this.dataSource.data = jobTitles.results
-        this.totalItems = jobTitles.count;
+        this.dataSource.data = jobTitles.data
+        this.totalItems = jobTitles.total;
       })
   }
 
