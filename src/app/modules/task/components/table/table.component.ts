@@ -1,36 +1,72 @@
-import { Component, OnInit } from '@angular/core';
-import {CalendarOptions, DateSelectArg, EventApi, EventClickArg} from "@fullcalendar/angular";
-import {CalendarDate, Event, Task} from "../../models/task.interface";
+import {Component, forwardRef, OnInit} from '@angular/core';
+import {Calendar, CalendarOptions, DateSelectArg, EventClickArg,} from "@fullcalendar/angular";
+import {CalendarDate} from "../../models/task.interface";
 import {TaskService} from "../../services/task.service";
 import {MatDialog} from "@angular/material/dialog";
 import * as moment from "moment";
 import {CrudComponent} from "../crud/crud.component";
 import {ModalResponse} from "../../../../core/utils/ModalResponse";
-import {EventDropArg} from "@fullcalendar/core";
-import {ConfirmComponent} from "../../../../shared/components/confirm/confirm.component";
+import {EventApi, EventDropArg} from "@fullcalendar/core";
 import {ConfirmEditComponent} from "../confirm-edit/confirm-edit.component";
+import dayGridPlugin from "@fullcalendar/daygrid";
+import interactionPlugin from "@fullcalendar/interaction";
 
 @Component({
   selector: 'app-table',
   templateUrl: './table.component.html',
   styleUrls: ['./app.component.scss']
-  /*styles: [``
-  ]*/
+  /*styles: [``]*/
 })
 export class TableComponent implements OnInit {
 
-  tasks: Event[] = []
+  // Declare any for model EventApi
+  tasks: any = []
   calendarOptions!: CalendarOptions
+  // references the #calendar in the template
+  //@ViewChild('calendar') calendarComponent!: FullCalendarComponent;
 
   constructor( private taskService: TaskService,
-               private dialog: MatDialog) {
-
-  }
+               private dialog: MatDialog) {}
 
   ngOnInit(): void {
+    forwardRef(() => Calendar)
+    // Valuers Initials Calendar
+    this.initCalendar()
+    // Events From Api
     this.initTaskCalendar()
   }
 
+  /**
+   * Values Initials Calendar
+   */
+  initCalendar() {
+    this.calendarOptions = {
+      headerToolbar: {
+        left: 'prev,next,today',
+        center: 'title',
+        right: 'dayGridMonth,timeGridWeek,timeGridDay,listWeek'
+      },
+      plugins: [dayGridPlugin, interactionPlugin],
+      initialView: 'timeGridWeek',
+      events: this.tasks,
+      weekends: true,
+      editable: true,
+      selectable: true,
+      selectMirror: true,
+      dayMaxEvents: true,
+      select: this.handleDateSelect.bind(this),
+      eventClick: this.handleEventClick.bind(this),
+      //timeZone: 'local',
+      locale: 'es',
+      eventsSet: this.handleEvents.bind(this),
+      eventDrop: this.handleEventDrag.bind(this)
+      //eventColor: '#378006'
+    };
+  }
+
+  /**
+   * Service for tasks in Calendar
+   */
   initTaskCalendar(): void {
     this.taskService.getTasks()
       .subscribe(tasks => {
@@ -47,30 +83,11 @@ export class TableComponent implements OnInit {
       })
   }
 
-  initCalendar() {
-    this.calendarOptions = {
-      headerToolbar: {
-        left: 'prev,next today',
-        center: 'title',
-        right: 'dayGridMonth,timeGridWeek,timeGridDay,listWeek'
-      },
-      initialView: 'dayGridWeek',
-      events: this.tasks,
-      weekends: true,
-      editable: true,
-      selectable: true,
-      selectMirror: true,
-      dayMaxEvents: true,
-      select: this.handleDateSelect.bind(this),
-      eventClick: this.handleEventClick.bind(this),
-      //timeZone: 'local',
-      locale: 'es',
-      //eventsSet: this.handleEvents.bind(this)
-      eventDrop: this.handleEventDrag.bind(this)
-      //eventColor: '#378006'
-    };
-  }
 
+  /**
+   * Update Calendar Date And Hour event dragging
+   * @param selectInfoEventDrag
+   */
   handleEventDrag(selectInfoEventDrag: EventDropArg) {
 
     // Show Dialog
@@ -100,10 +117,17 @@ export class TableComponent implements OnInit {
             console.log('Correctamente')
           })
         }
+
+        else selectInfoEventDrag.revert()
+
       })
 
   }
 
+  /**
+   * Add New Event With info Calendar Date and Hour
+   * @param selectInfo
+   */
   handleDateSelect(selectInfo: DateSelectArg) {
 
     const initialHour = moment(selectInfo.startStr).format('HH:mm')
@@ -121,6 +145,10 @@ export class TableComponent implements OnInit {
     this.openDialogTask(false, null, false, data)
   }
 
+  /**
+   * Click Event Edit and View Detail for status
+   * @param clickInfo
+   */
   handleEventClick(clickInfo: EventClickArg) {
 
     this.taskService.getTaskById(Number(clickInfo.event.id)).subscribe(res => {
@@ -134,7 +162,11 @@ export class TableComponent implements OnInit {
 
   }
 
-  handleEvents(events: Event[]) {
+  /**
+   * Event for match Model Event Api and Api Custom
+   * @param events
+   */
+  handleEvents(events: EventApi[]) {
     this.tasks = events;
   }
 
@@ -154,9 +186,8 @@ export class TableComponent implements OnInit {
     });
     dialogRef.afterClosed().subscribe(res => {
       if (res === ModalResponse.UPDATE) {
-        //TODO: Add calendar Dynamic
-        //this.initTaskCalendar()
-        location.reload()
+        this.tasks = []
+        this.initTaskCalendar()
       }
     });
   }
