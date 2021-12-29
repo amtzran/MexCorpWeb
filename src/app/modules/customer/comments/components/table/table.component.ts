@@ -22,7 +22,7 @@ export class TableComponent implements OnInit {
 
   displayedColumns: string[] = ['id', 'comment', 'updated_at','options'];
   dataSource!: MatTableDataSource<CommentCustomer>;
-  totalItems: number = 0;
+  totalItems!: number;
   pageSize = 10;
   idCustomer!: string | null;
   commentPaginateForm!: FormGroup;

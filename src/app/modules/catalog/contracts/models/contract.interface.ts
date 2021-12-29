@@ -3,8 +3,8 @@ import {Links} from "../../../../shared/interfaces/shared.interface";
 
 export interface ModelContract {
   total: number;
-  next: Links["next"];
-  previous: Links["prev"];
+  next?: Links["next"];
+  previous?: Links["prev"];
   data: Contract[];
 }
 

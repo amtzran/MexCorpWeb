@@ -21,8 +21,8 @@ export class TableComponent implements OnInit {
 
   displayedColumns: string[] = ['id', 'name', 'description', 'options'];
   dataSource!: MatTableDataSource<CustomerType>;
-  totalItems: number = 0;
-  pageSize = 10;
+  totalItems!: number;
+  pageSize!: number;
   customerTypePaginateForm!: FormGroup;
   @ViewChild(MatPaginator, {static: true}) paginator!: MatPaginator;
   @ViewChild(MatSort) sort!: MatSort;

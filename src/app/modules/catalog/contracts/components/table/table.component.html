@@ -78,7 +78,8 @@
       </tr>
     </table>
 
-    <mat-paginator #paginator [length]="totalItems"
+    <mat-paginator #paginator
+                   [length]="totalItems"
                    (page)="getContractsPaginator($event)"
                    [pageSize]="pageSize"
                    [showFirstLastButtons]="true">

@@ -21,8 +21,8 @@ export class TableComponent implements OnInit {
 
   displayedColumns: string[] = ['id', 'name', 'description', 'options'];
   dataSource!: MatTableDataSource<JobTitle>;
-  totalItems: number = 0;
-  pageSize = 10;
+  totalItems!: number;
+  pageSize!: number;
   jobTitlePaginateForm!: FormGroup;
   @ViewChild(MatPaginator, {static: true}) paginator!: MatPaginator;
   @ViewChild(MatSort) sort!: MatSort;

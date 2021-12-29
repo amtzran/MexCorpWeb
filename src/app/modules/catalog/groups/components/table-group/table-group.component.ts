@@ -26,7 +26,7 @@ export class TableGroupComponent implements OnInit {
   dataSource!: MatTableDataSource<Group>;
   @ViewChild(MatPaginator, {static: true}) paginator!: MatPaginator;
   totalItems!: number;
-  pageSize = 10;
+  pageSize!: number;
 
   /* Variable de Filtros */
   groupFilterForm!: FormGroup

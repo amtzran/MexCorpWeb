@@ -2,7 +2,7 @@ import {AfterViewInit, Component, OnInit, ViewChild} from '@angular/core';
 import {MatTableDataSource} from "@angular/material/table";
 import {MatPaginator} from "@angular/material/paginator";
 import {MatSort} from "@angular/material/sort";
-import {Customer} from "../../interfaces/customer.interface";
+import {Customer, ModelCustomer} from "../../interfaces/customer.interface";
 import {CustomerServiceService} from "../../services/customer-service.service";
 import {FormBuilder, FormGroup} from "@angular/forms";
 import {MatDialog} from "@angular/material/dialog";
@@ -54,11 +54,11 @@ export class ListComponent implements AfterViewInit, OnInit {
    * Get all customers and load data table.
    * @param event
    */
-  getCustomersPaginator(event: any){
+  getCustomersPaginator(event: any) : void {
     const paginator: MatPaginator = event;
     this.customerFilterForm.get('page')?.setValue(paginator.pageIndex + 1);
     this.customerService.getCustomers(this.customerFilterForm.value)
-      .subscribe(customers => {
+      .subscribe((customers : ModelCustomer)   => {
         this.dataSource.data = customers.data
         this.totalItems = customers.total;
       } )
@@ -121,7 +121,7 @@ export class ListComponent implements AfterViewInit, OnInit {
   loadCustomerFilterForm(): void{
     this.customerFilterForm = this.formBuilder.group({
       page: [],
-      page_size: [this.pageSize]
+      page_size: this.pageSize,
     })
   }
 

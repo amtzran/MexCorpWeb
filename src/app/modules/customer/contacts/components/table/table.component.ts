@@ -22,7 +22,7 @@ export class TableComponent implements OnInit {
 
   displayedColumns: string[] = ['id', 'name', 'phone', 'email', 'options'];
   dataSource!: MatTableDataSource<Contact>;
-  totalItems: number = 0;
+  totalItems!: number;
   pageSize = 10;
   idCustomer!: string | null;
   contactPaginateForm!: FormGroup;

@@ -27,7 +27,7 @@ export class ListComponent implements OnInit {
 
   displayedColumns: string[] = ['id', 'folio', 'name', 'observations', 'door_type_name','options'];
   dataSource!: MatTableDataSource<Door>;
-  totalItems: number = 0;
+  totalItems!: number;
   pageSize = 10;
   doorPaginateForm!: FormGroup;
   @ViewChild(MatPaginator, {static: true}) paginator!: MatPaginator;
@@ -126,7 +126,7 @@ export class ListComponent implements OnInit {
   loadDoorFilterForm(): void{
     this.doorPaginateForm = this.formBuilder.group({
       page: [],
-      page_size: [this.pageSize]
+      page_size: this.pageSize
     })
   }
 

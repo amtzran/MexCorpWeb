@@ -147,7 +147,7 @@ export class CrudComponent implements OnInit {
    * Close modal.
    */
   close(): void{
-    this.dialogRef.close(ModalResponse.UPDATE);
+    this.dialogRef.close(ModalResponse.CLOSE);
   }
 
 }

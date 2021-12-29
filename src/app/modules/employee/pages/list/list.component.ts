@@ -21,8 +21,8 @@ export class ListComponent implements OnInit {
 
   displayedColumns: string[] = ['id', 'name', 'email', 'color', 'is_active', 'options'];
   dataSource!: MatTableDataSource<Employee>;
-  totalItems: number = 0;
-  pageSize = 10;
+  totalItems!: number;
+  pageSize!: number;
   employeePaginateForm!: FormGroup;
   @ViewChild(MatPaginator, {static: true}) paginator!: MatPaginator;
   @ViewChild(MatSort) sort!: MatSort;
