@@ -1,8 +1,8 @@
 // DataSource for Contact
-import {Links} from "../../../../shared/interfaces/shared.interface";
+import {Links, MetaModel} from "../../../../shared/interfaces/shared.interface";
 
 export interface ModelContact {
-  total: number;
+  meta: MetaModel;
   next?: Links["next"];
   previous?: Links["prev"];
   data: Contact[];

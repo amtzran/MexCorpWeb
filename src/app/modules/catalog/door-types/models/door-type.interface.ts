@@ -1,8 +1,8 @@
 // DataSource for Door Type
-import {Links} from "../../../../shared/interfaces/shared.interface";
+import {Links, MetaModel} from "../../../../shared/interfaces/shared.interface";
 
 export interface ModelDoorType {
-  total: number;
+  meta: MetaModel;
   next?: Links["next"];
   previous?: Links["prev"];
   data: DoorType[];

@@ -23,7 +23,7 @@ export class TableComponent implements OnInit {
   displayedColumns: string[] = ['id', 'comment', 'updated_at','options'];
   dataSource!: MatTableDataSource<CommentCustomer>;
   totalItems!: number;
-  pageSize = 10;
+  pageSize = this.sharedService.pageSize;
   idCustomer!: string | null;
   commentPaginateForm!: FormGroup;
   @ViewChild(MatPaginator, {static: true}) paginator!: MatPaginator;
@@ -49,7 +49,6 @@ export class TableComponent implements OnInit {
   }
 
   ngAfterViewInit() {
-    this.dataSource.paginator = this.paginator;
     this.dataSource.sort = this.sort;
   }
 
@@ -59,7 +58,7 @@ export class TableComponent implements OnInit {
     this.commentService.getComments(this.commentPaginateForm.value, Number(this.idCustomer))
       .subscribe(comments => {
         this.dataSource.data = comments.data
-        this.totalItems = comments.total;
+        this.totalItems = comments.meta.total;
       })
   }
 

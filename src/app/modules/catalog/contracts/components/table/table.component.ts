@@ -22,7 +22,7 @@ export class TableComponent implements AfterViewInit, OnInit {
   displayedColumns: string[] = ['id', 'name', 'description', 'options'];
   dataSource!: MatTableDataSource<Contract>;
   totalItems!: number;
-  pageSize = 10;
+  pageSize = this.sharedService.pageSize
   contractPaginateForm!: FormGroup;
   @ViewChild(MatPaginator, {static: true}) paginator!: MatPaginator;
   @ViewChild(MatSort) sort!: MatSort;
@@ -42,7 +42,6 @@ export class TableComponent implements AfterViewInit, OnInit {
   }
 
   ngAfterViewInit() {
-    this.dataSource.paginator = this.paginator;
     this.dataSource.sort = this.sort;
   }
 
@@ -52,7 +51,7 @@ export class TableComponent implements AfterViewInit, OnInit {
     this.contractService.getContracts(this.contractPaginateForm.value)
       .subscribe((contracts: ModelContract) => {
         this.dataSource.data = contracts.data
-        this.totalItems = contracts.total;
+        this.totalItems = contracts.meta.total;
       })
   }
 

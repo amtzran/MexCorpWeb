@@ -23,7 +23,7 @@ export class TableComponent implements OnInit {
   displayedColumns: string[] = ['id', 'name', 'phone', 'email', 'options'];
   dataSource!: MatTableDataSource<Contact>;
   totalItems!: number;
-  pageSize = 10;
+  pageSize = this.sharedService.pageSize
   idCustomer!: string | null;
   contactPaginateForm!: FormGroup;
   @ViewChild(MatPaginator, {static: true}) paginator!: MatPaginator;
@@ -49,7 +49,6 @@ export class TableComponent implements OnInit {
   }
 
   ngAfterViewInit() {
-    this.dataSource.paginator = this.paginator;
     this.dataSource.sort = this.sort;
   }
 
@@ -59,7 +58,7 @@ export class TableComponent implements OnInit {
     this.contactService.getContacts(this.contactPaginateForm.value, Number(this.idCustomer))
       .subscribe(contacts => {
         this.dataSource.data = contacts.data
-        this.totalItems = contacts.total;
+        this.totalItems = contacts.meta.total;
       })
   }
 

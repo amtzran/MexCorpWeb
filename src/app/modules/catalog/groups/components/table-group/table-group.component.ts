@@ -26,7 +26,7 @@ export class TableGroupComponent implements OnInit {
   dataSource!: MatTableDataSource<Group>;
   @ViewChild(MatPaginator, {static: true}) paginator!: MatPaginator;
   totalItems!: number;
-  pageSize!: number;
+  pageSize = this.sharedService.pageSize;
 
   /* Variable de Filtros */
   groupFilterForm!: FormGroup
@@ -57,7 +57,7 @@ export class TableGroupComponent implements OnInit {
     this.groupFilterForm.get('page')?.setValue(paginator.pageIndex + 1);
     this._groupService.getGroups(this.groupFilterForm.value).subscribe(response => {
       this.dataSource.data = response.data;
-      this.totalItems = response.total;
+      this.totalItems = response.meta.total;
     });
   }
 

@@ -28,7 +28,7 @@ export class ListComponent implements OnInit {
   displayedColumns: string[] = ['id', 'folio', 'name', 'observations', 'door_type_name','options'];
   dataSource!: MatTableDataSource<Door>;
   totalItems!: number;
-  pageSize = 10;
+  pageSize = this.sharedService.pageSize
   doorPaginateForm!: FormGroup;
   @ViewChild(MatPaginator, {static: true}) paginator!: MatPaginator;
   @ViewChild(MatSort) sort!: MatSort;
@@ -59,7 +59,6 @@ export class ListComponent implements OnInit {
   }
 
   ngAfterViewInit() {
-    this.dataSource.paginator = this.paginator;
     this.dataSource.sort = this.sort;
   }
 
@@ -69,7 +68,7 @@ export class ListComponent implements OnInit {
     this.doorService.getDoors(this.doorPaginateForm.value,  this.idCustomer )
       .subscribe(doors => {
         this.dataSource.data = doors.data
-        this.totalItems = doors.total;
+        this.totalItems = doors.meta.total;
       } )
   }
 
