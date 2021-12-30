@@ -19,7 +19,7 @@ export class LoginComponent implements OnInit {
     email: ['', [Validators.required, Validators.email] ],
     password: ['', [Validators.required, Validators.minLength(6)] ]
     //email: ['manuel.mdz.rom@swopyn.com', [Validators.required, Validators.email] ],
-    //password: ['1234567890', [Validators.required, Validators.minLength(6)] ]
+    //password: ['1234567890', [Validators.required, Validators.minLength(8)] ]
   })
 
   constructor(
@@ -30,6 +30,14 @@ export class LoginComponent implements OnInit {
   }
 
   ngOnInit(): void {
+    // Validate Exists Token
+    if (localStorage.getItem('access_token')) {
+      this.loading = true;
+      setTimeout(() => {
+        this.router.navigate(['./dashboard/customer'])
+      }, 1000)
+    }
+
   }
 
   login(){
@@ -37,16 +45,23 @@ export class LoginComponent implements OnInit {
     const {email, password} = this.myForm.value
     this.authService.login(email, password)
       .subscribe(result => {
+
+        if (result.message === 'Ya estás autenticado') {
+          this.loading = true;
+          setTimeout(() => {
+            this.router.navigate(['./dashboard/customer'])
+          }, 1000)
+        }
         if (result.access_token){
           this.loading = true;
           setTimeout(() => {
             this.router.navigate(['./dashboard/customer'])
           }, 1000)
         }
-        else {
+        if (result.error) {
           this.dialog.open(CredentialsComponent, {
             width: '250px',
-            data: {...result}
+            data: {...result.error}
           });
         }
       })

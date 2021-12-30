@@ -1,6 +1,5 @@
 import {Component, Inject, OnInit} from '@angular/core';
 import {MAT_DIALOG_DATA, MatDialogRef} from "@angular/material/dialog";
-import {AuthResponse} from "../../interfaces/login.interface";
 
 @Component({
   selector: 'app-credentials',
@@ -10,13 +9,15 @@ import {AuthResponse} from "../../interfaces/login.interface";
 })
 export class CredentialsComponent implements OnInit {
 
+  result!: any;
+
   constructor(
     private dialogRef: MatDialogRef<CredentialsComponent>,
-    @Inject(MAT_DIALOG_DATA) public data: AuthResponse
+    @Inject(MAT_DIALOG_DATA) public data: any
   ) { }
 
   ngOnInit(): void {
-    console.log(this.data)
+    this.result = this.data.errors['0']
   }
 
   close() {
