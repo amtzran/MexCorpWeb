@@ -1,6 +1,5 @@
-import { Injectable } from '@angular/core';
+import {Injectable} from '@angular/core';
 import * as moment from "moment"
-import * as tz from "moment-timezone"
 
 @Injectable({
   providedIn: 'root'
@@ -30,8 +29,12 @@ export class DateService {
   }
   formatDateLocal(date:string){
     let local = date.split('T')
-    let newString = `${local[0]} ${local[1]}`
-    return newString;
+    return `${local[0]} ${local[1]}`;
+  }
+
+  // Format Input Angular Type Example: "2020-07-13T00:00:00-05:00".
+  getFormatDateSetInputRangePicker(date: string){
+    return moment(date).format()
   }
 
 }

@@ -1,6 +1,6 @@
 export interface Login {
-  refresh: string;
-  access:  string;
+  access_token:  string;
+  token_type: string
 }
 
 export interface AuthResponse {
@@ -13,7 +13,6 @@ export interface AuthResponse {
 }
 
 export interface User{
-  refresh: string,
   access:  string,
   name?: string
 }

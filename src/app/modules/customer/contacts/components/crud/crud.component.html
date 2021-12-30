@@ -1,0 +1,76 @@
+<h4 mat-dialog-title class="title-subsection">{{title}}</h4>
+<mat-divider></mat-divider>
+<br>
+<mat-dialog-content class="mat-typography" [formGroup]="contactForm">
+
+  <mat-card>
+    <mat-card-content>
+
+      <div fxLayout="row" fxLayoutGap="40px" fxLayout.xs="column">
+
+        <div class="container" fxFlex="100" fxLayout="column" fxLayout.xs="column">
+
+          <div fxLayout="row"
+               fxLayout.xs="column"
+               fxLayoutGap="20px">
+            <mat-form-field fxFlex="100">
+              <mat-label>Contacto</mat-label>
+              <input
+                matInput
+                type="text"
+                formControlName="name">
+              <mat-error *ngIf="fieldInvalid('name')">
+                Favor de Ingresar el Comentario
+              </mat-error>
+            </mat-form-field>
+
+            <mat-form-field fxFlex="100">
+              <mat-label>Teléfono</mat-label>
+              <input
+                matInput
+                type="text"
+                formControlName="phone"
+              >
+            </mat-form-field>
+          </div>
+
+          <div fxLayout="row"
+               fxLayout.xs="column"
+               fxLayoutGap="20px">
+
+            <mat-form-field fxFlex="100">
+              <mat-label>Puesto</mat-label>
+              <input
+                matInput
+                type="text"
+                formControlName="job_title">
+            </mat-form-field>
+
+            <mat-form-field fxFlex="100">
+              <mat-label>Correo</mat-label>
+              <input
+                matInput
+                type="text"
+                formControlName="email">
+              <mat-error *ngIf="fieldInvalid('email')">
+                Favor de Ingresar el correo correctamente
+              </mat-error>
+            </mat-form-field>
+
+          </div>
+
+        </div>
+
+      </div>
+
+    </mat-card-content>
+    <mat-card-actions>
+    </mat-card-actions>
+  </mat-card>
+</mat-dialog-content>
+
+<mat-dialog-actions fxLayoutAlign="end">
+  <button (click)="close()" mat-stroked-button color="primary" mat-dialog-close="true">Cancelar</button>
+  <button *ngIf="!contact.idContact" (click)="addContact()" mat-flat-button color="primary" cdkFocusInitial [disabled]="contactForm.invalid">Guardar {{menuTitle}}</button>
+  <button *ngIf="contact.idContact && contact.edit" (click)="updateContact()" mat-flat-button color="primary" cdkFocusInitial>Editar</button>
+</mat-dialog-actions>

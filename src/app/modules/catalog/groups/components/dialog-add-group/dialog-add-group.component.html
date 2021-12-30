@@ -25,6 +25,9 @@
             <mat-form-field>
               <mat-label> Razón Social </mat-label>
               <input formControlName="reason_social" matInput type="text">
+              <mat-error *ngIf="fieldInvalid('reason_social')">
+                Favor de Ingresar la Razón Social
+              </mat-error>
             </mat-form-field>
 
           </div>
@@ -36,6 +39,9 @@
             <mat-form-field>
               <mat-label> RFC </mat-label>
               <input formControlName="rfc" matInput type="text">
+              <mat-error *ngIf="fieldInvalid('rfc')">
+                Favor de Ingresar el RFC
+              </mat-error>
             </mat-form-field>
 
             <mat-form-field>
@@ -52,8 +58,10 @@
             <mat-form-field>
               <mat-label> Correo Electrónico </mat-label>
               <input formControlName="email" matInput type="email">
+              <mat-error *ngIf="fieldInvalid('email')">
+                Favor de Ingresar el correo correctamente
+              </mat-error>
             </mat-form-field>
-
 
             <mat-form-field>
               <mat-label> Dirección </mat-label>

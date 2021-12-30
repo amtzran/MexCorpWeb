@@ -59,10 +59,11 @@ export class CrudComponent implements OnInit {
    */
   loadCustomerById(): void{
     this._customerTypeService.getCustomerTypeById(this.customerType.idCustomerType).subscribe(response => {
-      delete response.id;
-      delete response.created_at;
-      delete response.updated_at;
-      this.customerTypeForm.setValue(response);
+      delete response.data.id;
+      delete response.data.is_active;
+      delete response.data.created_at;
+      delete response.data.updated_at;
+      this.customerTypeForm.setValue(response.data);
     })
   }
 
@@ -101,7 +102,7 @@ export class CrudComponent implements OnInit {
       return
     }
     this._customerTypeService.updateCustomerType(this.customerType.idCustomerType, this.customerTypeForm.value).subscribe(response => {
-      this.sharedService.showSnackBar(`Se ha actualizado correctamente el tipo de Cliente: ${response.name}` );
+      this.sharedService.showSnackBar(`Se ha actualizado correctamente el tipo de Cliente: ${response.data.name}` );
       this.dialogRef.close(ModalResponse.UPDATE);
     })
   }

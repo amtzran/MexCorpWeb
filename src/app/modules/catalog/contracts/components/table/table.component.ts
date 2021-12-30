@@ -1,11 +1,11 @@
-import {Component, OnInit, ViewChild} from '@angular/core';
+import {AfterViewInit, Component, OnInit, ViewChild} from '@angular/core';
 import {MatTableDataSource} from "@angular/material/table";
 import {FormBuilder, FormGroup} from "@angular/forms";
 import {MatPaginator} from "@angular/material/paginator";
 import {MatSort} from "@angular/material/sort";
 import {MatDialog} from "@angular/material/dialog";
 import {ModalResponse} from "../../../../../core/utils/ModalResponse";
-import {Contract} from "../../models/contract.interface";
+import {Contract, ModelContract} from "../../models/contract.interface";
 import {ContractService} from "../../services/contract.service";
 import {CrudComponent} from "../crud/crud.component";
 import {SharedService} from "../../../../../shared/services/shared.service";
@@ -17,11 +17,11 @@ import {ConfirmComponent} from "../../../../../shared/components/confirm/confirm
   styles: [
   ]
 })
-export class TableComponent implements OnInit {
+export class TableComponent implements AfterViewInit, OnInit {
 
   displayedColumns: string[] = ['id', 'name', 'description', 'options'];
   dataSource!: MatTableDataSource<Contract>;
-  totalItems: number = 0;
+  totalItems!: number;
   pageSize = 10;
   contractPaginateForm!: FormGroup;
   @ViewChild(MatPaginator, {static: true}) paginator!: MatPaginator;
@@ -34,10 +34,10 @@ export class TableComponent implements OnInit {
   }
 
   ngOnInit(): void {
-    /*Formulario*/
-    this.loadContractFilterForm();
     // Assign the data to the data source for the table to render
     this.dataSource = new MatTableDataSource();
+    /*Formulario*/
+    this.loadContractFilterForm();
     this.getContractsPaginator(this.paginator);
   }
 
@@ -50,9 +50,9 @@ export class TableComponent implements OnInit {
     const paginator: MatPaginator = event;
     this.contractPaginateForm.get('page')?.setValue(paginator.pageIndex + 1);
     this.contractService.getContracts(this.contractPaginateForm.value)
-      .subscribe(contracts => {
-        this.dataSource.data = contracts.results
-        this.totalItems = contracts.count;
+      .subscribe((contracts: ModelContract) => {
+        this.dataSource.data = contracts.data
+        this.totalItems = contracts.total;
       })
   }
 
@@ -109,7 +109,7 @@ export class TableComponent implements OnInit {
   loadContractFilterForm(): void {
     this.contractPaginateForm = this.formBuilder.group({
       page: [],
-      page_size: [this.pageSize]
+      page_size: this.pageSize
     })
   }
 

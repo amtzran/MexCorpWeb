@@ -1,6 +1,6 @@
 import {Component, Inject, OnInit} from '@angular/core';
-import {FormBuilder, FormControl, FormGroup, Validators} from "@angular/forms";
-import {Customer} from "../../../customer/interfaces/customer.interface";
+import {FormBuilder, FormGroup, Validators} from "@angular/forms";
+import {Customer} from "../../../customer/customers/interfaces/customer.interface";
 import {SharedService} from "../../../../shared/services/shared.service";
 import {MAT_DIALOG_DATA, MatDialogRef} from "@angular/material/dialog";
 import {ModalResponse} from "../../../../core/utils/ModalResponse";
@@ -8,7 +8,7 @@ import {TaskService} from "../../services/task.service";
 import {Employee, JobCenter} from "../../../employee/interfaces/employee.interface";
 import {CalendarDate, WorkType} from "../../models/task.interface";
 import {DateService} from "../../../../core/utils/date.service";
-import {DoorType} from "../../../door/interfaces/door.interface";
+import {DoorType} from "../../../customer/doors/interfaces/door.interface";
 
 @Component({
   selector: 'app-crud',
@@ -20,6 +20,9 @@ export class CrudComponent implements OnInit {
 
   /*Formulario*/
   taskForm!: FormGroup;
+  // Date Range
+  initialDate: string = '';
+  finalDate: string = '';
 
   /*Titulo Modal*/
   title: string = 'Nueva Tarea';
@@ -45,18 +48,17 @@ export class CrudComponent implements OnInit {
   ) { }
 
   ngOnInit(): void {
-
     // Customers init
-    this._taskService.getCustomers().subscribe(customers => {this.customers = customers.results} )
+    this._taskService.getCustomers().subscribe(customers => {this.customers = customers.data} )
 
     // Type Customers
-    this._taskService.getJobCenters().subscribe(jobCenters => {this.jobCenters = jobCenters.results} )
+    this._taskService.getJobCenters().subscribe(jobCenters => {this.jobCenters = jobCenters.data} )
 
     // Type Employees
-    this._taskService.getEmployees().subscribe(employees => {this.employees = employees.results} )
+    this._taskService.getEmployees().subscribe(employees => {this.employees = employees.data} )
 
     // Type Customers
-    this._taskService.getWorkTypes().subscribe(workTypes => {this.workTypes = workTypes.results} )
+    this._taskService.getWorkTypes().subscribe(workTypes => {this.workTypes = workTypes.data} )
 
     /*Formulario*/
     this.loadTaskForm();
@@ -86,14 +88,20 @@ export class CrudComponent implements OnInit {
    */
   loadTaskById(): void{
     this._taskService.getTaskById(this.task.idTask).subscribe(response => {
-      delete response.id;
-      delete response.folio;
-      delete response.start_task_hour;
-      delete response.end_task_hour;
-      delete response.status;
-      //delete response.created_at;
-      //delete response.updated_at;
-      this.taskForm.setValue(response);
+      this.taskForm.patchValue({
+        title: response.data.title,
+        employee_id: response.data.employee_id,
+        job_center_id: response.data.job_center_id,
+        customer_id: response.data.customer_id,
+        doors: response.data.doors,
+        comments: response.data.comments,
+        work_type_id: response.data.work_type_id,
+        initial_hour: response.data.initial_hour,
+        final_hour: response.data.final_hour,
+        initial_date: this._dateService.getFormatDateSetInputRangePicker(response.data.initial_date),
+        final_date: this._dateService.getFormatDateSetInputRangePicker(response.data.final_date)
+      })
+      //this.taskForm.setValue(response);
     })
   }
 
@@ -103,11 +111,11 @@ export class CrudComponent implements OnInit {
   loadTaskForm():void{
     this.taskForm = this.fb.group({
       title:[{value:'', disabled:this.task.info}],
-      job_center:[{value:'', disabled:this.task.info}, Validators.required],
-      customer:[{value:'', disabled:this.task.info}, Validators.required],
-      employee:[{value:'', disabled:this.task.info}, Validators.required],
-      work_type:[{value:'', disabled:this.task.info}, Validators.required],
-      //door_type:[{value: [], disabled:this.task.info}, Validators.required],
+      job_center_id:[{value:'', disabled:this.task.info}, Validators.required],
+      customer_id:[{value:'', disabled:this.task.info}, Validators.required],
+      employee_id:[{value:'', disabled:this.task.info}, Validators.required],
+      work_type_id:[{value:'', disabled:this.task.info}, Validators.required],
+      doors:[{value: [], disabled:this.task.info}, Validators.required],
       initial_date: [{value: '', disabled:this.task.info}, Validators.required],
       final_date: [{value: '', disabled:this.task.info}, Validators.required],
       initial_hour: [{value: '', disabled:this.task.info}, Validators.required],
@@ -122,11 +130,11 @@ export class CrudComponent implements OnInit {
   loadTaskFormDate():void{
     this.taskForm = this.fb.group({
       title:[{value:'', disabled:this.task.info}, Validators.required],
-      job_center:[{value:'', disabled:this.task.info}, Validators.required],
-      customer:[{value:'', disabled:this.task.info}, Validators.required],
-      employee:[{value:'', disabled:this.task.info}, Validators.required],
-      work_type:[{value:'', disabled:this.task.info}, Validators.required],
-      //door_type:[{value: [], disabled:this.task.info}, Validators.required],
+      job_center_id:[{value:'', disabled:this.task.info}, Validators.required],
+      customer_id:[{value:'', disabled:this.task.info}, Validators.required],
+      employee_id:[{value:'', disabled:this.task.info}, Validators.required],
+      work_type_id:[{value:'', disabled:this.task.info}, Validators.required],
+      doors:[{value: [], disabled:this.task.info}, Validators.required],
       initial_date: [{value: this.task.calendar.initial_date, disabled:this.task.info}, Validators.required],
       final_date: [{value: this.task.calendar.final_date, disabled:this.task.info}, Validators.required],
       initial_hour: [{value: this.task.calendar.initial_hour, disabled:this.task.info}, Validators.required],
@@ -144,12 +152,12 @@ export class CrudComponent implements OnInit {
       this.sharedService.showSnackBar('Los campos con * son obligatorios.');
       return
     }
-    let initialDate = this._dateService.getFormatDataDate(this.taskForm.get('initial_date')?.value)
-    this.taskForm.get('initial_date')?.setValue(initialDate)
-    let finalDate = this._dateService.getFormatDataDate(this.taskForm.get('final_date')?.value)
-    this.taskForm.get('final_date')?.setValue(finalDate)
+    this.initialDate = this._dateService.getFormatDataDate(this.taskForm.get('initial_date')?.value)
+    this.taskForm.get('initial_date')?.setValue(this.initialDate)
+    this.finalDate = this._dateService.getFormatDataDate(this.taskForm.get('final_date')?.value)
+    this.taskForm.get('final_date')?.setValue(this.finalDate)
     this._taskService.addTask(this.taskForm.value).subscribe(response => {
-      this.sharedService.showSnackBar('Se ha agregado correctamente la Tarea.');
+      this.sharedService.showSnackBar(`Se ha agregado correctamente la Tarea: ${response.data.title}`);
       this.dialogRef.close(ModalResponse.UPDATE);
     })
   }
@@ -163,8 +171,12 @@ export class CrudComponent implements OnInit {
       this.sharedService.showSnackBar('Los campos con * son obligatorios.');
       return
     }
+    this.initialDate = this._dateService.getFormatDataDate(this.taskForm.get('initial_date')?.value)
+    this.taskForm.get('initial_date')?.setValue(this.initialDate)
+    this.finalDate = this._dateService.getFormatDataDate(this.taskForm.get('final_date')?.value)
+    this.taskForm.get('final_date')?.setValue(this.finalDate)
     this._taskService.updateTask(this.task.idTask, this.taskForm.value).subscribe(response => {
-      this.sharedService.showSnackBar(`Se ha actualizado correctamente la Tarea:` );
+      this.sharedService.showSnackBar(`Se ha actualizado correctamente la Tarea: ${response.data.title}` );
       this.dialogRef.close(ModalResponse.UPDATE);
     })
   }
@@ -184,7 +196,7 @@ export class CrudComponent implements OnInit {
   loadAccess(idCustomer: number) {
     this._taskService.getDoorTypes(idCustomer).subscribe(
       doorTypesByCustomer => {
-        this.doorTypes = doorTypesByCustomer.results
+        this.doorTypes = doorTypesByCustomer.data
         if (this.doorTypes.length === 0) {
           this.sharedService.showSnackBar('No ha Seleccionado ningún Cliente')
         }

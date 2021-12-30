@@ -1,21 +1,28 @@
 // DataSource for Customer Type
+import {Links} from "../../../../shared/interfaces/shared.interface";
+
 export interface ModelCustomerType {
-  count:    number;
-  next:     null;
-  previous: null;
-  results:  CustomerType[];
+  total: number;
+  next: Links["next"];
+  previous: Links["prev"];
+  data: CustomerType[];
 }
 
 export interface CustomerType {
-  id?:            number;
-  name:           string;
-  description:          string;
-  created_at?:    Date;
-  updated_at?:    Date;
+  id?: number;
+  name: string;
+  description: string;
+  is_active?: boolean;
+  created_at?: Date;
+  updated_at?: Date;
 }
 
 // Data Paginate
 export interface CustomerTypePaginate {
   page: string,
   page_size: string
+}
+
+export interface CustomerTypeDetail {
+  data: CustomerType
 }

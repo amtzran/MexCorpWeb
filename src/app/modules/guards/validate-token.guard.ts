@@ -14,27 +14,28 @@ export class ValidateTokenGuard implements CanActivate, CanLoad {
   ) {}
 
   canActivate(): Observable<boolean> | boolean {
-    return true
-    /*return this.authService.validateToken()
+    //return true
+    return this.authService.validateToken()
       .pipe(
         tap( valid =>{
           if (!valid) {
-            this.router.navigateByUrl('/auth')
+            this.router.navigate(['/']).then(r => console.log(r)
+            )
           }
         })
-      )*/
+      )
   }
   canLoad(): Observable<boolean> | boolean {
-    return true
+  //return true
 
-   /* return this.authService.validateToken()
+  return this.authService.validateToken()
       .pipe(
         tap( valid =>{
           if (!valid) {
-            this.router.navigateByUrl('/auth')
+            this.router.navigate(['/']).then(r => console.log(r))
           }
         })
-      )*/
+      )
 
   }
 

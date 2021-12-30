@@ -15,9 +15,11 @@ export class LoginComponent implements OnInit {
 
   loading: boolean = false;
 
-  myform: FormGroup = this.formBuilder.group ({
+  myForm: FormGroup = this.formBuilder.group ({
     email: ['', [Validators.required, Validators.email] ],
     password: ['', [Validators.required, Validators.minLength(6)] ]
+    //email: ['manuel.mdz.rom@swopyn.com', [Validators.required, Validators.email] ],
+    //password: ['1234567890', [Validators.required, Validators.minLength(6)] ]
   })
 
   constructor(
@@ -32,13 +34,13 @@ export class LoginComponent implements OnInit {
 
   login(){
 
-    const {email, password} = this.myform.value
+    const {email, password} = this.myForm.value
     this.authService.login(email, password)
       .subscribe(result => {
-        if (result.access){
+        if (result.access_token){
           this.loading = true;
           setTimeout(() => {
-            this.router.navigate(['./customer'])
+            this.router.navigate(['./dashboard/customer'])
           }, 1000)
         }
         else {

@@ -2,7 +2,11 @@ import { Injectable } from '@angular/core';
 import {Observable} from "rxjs";
 import {HttpClient, HttpParams} from "@angular/common/http";
 import {environment} from "../../../../../environments/environment";
-import {CustomerType, CustomerTypePaginate, ModelCustomerType} from "../models/customer-type.interface";
+import {
+  CustomerTypeDetail,
+  CustomerTypePaginate,
+  ModelCustomerType
+} from "../models/customer-type.interface";
 
 @Injectable({
   providedIn: 'root'
@@ -13,8 +17,8 @@ export class CustomerTypeService {
   private baseUrl: string = environment.baseUrl
 
   // Get Customer Type
-  getCustomerTypeById(id: number) : Observable<CustomerType> {
-    return this.http.get<CustomerType>(`${this.baseUrl}/customer-types/${id}`)
+  getCustomerTypeById(id: number) : Observable<CustomerTypeDetail> {
+    return this.http.get<CustomerTypeDetail>(`${this.baseUrl}/customer-types/${id}`)
   }
 
   // Get Customer Types
@@ -26,13 +30,13 @@ export class CustomerTypeService {
   }
 
   // Add Customer Type
-  addCustomerType(customerType: CustomerType): Observable<CustomerType> {
-    return this.http.post<CustomerType>(`${this.baseUrl}/customer-types/`, customerType)
+  addCustomerType(customerType: CustomerTypeDetail): Observable<CustomerTypeDetail> {
+    return this.http.post<CustomerTypeDetail>(`${this.baseUrl}/customer-types/`, customerType)
   }
 
   // Update Customer Type
-  updateCustomerType(idCustomerType: number, customerType: CustomerType) : Observable<CustomerType> {
-    return this.http.put<CustomerType>(`${this.baseUrl}/customer-types/${idCustomerType}/`,customerType)
+  updateCustomerType(idCustomerType: number, customerType: CustomerTypeDetail) : Observable<CustomerTypeDetail> {
+    return this.http.put<CustomerTypeDetail>(`${this.baseUrl}/customer-types/${idCustomerType}/`,customerType)
   }
 
   // Delete Customer Type

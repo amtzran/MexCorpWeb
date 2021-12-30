@@ -13,6 +13,7 @@ import { CrudComponent } from './components/crud/crud.component';
 import {FlexLayoutModule} from "@angular/flex-layout";
 import {ReactiveFormsModule} from "@angular/forms";
 import {MaterialModule} from "../../material/material.module";
+import { ConfirmEditComponent } from './components/confirm-edit/confirm-edit.component';
 
 FullCalendarModule.registerPlugins([ // register FullCalendar plugins
   dayGridPlugin,
@@ -25,7 +26,8 @@ FullCalendarModule.registerPlugins([ // register FullCalendar plugins
   declarations: [
     TaskComponent,
     TableComponent,
-    CrudComponent
+    CrudComponent,
+    ConfirmEditComponent
   ],
   imports: [
     CommonModule,

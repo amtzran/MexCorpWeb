@@ -28,12 +28,12 @@
             <mat-form-field fxFlex="100">
               <mat-label>Empleados</mat-label>
               <mat-select
-                formControlName="employee">
+                formControlName="employee_id">
                 <mat-option *ngFor="let employee of employees" [value]="employee.id">
                   {{ employee.name }}
                 </mat-option>
               </mat-select>
-              <mat-error *ngIf="fieldInvalid('employee')">
+              <mat-error *ngIf="fieldInvalid('employee_id')">
                 Favor de Seleccionar un Empleado
               </mat-error>
             </mat-form-field>
@@ -47,12 +47,12 @@
             <mat-form-field fxFlex="100">
               <mat-label>Grupos</mat-label>
               <mat-select
-                formControlName="job_center">
+                formControlName="job_center_id">
                 <mat-option *ngFor="let jobCenter of jobCenters" [value]="jobCenter.id">
                   {{ jobCenter.name}}
                 </mat-option>
               </mat-select>
-              <mat-error *ngIf="fieldInvalid('job_center')">
+              <mat-error *ngIf="fieldInvalid('job_center_id')">
                 Favor de Seleccionar un Grupo
               </mat-error>
             </mat-form-field>
@@ -61,12 +61,12 @@
               <mat-label>Clientes</mat-label>
               <mat-select
                 (selectionChange)="selectCustomer($event.value)"
-                formControlName="customer">
+                formControlName="customer_id">
                 <mat-option *ngFor="let customer of customers" [value]="customer.id">
                   {{ customer.name}}
                 </mat-option>
               </mat-select>
-              <mat-error *ngIf="fieldInvalid('customer')">
+              <mat-error *ngIf="fieldInvalid('customer_id')">
                 Favor de Seleccionar un Cliente
               </mat-error>
             </mat-form-field>
@@ -79,25 +79,24 @@
 
             <mat-form-field fxFlex="100">
               <mat-label>Accesos Cliente</mat-label>
-              <mat-select multiple>
+              <mat-select multiple formControlName="doors">
                 <mat-option *ngFor="let doorType of doorTypes" [value]="doorType.id">
                   {{ doorType.name }}
                 </mat-option>
               </mat-select>
-             <!-- <mat-error *ngIf="fieldInvalid('door_type')">
+              <mat-error *ngIf="fieldInvalid('doors')">
                 Favor de Seleccionar una o mas Accesos
-              </mat-error>-->
+              </mat-error>
             </mat-form-field>
-            <!--TODO: Add Control Form formControlName="door_type"-->
 
             <mat-form-field fxFlex="100">
               <mat-label>Tipos de Trabajos</mat-label>
-              <mat-select formControlName="work_type">
+              <mat-select formControlName="work_type_id">
                 <mat-option *ngFor="let workType of workTypes" [value]="workType.id">
                   {{ workType.name }}
                 </mat-option>
               </mat-select>
-              <mat-error *ngIf="fieldInvalid('employee')">
+              <mat-error *ngIf="fieldInvalid('work_type_id')">
                 Favor de Seleccionar un Tipo Trabajo
               </mat-error>
             </mat-form-field>
@@ -133,7 +132,7 @@
                 <mat-datepicker-toggle matSuffix [for]="picker"></mat-datepicker-toggle>
                 <mat-date-range-picker #picker></mat-date-range-picker>
 
-                <mat-error>Invalid end date</mat-error>
+                <mat-error>fecha No ingresada correctamente.</mat-error>
               </mat-form-field>
 
             <mat-form-field fxFlex="25">

@@ -21,8 +21,8 @@ export class TableComponent implements OnInit {
 
   displayedColumns: string[] = ['id', 'name', 'description', 'options'];
   dataSource!: MatTableDataSource<JobTitle>;
-  totalItems: number = 0;
-  pageSize = 10;
+  totalItems!: number;
+  pageSize!: number;
   jobTitlePaginateForm!: FormGroup;
   @ViewChild(MatPaginator, {static: true}) paginator!: MatPaginator;
   @ViewChild(MatSort) sort!: MatSort;
@@ -51,8 +51,8 @@ export class TableComponent implements OnInit {
     this.jobTitlePaginateForm.get('page')?.setValue(paginator.pageIndex + 1);
     this.jobTitleService.getJobTitles(this.jobTitlePaginateForm.value)
       .subscribe(jobTitles => {
-        this.dataSource.data = jobTitles.results
-        this.totalItems = jobTitles.count;
+        this.dataSource.data = jobTitles.data
+        this.totalItems = jobTitles.total;
       })
   }
 

@@ -21,8 +21,8 @@ export class TableComponent implements OnInit {
 
   displayedColumns: string[] = ['id', 'name', 'description', 'options'];
   dataSource!: MatTableDataSource<WorkType>;
-  totalItems: number = 0;
-  pageSize = 10;
+  totalItems!: number;
+  pageSize!: number;
   workTypePaginateForm!: FormGroup;
   @ViewChild(MatPaginator, {static: true}) paginator!: MatPaginator;
   @ViewChild(MatSort) sort!: MatSort;
@@ -51,8 +51,8 @@ export class TableComponent implements OnInit {
     this.workTypePaginateForm.get('page')?.setValue(paginator.pageIndex + 1);
     this.workTypeService.getWorkTypes(this.workTypePaginateForm.value)
       .subscribe(workTypes => {
-        this.dataSource.data = workTypes.results
-        this.totalItems = workTypes.count;
+        this.dataSource.data = workTypes.data
+        this.totalItems = workTypes.total;
       })
   }
 

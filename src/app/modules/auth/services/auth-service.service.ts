@@ -25,33 +25,26 @@ export class AuthServiceService {
     return this.http.post<Login>(`${this.baseUrl}/auth/login`, body)
       .pipe(
         tap(resp => {
-          if (resp.access){
-            localStorage.setItem('access', resp.access)
+          if (resp.access_token){
+            localStorage.setItem('access_token', resp.access_token)
+            //localStorage.setItem('refresh', resp.refresh)
             this._user = {
-              refresh: resp.refresh,
-              access: resp.access,
+              access: resp.access_token,
             }
           }
         }),
-        //map(resp => resp.access),
         catchError(err => of(err))
       )
   }
 
   // Method Validate Token
   validateToken(): Observable<boolean>{
-    const headers = new HttpHeaders()
-      .set('access', localStorage.getItem('access') || '')
-    const url = `${this.baseUrl}/auth/token/refresh`
-    return this.http.get<Login>(url, {headers: headers})
+    const url = `${this.baseUrl}/auth/users`
+    return this.http.get<any>(url)
       .pipe(
         map(resp => {
-          localStorage.setItem('access', resp.access)
-          this._user = {
-            refresh: resp.refresh,
-            access: resp.access,
-          }
-          return true
+          // If exist Email is authenticated
+          return !!resp.email;
         }),
         catchError(err => of(false))
       )

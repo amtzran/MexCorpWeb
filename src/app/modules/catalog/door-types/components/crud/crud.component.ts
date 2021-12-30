@@ -59,10 +59,11 @@ export class CrudComponent implements OnInit {
    */
   loadDoorById(): void{
     this._doorTypeService.getDoorTypeById(this.doorType.idDoorType).subscribe(response => {
-      delete response.id;
-      delete response.created_at;
-      delete response.updated_at;
-      this.doorTypeForm.setValue(response);
+      delete response.data.id;
+      delete response.data.is_active;
+      delete response.data.created_at;
+      delete response.data.updated_at;
+      this.doorTypeForm.setValue(response.data);
     })
   }
 
@@ -101,7 +102,7 @@ export class CrudComponent implements OnInit {
       return
     }
     this._doorTypeService.updateDoorType(this.doorType.idDoorType, this.doorTypeForm.value).subscribe(response => {
-      this.sharedService.showSnackBar(`Se ha actualizado correctamente el tipo de Acceso: ${response.name}` );
+      this.sharedService.showSnackBar(`Se ha actualizado correctamente el tipo de Acceso: ${response.data.name}` );
       this.dialogRef.close(ModalResponse.UPDATE);
     })
   }

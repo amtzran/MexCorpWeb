@@ -29,17 +29,17 @@ export class SideNavComponent implements OnInit {
   menuRoute: RoutesSide[] = [
     {
       name: 'Clientes',
-      route: '/customer',
+      route: '/dashboard/customer',
       icon: 'people_alt'
     },
     {
       name: 'Empleados',
-      route: '/employee/list',
+      route: '/dashboard/employee/list',
       icon: 'engineering'
     },
     {
       name: 'Tareas',
-      route: '/calendar',
+      route: '/dashboard/task',
       icon: 'schedule'
     }
   ]
@@ -47,38 +47,38 @@ export class SideNavComponent implements OnInit {
   menuCatalogs: RoutesSide[] = [
     {
       name: 'Puestos',
-      route: '/job-title',
+      route: '/dashboard/job-title',
       icon: 'engineering'
     },
     {
       name: 'Grupos',
-      route: '/group',
+      route: '/dashboard/group',
       icon: 'group'
     },
     {
       name: 'Convenios',
-      route: '/contract',
+      route: '/dashboard/contract',
       icon: 'folder'
     },
     {
       name: 'Tipo Cliente',
-      route: '/customer-type',
+      route: '/dashboard/customer-type',
       icon: 'people_alt'
     },
     {
       name: 'Tipo Acceso',
-      route: '/door-type',
+      route: '/dashboard/doors-type',
       icon: 'security'
     },
     {
       name: 'Tipo Trabajo',
-      route: '/work-type',
+      route: '/dashboard/work-type',
       icon: 'work'
     },
   ]
 
   logout(){
-    this.router.navigateByUrl('/auth/login')
+    this.router.navigateByUrl('../auth/login')
     this.authService.logout()
   }
 

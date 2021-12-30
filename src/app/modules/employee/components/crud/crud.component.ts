@@ -41,13 +41,13 @@ export class CrudComponent implements OnInit {
     // Job Centers
     this._employeeService.getJobCenters()
       .subscribe(jobCenters => {
-        this.jobCenters = jobCenters.results
+        this.jobCenters = jobCenters.data
       } )
 
     // Type Jobs
     this._employeeService.getJobs()
       .subscribe(jobs => {
-        this.jobs = jobs.results
+        this.jobs = jobs.data
       } )
 
     /*Formulario*/
@@ -74,10 +74,14 @@ export class CrudComponent implements OnInit {
    */
   loadEmployeeById(): void{
     this._employeeService.getEmployeeById(this.employee.idEmployee).subscribe(response => {
-      delete response.id;
-      //delete response.created_at;
-      //delete response.updated_at;
-      this.employeeForm.setValue(response);
+      delete response.data.id;
+      delete response.data.user_id;
+      delete response.data.created_at;
+      delete response.data.updated_at;
+      delete response.data.job_center_name;
+      delete response.data.job_title_name;
+      delete response.data.user_name;
+      this.employeeForm.setValue(response.data);
     })
   }
 
@@ -87,12 +91,13 @@ export class CrudComponent implements OnInit {
   loadEmployeeForm():void{
     this.employeeForm = this.fb.group({
       name:[{value:null, disabled:this.employee.info}, Validators.required],
+      email:[{value:null, disabled:this.employee.info}, [Validators.required, Validators.email]],
       color:[{value:null, disabled:this.employee.info}, Validators.required],
       avatar:[{value:'', disabled:this.employee.info}],
       signature:[{value:'', disabled:this.employee.info}],
-      job_center: [{value: '', disabled:this.employee.info}, Validators.required],
-      job: [{value: '', disabled:this.employee.info}, Validators.required],
-      user: [{value: 1, disabled:this.employee.info}],
+      is_active:[{value:true, disabled:this.employee.info}],
+      job_center_id: [{value: '', disabled:this.employee.info}, Validators.required],
+      job_title_id: [{value: '', disabled:this.employee.info}, Validators.required],
     });
   }
 
@@ -121,7 +126,7 @@ export class CrudComponent implements OnInit {
       return
     }
     this._employeeService.updateEmployee(this.employee.idEmployee, this.employeeForm.value).subscribe(response => {
-      this.sharedService.showSnackBar(`Se ha actualizado correctamente el empleado: ${response.name}` );
+      this.sharedService.showSnackBar(`Se ha actualizado correctamente el empleado: ${response.data.name}` );
       this.dialogRef.close(ModalResponse.UPDATE);
     })
   }

@@ -1,0 +1,75 @@
+<h4 mat-dialog-title class="title-subsection">{{title}}</h4>
+<mat-divider></mat-divider>
+<br>
+
+<mat-dialog-content class="mat-typography" [formGroup]="doorForm">
+
+<mat-card>
+
+  <mat-card-content>
+
+      <div fxLayout="row" fxLayoutGap="40px" fxLayout.xs="column">
+
+        <div class="container" fxFlex="100" fxLayout="column" fxLayout.xs="column">
+
+          <div fxLayout="row"
+               fxLayout.xs="column"
+               fxLayoutGap="20px">
+
+            <mat-form-field fxFlex="100">
+              <mat-label>Acceso</mat-label>
+              <input
+                matInput
+                type="text"
+                formControlName="name"
+              >
+              <mat-error *ngIf="fieldInvalid('name')">
+                Favor de Ingresar el Acceso
+              </mat-error>
+            </mat-form-field>
+
+            <mat-form-field fxFlex="100">
+              <mat-label>Tipo de acceso</mat-label>
+              <mat-select
+                formControlName="door_type_id">
+                <mat-option *ngFor="let doorType of doorTypes" [value]="doorType.id">
+                  {{ doorType.name}}
+                </mat-option>
+              </mat-select>
+              <mat-error *ngIf="fieldInvalid('door_type_id')">
+                Favor de Seleccionar el Top de acceso
+              </mat-error>
+            </mat-form-field>
+
+          </div>
+
+          <div fxLayout="row"
+               fxLayout.xs="column"
+               fxLayoutGap="20px">
+
+            <mat-form-field fxFlex="100">
+              <mat-label>Observaciones</mat-label>
+              <textarea matInput
+                        formControlName="observations"
+                        placeholder="Observaciones de accesos..."></textarea>
+            </mat-form-field>
+
+          </div>
+
+        </div>
+
+      </div>
+
+  </mat-card-content>
+  <mat-card-actions>
+  </mat-card-actions>
+</mat-card>
+
+</mat-dialog-content>
+
+<mat-dialog-actions fxLayoutAlign="end">
+  <button (click)="close()" mat-stroked-button color="primary" mat-dialog-close="true">Cancelar</button>
+  <button *ngIf="!door.idDoor" (click)="addDoor()" mat-flat-button color="primary" cdkFocusInitial [disabled]="doorForm.invalid">Guardar Acceso</button>
+  <button *ngIf="door.idDoor && door.edit" (click)="updateDoor()" mat-flat-button color="primary" cdkFocusInitial>Editar</button>
+</mat-dialog-actions>
+

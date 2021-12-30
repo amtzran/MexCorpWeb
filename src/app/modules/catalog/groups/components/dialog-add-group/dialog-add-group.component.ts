@@ -56,10 +56,11 @@ export class DialogAddGroupComponent implements OnInit {
    */
   loadGroupById(): void{
     this._groupService.getGroupById(this.group.idGroup).subscribe(response => {
-      delete response.id;
-      delete response.created_at;
-      delete response.updated_at;
-      this.groupForm.setValue(response);
+      delete response.data.id;
+      delete response.data.is_active;
+      delete response.data.created_at;
+      delete response.data.updated_at;
+      this.groupForm.setValue(response.data);
     })
   }
 
@@ -69,10 +70,10 @@ export class DialogAddGroupComponent implements OnInit {
   loadGroupForm():void{
     this.groupForm = this.fb.group({
       name:[{value:null, disabled:this.group.info}, Validators.required],
-      reason_social:[{value:'', disabled:this.group.info}],
-      rfc:[{value:'', disabled:this.group.info}],
+      reason_social:[{value:'', disabled:this.group.info}, Validators.required],
+      rfc:[{value:'', disabled:this.group.info}, Validators.required],
       phone:[{value:'', disabled:this.group.info}],
-      email:[{value:'', disabled:this.group.info}],
+      email:[{value:'', disabled:this.group.info}, Validators.required],
       address: [{value:'', disabled:this.group.info}],
       city: [{value:'', disabled:this.group.info}],
       postal_code: [{value:'', disabled:this.group.info}]
@@ -104,8 +105,7 @@ export class DialogAddGroupComponent implements OnInit {
       return
     }
     this._groupService.updateGroup(this.group.idGroup, this.groupForm.value).subscribe(response => {
-      console.log(response);
-      this.sharedService.showSnackBar('Se ha actualizado correctamente el grupo.');
+      this.sharedService.showSnackBar(`Se ha actualizado correctamente el grupo`);
       this.dialogRef.close(ModalResponse.UPDATE);
     })
   }

@@ -59,10 +59,11 @@ export class CrudComponent implements OnInit {
    */
   loadWorkById(): void{
     this._workTypeService.getWorkTypeById(this.workType.idWorkType).subscribe(response => {
-      delete response.id;
-      delete response.created_at;
-      delete response.updated_at;
-      this.workTypeForm.setValue(response);
+      delete response.data.id;
+      delete response.data.is_active;
+      delete response.data.created_at;
+      delete response.data.updated_at;
+      this.workTypeForm.setValue(response.data);
     })
   }
 
@@ -101,7 +102,7 @@ export class CrudComponent implements OnInit {
       return
     }
     this._workTypeService.updateWorkType(this.workType.idWorkType, this.workTypeForm.value).subscribe(response => {
-      this.sharedService.showSnackBar(`Se ha actualizado correctamente el tipo de Trabajo: ${response.name}` );
+      this.sharedService.showSnackBar(`Se ha actualizado correctamente el tipo de Trabajo: ${response.data.name}` );
       this.dialogRef.close(ModalResponse.UPDATE);
     })
   }

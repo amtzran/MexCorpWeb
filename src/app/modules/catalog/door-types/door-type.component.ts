@@ -1,7 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 
 @Component({
-  selector: 'app-door-type',
+  selector: 'app-doors-type',
   templateUrl: './door-type.component.html',
   styles: [
   ]

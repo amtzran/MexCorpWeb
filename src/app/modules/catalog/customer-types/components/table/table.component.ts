@@ -21,8 +21,8 @@ export class TableComponent implements OnInit {
 
   displayedColumns: string[] = ['id', 'name', 'description', 'options'];
   dataSource!: MatTableDataSource<CustomerType>;
-  totalItems: number = 0;
-  pageSize = 10;
+  totalItems!: number;
+  pageSize!: number;
   customerTypePaginateForm!: FormGroup;
   @ViewChild(MatPaginator, {static: true}) paginator!: MatPaginator;
   @ViewChild(MatSort) sort!: MatSort;
@@ -51,8 +51,8 @@ export class TableComponent implements OnInit {
     this.customerTypePaginateForm.get('page')?.setValue(paginator.pageIndex + 1);
     this.customerTypeService.getCustomerTypes(this.customerTypePaginateForm.value)
       .subscribe(customerTypes => {
-        this.dataSource.data = customerTypes.results
-        this.totalItems = customerTypes.count;
+        this.dataSource.data = customerTypes.data
+        this.totalItems = customerTypes.total;
       })
   }
 
