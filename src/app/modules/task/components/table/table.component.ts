@@ -70,8 +70,7 @@ export class TableComponent implements OnInit {
   initTaskCalendar(): void {
     this.taskService.getTasks()
       .subscribe(tasks => {
-
-        tasks.forEach(element => {
+        tasks.data.forEach(element => {
           this.tasks.push({
             id: String(element.id),
             title: element.title,
@@ -152,7 +151,7 @@ export class TableComponent implements OnInit {
   handleEventClick(clickInfo: EventClickArg) {
 
     this.taskService.getTaskById(Number(clickInfo.event.id)).subscribe(res => {
-      if (res.status === 1) {
+      if (res.data.status === 'Programado') {
         this.openDialogTask(true, Number(clickInfo.event.id), false, null)
       }
       else {

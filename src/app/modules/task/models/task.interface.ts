@@ -1,26 +1,38 @@
+import {Links} from "../../../shared/interfaces/shared.interface";
+import {Door} from "../../customer/doors/interfaces/door.interface";
+
 export interface ModelTask {
-  count: number;
-  next: null;
-  previous: null;
-  results: Task[];
+  total: number;
+  next?: Links["next"];
+  previous?: Links["prev"];
+  data: Task[];
 }
 
 export interface Task {
   id?: number;
   folio?: string;
   title: string;
-  job_center: number;
-  customer: number;
-  employee: number;
-  work_type: number;
+  job_center_id: number;
+  job_center_name?: string
+  customer_id: number;
+  customer_name?: string
+  employee_id: number;
+  employee_name?: string;
+  work_type_id: number;
+  work_type_name?: string
   initial_date: string;
   final_date: string;
   initial_hour: string;
   final_hour: string;
   start_task_hour?: string | null;
   end_task_hour?: string | null;
-  status?: number;
+  status?: string;
   comments: null | string;
+  doors: Door[]
+}
+
+export interface TaskDetail {
+  data: Task
 }
 
 export interface CalendarDate {
@@ -39,10 +51,10 @@ export interface Event {
 
 // DataSource Work Types
 export interface ModelWorkType {
-  count: number;
+  total: number;
   next: null;
   previous: null;
-  results: WorkType[];
+  data: WorkType[];
 }
 
 export interface WorkType {
