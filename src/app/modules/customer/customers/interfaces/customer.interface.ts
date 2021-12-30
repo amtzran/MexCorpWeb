@@ -2,10 +2,14 @@
 import {Links} from "../../../../shared/interfaces/shared.interface";
 
 export interface ModelCustomer {
-  total: number;
+  meta: MetaModel;
   next?: Links["next"];
   previous?: Links["prev"];
   data: Customer[];
+}
+
+export interface MetaModel {
+  total: number
 }
 
 export interface Customer {

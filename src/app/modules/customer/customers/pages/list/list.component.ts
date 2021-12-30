@@ -26,7 +26,7 @@ export class ListComponent implements AfterViewInit, OnInit {
   displayedColumns: string[] = ['id', 'name', 'reason_social', 'rfc', 'phone', 'address', 'contract_name', 'customer_type_name','options'];
   dataSource!: MatTableDataSource<Customer>;
   totalItems!: number;
-  pageSize = 10;
+  pageSize = 15;
   customerFilterForm!: FormGroup;
   @ViewChild(MatPaginator, {static: true}) paginator!: MatPaginator;
   @ViewChild(MatSort) sort!: MatSort;
@@ -46,7 +46,7 @@ export class ListComponent implements AfterViewInit, OnInit {
   }
 
   ngAfterViewInit() {
-    this.dataSource.paginator = this.paginator;
+    //this.dataSource.paginator = this.paginator;
     this.dataSource.sort = this.sort;
   }
 
@@ -58,10 +58,11 @@ export class ListComponent implements AfterViewInit, OnInit {
     const paginator: MatPaginator = event;
     this.customerFilterForm.get('page')?.setValue(paginator.pageIndex + 1);
     this.customerService.getCustomers(this.customerFilterForm.value)
-      .subscribe((customers : ModelCustomer)   => {
+      .subscribe((customers : ModelCustomer) => {
         this.dataSource.data = customers.data
-        this.totalItems = customers.total;
-      } )
+        this.totalItems = customers.meta.total;
+        console.log(this.totalItems)
+      })
   }
 
   applyFilter(event: Event) {
