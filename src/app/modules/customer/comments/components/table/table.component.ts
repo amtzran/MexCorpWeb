@@ -11,6 +11,8 @@ import {ModalResponse} from "../../../../../core/utils/ModalResponse";
 import {CrudComponent} from "../crud/crud.component";
 import {CommentService} from "../../services/comment.service";
 import {CommentCustomer} from "../../models/comment.interface";
+import {CustomerTitle} from "../../../customers/interfaces/customer.interface";
+import {CustomerServiceService} from "../../../customers/services/customer-service.service";
 
 @Component({
   selector: 'app-table',
@@ -20,7 +22,7 @@ import {CommentCustomer} from "../../models/comment.interface";
 })
 export class TableComponent implements OnInit {
 
-  displayedColumns: string[] = ['id', 'comment', 'updated_at','options'];
+  displayedColumns: string[] = ['id', 'comment', 'updated_at', 'user_name', 'options'];
   dataSource!: MatTableDataSource<CommentCustomer>;
   totalItems!: number;
   pageSize = this.sharedService.pageSize;
@@ -29,11 +31,16 @@ export class TableComponent implements OnInit {
   @ViewChild(MatPaginator, {static: true}) paginator!: MatPaginator;
   @ViewChild(MatSort) sort!: MatSort;
 
+  customer: CustomerTitle = {
+    name : '',
+  };
+
   constructor(private commentService: CommentService,
               private formBuilder: FormBuilder,
               private dialog: MatDialog,
               private sharedService: SharedService,
-              private activateRoute: ActivatedRoute) {
+              private activateRoute: ActivatedRoute,
+              private customerService: CustomerServiceService) {
   }
 
   ngOnInit(): void {
@@ -41,6 +48,13 @@ export class TableComponent implements OnInit {
     this.activateRoute.paramMap.subscribe( params => {
       this.idCustomer = params.get('customer');
     })
+    /**
+     * Detail Data Customer
+     */
+    this.customerService.getCustomerById(Number(this.idCustomer)).subscribe(customer =>{
+        this.customer = customer.data
+      }
+    )
     /*Formulario*/
     this.loadCommentFilterForm();
     // Assign the data to the data source for the table to render

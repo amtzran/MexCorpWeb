@@ -11,6 +11,8 @@ import {ContactService} from "../../services/contact.service";
 import {Contact} from "../../models/contact.interface";
 import {CrudComponent} from "../crud/crud.component";
 import {ActivatedRoute} from "@angular/router";
+import {CustomerTitle} from "../../../customers/interfaces/customer.interface";
+import {CustomerServiceService} from "../../../customers/services/customer-service.service";
 
 @Component({
   selector: 'app-table',
@@ -28,19 +30,30 @@ export class TableComponent implements OnInit {
   contactPaginateForm!: FormGroup;
   @ViewChild(MatPaginator, {static: true}) paginator!: MatPaginator;
   @ViewChild(MatSort) sort!: MatSort;
+  customer: CustomerTitle = {
+    name : '',
+  };
 
   constructor(private contactService: ContactService,
               private formBuilder: FormBuilder,
               private dialog: MatDialog,
               private sharedService: SharedService,
-              private activateRoute: ActivatedRoute) {
+              private activateRoute: ActivatedRoute,
+              private customerService: CustomerServiceService) {
   }
 
   ngOnInit(): void {
     // get Id Route Customer
      this.activateRoute.paramMap.subscribe( params => {
-      this.idCustomer = params.get('customer');
+       this.idCustomer = params.get('customer');
     })
+    /**
+     * Detail Data Customer
+     */
+    this.customerService.getCustomerById(Number(this.idCustomer)).subscribe(customer =>{
+        this.customer = customer.data
+      }
+    )
     /*Formulario*/
     this.loadContactFilterForm();
     // Assign the data to the data source for the table to render

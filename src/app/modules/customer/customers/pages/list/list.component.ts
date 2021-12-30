@@ -14,12 +14,7 @@ import {ConfirmComponent} from "../../../../../shared/components/confirm/confirm
 @Component({
   selector: 'app-list',
   templateUrl: './list.component.html',
-  styles: [`
-  .tableResponsive{
-    width: 100%;
-    overflow-x: auto;
-  }
-  `]
+  styleUrls: ['./list.component.css']
 })
 export class ListComponent implements AfterViewInit, OnInit {
 

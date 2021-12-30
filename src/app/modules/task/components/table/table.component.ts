@@ -39,13 +39,15 @@ export class TableComponent implements OnInit {
   /**
    * Values Initials Calendar
    */
+  headerToolbar = {
+    left: 'prev,next,today,changeRange',
+    center: 'title',
+    right: 'dayGridMonth,timeGridWeek,timeGridDay,listWeek,listDay,monthYear'
+  }
+
   initCalendar() {
     this.calendarOptions = {
-      headerToolbar: {
-        left: 'prev,next,today',
-        center: 'title',
-        right: 'dayGridMonth,timeGridWeek,timeGridDay,listWeek'
-      },
+      headerToolbar: this.headerToolbar,
       plugins: [dayGridPlugin, interactionPlugin],
       initialView: 'timeGridWeek',
       events: this.tasks,
@@ -56,7 +58,6 @@ export class TableComponent implements OnInit {
       dayMaxEvents: true,
       select: this.handleDateSelect.bind(this),
       eventClick: this.handleEventClick.bind(this),
-      //timeZone: 'local',
       locale: 'es',
       eventsSet: this.handleEvents.bind(this),
       eventDrop: this.handleEventDrag.bind(this)

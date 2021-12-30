@@ -1,7 +1,7 @@
 <div class="container">
   <mat-card fxLayoutAlign="center center">
     <mat-card-title>
-      <mat-card-title>Comentarios</mat-card-title>
+      <mat-card-title>Comentarios: {{customer.name}}</mat-card-title>
     </mat-card-title>
   </mat-card>
 
@@ -53,6 +53,11 @@
         <td mat-cell *matCellDef="let row"> {{row.updated_at}} </td>
       </ng-container>
 
+      <!-- Name Column -->
+      <ng-container matColumnDef="user_name">
+        <th mat-header-cell *matHeaderCellDef mat-sort-header=""> Usuario</th>
+        <td mat-cell *matCellDef="let row"> {{row.user_name}} </td>
+      </ng-container>
 
       <!-- Teléfono Column -->
       <ng-container matColumnDef="options">

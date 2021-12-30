@@ -77,3 +77,8 @@ export interface TypeCustomer {
   updated_at?: Date;
 }
 
+export interface CustomerTitle {
+  id?: number;
+  name: string;
+}
+

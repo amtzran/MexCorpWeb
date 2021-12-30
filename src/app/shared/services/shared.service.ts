@@ -21,6 +21,6 @@ export class SharedService {
   /**
    * Default Paginate Tables
    */
-  pageSize = 15;
+  pageSize = 10;
 
 }

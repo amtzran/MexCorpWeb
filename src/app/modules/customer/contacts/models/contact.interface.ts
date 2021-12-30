@@ -15,6 +15,7 @@ export interface Contact {
   email?: string | null;
   job_title?: string
   customer_id?: number;
+  customer_name?: string;
   is_active?: boolean;
   created_at?: Date;
   updated_at?: Date;

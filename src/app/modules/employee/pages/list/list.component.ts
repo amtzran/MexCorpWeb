@@ -19,7 +19,7 @@ import {ActiveComponent} from "../../../../shared/components/active/active.compo
 })
 export class ListComponent implements OnInit {
 
-  displayedColumns: string[] = ['id', 'name', 'email', 'color', 'is_active', 'options'];
+  displayedColumns: string[] = ['id', 'name', 'email', 'color', 'job_title_name', 'is_active', 'options'];
   dataSource!: MatTableDataSource<Employee>;
   totalItems!: number;
   pageSize = this.sharedService.pageSize;
