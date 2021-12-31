@@ -1,4 +1,4 @@
-import { NgModule } from '@angular/core';
+import {LOCALE_ID, NgModule} from '@angular/core';
 import { BrowserModule } from '@angular/platform-browser';
 
 import { AppRoutingModule } from './app-routing.module';
@@ -8,6 +8,10 @@ import { AuthModule } from "./modules/auth/auth.module";
 import { HTTP_INTERCEPTORS } from "@angular/common/http";
 import { TokenInterceptor } from "./modules/interceptors/interceptor";
 
+// Add Changes Language My App
+import localeEsMx from '@angular/common/locales/es-MX';
+import { registerLocaleData } from '@angular/common'
+registerLocaleData(localeEsMx)
 
 @NgModule({
   declarations: [
@@ -22,7 +26,8 @@ import { TokenInterceptor } from "./modules/interceptors/interceptor";
   ],
   // Provider for Http Autorization Header
   providers: [
-    { provide: HTTP_INTERCEPTORS, useClass: TokenInterceptor, multi: true }
+    { provide: HTTP_INTERCEPTORS, useClass: TokenInterceptor, multi: true },
+    { provide: LOCALE_ID, useValue: 'es-MX'}
   ],
   bootstrap: [AppComponent]
 })

@@ -13,8 +13,7 @@ import {DoorType} from "../../../customer/doors/interfaces/door.interface";
 @Component({
   selector: 'app-crud',
   templateUrl: './crud.component.html',
-  styles: [
-  ]
+  styles: []
 })
 export class CrudComponent implements OnInit {
 
@@ -36,7 +35,7 @@ export class CrudComponent implements OnInit {
   jobCenters: JobCenter[] = [];
   employees: Employee[] = [];
   workTypes: WorkType[] =[];
-  doorTypes:  DoorType[] =[];
+  doorTypes:  DoorType[] = [];
 
   constructor(
     private fb: FormBuilder,
@@ -83,11 +82,18 @@ export class CrudComponent implements OnInit {
 
   }
 
+  equals(objOne: any, objTwo: any) : any {
+    if (typeof objOne !== 'undefined' && typeof objTwo !== 'undefined') {
+      return objOne === objTwo.id;
+    }
+  }
+
   /**
    * Get detail retrieve of one group.
    */
   loadTaskById(): void{
     this._taskService.getTaskById(this.task.idTask).subscribe(response => {
+      this.loadAccess(response.data.customer_id)
       this.taskForm.patchValue({
         title: response.data.title,
         employee_id: response.data.employee_id,
@@ -101,7 +107,6 @@ export class CrudComponent implements OnInit {
         initial_date: this._dateService.getFormatDateSetInputRangePicker(response.data.initial_date),
         final_date: this._dateService.getFormatDateSetInputRangePicker(response.data.final_date)
       })
-      //this.taskForm.setValue(response);
     })
   }
 
@@ -147,15 +152,7 @@ export class CrudComponent implements OnInit {
    * Create a Task.
    */
   addTask(): void {
-    this.submit = true;
-    if(this.taskForm.invalid){
-      this.sharedService.showSnackBar('Los campos con * son obligatorios.');
-      return
-    }
-    this.initialDate = this._dateService.getFormatDataDate(this.taskForm.get('initial_date')?.value)
-    this.taskForm.get('initial_date')?.setValue(this.initialDate)
-    this.finalDate = this._dateService.getFormatDataDate(this.taskForm.get('final_date')?.value)
-    this.taskForm.get('final_date')?.setValue(this.finalDate)
+    this.setValueSubmit()
     this._taskService.addTask(this.taskForm.value).subscribe(response => {
       this.sharedService.showSnackBar(`Se ha agregado correctamente la Tarea: ${response.data.title}`);
       this.dialogRef.close(ModalResponse.UPDATE);
@@ -166,6 +163,17 @@ export class CrudComponent implements OnInit {
    * Update a task.
    */
   updateTask(): void {
+    this.setValueSubmit()
+    this._taskService.updateTask(this.task.idTask, this.taskForm.value).subscribe(response => {
+      this.sharedService.showSnackBar(`Se ha actualizado correctamente la Tarea: ${response.data.title}` );
+      this.dialogRef.close(ModalResponse.UPDATE);
+    })
+  }
+
+  /**
+   * Value Submit Before send
+   */
+  setValueSubmit(){
     this.submit = true;
     if(this.taskForm.invalid){
       this.sharedService.showSnackBar('Los campos con * son obligatorios.');
@@ -175,10 +183,6 @@ export class CrudComponent implements OnInit {
     this.taskForm.get('initial_date')?.setValue(this.initialDate)
     this.finalDate = this._dateService.getFormatDataDate(this.taskForm.get('final_date')?.value)
     this.taskForm.get('final_date')?.setValue(this.finalDate)
-    this._taskService.updateTask(this.task.idTask, this.taskForm.value).subscribe(response => {
-      this.sharedService.showSnackBar(`Se ha actualizado correctamente la Tarea: ${response.data.title}` );
-      this.dialogRef.close(ModalResponse.UPDATE);
-    })
   }
 
   /**

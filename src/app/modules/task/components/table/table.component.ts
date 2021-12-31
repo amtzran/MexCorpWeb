@@ -1,5 +1,5 @@
-import {Component, forwardRef, OnInit} from '@angular/core';
-import {Calendar, CalendarOptions, DateSelectArg, EventClickArg,} from "@fullcalendar/angular";
+import {Component, ElementRef, forwardRef, OnInit, ViewChild} from '@angular/core';
+import {Calendar, CalendarOptions, DateSelectArg, EventClickArg, FullCalendarComponent } from "@fullcalendar/angular";
 import {CalendarDate} from "../../models/task.interface";
 import {TaskService} from "../../services/task.service";
 import {MatDialog} from "@angular/material/dialog";
@@ -18,12 +18,12 @@ import interactionPlugin from "@fullcalendar/interaction";
   /*styles: [``]*/
 })
 export class TableComponent implements OnInit {
-
   // Declare any for model EventApi
   tasks: any = []
   calendarOptions!: CalendarOptions
   // references the #calendar in the template
-  //@ViewChild('calendar') calendarComponent!: FullCalendarComponent;
+  @ViewChild('calendar') calendarComponent!: FullCalendarComponent;
+  @ViewChild('external') external!: ElementRef;
 
   constructor( private taskService: TaskService,
                private dialog: MatDialog) {}
@@ -42,8 +42,22 @@ export class TableComponent implements OnInit {
   headerToolbar = {
     left: 'prev,next,today,changeRange',
     center: 'title',
-    right: 'dayGridMonth,timeGridWeek,timeGridDay,listWeek,listDay,monthYear'
+    right: 'dayGridMonth,timeGridWeek,timeGridDay,listWeek,listDay'
   }
+
+  /**
+   * Values in Spanish Buttons
+   */
+  buttonText = {
+    today:    'Hoy',
+    month:    'Mes',
+    week:     'Semana',
+    day:      'Día',
+    list:     'Lista'
+  }
+
+  //This Values Ranges Date
+  modeFull = false;
 
   initCalendar() {
     this.calendarOptions = {
@@ -59,10 +73,32 @@ export class TableComponent implements OnInit {
       select: this.handleDateSelect.bind(this),
       eventClick: this.handleEventClick.bind(this),
       locale: 'es',
+      timeZone: 'locale',
       eventsSet: this.handleEvents.bind(this),
-      eventDrop: this.handleEventDrag.bind(this)
+      eventDrop: this.handleEventDrag.bind(this),
+      buttonText: this.buttonText,
+      customButtons: {
+        changeRange: {
+          text: '12/24',
+          click: this.customFunction.bind(this)
+        }
+      },
+      //slotMinTime: '00:00:00',
       //eventColor: '#378006'
     };
+  }
+
+  customFunction(){
+    if (this.modeFull) {
+      this.calendarOptions.slotMinTime = '00:00:00';
+      this.calendarOptions.slotMaxTime = '24:00:00';
+      this.modeFull = false
+    }
+    else {
+      this.calendarOptions.slotMinTime = '08:00:00';
+      this.calendarOptions.slotMaxTime = '20:00:00';
+      this.modeFull = true
+    }
   }
 
   /**

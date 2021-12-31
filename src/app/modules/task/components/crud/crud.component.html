@@ -79,7 +79,7 @@
 
             <mat-form-field fxFlex="100">
               <mat-label>Accesos Cliente</mat-label>
-              <mat-select multiple formControlName="doors">
+              <mat-select multiple formControlName="doors" [compareWith]="equals">
                 <mat-option *ngFor="let doorType of doorTypes" [value]="doorType.id">
                   {{ doorType.name }}
                 </mat-option>

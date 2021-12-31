@@ -44,7 +44,7 @@ export interface ModelDoorType {
 export interface DoorType {
   id?:          number;
   name:        string;
-  description: string;
+  description?: string;
   created_at?:  Date;
   updated_at?:  Date;
 }
