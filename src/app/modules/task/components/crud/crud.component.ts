@@ -43,7 +43,14 @@ export class CrudComponent implements OnInit {
     private dialogRef: MatDialogRef<CrudComponent>,
     private _taskService: TaskService,
     private _dateService: DateService,
-    @Inject(MAT_DIALOG_DATA) public task : {idTask: number, edit: boolean, info: boolean, calendar: CalendarDate}
+    @Inject(MAT_DIALOG_DATA) public task : {
+      idTask: number,
+      edit: boolean,
+      info: boolean,
+      calendar: CalendarDate,
+      eventDrag: boolean,
+      eventDragUpdate: boolean
+    }
   ) { }
 
   ngOnInit(): void {
@@ -72,8 +79,12 @@ export class CrudComponent implements OnInit {
       this.taskForm.updateValueAndValidity();
     }
 
-    if(this.task.idTask){
+    if(this.task.idTask && !this.task.eventDrag){
       this.loadTaskById();
+    }
+
+    if(this.task.idTask && this.task.eventDrag){
+      this.loadTaskByIdDrag();
     }
 
     if (this.task.calendar != null){
@@ -106,7 +117,30 @@ export class CrudComponent implements OnInit {
   }
 
   /**
-   * Load the form group.
+   * Get detail retrieve of one EventDrag Task.
+   */
+  loadTaskByIdDrag(): void{
+    this._taskService.getTaskById(this.task.idTask).subscribe(response => {
+      // Data Doors by Customer
+      this.loadAccess(response.data.customer_id)
+      this.taskForm.patchValue({
+        title: response.data.title,
+        employee_id: response.data.employee_id,
+        job_center_id: response.data.job_center_id,
+        customer_id: response.data.customer_id,
+        doors: response.data.doors.map( door => door.id),
+        comments: response.data.comments,
+        work_type_id: response.data.work_type_id,
+        initial_hour: this.task.calendar.initial_hour,
+        final_hour: this.task.calendar.final_hour,
+        initial_date: this.task.calendar.initial_date,
+        final_date: this.task.calendar.final_date
+      })
+    })
+  }
+
+  /**
+   * Load the form Task. from Button
    */
   loadTaskForm():void{
     this.taskForm = this.fb.group({
@@ -125,7 +159,7 @@ export class CrudComponent implements OnInit {
   }
 
   /**
-   * Load the form group.
+   * Load the form Task Click Data and Hour.
    */
   loadTaskFormDate():void{
     this.taskForm = this.fb.group({

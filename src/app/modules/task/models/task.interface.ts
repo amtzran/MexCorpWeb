@@ -12,6 +12,7 @@ export interface Task {
   id?: number;
   folio?: string;
   title?: string;
+  color: string;
   job_center_id: number;
   job_center_name?: string
   customer_id: number;

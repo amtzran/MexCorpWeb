@@ -1,6 +1,10 @@
 import { Component, OnInit } from '@angular/core';
 import {Router} from "@angular/router";
 import {AuthServiceService} from "../../../modules/auth/services/auth-service.service";
+import {ModalResponse} from "../../../core/utils/ModalResponse";
+import {MatDialog} from "@angular/material/dialog";
+import {ProfileUser} from "../../interfaces/shared.interface";
+import {CrudComponent} from "./crud/crud.component";
 
 interface RoutesSide {
   name: string,
@@ -17,13 +21,17 @@ interface RoutesSide {
 export class SideNavComponent implements OnInit {
 
   constructor(private router: Router,
-              private authService: AuthServiceService) { }
+              private authService: AuthServiceService,
+              private dialog: MatDialog,) { }
 
   get user() {
     return this.authService.user
   }
 
+  userName: string | undefined = '';
+
   ngOnInit(): void {
+    this.userName = this.user.name
   }
 
   menuRoute: RoutesSide[] = [
@@ -82,4 +90,7 @@ export class SideNavComponent implements OnInit {
     this.authService.logout()
   }
 
+  openDialogProfile(){
+    console.log('ok')
+  }
 }
