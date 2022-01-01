@@ -6,7 +6,9 @@ import {FooterComponent} from "./footer/footer.component";
 import {RouterModule} from "@angular/router";
 import {FlexLayoutModule} from "@angular/flex-layout";
 import {MaterialModule} from "../../material/material.module";
-import { ActiveComponent } from './active/active.component';
+import {ActiveComponent} from './active/active.component';
+import {CrudComponent} from "./side-nav/crud/crud.component";
+import {ReactiveFormsModule} from "@angular/forms";
 
 
 
@@ -15,13 +17,15 @@ import { ActiveComponent } from './active/active.component';
     HeaderComponent,
     SideNavComponent,
     FooterComponent,
-    ActiveComponent
+    ActiveComponent,
+    CrudComponent
   ],
   imports: [
     CommonModule,
     RouterModule,
     FlexLayoutModule,
-    MaterialModule
+    MaterialModule,
+    ReactiveFormsModule
   ],
   exports: [
     HeaderComponent,

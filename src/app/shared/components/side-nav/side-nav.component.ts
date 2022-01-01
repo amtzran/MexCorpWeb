@@ -3,8 +3,8 @@ import {Router} from "@angular/router";
 import {AuthServiceService} from "../../../modules/auth/services/auth-service.service";
 import {ModalResponse} from "../../../core/utils/ModalResponse";
 import {MatDialog} from "@angular/material/dialog";
-import {ProfileUser} from "../../interfaces/shared.interface";
 import {CrudComponent} from "./crud/crud.component";
+import {Validators} from "@angular/forms";
 
 interface RoutesSide {
   name: string,
@@ -90,7 +90,20 @@ export class SideNavComponent implements OnInit {
     this.authService.logout()
   }
 
-  openDialogProfile(){
-    console.log('ok')
+  /**
+   * Open dialog for add and update group.
+   */
+  openDialogProfile(): void {
+    const dialogRef = this.dialog.open(CrudComponent, {
+      autoFocus: false,
+      disableClose: true,
+      width: '50vw',
+      data: {}
+    });
+    dialogRef.afterClosed().subscribe(res => {
+      if (res === ModalResponse.UPDATE) {
+        //this.getContractsPaginator(this.paginator);
+      }
+    });
   }
 }
