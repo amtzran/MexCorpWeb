@@ -56,7 +56,7 @@ export class TableComponent implements OnInit {
   }
 
   //This Values Ranges Date
-  modeFull = false;
+  modeFull = true;
 
   initCalendar() {
     this.calendarOptions = {
@@ -76,6 +76,8 @@ export class TableComponent implements OnInit {
       eventsSet: this.handleEvents.bind(this),
       eventDrop: this.handleEventDrag.bind(this),
       buttonText: this.buttonText,
+      slotMinTime: '08:00:00',
+      slotMaxTime: '20:00:00',
       customButtons: {
         changeRange: {
           text: '12/24',
