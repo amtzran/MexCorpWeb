@@ -19,8 +19,10 @@ export class ValidateTokenGuard implements CanActivate, CanLoad {
       .pipe(
         tap( valid =>{
           if (!valid) {
-            this.router.navigate(['/']).then(r => console.log(r)
-            )
+            localStorage.clear()
+            this.router.navigate(['/']).then(r => {
+              //console.log(r)
+            })
           }
         })
       )
@@ -32,7 +34,10 @@ export class ValidateTokenGuard implements CanActivate, CanLoad {
       .pipe(
         tap( valid =>{
           if (!valid) {
-            this.router.navigate(['/']).then(r => console.log(r))
+            localStorage.clear()
+            this.router.navigate(['/']).then(r => {
+              //console.log(r)
+            })
           }
         })
       )
