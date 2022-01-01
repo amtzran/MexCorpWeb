@@ -82,24 +82,19 @@ export class CrudComponent implements OnInit {
 
   }
 
-  equals(objOne: any, objTwo: any) : any {
-    if (typeof objOne !== 'undefined' && typeof objTwo !== 'undefined') {
-      return objOne === objTwo.id;
-    }
-  }
-
   /**
-   * Get detail retrieve of one group.
+   * Get detail retrieve of one Task.
    */
   loadTaskById(): void{
     this._taskService.getTaskById(this.task.idTask).subscribe(response => {
+      // Data Doors by Customer
       this.loadAccess(response.data.customer_id)
       this.taskForm.patchValue({
         title: response.data.title,
         employee_id: response.data.employee_id,
         job_center_id: response.data.job_center_id,
         customer_id: response.data.customer_id,
-        doors: response.data.doors,
+        doors: response.data.doors.map( door => door.id),
         comments: response.data.comments,
         work_type_id: response.data.work_type_id,
         initial_hour: response.data.initial_hour,
@@ -222,6 +217,19 @@ export class CrudComponent implements OnInit {
    */
   close(): void{
     this.dialogRef.close(ModalResponse.CLOSE);
+  }
+
+  /**
+   * Function for set value in select multiple with json
+   * Error Documentation versión 13.1.1
+   * @param objInitial
+   * @param objSelected
+   */
+  setValueSelectObjectMultiple(objInitial: any, objSelected: any) : any {
+
+    if (typeof objInitial !== 'undefined' && typeof objSelected !== 'undefined') {
+      return objInitial && objSelected ? objInitial.id === objSelected.id : objInitial === objSelected;
+    }
   }
 
 }

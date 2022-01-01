@@ -148,10 +148,13 @@ export class TableComponent implements OnInit {
             final_date : finalDate
           }
 
-          this.taskService.patchTaskDateAndHour(Number(selectInfoEventDrag.event.id), data).subscribe(res => {
+          /*this.taskService.patchTaskDateAndHour(Number(selectInfoEventDrag.event.id), data).subscribe(res => {
             console.log(res)
             console.log('Correctamente')
-          })
+          })*/
+
+          this.openDialogTask(false, Number(selectInfoEventDrag.event.id), true, data)
+
         }
 
         else selectInfoEventDrag.revert()
