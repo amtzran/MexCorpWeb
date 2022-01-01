@@ -30,8 +30,8 @@ export class CrudComponent implements OnInit {
    */
   loadProfileForm():void{
     this.profileForm = this.fb.group({
-      name:[{value:null}, Validators.required],
-      description:[{value:'', }],
+      name:[{value:null, disabled:false}, Validators.required],
+      description:[{value:'', disabled:false}],
     });
   }
 

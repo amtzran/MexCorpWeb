@@ -19,12 +19,3 @@ export interface MetaModel {
   total: number
 }
 
-// Profile
-export interface ProfileUser {
-  id?: number,
-  name: string,
-  new_password?: string,
-  password?: string,
-  password_confirmation?: string,
-
-}

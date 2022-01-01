@@ -2,7 +2,8 @@ import { Injectable } from '@angular/core';
 import {HttpClient, HttpHeaders} from "@angular/common/http";
 import {catchError, map, Observable, of, tap} from "rxjs";
 import { environment } from "../../../../environments/environment";
-import {Login, User} from "../interfaces/login.interface";
+import {Login, ProfileUser, User} from "../interfaces/login.interface";
+import {CommentCustomerDetail} from "../../customer/comments/models/comment.interface";
 
 @Injectable({
   providedIn: 'root'
@@ -50,8 +51,18 @@ export class AuthServiceService {
       )
   }
 
-  logout(){
-    localStorage.clear();
+  /**
+   * Get User
+   */
+  getUserById() : Observable<ProfileUser> {
+    return this.http.get<ProfileUser>(`${this.baseUrl}/auth/users/`)
+  }
+
+  /**
+   * Clean Data User Session
+   */
+  logout() : Observable<any>{
+    return this.http.post<any>(`${this.baseUrl}/auth/logout/`,{})
   }
 
 }

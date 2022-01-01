@@ -23,3 +23,13 @@ export interface Error {
   title: string;
   detail: string;
 }
+
+// Profile
+export interface ProfileUser {
+  id?: number,
+  name: string,
+  email?: string,
+  email_verified_at?: string,
+  created_at?: string,
+  updated_at?: string
+}
