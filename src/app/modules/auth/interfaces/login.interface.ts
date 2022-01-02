@@ -33,3 +33,13 @@ export interface ProfileUser {
   created_at?: string,
   updated_at?: string
 }
+
+export interface ChangePassword {
+  email?: string,
+  current_password: string,
+  new_password: string
+}
+
+export interface MessagePassword {
+  message: string
+}

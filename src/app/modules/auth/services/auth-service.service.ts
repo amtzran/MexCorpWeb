@@ -2,7 +2,7 @@ import { Injectable } from '@angular/core';
 import {HttpClient, HttpHeaders} from "@angular/common/http";
 import {catchError, map, Observable, of, tap} from "rxjs";
 import { environment } from "../../../../environments/environment";
-import {Login, ProfileUser, User} from "../interfaces/login.interface";
+import {ChangePassword, Login, MessagePassword, ProfileUser, User} from "../interfaces/login.interface";
 import {CommentCustomerDetail} from "../../customer/comments/models/comment.interface";
 
 @Injectable({
@@ -63,6 +63,10 @@ export class AuthServiceService {
    */
   logout() : Observable<any>{
     return this.http.post<any>(`${this.baseUrl}/auth/logout/`,{})
+  }
+
+  chanePasswordUser(data: ChangePassword): Observable<MessagePassword>{
+    return this.http.post<MessagePassword>(`${this.baseUrl}/auth/change-password/`, data)
   }
 
 }

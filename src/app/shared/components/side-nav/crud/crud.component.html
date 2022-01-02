@@ -6,35 +6,31 @@
   <mat-card>
     <mat-card-content>
 
-      <div fxLayout="row" fxLayoutGap="40px" fxLayout.xs="column">
+      <div fxLayout="column" fxLayoutGap="20px" fxLayout.xs="column" fxFlex="50">
 
-        <div class="container" fxFlex="100" fxLayout="column" fxLayout.xs="column">
+        <mat-label>Correo: {{data.email}}</mat-label>
 
-          <div fxLayout="row"
-               fxLayout.xs="column"
-               fxLayoutGap="20px">
-            <mat-form-field fxFlex="100">
-              <mat-label>Convenio</mat-label>
-              <input
-                matInput
-                type="text"
-                formControlName="name">
-              <mat-error *ngIf="fieldInvalid('name')">
-                Favor de Ingresar el Convenio
-              </mat-error>
-            </mat-form-field>
+        <mat-form-field fxFlex="50">
+          <mat-label>Contraseña Actual</mat-label>
+          <input matInput [type]="hide ? 'password' : 'text'" formControlName="current_password">
+          <button mat-icon-button matSuffix (click)="hide = !hide" [attr.aria-label]="'Hide password'" [attr.aria-pressed]="hide">
+            <mat-icon>{{hide ? 'visibility_off' : 'visibility'}}</mat-icon>
+          </button>
+          <mat-error *ngIf="fieldInvalid('current_password')">
+            Favor de ingresar la Contraseña Actual
+          </mat-error>
+        </mat-form-field>
 
-            <mat-form-field fxFlex="100">
-              <mat-label>Descripción</mat-label>
-              <input
-                matInput
-                type="text"
-                formControlName="description"
-              >
-            </mat-form-field>
-          </div>
-
-        </div>
+        <mat-form-field fxFlex="50">
+          <mat-label>Contraseña Nueva</mat-label>
+          <input matInput [type]="hide ? 'password' : 'text'" formControlName="new_password">
+          <button mat-icon-button matSuffix (click)="hide = !hide" [attr.aria-label]="'Hide password'" [attr.aria-pressed]="hide">
+            <mat-icon>{{hide ? 'visibility_off' : 'visibility'}}</mat-icon>
+          </button>
+          <mat-error *ngIf="fieldInvalid('new_password')">
+            Favor de ingresar la Contraseña Nueva
+          </mat-error>
+        </mat-form-field>
 
       </div>
 
@@ -44,8 +40,13 @@
   </mat-card>
 </mat-dialog-content>
 
-<mat-dialog-actions fxLayoutAlign="end">
-  <button (click)="close()" mat-stroked-button color="primary" mat-dialog-close="true">Cancelar</button>
-  <button (click)="updateProfile()" mat-flat-button color="primary" cdkFocusInitial>Editar</button>
+<mat-dialog-actions fxLayoutAlign="center center">
+  <div fxLayoutAlign="center center">
+    <button (click)="changePassword()" mat-raised-button color="primary" cdkFocusInitial>Cambiar Contraseña</button>
+  </div>
+  <div class="spacer"></div>
+  <div fxLayoutAlign="center center">
+    <button (click)="close()" mat-raised-button color="warn" mat-dialog-close="true">Cancelar</button>
+  </div>
 </mat-dialog-actions>
 

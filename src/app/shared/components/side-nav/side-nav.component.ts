@@ -105,15 +105,16 @@ export class SideNavComponent implements OnInit {
   /**
    * Open dialog for add and update group.
    */
-  openDialogProfile(): void {
+  openDialogProfile(dataUser : ProfileUser) {
     const dialogRef = this.dialog.open(CrudComponent, {
       autoFocus: false,
       disableClose: true,
       width: '50vw',
-      data: {}
+      data: dataUser
     });
     dialogRef.afterClosed().subscribe(res => {
       if (res === ModalResponse.UPDATE) {
+        //TODO: Check logout
         //this.getContractsPaginator(this.paginator);
       }
     });
