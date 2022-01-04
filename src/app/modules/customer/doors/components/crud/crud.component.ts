@@ -17,7 +17,7 @@ export class CrudComponent implements OnInit {
   doorForm!: FormGroup;
   /* Variable to store file data */
   fileDataForm = new FormData();
-  valueInitialPhoto = 'null'
+  imageFile: string | null | undefined = '';
 
   /*Titulo Modal*/
   title: string = 'Nuevo Acceso';
@@ -50,11 +50,13 @@ export class CrudComponent implements OnInit {
 
     if(this.door.idDoor && this.door.edit){
       this.title = 'Editar Acceso';
+      this.imageFile = null
       this.doorForm.updateValueAndValidity();
     }
 
     if(this.door.idDoor && !this.door.edit){
       this.title = 'Información del Acceso';
+      this._dooService.getDoorById(this.door.idDoor).subscribe(res =>{this.imageFile = res.data.photo})
       this.doorForm.updateValueAndValidity();
     }
 

@@ -17,6 +17,8 @@ export class DialogAddGroupComponent implements OnInit {
   groupForm!: FormGroup;
   /* Variable to store file data */
   fileDataForm = new FormData();
+  /* Show Image */
+  imageFile: string | null | undefined = '';
 
   /*Titulo Modal*/
   title: string = 'Nuevo Grupo';
@@ -41,11 +43,13 @@ export class DialogAddGroupComponent implements OnInit {
 
     if(this.group.idGroup && this.group.edit){
       this.title = 'Editar Grupo';
+      this.imageFile = null;
       this.groupForm.updateValueAndValidity();
     }
 
     if(this.group.idGroup && !this.group.edit){
       this.title = 'Información del Grupo';
+      this._groupService.getGroupById(this.group.idGroup).subscribe(res => { this.imageFile = res.data.logo })
       this.groupForm.updateValueAndValidity();
     }
 

@@ -72,6 +72,20 @@
 
           </div>
 
+          <div fxLayout="row"
+               fxLayout.xs="column"
+               fxLayoutGap="20px"
+               *ngIf="imageFile !== null; else divLogo">
+
+            <mat-card fxFlex="100" fxLayoutAlign="center center">
+              <img mat-card-image [src]="imageFile" alt="">
+            </mat-card>
+
+          </div>
+
+          <ng-template #divLogo>
+          </ng-template>
+
         </div>
 
       </div>
