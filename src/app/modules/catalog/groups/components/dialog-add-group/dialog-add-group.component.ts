@@ -64,7 +64,6 @@ export class DialogAddGroupComponent implements OnInit {
       delete response.data.is_active;
       delete response.data.created_at;
       delete response.data.updated_at;
-      //if (response.data.logo === null) delete response.data.logo
       this.groupForm.setValue(response.data);
     })
   }
@@ -113,7 +112,6 @@ export class DialogAddGroupComponent implements OnInit {
       return
     }
     this.createFormData(this.groupForm.value)
-    if (this.fileDataForm.get('logo') === null) console.log(this.fileDataForm.get('logo')) //this.fileDataForm.delete('logo')
     this._groupService.updateGroup(this.group.idGroup, this.fileDataForm).subscribe(response => {
       this.sharedService.showSnackBar(`Se ha actualizado correctamente el grupo`);
       this.dialogRef.close(ModalResponse.UPDATE);
@@ -129,7 +127,18 @@ export class DialogAddGroupComponent implements OnInit {
 
     for(const key of Object.keys(formValue)){
       const value = formValue[key];
-      this.fileDataForm.append(key, value);
+      if (value !== null) {
+        if (key === 'logo') {
+          if (typeof(value) !== 'object') {
+            if (value.startsWith('https')) this.fileDataForm.append(key, '');
+          }
+          else this.fileDataForm.append(key, value);
+        }
+        else {
+          this.fileDataForm.append(key, value);
+        }
+      }
+
     }
 
   }

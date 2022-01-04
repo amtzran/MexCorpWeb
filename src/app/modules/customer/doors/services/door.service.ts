@@ -27,13 +27,13 @@ export class DoorService {
   }
 
   // Add Door
-  addDoor(door: DoorDetail): Observable<DoorDetail> {
+  addDoor(door: FormData): Observable<DoorDetail> {
     return this.http.post<DoorDetail>(`${this.baseUrl}/doors/`, door)
   }
 
   // Update Door
-  updateDoor(idDoor : number, door: DoorDetail) : Observable<DoorDetail> {
-    return this.http.put<DoorDetail>(`${this.baseUrl}/doors/${idDoor}/`, door)
+  updateDoor(idDoor : number, door: FormData) : Observable<DoorDetail> {
+    return this.http.post<DoorDetail>(`${this.baseUrl}/doors/${idDoor}/`, door)
   }
 
   // Delete Door

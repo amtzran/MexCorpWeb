@@ -16,7 +16,7 @@
   background: transparent;
 }
 
-#fileUpload {
+#fileUploadPhoto {
   position: absolute;
   z-index: 9;
   opacity: 0;
