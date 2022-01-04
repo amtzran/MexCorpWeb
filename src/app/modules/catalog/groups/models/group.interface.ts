@@ -17,6 +17,7 @@ export interface Group {
   address: string,
   city: string,
   postal_code: string,
+  logo?: string,
   is_active?: boolean,
   created_at?: string,
   updated_at?: string,

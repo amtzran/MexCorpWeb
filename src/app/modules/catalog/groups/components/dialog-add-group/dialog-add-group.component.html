@@ -1,4 +1,5 @@
 <h4 mat-dialog-title class="title-subsection">{{title}}</h4>
+<ngx-spinner></ngx-spinner>
 <mat-divider></mat-divider>
 <br>
 <mat-dialog-content class="mat-typography" [formGroup]="groupForm">
@@ -82,6 +83,31 @@
             <mat-form-field>
               <mat-label> C.P. </mat-label>
               <input formControlName="postal_code" matInput type="text">
+            </mat-form-field>
+
+          </div>
+
+          <div fxLayout="row"
+               fxLayout.xs="column"
+               fxLayoutGap="20px">
+
+            <mat-form-field>
+
+                <mat-toolbar>
+                  <!-- Readonly Input to show File names -->
+                  <input matInput readonly name="memberContactNo">
+                  <!-- Browse Button -->
+                  <button mat-flat-button color="primary">
+                    <mat-icon>image</mat-icon>
+                    Logo
+                  </button>
+
+                </mat-toolbar>
+                <!-- Fetch selected filed on change -->
+                <input type="file" #UploadFileInput id="fileUpload" name="myFile" (change)="setFileLogo($event)" accept="image/*">
+
+              <img alt="">
+
             </mat-form-field>
 
           </div>

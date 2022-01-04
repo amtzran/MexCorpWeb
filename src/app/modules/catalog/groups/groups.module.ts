@@ -8,6 +8,7 @@ import {DialogAddGroupComponent} from "./components/dialog-add-group/dialog-add-
 import {MaterialModule} from "../../../material/material.module";
 import {FlexLayoutModule} from "@angular/flex-layout";
 import {ReactiveFormsModule} from "@angular/forms";
+import {NgxSpinnerModule} from "ngx-spinner";
 
 
 @NgModule({
@@ -21,7 +22,8 @@ import {ReactiveFormsModule} from "@angular/forms";
     GroupsRoutingModule,
     MaterialModule,
     FlexLayoutModule,
-    ReactiveFormsModule
+    ReactiveFormsModule,
+    NgxSpinnerModule
   ]
 })
 export class GroupsModule { }

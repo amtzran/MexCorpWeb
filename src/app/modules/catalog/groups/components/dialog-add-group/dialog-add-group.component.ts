@@ -1,9 +1,10 @@
 import { Component, OnInit, Inject } from '@angular/core';
 import {FormBuilder, FormGroup, Validators} from "@angular/forms";
-import {MAT_DIALOG_DATA, MatDialogRef} from "@angular/material/dialog";
 import {GroupService} from "../../services/groups.service";
 import {ModalResponse} from "../../../../../core/utils/ModalResponse";
 import {SharedService} from "../../../../../shared/services/shared.service";
+import {MAT_DIALOG_DATA, MatDialogRef} from "@angular/material/dialog";
+import {NgxSpinnerService} from "ngx-spinner";
 
 @Component({
   selector: 'app-dialog-add-group',
@@ -14,6 +15,8 @@ export class DialogAddGroupComponent implements OnInit {
 
   /*Formulario*/
   groupForm!: FormGroup;
+  /* Variable to store file data */
+  fileDataForm = new FormData();
 
   /*Titulo Modal*/
   title: string = 'Nuevo Grupo';
@@ -27,6 +30,7 @@ export class DialogAddGroupComponent implements OnInit {
     private sharedService: SharedService,
     private dialogRef: MatDialogRef<DialogAddGroupComponent>,
     private _groupService: GroupService,
+    private spinner: NgxSpinnerService,
     @Inject(MAT_DIALOG_DATA) public group : {idGroup: number, edit: boolean, info: boolean}
   ) { }
 
@@ -60,6 +64,7 @@ export class DialogAddGroupComponent implements OnInit {
       delete response.data.is_active;
       delete response.data.created_at;
       delete response.data.updated_at;
+      //if (response.data.logo === null) delete response.data.logo
       this.groupForm.setValue(response.data);
     })
   }
@@ -76,7 +81,8 @@ export class DialogAddGroupComponent implements OnInit {
       email:[{value:'', disabled:this.group.info}, Validators.required],
       address: [{value:'', disabled:this.group.info}],
       city: [{value:'', disabled:this.group.info}],
-      postal_code: [{value:'', disabled:this.group.info}]
+      postal_code: [{value:'', disabled:this.group.info}],
+      logo: [{value:'', disabled:this.group.info}],
     });
   }
 
@@ -89,7 +95,9 @@ export class DialogAddGroupComponent implements OnInit {
       this.sharedService.showSnackBar('Los campos con * son obligatorios.');
       return
     }
-    this._groupService.postGroup(this.groupForm.value).subscribe(response => {
+    this.createFormData(this.groupForm.value);
+    this._groupService.postGroup(this.fileDataForm).subscribe(response => {
+      this.showSpinner()
       this.sharedService.showSnackBar('Se ha agregado correctamente el grupo.');
       this.dialogRef.close(ModalResponse.UPDATE);
     })
@@ -104,10 +112,26 @@ export class DialogAddGroupComponent implements OnInit {
       this.sharedService.showSnackBar('Los campos con * son obligatorios.');
       return
     }
-    this._groupService.updateGroup(this.group.idGroup, this.groupForm.value).subscribe(response => {
+    this.createFormData(this.groupForm.value)
+    if (this.fileDataForm.get('logo') === null) console.log(this.fileDataForm.get('logo')) //this.fileDataForm.delete('logo')
+    this._groupService.updateGroup(this.group.idGroup, this.fileDataForm).subscribe(response => {
       this.sharedService.showSnackBar(`Se ha actualizado correctamente el grupo`);
       this.dialogRef.close(ModalResponse.UPDATE);
     })
+  }
+
+  /* File onchange event */
+  setFileLogo(e : any){
+    this.groupForm.get('logo')?.setValue(e.target.files[0])
+  }
+
+  createFormData(formValue:any){
+
+    for(const key of Object.keys(formValue)){
+      const value = formValue[key];
+      this.fileDataForm.append(key, value);
+    }
+
   }
 
   /**
@@ -124,6 +148,14 @@ export class DialogAddGroupComponent implements OnInit {
    */
   close(): void{
     this.dialogRef.close(ModalResponse.UPDATE);
+  }
+
+  showSpinner(){
+    this.spinner.show()
+    setTimeout(() => {
+      /** spinner ends after 5 seconds */
+      this.spinner.hide();
+    }, 1000);
   }
 
 }
