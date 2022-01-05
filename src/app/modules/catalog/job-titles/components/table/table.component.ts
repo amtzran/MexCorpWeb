@@ -10,6 +10,7 @@ import {JobTitleService} from "../../services/job-title.service";
 import {CrudComponent} from "../crud/crud.component";
 import {SharedService} from "../../../../../shared/services/shared.service";
 import {ConfirmComponent} from "../../../../../shared/components/confirm/confirm.component";
+import {NgxSpinnerService} from "ngx-spinner";
 
 @Component({
   selector: 'app-table',
@@ -30,7 +31,8 @@ export class TableComponent implements OnInit {
   constructor(private jobTitleService: JobTitleService,
               private formBuilder: FormBuilder,
               private dialog: MatDialog,
-              private sharedService: SharedService) {
+              private sharedService: SharedService,
+              private spinner: NgxSpinnerService,) {
   }
 
   ngOnInit(): void {
@@ -48,11 +50,17 @@ export class TableComponent implements OnInit {
   getJobTitlePaginator(event: any) {
     const paginator: MatPaginator = event;
     this.jobTitlePaginateForm.get('page')?.setValue(paginator.pageIndex + 1);
+    this.spinner.show()
     this.jobTitleService.getJobTitles(this.jobTitlePaginateForm.value)
       .subscribe(jobTitles => {
+        this.spinner.hide()
         this.dataSource.data = jobTitles.data
         this.totalItems = jobTitles.meta.total;
-      })
+        }, (error => {
+          this.spinner.hide()
+          this.sharedService.errorDialog()
+        } )
+      )
   }
 
   applyFilter(event: Event) {

@@ -5,6 +5,7 @@ import {MAT_DIALOG_DATA, MatDialogRef} from "@angular/material/dialog";
 import {ModalResponse} from "../../../../../core/utils/ModalResponse";
 import {CustomerTypeService} from "../../services/customer-type.service";
 import {SharedService} from "../../../../../shared/services/shared.service";
+import {NgxSpinnerService} from "ngx-spinner";
 
 @Component({
   selector: 'app-crud',
@@ -30,6 +31,7 @@ export class CrudComponent implements OnInit {
     private dialogRef: MatDialogRef<CrudComponent>,
     private _customerTypeService: CustomerTypeService,
     private sharedService: SharedService,
+    private spinner: NgxSpinnerService,
     @Inject(MAT_DIALOG_DATA) public customerType : {idCustomerType: number, edit: boolean, info: boolean}
   ) { }
 
@@ -58,13 +60,19 @@ export class CrudComponent implements OnInit {
    * Get detail retrieve of one group.
    */
   loadCustomerById(): void{
+    this.spinner.show()
     this._customerTypeService.getCustomerTypeById(this.customerType.idCustomerType).subscribe(response => {
+      this.spinner.hide()
       delete response.data.id;
       delete response.data.is_active;
       delete response.data.created_at;
       delete response.data.updated_at;
       this.customerTypeForm.setValue(response.data);
-    })
+      }, (error => {
+        this.spinner.hide()
+        this.sharedService.errorDialog()
+      } )
+    )
   }
 
   /**
@@ -81,30 +89,45 @@ export class CrudComponent implements OnInit {
    * Create employee.
    */
   addCustomerType(): void {
-    this.submit = true;
-    if(this.customerTypeForm.invalid){
-      this.sharedService.showSnackBar('Los campos con * son obligatorios.');
-      return
-    }
+    this.validateForm()
+    this.spinner.show()
     this._customerTypeService.addCustomerType(this.customerTypeForm.value).subscribe(response => {
+      this.spinner.hide()
       this.sharedService.showSnackBar('Se ha agregado correctamente el tipo de Cliente.');
       this.dialogRef.close(ModalResponse.UPDATE);
-    })
+      }, (error => {
+        this.spinner.hide()
+        this.sharedService.errorDialog()
+      })
+    )
   }
 
   /**
    * Update a employee.
    */
   updateCustomerType(): void {
+    this.validateForm()
+    this.spinner.show()
+    this._customerTypeService.updateCustomerType(this.customerType.idCustomerType, this.customerTypeForm.value).subscribe(response => {
+      this.spinner.hide()
+      this.sharedService.showSnackBar(`Se ha actualizado correctamente el tipo de Cliente: ${response.data.name}` );
+      this.dialogRef.close(ModalResponse.UPDATE);
+      }, (error => {
+        this.spinner.hide()
+        this.sharedService.errorDialog()
+      })
+    )
+  }
+
+  /**
+   * Validate form in general
+   */
+  validateForm(){
     this.submit = true;
     if(this.customerTypeForm.invalid){
       this.sharedService.showSnackBar('Los campos con * son obligatorios.');
       return
     }
-    this._customerTypeService.updateCustomerType(this.customerType.idCustomerType, this.customerTypeForm.value).subscribe(response => {
-      this.sharedService.showSnackBar(`Se ha actualizado correctamente el tipo de Cliente: ${response.data.name}` );
-      this.dialogRef.close(ModalResponse.UPDATE);
-    })
   }
 
   /**

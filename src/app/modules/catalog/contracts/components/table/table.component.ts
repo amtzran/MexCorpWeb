@@ -10,6 +10,7 @@ import {ContractService} from "../../services/contract.service";
 import {CrudComponent} from "../crud/crud.component";
 import {SharedService} from "../../../../../shared/services/shared.service";
 import {ConfirmComponent} from "../../../../../shared/components/confirm/confirm.component";
+import {NgxSpinnerService} from "ngx-spinner";
 
 @Component({
   selector: 'app-table',
@@ -30,7 +31,9 @@ export class TableComponent implements AfterViewInit, OnInit {
   constructor(private contractService: ContractService,
               private formBuilder: FormBuilder,
               private dialog: MatDialog,
-              private sharedService: SharedService,) {
+              private sharedService: SharedService,
+              private spinner: NgxSpinnerService,
+              ) {
   }
 
   ngOnInit(): void {
@@ -48,11 +51,16 @@ export class TableComponent implements AfterViewInit, OnInit {
   getContractsPaginator(event: any) {
     const paginator: MatPaginator = event;
     this.contractPaginateForm.get('page')?.setValue(paginator.pageIndex + 1);
+    this.spinner.show()
     this.contractService.getContracts(this.contractPaginateForm.value)
       .subscribe((contracts: ModelContract) => {
         this.dataSource.data = contracts.data
         this.totalItems = contracts.meta.total;
-      })
+        }, (error => {
+          this.spinner.hide()
+          this.sharedService.errorDialog()
+        } )
+      )
   }
 
   applyFilter(event: Event) {

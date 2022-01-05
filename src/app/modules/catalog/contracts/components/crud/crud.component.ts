@@ -5,6 +5,7 @@ import {MAT_DIALOG_DATA, MatDialogRef} from "@angular/material/dialog";
 import {ModalResponse} from "../../../../../core/utils/ModalResponse";
 import {ContractService} from "../../services/contract.service";
 import {SharedService} from "../../../../../shared/services/shared.service";
+import {NgxSpinnerService} from "ngx-spinner";
 
 @Component({
   selector: 'app-crud',
@@ -30,6 +31,7 @@ export class CrudComponent implements OnInit {
     private dialogRef: MatDialogRef<CrudComponent>,
     private _contractService: ContractService,
     private sharedService: SharedService,
+    private spinner: NgxSpinnerService,
     @Inject(MAT_DIALOG_DATA) public contract : {idContract: number, edit: boolean, info: boolean}
   ) { }
 
@@ -58,13 +60,19 @@ export class CrudComponent implements OnInit {
    * Get detail retrieve of one group.
    */
   loadContractById(): void{
+    this.spinner.show()
     this._contractService.getContractById(this.contract.idContract).subscribe(response => {
+      this.spinner.hide()
       delete response.data.id;
       delete response.data.created_at;
       delete response.data.updated_at;
       delete response.data.is_active;
       this.contractForm.setValue(response.data);
-    })
+    }, (error => {
+      this.spinner.hide()
+      this.sharedService.errorDialog()
+    } )
+    )
   }
 
   /**
@@ -81,30 +89,46 @@ export class CrudComponent implements OnInit {
    * Create Contract.
    */
   addContract(): void {
-    this.submit = true;
-    if(this.contractForm.invalid){
-      this.sharedService.showSnackBar('Los campos con * son obligatorios.');
-      return
-    }
+    this.validateForm()
+    this.spinner.show()
     this._contractService.addContract(this.contractForm.value).subscribe(response => {
+      this.spinner.hide()
       this.sharedService.showSnackBar('Se ha agregado correctamente el convenio.');
       this.dialogRef.close(ModalResponse.UPDATE);
-    })
+        this.spinner.hide()
+      }, (error => {
+        this.spinner.hide()
+        this.sharedService.errorDialog()
+      })
+    )
   }
 
   /**
    * Update a Contract.
    */
   updateContract(): void {
+   this.validateForm()
+    this.spinner.show()
+    this._contractService.updateContract(this.contract.idContract, this.contractForm.value).subscribe(response => {
+      this.spinner.hide()
+      this.sharedService.showSnackBar(`Se ha actualizado correctamente el convenio: ${response.data.name}` );
+      this.dialogRef.close(ModalResponse.UPDATE);
+      }, (error => {
+        this.spinner.hide()
+        this.sharedService.errorDialog()
+      })
+    )
+  }
+
+  /**
+   * Validate form in general
+   */
+  validateForm(){
     this.submit = true;
     if(this.contractForm.invalid){
       this.sharedService.showSnackBar('Los campos con * son obligatorios.');
       return
     }
-    this._contractService.updateContract(this.contract.idContract, this.contractForm.value).subscribe(response => {
-      this.sharedService.showSnackBar(`Se ha actualizado correctamente el convenio: ${response.data.name}` );
-      this.dialogRef.close(ModalResponse.UPDATE);
-    })
   }
 
   /**

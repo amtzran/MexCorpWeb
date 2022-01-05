@@ -5,6 +5,7 @@ import {MAT_DIALOG_DATA, MatDialogRef} from "@angular/material/dialog";
 import {SharedService} from "../../../../../shared/services/shared.service";
 import {ModalResponse} from "../../../../../core/utils/ModalResponse";
 import {WorkTypeService} from "../../services/work-type.service";
+import {NgxSpinnerService} from "ngx-spinner";
 
 @Component({
   selector: 'app-crud',
@@ -30,6 +31,7 @@ export class CrudComponent implements OnInit {
     private dialogRef: MatDialogRef<CrudComponent>,
     private _workTypeService: WorkTypeService,
     private sharedService: SharedService,
+    private spinner: NgxSpinnerService,
     @Inject(MAT_DIALOG_DATA) public workType : {idWorkType: number, edit: boolean, info: boolean}
   ) { }
 
@@ -58,13 +60,19 @@ export class CrudComponent implements OnInit {
    * Get detail retrieve of one group.
    */
   loadWorkById(): void{
+    this.spinner.show()
     this._workTypeService.getWorkTypeById(this.workType.idWorkType).subscribe(response => {
+      this.spinner.hide()
       delete response.data.id;
       delete response.data.is_active;
       delete response.data.created_at;
       delete response.data.updated_at;
       this.workTypeForm.setValue(response.data);
-    })
+      }, (error => {
+        this.spinner.hide()
+        this.sharedService.errorDialog()
+      } )
+    )
   }
 
   /**
@@ -81,30 +89,45 @@ export class CrudComponent implements OnInit {
    * Create Wor Type.
    */
   addWorkType(): void {
-    this.submit = true;
-    if(this.workTypeForm.invalid){
-      this.sharedService.showSnackBar('Los campos con * son obligatorios.');
-      return
-    }
+    this.validateForm()
+    this.spinner.show()
     this._workTypeService.addWorkType(this.workTypeForm.value).subscribe(response => {
+      this.spinner.hide()
       this.sharedService.showSnackBar('Se ha agregado correctamente el tipo deAcceso.');
       this.dialogRef.close(ModalResponse.UPDATE);
-    })
+      }, (error => {
+        this.spinner.hide()
+        this.sharedService.errorDialog()
+      })
+    )
   }
 
   /**
    * Update a employee.
    */
   updateWorkType(): void {
+    this.validateForm()
+    this.spinner.show()
+    this._workTypeService.updateWorkType(this.workType.idWorkType, this.workTypeForm.value).subscribe(response => {
+      this.spinner.hide()
+      this.sharedService.showSnackBar(`Se ha actualizado correctamente el tipo de Trabajo: ${response.data.name}` );
+      this.dialogRef.close(ModalResponse.UPDATE);
+      }, (error => {
+        this.spinner.hide()
+        this.sharedService.errorDialog()
+      })
+    )
+  }
+
+  /**
+   * Validate form in general
+   */
+  validateForm(){
     this.submit = true;
     if(this.workTypeForm.invalid){
       this.sharedService.showSnackBar('Los campos con * son obligatorios.');
       return
     }
-    this._workTypeService.updateWorkType(this.workType.idWorkType, this.workTypeForm.value).subscribe(response => {
-      this.sharedService.showSnackBar(`Se ha actualizado correctamente el tipo de Trabajo: ${response.data.name}` );
-      this.dialogRef.close(ModalResponse.UPDATE);
-    })
   }
 
   /**

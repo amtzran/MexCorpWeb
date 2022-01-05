@@ -10,6 +10,7 @@ import {ModalResponse} from "../../../../../core/utils/ModalResponse";
 import {WorkType} from "../../models/work-type.interface";
 import {WorkTypeService} from "../../services/work-type.service";
 import {CrudComponent} from "../crud/crud.component";
+import {NgxSpinnerService} from "ngx-spinner";
 
 @Component({
   selector: 'app-table',
@@ -30,7 +31,8 @@ export class TableComponent implements OnInit {
   constructor(private workTypeService: WorkTypeService,
               private formBuilder: FormBuilder,
               private dialog: MatDialog,
-              private sharedService: SharedService) {
+              private sharedService: SharedService,
+              private spinner: NgxSpinnerService,) {
   }
 
   ngOnInit(): void {
@@ -48,11 +50,17 @@ export class TableComponent implements OnInit {
   getWorkTypePaginator(event: any) {
     const paginator: MatPaginator = event;
     this.workTypePaginateForm.get('page')?.setValue(paginator.pageIndex + 1);
+    this.spinner.show()
     this.workTypeService.getWorkTypes(this.workTypePaginateForm.value)
       .subscribe(workTypes => {
+        this.spinner.hide()
         this.dataSource.data = workTypes.data
         this.totalItems = workTypes.meta.total;
-      })
+        }, (error => {
+          this.spinner.hide()
+          this.sharedService.errorDialog()
+        } )
+      )
   }
 
   applyFilter(event: Event) {

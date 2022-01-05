@@ -9,6 +9,7 @@ import {MaterialModule} from "../../material/material.module";
 import {ActiveComponent} from './active/active.component';
 import {CrudComponent} from "./side-nav/crud/crud.component";
 import {ReactiveFormsModule} from "@angular/forms";
+import { ErrorComponent } from './error/error.component';
 
 
 
@@ -18,7 +19,8 @@ import {ReactiveFormsModule} from "@angular/forms";
     SideNavComponent,
     FooterComponent,
     ActiveComponent,
-    CrudComponent
+    CrudComponent,
+    ErrorComponent
   ],
   imports: [
     CommonModule,

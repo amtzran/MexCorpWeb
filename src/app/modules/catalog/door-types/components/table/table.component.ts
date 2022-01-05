@@ -10,6 +10,7 @@ import {DoorTypeService} from "../../services/door-type.service";
 import {CrudComponent} from "../crud/crud.component";
 import {SharedService} from "../../../../../shared/services/shared.service";
 import {ConfirmComponent} from "../../../../../shared/components/confirm/confirm.component";
+import {NgxSpinnerService} from "ngx-spinner";
 
 @Component({
   selector: 'app-table',
@@ -30,7 +31,8 @@ export class TableComponent implements OnInit {
   constructor(private doorTypeService: DoorTypeService,
               private formBuilder: FormBuilder,
               private dialog: MatDialog,
-              private sharedService: SharedService) {
+              private sharedService: SharedService,
+              private spinner: NgxSpinnerService,) {
   }
 
   ngOnInit(): void {
@@ -48,11 +50,17 @@ export class TableComponent implements OnInit {
   getDoorTypePaginator(event: any) {
     const paginator: MatPaginator = event;
     this.doorTypePaginateForm.get('page')?.setValue(paginator.pageIndex + 1);
+    this.spinner.show()
     this.doorTypeService.getDoorTypes(this.doorTypePaginateForm.value)
       .subscribe(doorTypes => {
+        this.spinner.hide()
         this.dataSource.data = doorTypes.data
         this.totalItems = doorTypes.meta.total;
-      })
+        }, (error => {
+          this.spinner.hide()
+          this.sharedService.errorDialog()
+        } )
+      )
   }
 
   applyFilter(event: Event) {

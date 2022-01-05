@@ -9,6 +9,7 @@ import {DialogAddGroupComponent} from "../dialog-add-group/dialog-add-group.comp
 import {ModalResponse} from "../../../../../core/utils/ModalResponse";
 import {SharedService} from "../../../../../shared/services/shared.service";
 import {ConfirmComponent} from "../../../../../shared/components/confirm/confirm.component";
+import {NgxSpinnerService} from "ngx-spinner";
 
 @Component({
   selector: 'app-table-group',
@@ -36,6 +37,7 @@ export class TableGroupComponent implements OnInit {
     private _groupService: GroupService,
     private fb: FormBuilder,
     private dialog: MatDialog,
+    private spinner: NgxSpinnerService,
   ) {
   }
 
@@ -55,10 +57,16 @@ export class TableGroupComponent implements OnInit {
   loadGroupsPaginator(event: any): void {
     const paginator: MatPaginator = event;
     this.groupFilterForm.get('page')?.setValue(paginator.pageIndex + 1);
+    this.spinner.show()
     this._groupService.getGroups(this.groupFilterForm.value).subscribe(response => {
+      this.spinner.hide()
       this.dataSource.data = response.data;
       this.totalItems = response.meta.total;
-    });
+      }, (error => {
+        this.spinner.hide()
+        this.sharedService.errorDialog()
+      } )
+    )
   }
 
   /**

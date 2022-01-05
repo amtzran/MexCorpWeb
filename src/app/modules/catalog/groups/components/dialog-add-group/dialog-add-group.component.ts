@@ -57,21 +57,25 @@ export class DialogAddGroupComponent implements OnInit {
       this.loadGroupById();
     }
 
-    this.showSpinner()
-
   }
 
   /**
    * Get detail retrieve of one group.
    */
   loadGroupById(): void{
+    this.spinner.show()
     this._groupService.getGroupById(this.group.idGroup).subscribe(response => {
+      this.spinner.hide()
       delete response.data.id;
       delete response.data.is_active;
       delete response.data.created_at;
       delete response.data.updated_at;
       this.groupForm.setValue(response.data);
-    })
+    }, (error => {
+      this.spinner.hide()
+      this.sharedService.errorDialog()
+    } )
+    )
   }
 
   /**
@@ -95,33 +99,36 @@ export class DialogAddGroupComponent implements OnInit {
    * Create a group.
    */
   addGroup(): void {
-    this.submit = true;
-    if(this.groupForm.invalid){
-      this.sharedService.showSnackBar('Los campos con * son obligatorios.');
-      return
-    }
+    this.validateForm()
     this.createFormData(this.groupForm.value);
+    this.spinner.show()
     this._groupService.postGroup(this.fileDataForm).subscribe(response => {
-      this.showSpinner()
       this.sharedService.showSnackBar('Se ha agregado correctamente el grupo.');
       this.dialogRef.close(ModalResponse.UPDATE);
-    })
+      this.spinner.hide()
+    }, (error => {
+      this.spinner.hide()
+      this.sharedService.errorDialog()
+    } )
+    )
   }
 
   /**
    * Update a group.
    */
   updateGroup(): void {
-    this.submit = true;
-    if(this.groupForm.invalid){
-      this.sharedService.showSnackBar('Los campos con * son obligatorios.');
-      return
-    }
+    this.validateForm()
     this.createFormData(this.groupForm.value)
+    this.spinner.show()
     this._groupService.updateGroup(this.group.idGroup, this.fileDataForm).subscribe(response => {
+      this.spinner.hide()
       this.sharedService.showSnackBar(`Se ha actualizado correctamente el grupo`);
       this.dialogRef.close(ModalResponse.UPDATE);
+    }, (error => {
+        this.spinner.hide()
+        this.sharedService.errorDialog()
     })
+    )
   }
 
   /* File onchange event */
@@ -129,6 +136,10 @@ export class DialogAddGroupComponent implements OnInit {
     this.groupForm.get('logo')?.setValue(e.target.files[0])
   }
 
+  /**
+   * Method convert formGroup a DataForm and wor with files
+   * @param formValue
+   */
   createFormData(formValue:any){
 
     for(const key of Object.keys(formValue)){
@@ -150,6 +161,17 @@ export class DialogAddGroupComponent implements OnInit {
   }
 
   /**
+   * Validate form in general
+   */
+  validateForm(){
+    this.submit = true;
+    if(this.groupForm.invalid){
+      this.sharedService.showSnackBar('Los campos con * son obligatorios.');
+      return
+    }
+  }
+
+  /**
    * Validations
    * @param field
    */
@@ -163,13 +185,6 @@ export class DialogAddGroupComponent implements OnInit {
    */
   close(): void{
     this.dialogRef.close(ModalResponse.UPDATE);
-  }
-
-  showSpinner(){
-    this.spinner.show()
-    setTimeout(() => {
-      this.spinner.hide();
-    }, 1000);
   }
 
 }

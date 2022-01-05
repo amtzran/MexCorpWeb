@@ -7,6 +7,7 @@ import { CrudComponent } from './components/crud/crud.component';
 import {MaterialModule} from "../../../material/material.module";
 import {FlexLayoutModule} from "@angular/flex-layout";
 import {ReactiveFormsModule} from "@angular/forms";
+import {NgxSpinnerModule} from "ngx-spinner";
 
 
 @NgModule({
@@ -15,12 +16,13 @@ import {ReactiveFormsModule} from "@angular/forms";
     TableComponent,
     CrudComponent,
   ],
-  imports: [
-    CommonModule,
-    ContractRoutingModule,
-    MaterialModule,
-    FlexLayoutModule,
-    ReactiveFormsModule
-  ]
+    imports: [
+        CommonModule,
+        ContractRoutingModule,
+        MaterialModule,
+        FlexLayoutModule,
+        ReactiveFormsModule,
+        NgxSpinnerModule
+    ]
 })
 export class ContractModule { }
