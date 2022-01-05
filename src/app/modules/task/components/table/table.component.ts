@@ -20,8 +20,8 @@ export class TableComponent implements OnInit {
   tasks: any = []
   calendarOptions!: CalendarOptions
   // references the #calendar in the template
-  //@ViewChild('calendar') calendarComponent!: FullCalendarComponent;
-  //@ViewChild('external') external!: ElementRef;
+  @ViewChild('calendar') calendarComponent!: FullCalendarComponent;
+  @ViewChild('external') external!: ElementRef;
 
   constructor(private taskService: TaskService,
               private dialog: MatDialog) {
@@ -58,6 +58,9 @@ export class TableComponent implements OnInit {
   //This Values Ranges Date
   modeFull = true;
 
+  /**
+   * initialization Calendar Main View
+   */
   initCalendar() {
     this.calendarOptions = {
       headerToolbar: this.headerToolbar,
@@ -211,10 +214,8 @@ export class TableComponent implements OnInit {
       data: {edit: edit, idTask: idTask, info: info, calendar, eventDrag: eventDrag}
     });
     dialogRef.afterClosed().subscribe(res => {
-      if (res) {
-        this.tasks = []
-        this.initTaskCalendar()
-      }
+      this.tasks = []
+      this.initTaskCalendar()
     });
   }
 

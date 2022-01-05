@@ -47,6 +47,30 @@
                fxLayout.xs="column"
                fxLayoutGap="20px">
 
+            <mat-form-field fxFlex="100">
+              <mat-label>Marca</mat-label>
+              <input
+                matInput
+                type="text"
+                formControlName="brand"
+              >
+            </mat-form-field>
+
+            <mat-form-field fxFlex="100">
+              <mat-label>Modelo</mat-label>
+              <input
+                matInput
+                type="text"
+                formControlName="model"
+              >
+            </mat-form-field>
+
+          </div>
+
+          <div fxLayout="row"
+               fxLayout.xs="column"
+               fxLayoutGap="20px">
+
             <mat-form-field fxFlex="50">
               <mat-label>Observaciones</mat-label>
               <textarea matInput
@@ -58,7 +82,7 @@
 
               <mat-toolbar>
                 <!-- Readonly Input to show File names -->
-                <input matInput readonly name="memberContactNo" placeholder="Logo">
+                <input matInput readonly name="memberContactNo" placeholder="Foto">
                 <!-- Browse Button -->
                 <button mat-flat-button color="primary">
                   <mat-icon>image</mat-icon>

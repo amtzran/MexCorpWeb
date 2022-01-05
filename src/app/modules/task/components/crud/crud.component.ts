@@ -83,6 +83,9 @@ export class CrudComponent implements OnInit {
     /*Formulario*/
     this.loadTaskForm();
 
+    /**
+     * If show type form
+     */
     if(this.task.idTask && this.task.edit){
       this.title = 'Editar Tarea';
       this.taskForm.updateValueAndValidity();
@@ -256,6 +259,10 @@ export class CrudComponent implements OnInit {
     )
   }
 
+  /**
+   * Get Data for table from Api
+   * @param event
+   */
   getDoorsPaginator(event: any) {
     /*const paginator: MatPaginator = event;
     this.doorPaginateForm.get('page')?.setValue(paginator.pageIndex + 1);*/
@@ -289,6 +296,10 @@ export class CrudComponent implements OnInit {
     })
   }*/
 
+  /**
+   * Event click show url (Pdf)
+   * @param reportPdf
+   */
   viewPdf(reportPdf: string){
     window.open(reportPdf)
   }

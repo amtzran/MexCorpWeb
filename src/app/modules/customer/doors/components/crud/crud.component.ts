@@ -46,11 +46,11 @@ export class CrudComponent implements OnInit {
       } )
 
     /*Formulario*/
+    this.imageFile = null
     this.loadDoorForm();
 
     if(this.door.idDoor && this.door.edit){
       this.title = 'Editar Acceso';
-      this.imageFile = null
       this.doorForm.updateValueAndValidity();
     }
 
@@ -89,6 +89,8 @@ export class CrudComponent implements OnInit {
     this.doorForm = this.fb.group({
       name:[{value:null, disabled:this.door.info}, Validators.required],
       observations:[{value: '', disabled:this.door.info}],
+      brand:[{value: '', disabled:this.door.info}],
+      model:[{value: '', disabled:this.door.info}],
       door_type_id: [{value: '', disabled:this.door.info}, Validators.required],
       customer_id: [{value: this.door.idCustomer, disabled:this.door.info}],
       photo: [{value: '', disabled:this.door.info}],
