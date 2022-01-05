@@ -18,4 +18,9 @@ export class SharedService {
     })
   }
 
+  /**
+   * Default Paginate Tables
+   */
+  pageSize = 10;
+
 }

@@ -11,7 +11,8 @@ export interface ModelTask {
 export interface Task {
   id?: number;
   folio?: string;
-  title: string;
+  title?: string;
+  color: string;
   job_center_id: number;
   job_center_name?: string
   customer_id: number;
@@ -27,6 +28,8 @@ export interface Task {
   start_task_hour?: string | null;
   end_task_hour?: string | null;
   status?: string;
+  created_at?: string;
+  updated_at?: string;
   comments: null | string;
   doors: Door[]
 }

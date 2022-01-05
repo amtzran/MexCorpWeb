@@ -12,6 +12,7 @@ import {ModalResponse} from "../../../../../core/utils/ModalResponse";
 import {CrudComponent} from "../../components/crud/crud.component";
 import {SharedService} from "../../../../../shared/services/shared.service";
 import {ConfirmComponent} from "../../../../../shared/components/confirm/confirm.component";
+import {Customer, CustomerDetail, CustomerTitle} from "../../../customers/interfaces/customer.interface";
 
 @Component({
   selector: 'app-list',
@@ -25,15 +26,18 @@ import {ConfirmComponent} from "../../../../../shared/components/confirm/confirm
 })
 export class ListComponent implements OnInit {
 
-  displayedColumns: string[] = ['id', 'folio', 'name', 'observations', 'door_type_name','options'];
+  displayedColumns: string[] = ['id', 'folio', 'name', 'observations', 'door_type_name', 'options'];
   dataSource!: MatTableDataSource<Door>;
   totalItems!: number;
-  pageSize = 10;
+  pageSize = this.sharedService.pageSize
   doorPaginateForm!: FormGroup;
   @ViewChild(MatPaginator, {static: true}) paginator!: MatPaginator;
   @ViewChild(MatSort) sort!: MatSort;
   idCustomer!: string | null;
   private sub : any;
+  customer: CustomerTitle = {
+    name : '',
+  };
 
   constructor(private doorService: DoorService,
               private customerService: CustomerServiceService,
@@ -49,7 +53,13 @@ export class ListComponent implements OnInit {
     this.sub = this.activateRoute.paramMap.subscribe( params => {
       this.idCustomer = params.get('customer');
     })
-
+    /**
+     * Detail Data Customer
+     */
+    this.customerService.getCustomerById(Number(this.idCustomer)).subscribe(customer =>{
+        this.customer = customer.data
+      }
+    )
     /*Formulario*/
     this.loadDoorFilterForm();
 
@@ -59,7 +69,6 @@ export class ListComponent implements OnInit {
   }
 
   ngAfterViewInit() {
-    this.dataSource.paginator = this.paginator;
     this.dataSource.sort = this.sort;
   }
 
@@ -69,7 +78,7 @@ export class ListComponent implements OnInit {
     this.doorService.getDoors(this.doorPaginateForm.value,  this.idCustomer )
       .subscribe(doors => {
         this.dataSource.data = doors.data
-        this.totalItems = doors.total;
+        this.totalItems = doors.meta.total;
       } )
   }
 

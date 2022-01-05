@@ -1,13 +1,11 @@
-import {Component, forwardRef, OnInit} from '@angular/core';
-import {Calendar, CalendarOptions, DateSelectArg, EventClickArg,} from "@fullcalendar/angular";
+import {Component, ElementRef, forwardRef, OnInit, ViewChild} from '@angular/core';
+import {Calendar, CalendarOptions, DateSelectArg, EventClickArg, FullCalendarComponent} from "@fullcalendar/angular";
 import {CalendarDate} from "../../models/task.interface";
 import {TaskService} from "../../services/task.service";
 import {MatDialog} from "@angular/material/dialog";
 import * as moment from "moment";
 import {CrudComponent} from "../crud/crud.component";
-import {ModalResponse} from "../../../../core/utils/ModalResponse";
 import {EventApi, EventDropArg} from "@fullcalendar/core";
-import {ConfirmEditComponent} from "../confirm-edit/confirm-edit.component";
 import dayGridPlugin from "@fullcalendar/daygrid";
 import interactionPlugin from "@fullcalendar/interaction";
 
@@ -18,15 +16,16 @@ import interactionPlugin from "@fullcalendar/interaction";
   /*styles: [``]*/
 })
 export class TableComponent implements OnInit {
-
   // Declare any for model EventApi
   tasks: any = []
   calendarOptions!: CalendarOptions
   // references the #calendar in the template
   //@ViewChild('calendar') calendarComponent!: FullCalendarComponent;
+  //@ViewChild('external') external!: ElementRef;
 
-  constructor( private taskService: TaskService,
-               private dialog: MatDialog) {}
+  constructor(private taskService: TaskService,
+              private dialog: MatDialog) {
+  }
 
   ngOnInit(): void {
     forwardRef(() => Calendar)
@@ -39,13 +38,29 @@ export class TableComponent implements OnInit {
   /**
    * Values Initials Calendar
    */
+  headerToolbar = {
+    left: 'prev,next,today,changeRange',
+    center: 'title',
+    right: 'dayGridMonth,timeGridWeek,timeGridDay,listWeek,listDay'
+  }
+
+  /**
+   * Values in Spanish Buttons
+   */
+  buttonText = {
+    today: 'Hoy',
+    month: 'Mes',
+    week: 'Semana',
+    day: 'Día',
+    list: 'Lista'
+  }
+
+  //This Values Ranges Date
+  modeFull = true;
+
   initCalendar() {
     this.calendarOptions = {
-      headerToolbar: {
-        left: 'prev,next,today',
-        center: 'title',
-        right: 'dayGridMonth,timeGridWeek,timeGridDay,listWeek'
-      },
+      headerToolbar: this.headerToolbar,
       plugins: [dayGridPlugin, interactionPlugin],
       initialView: 'timeGridWeek',
       events: this.tasks,
@@ -56,12 +71,36 @@ export class TableComponent implements OnInit {
       dayMaxEvents: true,
       select: this.handleDateSelect.bind(this),
       eventClick: this.handleEventClick.bind(this),
-      //timeZone: 'local',
       locale: 'es',
+      timeZone: 'locale',
       eventsSet: this.handleEvents.bind(this),
-      eventDrop: this.handleEventDrag.bind(this)
+      eventDrop: this.handleEventDrag.bind(this),
+      buttonText: this.buttonText,
+      slotMinTime: '08:00:00',
+      slotMaxTime: '20:00:00',
+      customButtons: {
+        changeRange: {
+          text: '12/24',
+          click: this.customFunction.bind(this)
+        }
+      },
       //eventColor: '#378006'
     };
+  }
+
+  /**
+   * Get Date 12/24 Custom Button
+   */
+  customFunction() {
+    if (this.modeFull) {
+      this.calendarOptions.slotMinTime = '00:00:00';
+      this.calendarOptions.slotMaxTime = '24:00:00';
+      this.modeFull = false
+    } else {
+      this.calendarOptions.slotMinTime = '08:00:00';
+      this.calendarOptions.slotMaxTime = '20:00:00';
+      this.modeFull = true
+    }
   }
 
   /**
@@ -71,12 +110,16 @@ export class TableComponent implements OnInit {
     this.taskService.getTasks()
       .subscribe(tasks => {
         tasks.data.forEach(element => {
-          this.tasks.push({
-            id: String(element.id),
-            title: element.title,
-            start:`${element.initial_date} ${element.initial_hour}` ,
-            end: `${element.final_date} ${element.final_hour}`
-          })
+
+            this.tasks.push({
+              id: String(element.id),
+              title: element.title,
+              start: `${element.initial_date} ${element.initial_hour}`,
+              end: `${element.final_date} ${element.final_hour}`,
+              backgroundColor: element.color,
+              borderColor: element.color
+            })
+
         })
         this.initCalendar()
       })
@@ -89,37 +132,19 @@ export class TableComponent implements OnInit {
    */
   handleEventDrag(selectInfoEventDrag: EventDropArg) {
 
-    // Show Dialog
-    const dialog = this.dialog.open(ConfirmEditComponent, {
-      width: '250',
-      data: selectInfoEventDrag.event
-    })
+    const initialHour = moment(selectInfoEventDrag.event.startStr).format('HH:mm')
+    const finalHour = moment(selectInfoEventDrag.event.endStr).format('HH:mm')
+    const initialDate = selectInfoEventDrag.event.startStr
+    const finalDate = selectInfoEventDrag.event.endStr
 
-    dialog.afterClosed().subscribe(
-      ( result ) => {
-        if ( result ) {
+    const data: CalendarDate = {
+      initial_hour: initialHour,
+      final_hour: finalHour,
+      initial_date: initialDate,
+      final_date: finalDate
+    }
 
-          const initialHour = moment(selectInfoEventDrag.event.startStr).format('HH:mm')
-          const finalHour = moment(selectInfoEventDrag.event.endStr).format('HH:mm')
-          const initialDate = selectInfoEventDrag.event.startStr
-          const finalDate = selectInfoEventDrag.event.endStr
-
-          const data: CalendarDate = {
-            initial_hour : initialHour,
-            final_hour : finalHour,
-            initial_date : initialDate,
-            final_date : finalDate
-          }
-
-          this.taskService.patchTaskDateAndHour(Number(selectInfoEventDrag.event.id), data).subscribe(res => {
-            console.log(res)
-            console.log('Correctamente')
-          })
-        }
-
-        else selectInfoEventDrag.revert()
-
-      })
+    this.openDialogTask(true, Number(selectInfoEventDrag.event.id), false, data, true)
 
   }
 
@@ -135,13 +160,14 @@ export class TableComponent implements OnInit {
     const finalDate = selectInfo.endStr
 
     const data: CalendarDate = {
-      initial_hour : initialHour,
-      final_hour : finalHour,
-      initial_date : initialDate,
-      final_date : finalDate
+      initial_hour: initialHour,
+      final_hour: finalHour,
+      initial_date: initialDate,
+      final_date: finalDate
     }
 
-    this.openDialogTask(false, null, false, data)
+    this.openDialogTask(false, null, false, data, false)
+
   }
 
   /**
@@ -152,10 +178,10 @@ export class TableComponent implements OnInit {
 
     this.taskService.getTaskById(Number(clickInfo.event.id)).subscribe(res => {
       if (res.data.status === 'Programado') {
-        this.openDialogTask(true, Number(clickInfo.event.id), false, null)
+        this.openDialogTask(true, Number(clickInfo.event.id), false, null, false)
       }
-      else {
-        this.openDialogTask(false, Number(clickInfo.event.id), true, null)
+      if (res.data.status === 'Finalizado') {
+        this.openDialogTask(false, Number(clickInfo.event.id), true, null, false)
       }
     })
 
@@ -175,16 +201,17 @@ export class TableComponent implements OnInit {
    * @param idTask
    * @param info
    * @param calendar
+   * @param eventDrag
    */
-  openDialogTask(edit: boolean, idTask: number | null, info: boolean, calendar: CalendarDate | null): void {
+  openDialogTask(edit: boolean, idTask: number | null, info: boolean, calendar: CalendarDate | null, eventDrag: boolean): void {
     const dialogRef = this.dialog.open(CrudComponent, {
       autoFocus: false,
       disableClose: true,
-      width: '50vw',
-      data: {edit: edit, idTask: idTask, info: info, calendar}
+      width: '250vw',
+      data: {edit: edit, idTask: idTask, info: info, calendar, eventDrag: eventDrag}
     });
     dialogRef.afterClosed().subscribe(res => {
-      if (res === ModalResponse.UPDATE) {
+      if (res) {
         this.tasks = []
         this.initTaskCalendar()
       }

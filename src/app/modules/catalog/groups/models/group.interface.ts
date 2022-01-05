@@ -1,7 +1,7 @@
-import {Links} from "../../../../shared/interfaces/shared.interface";
+import {Links, MetaModel} from "../../../../shared/interfaces/shared.interface";
 
 export interface GroupModel {
-  total: number;
+  meta: MetaModel;
   next?: Links["next"];
   previous?: Links["prev"];
   data: Group[];
@@ -17,6 +17,7 @@ export interface Group {
   address: string,
   city: string,
   postal_code: string,
+  logo?: string,
   is_active?: boolean,
   created_at?: string,
   updated_at?: string,

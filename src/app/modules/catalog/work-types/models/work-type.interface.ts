@@ -1,8 +1,8 @@
 // DataSource for Work Type
-import {Links} from "../../../../shared/interfaces/shared.interface";
+import {Links, MetaModel} from "../../../../shared/interfaces/shared.interface";
 
 export interface ModelWorkType {
-  total: number;
+  meta: MetaModel;
   next?: Links["next"];
   previous?: Links["prev"];
   data: WorkType[];

@@ -47,14 +47,44 @@
                fxLayout.xs="column"
                fxLayoutGap="20px">
 
-            <mat-form-field fxFlex="100">
+            <mat-form-field fxFlex="50">
               <mat-label>Observaciones</mat-label>
               <textarea matInput
                         formControlName="observations"
                         placeholder="Observaciones de accesos..."></textarea>
             </mat-form-field>
 
+            <mat-form-field fxFlex="50">
+
+              <mat-toolbar>
+                <!-- Readonly Input to show File names -->
+                <input matInput readonly name="memberContactNo" placeholder="Logo">
+                <!-- Browse Button -->
+                <button mat-flat-button color="primary">
+                  <mat-icon>image</mat-icon>
+                </button>
+
+              </mat-toolbar>
+              <!-- Fetch selected filed on change -->
+              <input type="file" #UploadFileInput id="fileUploadPhoto" name="myFile" (change)="setFileLogo($event)" accept="image/*">
+
+            </mat-form-field>
+
           </div>
+
+          <div fxLayout="row"
+               fxLayout.xs="column"
+               fxLayoutGap="20px"
+               *ngIf="imageFile !== null; else divLogo">
+
+            <mat-card fxFlex="100" fxLayoutAlign="center center">
+              <img mat-card-image [src]="imageFile" alt="">
+            </mat-card>
+
+          </div>
+
+          <ng-template #divLogo>
+          </ng-template>
 
         </div>
 

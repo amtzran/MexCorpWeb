@@ -1,9 +1,10 @@
 import { Component, OnInit, Inject } from '@angular/core';
 import {FormBuilder, FormGroup, Validators} from "@angular/forms";
-import {MAT_DIALOG_DATA, MatDialogRef} from "@angular/material/dialog";
 import {GroupService} from "../../services/groups.service";
 import {ModalResponse} from "../../../../../core/utils/ModalResponse";
 import {SharedService} from "../../../../../shared/services/shared.service";
+import {MAT_DIALOG_DATA, MatDialogRef} from "@angular/material/dialog";
+import {NgxSpinnerService} from "ngx-spinner";
 
 @Component({
   selector: 'app-dialog-add-group',
@@ -14,6 +15,10 @@ export class DialogAddGroupComponent implements OnInit {
 
   /*Formulario*/
   groupForm!: FormGroup;
+  /* Variable to store file data */
+  fileDataForm = new FormData();
+  /* Show Image */
+  imageFile: string | null | undefined = '';
 
   /*Titulo Modal*/
   title: string = 'Nuevo Grupo';
@@ -27,6 +32,7 @@ export class DialogAddGroupComponent implements OnInit {
     private sharedService: SharedService,
     private dialogRef: MatDialogRef<DialogAddGroupComponent>,
     private _groupService: GroupService,
+    private spinner: NgxSpinnerService,
     @Inject(MAT_DIALOG_DATA) public group : {idGroup: number, edit: boolean, info: boolean}
   ) { }
 
@@ -37,17 +43,21 @@ export class DialogAddGroupComponent implements OnInit {
 
     if(this.group.idGroup && this.group.edit){
       this.title = 'Editar Grupo';
+      this.imageFile = null;
       this.groupForm.updateValueAndValidity();
     }
 
     if(this.group.idGroup && !this.group.edit){
       this.title = 'Información del Grupo';
+      this._groupService.getGroupById(this.group.idGroup).subscribe(res => { this.imageFile = res.data.logo })
       this.groupForm.updateValueAndValidity();
     }
 
     if(this.group.idGroup){
       this.loadGroupById();
     }
+
+    this.showSpinner()
 
   }
 
@@ -76,7 +86,8 @@ export class DialogAddGroupComponent implements OnInit {
       email:[{value:'', disabled:this.group.info}, Validators.required],
       address: [{value:'', disabled:this.group.info}],
       city: [{value:'', disabled:this.group.info}],
-      postal_code: [{value:'', disabled:this.group.info}]
+      postal_code: [{value:'', disabled:this.group.info}],
+      logo: [{value:'', disabled:this.group.info}],
     });
   }
 
@@ -89,7 +100,9 @@ export class DialogAddGroupComponent implements OnInit {
       this.sharedService.showSnackBar('Los campos con * son obligatorios.');
       return
     }
-    this._groupService.postGroup(this.groupForm.value).subscribe(response => {
+    this.createFormData(this.groupForm.value);
+    this._groupService.postGroup(this.fileDataForm).subscribe(response => {
+      this.showSpinner()
       this.sharedService.showSnackBar('Se ha agregado correctamente el grupo.');
       this.dialogRef.close(ModalResponse.UPDATE);
     })
@@ -104,10 +117,36 @@ export class DialogAddGroupComponent implements OnInit {
       this.sharedService.showSnackBar('Los campos con * son obligatorios.');
       return
     }
-    this._groupService.updateGroup(this.group.idGroup, this.groupForm.value).subscribe(response => {
+    this.createFormData(this.groupForm.value)
+    this._groupService.updateGroup(this.group.idGroup, this.fileDataForm).subscribe(response => {
       this.sharedService.showSnackBar(`Se ha actualizado correctamente el grupo`);
       this.dialogRef.close(ModalResponse.UPDATE);
     })
+  }
+
+  /* File onchange event */
+  setFileLogo(e : any){
+    this.groupForm.get('logo')?.setValue(e.target.files[0])
+  }
+
+  createFormData(formValue:any){
+
+    for(const key of Object.keys(formValue)){
+      const value = formValue[key];
+      if (value !== null) {
+        if (key === 'logo') {
+          if (typeof(value) !== 'object') {
+            if (value.startsWith('https')) this.fileDataForm.append(key, '');
+          }
+          else this.fileDataForm.append(key, value);
+        }
+        else {
+          this.fileDataForm.append(key, value);
+        }
+      }
+
+    }
+
   }
 
   /**
@@ -124,6 +163,13 @@ export class DialogAddGroupComponent implements OnInit {
    */
   close(): void{
     this.dialogRef.close(ModalResponse.UPDATE);
+  }
+
+  showSpinner(){
+    this.spinner.show()
+    setTimeout(() => {
+      this.spinner.hide();
+    }, 1000);
   }
 
 }

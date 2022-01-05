@@ -1,0 +1,19 @@
+/**
+Design Module Customer
+ */
+.tableResponsive{
+  width: 100%;
+  overflow-x: auto;
+}
+.greenColor {
+  color: #66BB6A;
+}
+.yellowColor {
+  color: #FFEA00;
+}
+.orangeColor {
+  color: #FB8C00;
+}
+.blueColor {
+  color: deepskyblue;
+}

@@ -1,6 +1,6 @@
 import {Injectable} from '@angular/core';
 import {Observable} from "rxjs";
-import {HttpClient, HttpParams} from "@angular/common/http";
+import {HttpClient, HttpHeaders, HttpParams} from "@angular/common/http";
 import {environment} from "../../../../../environments/environment";
 import {GroupDetail, GroupFilterModel, GroupModel} from "../models/group.interface";
 
@@ -37,7 +37,7 @@ export class GroupService {
    * Create a group.
    * @param group
    */
-  postGroup(group: GroupDetail): Observable<GroupDetail>{
+  postGroup(group: FormData): Observable<GroupDetail>{
     return this.http.post<GroupDetail>(`${ this.baseUrl }/groups/`, group);
   }
 
@@ -46,8 +46,8 @@ export class GroupService {
    * @param groupId
    * @param group
    */
-  updateGroup(groupId: number, group: GroupDetail){
-    return this.http.patch(`${ this.baseUrl }/groups/${groupId}/`, group);
+  updateGroup(groupId: number, group: FormData){
+    return this.http.post(`${ this.baseUrl }/groups/${groupId}/`, group);
   }
 
   /**

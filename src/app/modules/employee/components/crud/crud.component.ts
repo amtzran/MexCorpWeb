@@ -81,6 +81,7 @@ export class CrudComponent implements OnInit {
       delete response.data.job_center_name;
       delete response.data.job_title_name;
       delete response.data.user_name;
+      delete response.data.avatar;
       this.employeeForm.setValue(response.data);
     })
   }
@@ -93,7 +94,6 @@ export class CrudComponent implements OnInit {
       name:[{value:null, disabled:this.employee.info}, Validators.required],
       email:[{value:null, disabled:this.employee.info}, [Validators.required, Validators.email]],
       color:[{value:null, disabled:this.employee.info}, Validators.required],
-      avatar:[{value:'', disabled:this.employee.info}],
       signature:[{value:'', disabled:this.employee.info}],
       is_active:[{value:true, disabled:this.employee.info}],
       job_center_id: [{value: '', disabled:this.employee.info}, Validators.required],

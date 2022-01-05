@@ -1,4 +1,4 @@
-import {Component, Inject, OnInit} from '@angular/core';
+import {Component, Inject, OnInit, ViewChild} from '@angular/core';
 import {FormBuilder, FormGroup, Validators} from "@angular/forms";
 import {Customer} from "../../../customer/customers/interfaces/customer.interface";
 import {SharedService} from "../../../../shared/services/shared.service";
@@ -8,13 +8,15 @@ import {TaskService} from "../../services/task.service";
 import {Employee, JobCenter} from "../../../employee/interfaces/employee.interface";
 import {CalendarDate, WorkType} from "../../models/task.interface";
 import {DateService} from "../../../../core/utils/date.service";
-import {DoorType} from "../../../customer/doors/interfaces/door.interface";
+import {Door, DoorType} from "../../../customer/doors/interfaces/door.interface";
+import {MatTableDataSource} from "@angular/material/table";
+import {MatPaginator} from "@angular/material/paginator";
+import {MatSort} from "@angular/material/sort";
 
 @Component({
   selector: 'app-crud',
   templateUrl: './crud.component.html',
-  styles: [
-  ]
+  styles: []
 })
 export class CrudComponent implements OnInit {
 
@@ -36,7 +38,18 @@ export class CrudComponent implements OnInit {
   jobCenters: JobCenter[] = [];
   employees: Employee[] = [];
   workTypes: WorkType[] =[];
-  doorTypes:  DoorType[] =[];
+  doorTypes:  DoorType[] = [];
+
+  /**
+   * Table Access Files
+   */
+  displayedColumns: string[] = ['id', 'folio', 'name', 'door_type_name', 'options'];
+  dataSource!: MatTableDataSource<Door>;
+  totalItems!: number;
+  pageSize = 30;
+  doorPaginateForm!: FormGroup;
+  @ViewChild(MatPaginator, {static: true}) paginator!: MatPaginator;
+  @ViewChild(MatSort) sort!: MatSort;
 
   constructor(
     private fb: FormBuilder,
@@ -44,7 +57,14 @@ export class CrudComponent implements OnInit {
     private dialogRef: MatDialogRef<CrudComponent>,
     private _taskService: TaskService,
     private _dateService: DateService,
-    @Inject(MAT_DIALOG_DATA) public task : {idTask: number, edit: boolean, info: boolean, calendar: CalendarDate}
+    @Inject(MAT_DIALOG_DATA) public task : {
+      idTask: number,
+      edit: boolean,
+      info: boolean,
+      calendar: CalendarDate,
+      eventDrag: boolean,
+      eventDragUpdate: boolean
+    }
   ) { }
 
   ngOnInit(): void {
@@ -73,27 +93,38 @@ export class CrudComponent implements OnInit {
       this.taskForm.updateValueAndValidity();
     }
 
-    if(this.task.idTask){
+    if(this.task.idTask && !this.task.eventDrag){
       this.loadTaskById();
+    }
+
+    if(this.task.idTask && this.task.eventDrag){
+      this.loadTaskByIdDrag();
     }
 
     if (this.task.calendar != null){
       this.loadTaskFormDate()
     }
 
+    // Assign the data to the data source for the table to render
+    this.dataSource = new MatTableDataSource();
+    /*Formulario*/
+    //this.loadDoorFilterForm();
+    if (this.task.info) this.getDoorsPaginator(this.paginator);
   }
 
   /**
-   * Get detail retrieve of one group.
+   * Get detail retrieve of one Task.
    */
   loadTaskById(): void{
     this._taskService.getTaskById(this.task.idTask).subscribe(response => {
+      // Data Doors by Customer
+      this.loadAccess(response.data.customer_id)
       this.taskForm.patchValue({
         title: response.data.title,
         employee_id: response.data.employee_id,
         job_center_id: response.data.job_center_id,
         customer_id: response.data.customer_id,
-        doors: response.data.doors,
+        doors: response.data.doors.map( door => door.id),
         comments: response.data.comments,
         work_type_id: response.data.work_type_id,
         initial_hour: response.data.initial_hour,
@@ -101,12 +132,34 @@ export class CrudComponent implements OnInit {
         initial_date: this._dateService.getFormatDateSetInputRangePicker(response.data.initial_date),
         final_date: this._dateService.getFormatDateSetInputRangePicker(response.data.final_date)
       })
-      //this.taskForm.setValue(response);
     })
   }
 
   /**
-   * Load the form group.
+   * Get detail retrieve of one EventDrag Task.
+   */
+  loadTaskByIdDrag(): void{
+    this._taskService.getTaskById(this.task.idTask).subscribe(response => {
+      // Data Doors by Customer
+      this.loadAccess(response.data.customer_id)
+      this.taskForm.patchValue({
+        title: response.data.title,
+        employee_id: response.data.employee_id,
+        job_center_id: response.data.job_center_id,
+        customer_id: response.data.customer_id,
+        doors: response.data.doors.map( door => door.id),
+        comments: response.data.comments,
+        work_type_id: response.data.work_type_id,
+        initial_hour: this.task.calendar.initial_hour,
+        final_hour: this.task.calendar.final_hour,
+        initial_date: this.task.calendar.initial_date,
+        final_date: this.task.calendar.final_date
+      })
+    })
+  }
+
+  /**
+   * Load the form Task. from Button
    */
   loadTaskForm():void{
     this.taskForm = this.fb.group({
@@ -125,7 +178,7 @@ export class CrudComponent implements OnInit {
   }
 
   /**
-   * Load the form group.
+   * Load the form Task Click Data and Hour.
    */
   loadTaskFormDate():void{
     this.taskForm = this.fb.group({
@@ -147,15 +200,7 @@ export class CrudComponent implements OnInit {
    * Create a Task.
    */
   addTask(): void {
-    this.submit = true;
-    if(this.taskForm.invalid){
-      this.sharedService.showSnackBar('Los campos con * son obligatorios.');
-      return
-    }
-    this.initialDate = this._dateService.getFormatDataDate(this.taskForm.get('initial_date')?.value)
-    this.taskForm.get('initial_date')?.setValue(this.initialDate)
-    this.finalDate = this._dateService.getFormatDataDate(this.taskForm.get('final_date')?.value)
-    this.taskForm.get('final_date')?.setValue(this.finalDate)
+    this.setValueSubmit()
     this._taskService.addTask(this.taskForm.value).subscribe(response => {
       this.sharedService.showSnackBar(`Se ha agregado correctamente la Tarea: ${response.data.title}`);
       this.dialogRef.close(ModalResponse.UPDATE);
@@ -166,6 +211,17 @@ export class CrudComponent implements OnInit {
    * Update a task.
    */
   updateTask(): void {
+    this.setValueSubmit()
+    this._taskService.updateTask(this.task.idTask, this.taskForm.value).subscribe(response => {
+      this.sharedService.showSnackBar(`Se ha actualizado correctamente la Tarea: ${response.data.title}` );
+      this.dialogRef.close(ModalResponse.UPDATE);
+    })
+  }
+
+  /**
+   * Value Submit Before send
+   */
+  setValueSubmit(){
     this.submit = true;
     if(this.taskForm.invalid){
       this.sharedService.showSnackBar('Los campos con * son obligatorios.');
@@ -175,10 +231,6 @@ export class CrudComponent implements OnInit {
     this.taskForm.get('initial_date')?.setValue(this.initialDate)
     this.finalDate = this._dateService.getFormatDataDate(this.taskForm.get('final_date')?.value)
     this.taskForm.get('final_date')?.setValue(this.finalDate)
-    this._taskService.updateTask(this.task.idTask, this.taskForm.value).subscribe(response => {
-      this.sharedService.showSnackBar(`Se ha actualizado correctamente la Tarea: ${response.data.title}` );
-      this.dialogRef.close(ModalResponse.UPDATE);
-    })
   }
 
   /**
@@ -204,6 +256,43 @@ export class CrudComponent implements OnInit {
     )
   }
 
+  getDoorsPaginator(event: any) {
+    /*const paginator: MatPaginator = event;
+    this.doorPaginateForm.get('page')?.setValue(paginator.pageIndex + 1);*/
+    this._taskService.getTaskByIdDoors(this.task.idTask)
+      .subscribe(task => {
+        this.dataSource.data = task.data
+        // TODO : Check Paginate
+        //this.totalItems = task.meta.total;
+      })
+  }
+
+
+  ngAfterViewInit() {
+    this.dataSource.sort = this.sort;
+  }
+
+  applyFilter(event: Event) {
+    const filterValue = (event.target as HTMLInputElement).value;
+    this.dataSource.filter = filterValue.trim().toLowerCase();
+
+    if (this.dataSource.paginator) {
+      this.dataSource.paginator.firstPage();
+    }
+  }
+
+ /* /!* Método que permite iniciar los filtros de rutas*!/
+  loadDoorFilterForm(): void {
+    this.doorPaginateForm = this.fb.group({
+      page: [],
+      page_size: this.pageSize
+    })
+  }*/
+
+  viewPdf(reportPdf: string){
+    window.open(reportPdf)
+  }
+
   /**
    * Validations
    * @param field
@@ -218,6 +307,19 @@ export class CrudComponent implements OnInit {
    */
   close(): void{
     this.dialogRef.close(ModalResponse.CLOSE);
+  }
+
+  /**
+   * Function for set value in select multiple with json
+   * Error Documentation versión 13.1.1
+   * @param objInitial
+   * @param objSelected
+   */
+  setValueSelectObjectMultiple(objInitial: any, objSelected: any) : any {
+
+    if (typeof objInitial !== 'undefined' && typeof objSelected !== 'undefined') {
+      return objInitial && objSelected ? objInitial.id === objSelected.id : objInitial === objSelected;
+    }
   }
 
 }

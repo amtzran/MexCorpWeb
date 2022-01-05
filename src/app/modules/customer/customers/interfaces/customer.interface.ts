@@ -1,15 +1,11 @@
 // DataSource for Customer
-import {Links} from "../../../../shared/interfaces/shared.interface";
+import {Links, MetaModel} from "../../../../shared/interfaces/shared.interface";
 
 export interface ModelCustomer {
   meta: MetaModel;
   next?: Links["next"];
   previous?: Links["prev"];
   data: Customer[];
-}
-
-export interface MetaModel {
-  total: number
 }
 
 export interface Customer {
@@ -79,5 +75,10 @@ export interface TypeCustomer {
   is_active?: boolean;
   created_at?: Date;
   updated_at?: Date;
+}
+
+export interface CustomerTitle {
+  id?: number;
+  name: string;
 }
 

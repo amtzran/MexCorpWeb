@@ -22,7 +22,7 @@ export class TableComponent implements OnInit {
   displayedColumns: string[] = ['id', 'name', 'description', 'options'];
   dataSource!: MatTableDataSource<WorkType>;
   totalItems!: number;
-  pageSize!: number;
+  pageSize = this.sharedService.pageSize
   workTypePaginateForm!: FormGroup;
   @ViewChild(MatPaginator, {static: true}) paginator!: MatPaginator;
   @ViewChild(MatSort) sort!: MatSort;
@@ -42,7 +42,6 @@ export class TableComponent implements OnInit {
   }
 
   ngAfterViewInit() {
-    this.dataSource.paginator = this.paginator;
     this.dataSource.sort = this.sort;
   }
 
@@ -52,7 +51,7 @@ export class TableComponent implements OnInit {
     this.workTypeService.getWorkTypes(this.workTypePaginateForm.value)
       .subscribe(workTypes => {
         this.dataSource.data = workTypes.data
-        this.totalItems = workTypes.total;
+        this.totalItems = workTypes.meta.total;
       })
   }
 

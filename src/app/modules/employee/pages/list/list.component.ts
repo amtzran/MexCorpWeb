@@ -19,10 +19,10 @@ import {ActiveComponent} from "../../../../shared/components/active/active.compo
 })
 export class ListComponent implements OnInit {
 
-  displayedColumns: string[] = ['id', 'name', 'email', 'color', 'is_active', 'options'];
+  displayedColumns: string[] = ['id', 'name', 'email', 'color', 'job_title_name', 'is_active', 'options'];
   dataSource!: MatTableDataSource<Employee>;
   totalItems!: number;
-  pageSize!: number;
+  pageSize = this.sharedService.pageSize;
   employeePaginateForm!: FormGroup;
   @ViewChild(MatPaginator, {static: true}) paginator!: MatPaginator;
   @ViewChild(MatSort) sort!: MatSort;
@@ -42,7 +42,6 @@ export class ListComponent implements OnInit {
   }
 
   ngAfterViewInit() {
-    this.dataSource.paginator = this.paginator;
     this.dataSource.sort = this.sort;
   }
 
@@ -52,7 +51,7 @@ export class ListComponent implements OnInit {
     this.employeeService.getEmployees(this.employeePaginateForm.value)
       .subscribe(employees => {
         this.dataSource.data = employees.data
-        this.totalItems = employees.total;
+        this.totalItems = employees.meta.total;
       })
   }
 

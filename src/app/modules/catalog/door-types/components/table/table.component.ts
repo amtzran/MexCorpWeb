@@ -4,7 +4,6 @@ import {FormBuilder, FormGroup} from "@angular/forms";
 import {MatPaginator} from "@angular/material/paginator";
 import {MatSort} from "@angular/material/sort";
 import {MatDialog} from "@angular/material/dialog";
-import {MatSnackBar} from "@angular/material/snack-bar";
 import {ModalResponse} from "../../../../../core/utils/ModalResponse";
 import {DoorType} from "../../models/door-type.interface";
 import {DoorTypeService} from "../../services/door-type.service";
@@ -23,7 +22,7 @@ export class TableComponent implements OnInit {
   displayedColumns: string[] = ['id', 'name', 'description', 'options'];
   dataSource!: MatTableDataSource<DoorType>;
   totalItems!: number;
-  pageSize!: number;
+  pageSize = this.sharedService.pageSize
   doorTypePaginateForm!: FormGroup;
   @ViewChild(MatPaginator, {static: true}) paginator!: MatPaginator;
   @ViewChild(MatSort) sort!: MatSort;
@@ -43,7 +42,6 @@ export class TableComponent implements OnInit {
   }
 
   ngAfterViewInit() {
-    this.dataSource.paginator = this.paginator;
     this.dataSource.sort = this.sort;
   }
 
@@ -53,7 +51,7 @@ export class TableComponent implements OnInit {
     this.doorTypeService.getDoorTypes(this.doorTypePaginateForm.value)
       .subscribe(doorTypes => {
         this.dataSource.data = doorTypes.data
-        this.totalItems = doorTypes.total;
+        this.totalItems = doorTypes.meta.total;
       })
   }
 

@@ -1,6 +1,10 @@
 import { Component, OnInit } from '@angular/core';
 import {Router} from "@angular/router";
 import {AuthServiceService} from "../../../modules/auth/services/auth-service.service";
+import {ModalResponse} from "../../../core/utils/ModalResponse";
+import {MatDialog} from "@angular/material/dialog";
+import {CrudComponent} from "./crud/crud.component";
+import {ProfileUser} from "../../../modules/auth/interfaces/login.interface";
 
 interface RoutesSide {
   name: string,
@@ -17,13 +21,28 @@ interface RoutesSide {
 export class SideNavComponent implements OnInit {
 
   constructor(private router: Router,
-              private authService: AuthServiceService) { }
+              private authService: AuthServiceService,
+              private dialog: MatDialog) { }
 
   get user() {
     return this.authService.user
   }
 
+  dataUser: ProfileUser = {
+   name: ''
+  };
+
   ngOnInit(): void {
+    this.loadUser()
+  }
+
+  /**
+   * Data User Session
+   */
+  loadUser(): void {
+    this.authService.getUserById().subscribe(user => {
+      this.dataUser = user
+    })
   }
 
   menuRoute: RoutesSide[] = [
@@ -80,6 +99,24 @@ export class SideNavComponent implements OnInit {
   logout(){
     this.router.navigateByUrl('../auth/login')
     this.authService.logout()
+    localStorage.clear()
   }
 
+  /**
+   * Open dialog for add and update group.
+   */
+  openDialogProfile(dataUser : ProfileUser) {
+    const dialogRef = this.dialog.open(CrudComponent, {
+      autoFocus: false,
+      disableClose: true,
+      width: '50vw',
+      data: dataUser
+    });
+    dialogRef.afterClosed().subscribe(res => {
+      if (res === ModalResponse.UPDATE) {
+        //TODO: Check logout
+        //this.getContractsPaginator(this.paginator);
+      }
+    });
+  }
 }

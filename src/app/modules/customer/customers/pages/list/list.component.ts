@@ -14,19 +14,14 @@ import {ConfirmComponent} from "../../../../../shared/components/confirm/confirm
 @Component({
   selector: 'app-list',
   templateUrl: './list.component.html',
-  styles: [`
-  .tableResponsive{
-    width: 100%;
-    overflow-x: auto;
-  }
-  `]
+  styleUrls: ['./list.component.css']
 })
 export class ListComponent implements AfterViewInit, OnInit {
 
   displayedColumns: string[] = ['id', 'name', 'reason_social', 'rfc', 'phone', 'address', 'contract_name', 'customer_type_name','options'];
   dataSource!: MatTableDataSource<Customer>;
   totalItems!: number;
-  pageSize = 15;
+  pageSize = this.sharedService.pageSize;
   customerFilterForm!: FormGroup;
   @ViewChild(MatPaginator, {static: true}) paginator!: MatPaginator;
   @ViewChild(MatSort) sort!: MatSort;
@@ -46,7 +41,6 @@ export class ListComponent implements AfterViewInit, OnInit {
   }
 
   ngAfterViewInit() {
-    //this.dataSource.paginator = this.paginator;
     this.dataSource.sort = this.sort;
   }
 
@@ -61,7 +55,6 @@ export class ListComponent implements AfterViewInit, OnInit {
       .subscribe((customers : ModelCustomer) => {
         this.dataSource.data = customers.data
         this.totalItems = customers.meta.total;
-        console.log(this.totalItems)
       })
   }
 
