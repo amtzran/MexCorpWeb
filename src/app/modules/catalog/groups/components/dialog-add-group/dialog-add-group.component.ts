@@ -57,6 +57,8 @@ export class DialogAddGroupComponent implements OnInit {
       this.loadGroupById();
     }
 
+    this.showSpinner()
+
   }
 
   /**
@@ -166,7 +168,6 @@ export class DialogAddGroupComponent implements OnInit {
   showSpinner(){
     this.spinner.show()
     setTimeout(() => {
-      /** spinner ends after 5 seconds */
       this.spinner.hide();
     }, 1000);
   }

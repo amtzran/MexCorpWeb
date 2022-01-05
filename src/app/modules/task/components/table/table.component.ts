@@ -20,8 +20,8 @@ export class TableComponent implements OnInit {
   tasks: any = []
   calendarOptions!: CalendarOptions
   // references the #calendar in the template
-  @ViewChild('calendar') calendarComponent!: FullCalendarComponent;
-  @ViewChild('external') external!: ElementRef;
+  //@ViewChild('calendar') calendarComponent!: FullCalendarComponent;
+  //@ViewChild('external') external!: ElementRef;
 
   constructor(private taskService: TaskService,
               private dialog: MatDialog) {
@@ -111,18 +111,14 @@ export class TableComponent implements OnInit {
       .subscribe(tasks => {
         tasks.data.forEach(element => {
 
-          // Validate Status
-          if (element.status === "Programado") {
             this.tasks.push({
               id: String(element.id),
               title: element.title,
               start: `${element.initial_date} ${element.initial_hour}`,
               end: `${element.final_date} ${element.final_hour}`,
-              // validation card by status
               backgroundColor: element.color,
               borderColor: element.color
             })
-          }
 
         })
         this.initCalendar()
@@ -183,7 +179,8 @@ export class TableComponent implements OnInit {
     this.taskService.getTaskById(Number(clickInfo.event.id)).subscribe(res => {
       if (res.data.status === 'Programado') {
         this.openDialogTask(true, Number(clickInfo.event.id), false, null, false)
-      } else {
+      }
+      if (res.data.status === 'Finalizado') {
         this.openDialogTask(false, Number(clickInfo.event.id), true, null, false)
       }
     })
@@ -210,7 +207,7 @@ export class TableComponent implements OnInit {
     const dialogRef = this.dialog.open(CrudComponent, {
       autoFocus: false,
       disableClose: true,
-      width: '50vw',
+      width: '250vw',
       data: {edit: edit, idTask: idTask, info: info, calendar, eventDrag: eventDrag}
     });
     dialogRef.afterClosed().subscribe(res => {

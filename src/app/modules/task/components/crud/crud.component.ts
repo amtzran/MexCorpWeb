@@ -1,4 +1,4 @@
-import {Component, Inject, OnInit} from '@angular/core';
+import {Component, Inject, OnInit, ViewChild} from '@angular/core';
 import {FormBuilder, FormGroup, Validators} from "@angular/forms";
 import {Customer} from "../../../customer/customers/interfaces/customer.interface";
 import {SharedService} from "../../../../shared/services/shared.service";
@@ -8,7 +8,10 @@ import {TaskService} from "../../services/task.service";
 import {Employee, JobCenter} from "../../../employee/interfaces/employee.interface";
 import {CalendarDate, WorkType} from "../../models/task.interface";
 import {DateService} from "../../../../core/utils/date.service";
-import {DoorType} from "../../../customer/doors/interfaces/door.interface";
+import {Door, DoorType} from "../../../customer/doors/interfaces/door.interface";
+import {MatTableDataSource} from "@angular/material/table";
+import {MatPaginator} from "@angular/material/paginator";
+import {MatSort} from "@angular/material/sort";
 
 @Component({
   selector: 'app-crud',
@@ -36,6 +39,17 @@ export class CrudComponent implements OnInit {
   employees: Employee[] = [];
   workTypes: WorkType[] =[];
   doorTypes:  DoorType[] = [];
+
+  /**
+   * Table Access Files
+   */
+  displayedColumns: string[] = ['id', 'folio', 'name', 'door_type_name', 'options'];
+  dataSource!: MatTableDataSource<Door>;
+  totalItems!: number;
+  pageSize = 30;
+  doorPaginateForm!: FormGroup;
+  @ViewChild(MatPaginator, {static: true}) paginator!: MatPaginator;
+  @ViewChild(MatSort) sort!: MatSort;
 
   constructor(
     private fb: FormBuilder,
@@ -91,6 +105,11 @@ export class CrudComponent implements OnInit {
       this.loadTaskFormDate()
     }
 
+    // Assign the data to the data source for the table to render
+    this.dataSource = new MatTableDataSource();
+    /*Formulario*/
+    //this.loadDoorFilterForm();
+    if (this.task.info) this.getDoorsPaginator(this.paginator);
   }
 
   /**
@@ -235,6 +254,43 @@ export class CrudComponent implements OnInit {
         }
       }
     )
+  }
+
+  getDoorsPaginator(event: any) {
+    /*const paginator: MatPaginator = event;
+    this.doorPaginateForm.get('page')?.setValue(paginator.pageIndex + 1);*/
+    this._taskService.getTaskByIdDoors(this.task.idTask)
+      .subscribe(task => {
+        this.dataSource.data = task.data
+        // TODO : Check Paginate
+        //this.totalItems = task.meta.total;
+      })
+  }
+
+
+  ngAfterViewInit() {
+    this.dataSource.sort = this.sort;
+  }
+
+  applyFilter(event: Event) {
+    const filterValue = (event.target as HTMLInputElement).value;
+    this.dataSource.filter = filterValue.trim().toLowerCase();
+
+    if (this.dataSource.paginator) {
+      this.dataSource.paginator.firstPage();
+    }
+  }
+
+ /* /!* Método que permite iniciar los filtros de rutas*!/
+  loadDoorFilterForm(): void {
+    this.doorPaginateForm = this.fb.group({
+      page: [],
+      page_size: this.pageSize
+    })
+  }*/
+
+  viewPdf(reportPdf: string){
+    window.open(reportPdf)
   }
 
   /**

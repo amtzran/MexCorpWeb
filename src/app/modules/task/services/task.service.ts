@@ -5,7 +5,7 @@ import {environment} from "../../../../environments/environment";
 import {CalendarDate, ModelTask, ModelWorkType, Task, TaskDetail} from "../models/task.interface";
 import {ModelCustomer} from "../../customer/customers/interfaces/customer.interface";
 import {Employee, ModelEmployee, ModelJobCenter} from "../../employee/interfaces/employee.interface";
-import {ModelDoorType} from "../../customer/doors/interfaces/door.interface";
+import {Door, DoorDetailTask, ModelDoorType} from "../../customer/doors/interfaces/door.interface";
 
 @Injectable({
   providedIn: 'root'
@@ -18,6 +18,11 @@ export class TaskService {
   // Get Task
   getTaskById(id: number) : Observable<TaskDetail> {
     return this.http.get<TaskDetail>(`${this.baseUrl}/tasks/${id}`)
+  }
+
+  // Get Task By Doors
+  getTaskByIdDoors(id: number) : Observable<DoorDetailTask> {
+    return this.http.get<DoorDetailTask>(`${this.baseUrl}/tasks-doors-finished/${id}`)
   }
 
   // Get Tasks
