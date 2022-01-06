@@ -10,6 +10,7 @@ import {ModalResponse} from "../../../../../core/utils/ModalResponse";
 import {CrudComponent} from "../../components/crud/crud.component";
 import {SharedService} from "../../../../../shared/services/shared.service";
 import {ConfirmComponent} from "../../../../../shared/components/confirm/confirm.component";
+import {NgxSpinnerService} from "ngx-spinner";
 
 @Component({
   selector: 'app-list',
@@ -29,7 +30,8 @@ export class ListComponent implements AfterViewInit, OnInit {
   constructor( private customerService: CustomerServiceService,
                private formBuilder: FormBuilder,
                private dialog : MatDialog,
-               private sharedService: SharedService
+               private sharedService: SharedService,
+               private spinner: NgxSpinnerService,
                ) {}
 
   ngOnInit() {
@@ -51,11 +53,17 @@ export class ListComponent implements AfterViewInit, OnInit {
   getCustomersPaginator(event: any) : void {
     const paginator: MatPaginator = event;
     this.customerFilterForm.get('page')?.setValue(paginator.pageIndex + 1);
+    this.spinner.show()
     this.customerService.getCustomers(this.customerFilterForm.value)
       .subscribe((customers : ModelCustomer) => {
+        this.spinner.hide()
         this.dataSource.data = customers.data
         this.totalItems = customers.meta.total;
-      })
+        }, (error => {
+          this.spinner.hide()
+          this.sharedService.errorDialog()
+        })
+      )
   }
 
   applyFilter(event: Event) {

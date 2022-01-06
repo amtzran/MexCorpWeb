@@ -5,6 +5,7 @@ import {EmployeeService} from "../../services/employee.service";
 import {Job, JobCenter} from "../../interfaces/employee.interface";
 import {ModalResponse} from "../../../../core/utils/ModalResponse";
 import {SharedService} from "../../../../shared/services/shared.service";
+import {NgxSpinnerService} from "ngx-spinner";
 
 @Component({
   selector: 'app-crud',
@@ -33,6 +34,7 @@ export class CrudComponent implements OnInit {
     private sharedService: SharedService,
     private dialogRef: MatDialogRef<CrudComponent>,
     private _employeeService: EmployeeService,
+    private spinner: NgxSpinnerService,
     @Inject(MAT_DIALOG_DATA) public employee : {idEmployee: number, edit: boolean, info: boolean}
   ) { }
 
@@ -73,7 +75,9 @@ export class CrudComponent implements OnInit {
    * Get detail retrieve of one group.
    */
   loadEmployeeById(): void{
+    this.spinner.show()
     this._employeeService.getEmployeeById(this.employee.idEmployee).subscribe(response => {
+      this.spinner.hide()
       delete response.data.id;
       delete response.data.user_id;
       delete response.data.created_at;
@@ -83,7 +87,11 @@ export class CrudComponent implements OnInit {
       delete response.data.user_name;
       delete response.data.avatar;
       this.employeeForm.setValue(response.data);
-    })
+      }, (error => {
+        this.spinner.hide()
+        this.sharedService.errorDialog()
+      } )
+    )
   }
 
   /**
@@ -105,30 +113,45 @@ export class CrudComponent implements OnInit {
    * Create employee.
    */
   addEmployee(): void {
-    this.submit = true;
-    if(this.employeeForm.invalid){
-      this.sharedService.showSnackBar('Los campos con * son obligatorios.');
-      return
-    }
+    this.validateForm()
+    this.spinner.show()
     this._employeeService.addEmployee(this.employeeForm.value).subscribe(response => {
+      this.spinner.hide()
       this.sharedService.showSnackBar('Se ha agregado correctamente el empleado.');
       this.dialogRef.close(ModalResponse.UPDATE);
-    })
+      }, (error => {
+        this.spinner.hide()
+        this.sharedService.errorDialog()
+      } )
+    )
   }
 
   /**
    * Update a employee.
    */
   updateEmployee(): void {
+    this.validateForm()
+    this.spinner.show()
+    this._employeeService.updateEmployee(this.employee.idEmployee, this.employeeForm.value).subscribe(response => {
+      this.spinner.hide()
+      this.sharedService.showSnackBar(`Se ha actualizado correctamente el empleado: ${response.data.name}` );
+      this.dialogRef.close(ModalResponse.UPDATE);
+      }, (error => {
+        this.spinner.hide()
+        this.sharedService.errorDialog()
+      } )
+    )
+  }
+
+  /**
+   * Validate form in general
+   */
+  validateForm(){
     this.submit = true;
     if(this.employeeForm.invalid){
       this.sharedService.showSnackBar('Los campos con * son obligatorios.');
       return
     }
-    this._employeeService.updateEmployee(this.employee.idEmployee, this.employeeForm.value).subscribe(response => {
-      this.sharedService.showSnackBar(`Se ha actualizado correctamente el empleado: ${response.data.name}` );
-      this.dialogRef.close(ModalResponse.UPDATE);
-    })
   }
 
   /**

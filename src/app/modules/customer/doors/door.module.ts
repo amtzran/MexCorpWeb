@@ -8,6 +8,7 @@ import { ReactiveFormsModule} from "@angular/forms";
 import { HomeComponent } from './pages/home/home.component';
 import { ListComponent } from './pages/list/list.component';
 import { CrudComponent} from "./components/crud/crud.component";
+import {NgxSpinnerModule} from "ngx-spinner";
 
 
 @NgModule({
@@ -16,12 +17,13 @@ import { CrudComponent} from "./components/crud/crud.component";
     ListComponent,
     CrudComponent
   ],
-  imports: [
-    CommonModule,
-    DoorRoutingModule,
-    MaterialModule,
-    FlexLayoutModule,
-    ReactiveFormsModule
-  ]
+    imports: [
+        CommonModule,
+        DoorRoutingModule,
+        MaterialModule,
+        FlexLayoutModule,
+        ReactiveFormsModule,
+        NgxSpinnerModule
+    ]
 })
 export class DoorModule { }

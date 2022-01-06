@@ -13,6 +13,7 @@ import {CrudComponent} from "../crud/crud.component";
 import {ActivatedRoute} from "@angular/router";
 import {CustomerTitle} from "../../../customers/interfaces/customer.interface";
 import {CustomerServiceService} from "../../../customers/services/customer-service.service";
+import {NgxSpinnerService} from "ngx-spinner";
 
 @Component({
   selector: 'app-table',
@@ -39,7 +40,8 @@ export class TableComponent implements OnInit {
               private dialog: MatDialog,
               private sharedService: SharedService,
               private activateRoute: ActivatedRoute,
-              private customerService: CustomerServiceService) {
+              private customerService: CustomerServiceService,
+              private spinner: NgxSpinnerService,) {
   }
 
   ngOnInit(): void {
@@ -68,11 +70,17 @@ export class TableComponent implements OnInit {
   getContactsPaginator(event: any) {
     const paginator: MatPaginator = event;
     this.contactPaginateForm.get('page')?.setValue(paginator.pageIndex + 1);
+    this.spinner.show()
     this.contactService.getContacts(this.contactPaginateForm.value, Number(this.idCustomer))
       .subscribe(contacts => {
+        this.spinner.hide()
         this.dataSource.data = contacts.data
         this.totalItems = contacts.meta.total;
-      })
+        }, (error => {
+          this.spinner.hide()
+          this.sharedService.errorDialog()
+        })
+      )
   }
 
   applyFilter(event: Event) {

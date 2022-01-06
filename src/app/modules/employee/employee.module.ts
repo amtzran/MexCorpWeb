@@ -9,6 +9,7 @@ import { FlexLayoutModule} from "@angular/flex-layout";
 import { ReactiveFormsModule} from "@angular/forms";
 import { CrudComponent } from './components/crud/crud.component';
 import { EmployeeComponent } from './employee.component';
+import {NgxSpinnerModule} from "ngx-spinner";
 
 
 @NgModule({
@@ -18,12 +19,13 @@ import { EmployeeComponent } from './employee.component';
     CrudComponent,
     EmployeeComponent
   ],
-  imports: [
-    CommonModule,
-    EmployeeRoutingModule,
-    MaterialModule,
-    FlexLayoutModule,
-    ReactiveFormsModule
-  ]
+    imports: [
+        CommonModule,
+        EmployeeRoutingModule,
+        MaterialModule,
+        FlexLayoutModule,
+        ReactiveFormsModule,
+        NgxSpinnerModule
+    ]
 })
 export class EmployeeModule { }

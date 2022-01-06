@@ -16,6 +16,7 @@ export class CrudComponent implements OnInit {
 
   /*Formulario*/
   profileForm!: FormGroup;
+  nameProfileForm!: FormGroup;
 
   /*Titulo Modal*/
   title: string = 'Usuario';
@@ -32,10 +33,11 @@ export class CrudComponent implements OnInit {
   ngOnInit(): void {
     /*Formulario*/
     this.loadProfileForm();
+    this.loadNameProfileForm()
   }
 
   /**
-   * Load the form group.
+   * Load the form Profile Password.
    */
   loadProfileForm():void{
     this.profileForm = this.fb.group({
@@ -43,6 +45,41 @@ export class CrudComponent implements OnInit {
       current_password:[{value:'', disabled:false}, [Validators.required, Validators.minLength(8)]],
       new_password:[{value:'', disabled:false}, [Validators.required, Validators.minLength(8)]],
     });
+  }
+
+  /**
+   * Load the form Profile Name.
+   */
+  loadNameProfileForm():void{
+    this.nameProfileForm = this.fb.group({
+      name:[{value:this.data.name, disabled:false}, Validators.required],
+    });
+  }
+
+  changePassword(){
+    this.submit = true;
+    if(this.profileForm.invalid){
+      this.sharedService.showSnackBar('Los campos con * son obligatorios.');
+      return
+    }
+
+    this.authService.changePasswordUser(this.profileForm.value).subscribe(response => {
+      this.sharedService.showSnackBar(`${response.message}` );
+      this.dialogRef.close(ModalResponse.UPDATE);
+    })
+  }
+
+  changeName(){
+    this.submit = true;
+    if(this.nameProfileForm.invalid){
+      this.sharedService.showSnackBar('Los campos con * son obligatorios.');
+      return
+    }
+    this.authService.changeNameUser(this.nameProfileForm.value).subscribe(response => {
+      this.sharedService.showSnackBar(`${response.message}` );
+      this.dialogRef.close(ModalResponse.UPDATE);
+
+    })
   }
 
   /**
@@ -59,20 +96,6 @@ export class CrudComponent implements OnInit {
    */
   close(): void{
     this.dialogRef.close(ModalResponse.CLOSE);
-  }
-
-
-  changePassword(){
-    this.submit = true;
-    if(this.profileForm.invalid){
-      this.sharedService.showSnackBar('Los campos con * son obligatorios.');
-      return
-    }
-    //this.profileForm.setValue({email: this.data.email})
-    this.authService.chanePasswordUser(this.profileForm.value).subscribe(response => {
-      this.sharedService.showSnackBar(`${response.message}` );
-      this.dialogRef.close(ModalResponse.UPDATE);
-    })
   }
 
 }

@@ -13,6 +13,7 @@ import {CommentService} from "../../services/comment.service";
 import {CommentCustomer} from "../../models/comment.interface";
 import {CustomerTitle} from "../../../customers/interfaces/customer.interface";
 import {CustomerServiceService} from "../../../customers/services/customer-service.service";
+import {NgxSpinnerService} from "ngx-spinner";
 
 @Component({
   selector: 'app-table',
@@ -40,7 +41,8 @@ export class TableComponent implements OnInit {
               private dialog: MatDialog,
               private sharedService: SharedService,
               private activateRoute: ActivatedRoute,
-              private customerService: CustomerServiceService) {
+              private customerService: CustomerServiceService,
+              private spinner: NgxSpinnerService,) {
   }
 
   ngOnInit(): void {
@@ -69,11 +71,17 @@ export class TableComponent implements OnInit {
   getCommentsPaginator(event: any) {
     const paginator: MatPaginator = event;
     this.commentPaginateForm.get('page')?.setValue(paginator.pageIndex + 1);
+    this.spinner.show()
     this.commentService.getComments(this.commentPaginateForm.value, Number(this.idCustomer))
       .subscribe(comments => {
+        this.spinner.hide()
         this.dataSource.data = comments.data
         this.totalItems = comments.meta.total;
-      })
+        }, (error => {
+          this.spinner.hide()
+          this.sharedService.errorDialog()
+        } )
+      )
   }
 
   applyFilter(event: Event) {

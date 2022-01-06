@@ -8,6 +8,7 @@ import {MaterialModule} from "../../../material/material.module";
 import {FlexLayoutModule} from "@angular/flex-layout";
 import {ReactiveFormsModule} from "@angular/forms";
 import {CommentComponent} from "./comment.component";
+import {NgxSpinnerModule} from "ngx-spinner";
 
 
 @NgModule({
@@ -16,12 +17,13 @@ import {CommentComponent} from "./comment.component";
     CrudComponent,
     CommentComponent
   ],
-  imports: [
-    CommonModule,
-    CommentRoutingModule,
-    MaterialModule,
-    FlexLayoutModule,
-    ReactiveFormsModule
-  ]
+    imports: [
+        CommonModule,
+        CommentRoutingModule,
+        MaterialModule,
+        FlexLayoutModule,
+        ReactiveFormsModule,
+        NgxSpinnerModule
+    ]
 })
 export class CommentModule { }

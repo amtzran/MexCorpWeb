@@ -5,6 +5,7 @@ import {MAT_DIALOG_DATA, MatDialogRef} from "@angular/material/dialog";
 import {SharedService} from "../../../../../shared/services/shared.service";
 import {ModalResponse} from "../../../../../core/utils/ModalResponse";
 import {ContactService} from "../../services/contact.service";
+import {NgxSpinnerService} from "ngx-spinner";
 
 @Component({
   selector: 'app-crud',
@@ -31,6 +32,7 @@ export class CrudComponent implements OnInit {
     private dialogRef: MatDialogRef<CrudComponent>,
     private _contactService: ContactService,
     private sharedService: SharedService,
+    private spinner: NgxSpinnerService,
     @Inject(MAT_DIALOG_DATA) public contact : {idContact: number, edit: boolean, info: boolean, idCustomer: number}
   ) { }
 
@@ -59,12 +61,18 @@ export class CrudComponent implements OnInit {
    * Get detail retrieve of one group.
    */
   loadContractById(): void{
+    this.spinner.show()
     this._contactService.getContactById(this.contact.idContact).subscribe(response => {
+      this.spinner.hide()
       delete response.data.id;
       delete response.data.created_at;
       delete response.data.updated_at;
       this.contactForm.setValue(response.data);
-    })
+      }, (error => {
+        this.spinner.hide()
+        this.sharedService.errorDialog()
+      })
+    )
   }
 
   /**
@@ -84,30 +92,45 @@ export class CrudComponent implements OnInit {
    * Create Contact.
    */
   addContact(): void {
-    this.submit = true;
-    if(this.contactForm.invalid){
-      this.sharedService.showSnackBar('Los campos con * son obligatorios.');
-      return
-    }
+    this.validateForm()
+    this.spinner.show()
     this._contactService.addContact(this.contactForm.value).subscribe(response => {
+      this.spinner.hide()
       this.sharedService.showSnackBar(`Se ha agregado correctamente el ${this.menuTitle}.`);
       this.dialogRef.close(ModalResponse.UPDATE);
-    })
+      }, (error => {
+        this.spinner.hide()
+        this.sharedService.errorDialog()
+      })
+    )
   }
 
   /**
    * Update a contact.
    */
   updateContact(): void {
+    this.validateForm()
+    this.spinner.show()
+    this._contactService.updateContact(this.contact.idContact, this.contactForm.value).subscribe(response => {
+      this.spinner.hide()
+      this.sharedService.showSnackBar(`Se ha actualizado correctamente el ${this.menuTitle}: ${response.data.name}` );
+      this.dialogRef.close(ModalResponse.UPDATE);
+      }, (error => {
+        this.spinner.hide()
+        this.sharedService.errorDialog()
+      })
+    )
+  }
+
+  /**
+   * Validate form in general
+   */
+  validateForm(){
     this.submit = true;
     if(this.contactForm.invalid){
       this.sharedService.showSnackBar('Los campos con * son obligatorios.');
       return
     }
-    this._contactService.updateContact(this.contact.idContact, this.contactForm.value).subscribe(response => {
-      this.sharedService.showSnackBar(`Se ha actualizado correctamente el ${this.menuTitle}: ${response.data.name}` );
-      this.dialogRef.close(ModalResponse.UPDATE);
-    })
   }
 
   /**

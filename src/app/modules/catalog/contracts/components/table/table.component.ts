@@ -53,13 +53,16 @@ export class TableComponent implements AfterViewInit, OnInit {
     this.contractPaginateForm.get('page')?.setValue(paginator.pageIndex + 1);
     this.spinner.show()
     this.contractService.getContracts(this.contractPaginateForm.value)
-      .subscribe((contracts: ModelContract) => {
+      .subscribe(
+        (contracts: ModelContract) => {
+        this.spinner.hide()
         this.dataSource.data = contracts.data
         this.totalItems = contracts.meta.total;
-        }, (error => {
+        },
+        (error => {
           this.spinner.hide()
           this.sharedService.errorDialog()
-        } )
+        })
       )
   }
 

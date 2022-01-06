@@ -14,6 +14,7 @@ import {FlexLayoutModule} from "@angular/flex-layout";
 import {ReactiveFormsModule} from "@angular/forms";
 import {MaterialModule} from "../../material/material.module";
 import { ConfirmEditComponent } from './components/confirm-edit/confirm-edit.component';
+import {NgxSpinnerModule} from "ngx-spinner";
 
 FullCalendarModule.registerPlugins([ // register FullCalendar plugins
   dayGridPlugin,
@@ -29,13 +30,14 @@ FullCalendarModule.registerPlugins([ // register FullCalendar plugins
     CrudComponent,
     ConfirmEditComponent
   ],
-  imports: [
-    CommonModule,
-    TaskRoutingModule,
-    FullCalendarModule,
-    MaterialModule,
-    FlexLayoutModule,
-    ReactiveFormsModule
-  ]
+    imports: [
+        CommonModule,
+        TaskRoutingModule,
+        FullCalendarModule,
+        MaterialModule,
+        FlexLayoutModule,
+        ReactiveFormsModule,
+        NgxSpinnerModule
+    ]
 })
 export class TaskModule { }

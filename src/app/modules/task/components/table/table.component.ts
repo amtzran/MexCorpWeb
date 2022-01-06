@@ -8,6 +8,8 @@ import {CrudComponent} from "../crud/crud.component";
 import {EventApi, EventDropArg} from "@fullcalendar/core";
 import dayGridPlugin from "@fullcalendar/daygrid";
 import interactionPlugin from "@fullcalendar/interaction";
+import {NgxSpinnerService} from "ngx-spinner";
+import {SharedService} from "../../../../shared/services/shared.service";
 
 @Component({
   selector: 'app-table',
@@ -24,7 +26,9 @@ export class TableComponent implements OnInit {
   @ViewChild('external') external!: ElementRef;
 
   constructor(private taskService: TaskService,
-              private dialog: MatDialog) {
+              private dialog: MatDialog,
+              private spinner: NgxSpinnerService,
+              private sharedService: SharedService) {
   }
 
   ngOnInit(): void {
@@ -87,7 +91,6 @@ export class TableComponent implements OnInit {
           click: this.customFunction.bind(this)
         }
       },
-      //eventColor: '#378006'
     };
   }
 
@@ -110,10 +113,11 @@ export class TableComponent implements OnInit {
    * Service for tasks in Calendar
    */
   initTaskCalendar(): void {
+    this.spinner.show()
     this.taskService.getTasks()
       .subscribe(tasks => {
+        this.spinner.hide()
         tasks.data.forEach(element => {
-
             this.tasks.push({
               id: String(element.id),
               title: element.title,
@@ -122,10 +126,13 @@ export class TableComponent implements OnInit {
               backgroundColor: element.color,
               borderColor: element.color
             })
-
         })
         this.initCalendar()
-      })
+        }, (error => {
+          this.spinner.hide()
+          this.sharedService.errorDialog()
+        } )
+      )
   }
 
 

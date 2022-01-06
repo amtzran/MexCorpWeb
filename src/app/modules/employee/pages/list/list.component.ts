@@ -11,6 +11,7 @@ import {CrudComponent} from "../../components/crud/crud.component";
 import {SharedService} from "../../../../shared/services/shared.service";
 import {ConfirmComponent} from "../../../../shared/components/confirm/confirm.component";
 import {ActiveComponent} from "../../../../shared/components/active/active.component";
+import {NgxSpinnerService} from "ngx-spinner";
 
 @Component({
   selector: 'app-list',
@@ -30,7 +31,8 @@ export class ListComponent implements OnInit {
   constructor(private employeeService: EmployeeService,
               private formBuilder: FormBuilder,
               private dialog: MatDialog,
-              private sharedService: SharedService) {
+              private sharedService: SharedService,
+              private spinner: NgxSpinnerService,) {
   }
 
   ngOnInit(): void {
@@ -48,11 +50,17 @@ export class ListComponent implements OnInit {
   getEmployeesPaginator(event: any) {
     const paginator: MatPaginator = event;
     this.employeePaginateForm.get('page')?.setValue(paginator.pageIndex + 1);
+    this.spinner.show()
     this.employeeService.getEmployees(this.employeePaginateForm.value)
       .subscribe(employees => {
+        this.spinner.hide()
         this.dataSource.data = employees.data
         this.totalItems = employees.meta.total;
-      })
+        }, (error => {
+          this.spinner.hide()
+          this.sharedService.errorDialog()
+        } )
+      )
   }
 
   applyFilter(event: Event) {

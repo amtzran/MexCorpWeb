@@ -5,6 +5,7 @@ import {ModalResponse} from "../../../../../core/utils/ModalResponse";
 import {DoorService} from "../../services/door.service";
 import {DoorType} from "../../interfaces/door.interface";
 import {SharedService} from "../../../../../shared/services/shared.service";
+import {NgxSpinnerService} from "ngx-spinner";
 
 @Component({
   selector: 'app-crud',
@@ -34,6 +35,7 @@ export class CrudComponent implements OnInit {
     private sharedService: SharedService,
     private dialogRef: MatDialogRef<CrudComponent>,
     private _dooService: DoorService,
+    private spinner: NgxSpinnerService,
     @Inject(MAT_DIALOG_DATA) public door : {idDoor: number, edit: boolean, info: boolean, idCustomer: number}
   ) { }
 
@@ -56,7 +58,16 @@ export class CrudComponent implements OnInit {
 
     if(this.door.idDoor && !this.door.edit){
       this.title = 'Información del Acceso';
-      this._dooService.getDoorById(this.door.idDoor).subscribe(res =>{this.imageFile = res.data.photo})
+      this._dooService.getDoorById(this.door.idDoor).subscribe(
+        res => {
+          this.imageFile = res.data.photo
+          this.spinner.hide()
+        },
+        (error => {
+          this.spinner.hide()
+          this.sharedService.errorDialog()
+        })
+      );
       this.doorForm.updateValueAndValidity();
     }
 
@@ -70,7 +81,9 @@ export class CrudComponent implements OnInit {
    * Get detail retrieve of one group.
    */
   loadGroupById(): void{
+    this.spinner.show()
     this._dooService.getDoorById(this.door.idDoor).subscribe(response => {
+      this.spinner.hide()
       delete response.data.id;
       delete response.data.folio;
       delete response.data.created_at;
@@ -79,7 +92,11 @@ export class CrudComponent implements OnInit {
       delete response.data.door_type_name;
       delete response.data.is_active;
       this.doorForm.setValue(response.data);
-    })
+      }, (error => {
+        this.spinner.hide()
+        this.sharedService.errorDialog()
+      } )
+    )
   }
 
   /**
@@ -101,14 +118,12 @@ export class CrudComponent implements OnInit {
    * Create access.
    */
   addDoor(): void {
-    this.submit = true;
-    if(this.doorForm.invalid){
-      this.sharedService.showSnackBar('Los campos con * son obligatorios.');
-      return
-    }
+    this.validateForm()
     this.doorForm.addControl('customer', new FormControl(this.door.idCustomer))
     this.createFormData(this.doorForm.value);
+    this.spinner.show()
     this._dooService.addDoor(this.fileDataForm).subscribe(response => {
+      this.spinner.hide()
       this.sharedService.showSnackBar('Se ha agregado correctamente el acceso.');
       this.dialogRef.close(ModalResponse.UPDATE);
     })
@@ -118,13 +133,11 @@ export class CrudComponent implements OnInit {
    * Update a access.
    */
   updateDoor(): void {
-    this.submit = true;
-    if(this.doorForm.invalid){
-      this.sharedService.showSnackBar('Los campos con * son obligatorios.');
-      return
-    }
+    this.validateForm()
     this.createFormData(this.doorForm.value);
+    this.spinner.show()
     this._dooService.updateDoor(this.door.idDoor, this.fileDataForm).subscribe(response => {
+      this.spinner.hide()
       this.sharedService.showSnackBar(`Se ha actualizado correctamente el acceso: ${response.data.name}` );
       this.dialogRef.close(ModalResponse.UPDATE);
     })
@@ -135,6 +148,10 @@ export class CrudComponent implements OnInit {
     this.doorForm.get('photo')?.setValue(e.target.files[0])
   }
 
+  /**
+   * Method convert formGroup a DataForm and wor with files
+   * @param formValue
+   */
   createFormData(formValue:any){
 
     for(const key of Object.keys(formValue)){
@@ -153,6 +170,17 @@ export class CrudComponent implements OnInit {
 
     }
 
+  }
+
+  /**
+   * Validate form in general
+   */
+  validateForm(){
+    this.submit = true;
+    if(this.doorForm.invalid){
+      this.sharedService.showSnackBar('Los campos con * son obligatorios.');
+      return
+    }
   }
 
   /**

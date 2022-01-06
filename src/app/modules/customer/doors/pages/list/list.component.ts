@@ -13,6 +13,7 @@ import {CrudComponent} from "../../components/crud/crud.component";
 import {SharedService} from "../../../../../shared/services/shared.service";
 import {ConfirmComponent} from "../../../../../shared/components/confirm/confirm.component";
 import {Customer, CustomerDetail, CustomerTitle} from "../../../customers/interfaces/customer.interface";
+import {NgxSpinnerService} from "ngx-spinner";
 
 @Component({
   selector: 'app-list',
@@ -44,7 +45,8 @@ export class ListComponent implements OnInit {
               private formBuilder: FormBuilder,
               private dialog : MatDialog,
               private sharedService: SharedService,
-              private activateRoute: ActivatedRoute) {
+              private activateRoute: ActivatedRoute,
+              private spinner: NgxSpinnerService,) {
 
   }
 
@@ -75,11 +77,17 @@ export class ListComponent implements OnInit {
   getDoorsPaginator(event: any){
     const paginator: MatPaginator = event;
     this.doorPaginateForm.get('page')?.setValue(paginator.pageIndex + 1);
+    this.spinner.show()
     this.doorService.getDoors(this.doorPaginateForm.value,  this.idCustomer )
       .subscribe(doors => {
+        this.spinner.hide()
         this.dataSource.data = doors.data
         this.totalItems = doors.meta.total;
-      } )
+        }, (error => {
+          this.spinner.hide()
+          this.sharedService.errorDialog()
+        } )
+      )
   }
 
   applyFilter(event: Event) {

@@ -40,6 +40,10 @@ export interface ChangePassword {
   new_password: string
 }
 
+export interface NameUser {
+  name: string,
+}
+
 export interface MessagePassword {
   message: string
 }

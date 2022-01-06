@@ -12,6 +12,7 @@ import {Door, DoorType} from "../../../customer/doors/interfaces/door.interface"
 import {MatTableDataSource} from "@angular/material/table";
 import {MatPaginator} from "@angular/material/paginator";
 import {MatSort} from "@angular/material/sort";
+import {NgxSpinnerService} from "ngx-spinner";
 
 @Component({
   selector: 'app-crud',
@@ -57,6 +58,7 @@ export class CrudComponent implements OnInit {
     private dialogRef: MatDialogRef<CrudComponent>,
     private _taskService: TaskService,
     private _dateService: DateService,
+    private spinner: NgxSpinnerService,
     @Inject(MAT_DIALOG_DATA) public task : {
       idTask: number,
       edit: boolean,
@@ -119,7 +121,9 @@ export class CrudComponent implements OnInit {
    * Get detail retrieve of one Task.
    */
   loadTaskById(): void{
+    this.spinner.show()
     this._taskService.getTaskById(this.task.idTask).subscribe(response => {
+      this.spinner.hide()
       // Data Doors by Customer
       this.loadAccess(response.data.customer_id)
       this.taskForm.patchValue({
@@ -135,14 +139,20 @@ export class CrudComponent implements OnInit {
         initial_date: this._dateService.getFormatDateSetInputRangePicker(response.data.initial_date),
         final_date: this._dateService.getFormatDateSetInputRangePicker(response.data.final_date)
       })
-    })
+    }, (error => {
+        this.spinner.hide()
+        this.sharedService.errorDialog()
+      })
+    )
   }
 
   /**
    * Get detail retrieve of one EventDrag Task.
    */
   loadTaskByIdDrag(): void{
+    this.spinner.show()
     this._taskService.getTaskById(this.task.idTask).subscribe(response => {
+      this.spinner.hide()
       // Data Doors by Customer
       this.loadAccess(response.data.customer_id)
       this.taskForm.patchValue({
@@ -158,7 +168,11 @@ export class CrudComponent implements OnInit {
         initial_date: this.task.calendar.initial_date,
         final_date: this.task.calendar.final_date
       })
-    })
+      }, (error => {
+        this.spinner.hide()
+        this.sharedService.errorDialog()
+      })
+    )
   }
 
   /**
@@ -204,10 +218,16 @@ export class CrudComponent implements OnInit {
    */
   addTask(): void {
     this.setValueSubmit()
+    this.spinner.show()
     this._taskService.addTask(this.taskForm.value).subscribe(response => {
+      this.spinner.hide()
       this.sharedService.showSnackBar(`Se ha agregado correctamente la Tarea: ${response.data.title}`);
       this.dialogRef.close(ModalResponse.UPDATE);
-    })
+      }, (error => {
+        this.spinner.hide()
+        this.sharedService.errorDialog()
+      })
+    )
   }
 
   /**
@@ -215,10 +235,16 @@ export class CrudComponent implements OnInit {
    */
   updateTask(): void {
     this.setValueSubmit()
+    this.spinner.show()
     this._taskService.updateTask(this.task.idTask, this.taskForm.value).subscribe(response => {
+      this.spinner.hide()
       this.sharedService.showSnackBar(`Se ha actualizado correctamente la Tarea: ${response.data.title}` );
       this.dialogRef.close(ModalResponse.UPDATE);
-    })
+      }, (error => {
+        this.spinner.hide()
+        this.sharedService.errorDialog()
+      })
+    )
   }
 
   /**
@@ -266,12 +292,18 @@ export class CrudComponent implements OnInit {
   getDoorsPaginator(event: any) {
     /*const paginator: MatPaginator = event;
     this.doorPaginateForm.get('page')?.setValue(paginator.pageIndex + 1);*/
+    this.spinner.show()
     this._taskService.getTaskByIdDoors(this.task.idTask)
       .subscribe(task => {
+        this.spinner.hide()
         this.dataSource.data = task.data
         // TODO : Check Paginate
         //this.totalItems = task.meta.total;
-      })
+        }, (error => {
+          this.spinner.hide()
+          this.sharedService.errorDialog()
+        })
+      )
   }
 
 
