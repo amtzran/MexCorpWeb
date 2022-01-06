@@ -1,5 +1,4 @@
 <h4 mat-dialog-title class="title-subsection">{{title}}</h4>
-<ngx-spinner></ngx-spinner>
 <mat-divider></mat-divider>
 <br>
 <mat-dialog-content class="mat-typography" [formGroup]="groupForm">
@@ -95,7 +94,7 @@
 
                 <mat-toolbar>
                   <!-- Readonly Input to show File names -->
-                  <input matInput readonly name="memberContactNo">
+                  <input matInput readonly name="memberContactNo" placeholder="Logo">
                   <!-- Browse Button -->
                   <button mat-flat-button color="primary">
                     <mat-icon>image</mat-icon>

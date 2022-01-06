@@ -1,16 +1,3 @@
-.title-subsection{
-  color: rgb(50,68,150);
-  font-weight: bold;
-  font-size: 1rem;
-  margin-top: 1rem;
-  margin-bottom: 1rem;
-  text-align: center;
-}
-
-.mat-form-field {
-  width: 100%;
-}
-
 .mat-toolbar-single-row {
   height: auto !important;
   background: transparent;

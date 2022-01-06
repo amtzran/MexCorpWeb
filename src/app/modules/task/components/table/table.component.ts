@@ -10,6 +10,8 @@ import dayGridPlugin from "@fullcalendar/daygrid";
 import interactionPlugin from "@fullcalendar/interaction";
 import {NgxSpinnerService} from "ngx-spinner";
 import {SharedService} from "../../../../shared/services/shared.service";
+import {Customer} from "../../../customer/customers/interfaces/customer.interface";
+import {Employee, JobCenter} from "../../../employee/interfaces/employee.interface";
 
 @Component({
   selector: 'app-table',
@@ -25,13 +27,27 @@ export class TableComponent implements OnInit {
   @ViewChild('calendar') calendarComponent!: FullCalendarComponent;
   @ViewChild('external') external!: ElementRef;
 
+  customers: Customer[] = [];
+  jobCenters: JobCenter[] = [];
+  employees: Employee[] = [];
+
   constructor(private taskService: TaskService,
               private dialog: MatDialog,
               private spinner: NgxSpinnerService,
-              private sharedService: SharedService) {
-  }
+              private sharedService: SharedService,
+              private _taskService: TaskService) {}
 
   ngOnInit(): void {
+
+    // Type Customers
+    this._taskService.getCustomers().subscribe(customers => {this.customers = customers.data} )
+
+    // Type Groups
+    this._taskService.getJobCenters().subscribe(jobCenters => {this.jobCenters = jobCenters.data} )
+
+    // Type Employees
+    this._taskService.getEmployees().subscribe(employees => {this.employees = employees.data} )
+
     forwardRef(() => Calendar)
     // Valuers Initials Calendar
     this.initCalendar()
@@ -118,13 +134,16 @@ export class TableComponent implements OnInit {
       .subscribe(tasks => {
         this.spinner.hide()
         tasks.data.forEach(element => {
+          let color = element.color
+          if (element.status === 'Finalizado') color = '#239B56'
+          if (element.status === 'En Proceso') color = '#F39C12'
             this.tasks.push({
               id: String(element.id),
               title: element.title,
               start: `${element.initial_date} ${element.initial_hour}`,
               end: `${element.final_date} ${element.final_hour}`,
-              backgroundColor: element.color,
-              borderColor: element.color
+              backgroundColor: color,
+              borderColor: color
             })
         })
         this.initCalendar()
@@ -190,7 +209,7 @@ export class TableComponent implements OnInit {
       if (res.data.status === 'Programado') {
         this.openDialogTask(true, Number(clickInfo.event.id), false, null, false)
       }
-      if (res.data.status === 'Finalizado') {
+      if (res.data.status === 'Finalizado' || res.data.status === 'En Proceso') {
         this.openDialogTask(false, Number(clickInfo.event.id), true, null, false)
       }
     })
@@ -224,6 +243,18 @@ export class TableComponent implements OnInit {
       this.tasks = []
       this.initTaskCalendar()
     });
+  }
+
+  filterSelectCustomer(idCustomer: number){
+    console.log('eventCustomer')
+  }
+
+  filterSelectJobCenter(idJobCenter: number){
+    console.log('eventJobCenter')
+  }
+
+  filterSelectEmployee(idEmployee: number){
+    console.log('eventEmployee')
   }
 
 }

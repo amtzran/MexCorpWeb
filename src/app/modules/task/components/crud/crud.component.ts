@@ -94,7 +94,6 @@ export class CrudComponent implements OnInit {
     }
 
     if(this.task.idTask && !this.task.edit){
-      this.title = 'Información de la Tarea';
       this.taskForm.updateValueAndValidity();
     }
 
@@ -124,6 +123,7 @@ export class CrudComponent implements OnInit {
     this.spinner.show()
     this._taskService.getTaskById(this.task.idTask).subscribe(response => {
       this.spinner.hide()
+      this.title = `Información de la Tarea | ${response.data.status} | ${response.data.folio}`;
       // Data Doors by Customer
       this.loadAccess(response.data.customer_id)
       this.taskForm.patchValue({
