@@ -180,7 +180,7 @@ export class CrudComponent implements OnInit {
    */
   loadTaskForm():void{
     this.taskForm = this.fb.group({
-      title:[{value:'', disabled:this.task.info}],
+      title:[{value:'', disabled:this.task.info}, Validators.required],
       job_center_id:[{value:'', disabled:this.task.info}, Validators.required],
       customer_id:[{value:'', disabled:this.task.info}, Validators.required],
       employee_id:[{value:'', disabled:this.task.info}, Validators.required],
@@ -191,6 +191,7 @@ export class CrudComponent implements OnInit {
       initial_hour: [{value: '', disabled:this.task.info}, Validators.required],
       final_hour: [{value: '', disabled:this.task.info}, Validators.required],
       comments: [{value: '', disabled:this.task.info},],
+      //multiple_date: [{value: [], disabled:this.task.info},],
     });
   }
 
@@ -210,6 +211,7 @@ export class CrudComponent implements OnInit {
       initial_hour: [{value: this.task.calendar.initial_hour, disabled:this.task.info}, Validators.required],
       final_hour: [{value: this.task.calendar.final_hour, disabled:this.task.info}, Validators.required],
       comments: [{value: '', disabled:this.task.info},],
+      //multiple_date: [{value: [], disabled:this.task.info},],
     });
   }
 

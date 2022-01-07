@@ -29,6 +29,7 @@
     "@fullcalendar/timegrid": "^5.10.1",
     "moment": "^2.29.1",
     "moment-timezone": "^0.5.34",
+    "ngx-multiple-dates": "^13.0.0",
     "ngx-spinner": "^13.0.0",
     "rxjs": "~7.4.0",
     "tslib": "^2.3.0",

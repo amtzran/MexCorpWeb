@@ -130,16 +130,19 @@
                fxLayoutGap="10px">
 
             <mat-form-field fxFlex="50">
-                <mat-label>Enter a date range</mat-label>
-                <mat-date-range-input  [rangePicker]="picker">
-                  <input matStartDate formControlName="initial_date" placeholder="Fecha Inicial">
-                  <input matEndDate formControlName="final_date" placeholder="Fecha Final">
-                </mat-date-range-input>
-                <mat-datepicker-toggle matSuffix [for]="picker"></mat-datepicker-toggle>
-                <mat-date-range-picker #picker></mat-date-range-picker>
 
-                <mat-error>fecha No ingresada correctamente.</mat-error>
-              </mat-form-field>
+              <mat-label>Ingresar Rango Fecha</mat-label>
+              <mat-date-range-input [rangePicker]="picker">
+                <input matStartDate formControlName="initial_date" placeholder="Fecha Inicial">
+                <input matEndDate formControlName="final_date" placeholder="Fecha Final">
+              </mat-date-range-input>
+              <mat-datepicker-toggle matSuffix [for]="picker"></mat-datepicker-toggle>
+              <mat-date-range-picker #picker></mat-date-range-picker>
+              <mat-error *ngIf="fieldInvalid('initial_date')">
+                Favor de ingresar el rango
+              </mat-error>
+
+            </mat-form-field>
 
             <mat-form-field fxFlex="25">
               <mat-label>Hora Inicial</mat-label>
@@ -164,6 +167,20 @@
             </mat-form-field>
 
           </div>
+<!--
+          <div fxLayout="row"
+               fxLayout.xs="column"
+               fxLayout.sm="column"
+               fxLayoutGap="20px">
+
+              <mat-form-field fxFlex="100">
+                <mat-label>Multiples Fechas</mat-label>
+                <ngx-multiple-dates [matDatepicker]="pickerMultiple" placeholder="Excluded Dates" formControlName="multiple_date"></ngx-multiple-dates>
+                <mat-datepicker-toggle matPrefix [for]="pickerMultiple"></mat-datepicker-toggle>
+                <mat-datepicker #pickerMultiple></mat-datepicker>
+              </mat-form-field>
+
+          </div>-->
 
         </div>
 
@@ -242,7 +259,7 @@
 
 <mat-dialog-actions fxLayoutAlign="end">
   <button (click)="close()" mat-stroked-button color="primary" mat-dialog-close="true">Cancelar</button>
-  <button *ngIf="!task.idTask" (click)="addTask()" mat-flat-button color="primary" cdkFocusInitial >Guardar Tarea</button>
+  <button *ngIf="!task.idTask" (click)="addTask()" mat-flat-button color="primary" cdkFocusInitial [disabled]="taskForm.invalid">Guardar Tarea</button>
   <button *ngIf="task.idTask && task.edit" (click)="updateTask()" mat-flat-button color="primary" cdkFocusInitial>Editar</button>
 </mat-dialog-actions>
 

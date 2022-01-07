@@ -25,3 +25,21 @@ Run `ng e2e` to execute the end-to-end tests via a platform of your choice. To u
 ## Further help
 
 To get more help on the Angular CLI use `ng help` or go check out the [Angular CLI Overview and Command Reference](https://angular.io/cli) page.
+
+## Add Library additional
+
+--- Angular's Own ---
+
+1.- Angular Material ^13.1.1
+
+2.- Flex Layout Beta ^13.0.0-beta.36
+
+--- External ----
+
+1.-Full Calendar ^5.10.1
+
+2.-Moment ^2.29.1 
+
+3.-ngx-spinner ^13.0.0
+
+4.-ngx-multiple-dates ^13.0.0
