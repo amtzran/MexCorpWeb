@@ -57,7 +57,7 @@ export class TaskService {
 
   // Get Customer
   getCustomers() : Observable<ModelCustomer> {
-    return this.http.get<ModelCustomer>(`${this.baseUrl}/customers/`)
+    return this.http.get<ModelCustomer>(`${this.baseUrl}/customers/?not_paginate=true`)
   }
 
   // Get Customer
@@ -67,18 +67,19 @@ export class TaskService {
 
   // Get Employees
   getEmployees() : Observable<ModelEmployee> {
-    return this.http.get<ModelEmployee>(`${this.baseUrl}/employees/`)
+    return this.http.get<ModelEmployee>(`${this.baseUrl}/employees/?not_paginate=true`)
   }
 
   // Get Work Types
   getWorkTypes() : Observable<ModelWorkType> {
-    return this.http.get<ModelWorkType>(`${this.baseUrl}/work-types/`)
+    return this.http.get<ModelWorkType>(`${this.baseUrl}/work-types/?not_paginate=true`)
   }
 
   // Get Door Types By Customer
   getDoorTypes(idCustomer: number) : Observable<ModelDoorType> {
     let params = new HttpParams();
     idCustomer ? params = params.append('customer', idCustomer) : null;
+    params = params.append('not_paginate', 'true');
     return this.http.get<ModelDoorType>(`${this.baseUrl}/doors/`,{params})
   }
 
