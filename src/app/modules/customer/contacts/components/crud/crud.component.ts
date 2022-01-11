@@ -84,6 +84,7 @@ export class CrudComponent implements OnInit {
       phone:[{value:'', disabled:this.contact.info}],
       job_title:[{value:'', disabled:this.contact.info}],
       email:[{value:null, disabled:this.contact.info}, Validators.email],
+      department:[{value:'', disabled:this.contact.info}],
       customer_id: [{value: this.contact.idCustomer, disabled:this.contact.info}]
     });
   }

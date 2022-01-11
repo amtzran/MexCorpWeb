@@ -13,6 +13,7 @@ export interface Contact {
   name: string;
   phone: string;
   email?: string | null;
+  department?: string;
   job_title?: string
   customer_id?: number;
   customer_name?: string;

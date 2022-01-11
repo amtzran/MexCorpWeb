@@ -23,7 +23,7 @@ import {NgxSpinnerService} from "ngx-spinner";
 })
 export class TableComponent implements OnInit {
 
-  displayedColumns: string[] = ['id', 'name', 'phone', 'email', 'options'];
+  displayedColumns: string[] = ['id', 'name', 'phone', 'email', 'department','options'];
   dataSource!: MatTableDataSource<Contact>;
   totalItems!: number;
   pageSize = this.sharedService.pageSize
