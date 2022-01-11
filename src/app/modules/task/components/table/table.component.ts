@@ -33,6 +33,7 @@ export class TableComponent implements OnInit {
   idCustomer : number | string = '';
   idEmployee : number | string = '';
   idJobCenter : number | string = '';
+  status : number | string = '';
 
   constructor(private taskService: TaskService,
               private dialog: MatDialog,
@@ -132,7 +133,7 @@ export class TableComponent implements OnInit {
    */
   initTaskCalendar(): void {
     this.spinner.show()
-    this.taskService.getTasks(this.idCustomer, this.idEmployee, this.idJobCenter)
+    this.taskService.getTasks(this.idCustomer, this.idEmployee, this.idJobCenter, this.status)
       .subscribe(tasks => {
         this.spinner.hide()
         tasks.data.forEach(element => {
@@ -248,7 +249,7 @@ export class TableComponent implements OnInit {
   }
 
   filterSelectCustomer(idCustomer: number){
-    this.taskService.getTasks(idCustomer, '', '').subscribe(res => {
+    this.taskService.getTasks(idCustomer, '', '', '').subscribe(res => {
       this.idCustomer = idCustomer
       this.tasks = []
       this.initTaskCalendar()
@@ -256,7 +257,7 @@ export class TableComponent implements OnInit {
   }
 
   filterSelectEmployee(idEmployee: number){
-    this.taskService.getTasks('', idEmployee, '').subscribe(res => {
+    this.taskService.getTasks('', idEmployee, '', '').subscribe(res => {
       this.idEmployee = idEmployee
       this.tasks = []
       this.initTaskCalendar()
@@ -264,8 +265,16 @@ export class TableComponent implements OnInit {
   }
 
   filterSelectJobCenter(idJobCenter: number){
-    this.taskService.getTasks('', '', idJobCenter).subscribe(res => {
+    this.taskService.getTasks('', '', idJobCenter,'').subscribe(res => {
       this.idJobCenter = idJobCenter
+      this.tasks = []
+      this.initTaskCalendar()
+    })
+  }
+
+  filterSelectStatus(status: number){
+    this.taskService.getTasks('', '', '', status).subscribe(res => {
+      this.status = status
       this.tasks = []
       this.initTaskCalendar()
     })

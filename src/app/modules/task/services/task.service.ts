@@ -26,11 +26,16 @@ export class TaskService {
   }
 
   // Get Tasks
-  getTasks(idCustomer: string | number, idEmployee: string | number, idJobCenter: string | number): Observable<ModelTask> {
+  getTasks(
+    idCustomer: string | number,
+    idEmployee: string | number,
+    idJobCenter: string | number,
+    status: string | number): Observable<ModelTask> {
     let params = new HttpParams();
     params = params.append('customer', idCustomer)
     params = params.append('employee', idEmployee)
     params = params.append('group', idJobCenter)
+    params = params.append('status', status)
     return this.http.get<ModelTask>(`${this.baseUrl}/tasks/`,{params})
   }
 

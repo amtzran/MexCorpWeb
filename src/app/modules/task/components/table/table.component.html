@@ -28,6 +28,17 @@
       </mat-form-field>
 
       <mat-form-field fxFlex="100">
+        <mat-label>Empleados</mat-label>
+        <mat-select
+          (selectionChange)="filterSelectEmployee($event.value)">
+          <mat-option value="">TODOS</mat-option>
+          <mat-option *ngFor="let employee of employees" [value]="employee.id">
+            {{ employee.name }}
+          </mat-option>
+        </mat-select>
+      </mat-form-field>
+
+      <mat-form-field fxFlex="100">
         <mat-label>Grupos</mat-label>
         <mat-select
           (selectionChange)="filterSelectJobCenter($event.value)">
@@ -39,13 +50,13 @@
       </mat-form-field>
 
       <mat-form-field fxFlex="100">
-        <mat-label>Empleados</mat-label>
+        <mat-label>Estatus</mat-label>
         <mat-select
-          (selectionChange)="filterSelectEmployee($event.value)">
+          (selectionChange)="filterSelectStatus($event.value)">
           <mat-option value="">TODOS</mat-option>
-          <mat-option *ngFor="let employee of employees" [value]="employee.id">
-            {{ employee.name }}
-          </mat-option>
+          <mat-option value="Finalizado">Finalizado</mat-option>
+          <mat-option value="Programado">Programado</mat-option>
+          <mat-option value="En Proceso">En Proceso</mat-option>
         </mat-select>
       </mat-form-field>
 
