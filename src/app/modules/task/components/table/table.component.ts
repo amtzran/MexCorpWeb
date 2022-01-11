@@ -30,23 +30,25 @@ export class TableComponent implements OnInit {
   customers: Customer[] = [];
   jobCenters: JobCenter[] = [];
   employees: Employee[] = [];
+  idCustomer : number | string = '';
+  idEmployee : number | string = '';
+  idJobCenter : number | string = '';
 
   constructor(private taskService: TaskService,
               private dialog: MatDialog,
               private spinner: NgxSpinnerService,
-              private sharedService: SharedService,
-              private _taskService: TaskService) {}
+              private sharedService: SharedService) {}
 
   ngOnInit(): void {
 
     // Type Customers
-    this._taskService.getCustomers().subscribe(customers => {this.customers = customers.data} )
+    this.taskService.getCustomers().subscribe(customers => {this.customers = customers.data} )
 
     // Type Groups
-    this._taskService.getJobCenters().subscribe(jobCenters => {this.jobCenters = jobCenters.data} )
+    this.taskService.getJobCenters().subscribe(jobCenters => {this.jobCenters = jobCenters.data} )
 
     // Type Employees
-    this._taskService.getEmployees().subscribe(employees => {this.employees = employees.data} )
+    this.taskService.getEmployees().subscribe(employees => {this.employees = employees.data} )
 
     forwardRef(() => Calendar)
     // Valuers Initials Calendar
@@ -130,7 +132,7 @@ export class TableComponent implements OnInit {
    */
   initTaskCalendar(): void {
     this.spinner.show()
-    this.taskService.getTasks()
+    this.taskService.getTasks(this.idCustomer, this.idEmployee, this.idJobCenter)
       .subscribe(tasks => {
         this.spinner.hide()
         tasks.data.forEach(element => {
@@ -246,15 +248,27 @@ export class TableComponent implements OnInit {
   }
 
   filterSelectCustomer(idCustomer: number){
-    console.log('eventCustomer')
-  }
-
-  filterSelectJobCenter(idJobCenter: number){
-    console.log('eventJobCenter')
+    this.taskService.getTasks(idCustomer, '', '').subscribe(res => {
+      this.idCustomer = idCustomer
+      this.tasks = []
+      this.initTaskCalendar()
+    })
   }
 
   filterSelectEmployee(idEmployee: number){
-    console.log('eventEmployee')
+    this.taskService.getTasks('', idEmployee, '').subscribe(res => {
+      this.idEmployee = idEmployee
+      this.tasks = []
+      this.initTaskCalendar()
+    })
+  }
+
+  filterSelectJobCenter(idJobCenter: number){
+    this.taskService.getTasks('', '', idJobCenter).subscribe(res => {
+      this.idJobCenter = idJobCenter
+      this.tasks = []
+      this.initTaskCalendar()
+    })
   }
 
 }

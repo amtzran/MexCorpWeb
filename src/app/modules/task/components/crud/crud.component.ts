@@ -13,6 +13,7 @@ import {MatTableDataSource} from "@angular/material/table";
 import {MatPaginator} from "@angular/material/paginator";
 import {MatSort} from "@angular/material/sort";
 import {NgxSpinnerService} from "ngx-spinner";
+import {Observable, startWith, map} from "rxjs";
 
 @Component({
   selector: 'app-crud',
@@ -35,11 +36,12 @@ export class CrudComponent implements OnInit {
   submit!: boolean;
 
   // Fill Selects Crud
-  customers: Customer[] = [];
-  jobCenters: JobCenter[] = [];
-  employees: Employee[] = [];
-  workTypes: WorkType[] =[];
-  doorTypes:  DoorType[] = [];
+  customers!: Customer[];
+  //jobCenters!: Observable<JobCenter[]>;
+  jobCenters!: JobCenter[];
+  employees!: Employee[];
+  workTypes!: WorkType[];
+  doorTypes!:  DoorType[];
 
   /**
    * Table Access Files
@@ -73,8 +75,16 @@ export class CrudComponent implements OnInit {
     // Customers init
     this._taskService.getCustomers().subscribe(customers => {this.customers = customers.data} )
 
-    // Type Customers
-    this._taskService.getJobCenters().subscribe(jobCenters => {this.jobCenters = jobCenters.data} )
+    // Type Job Centers
+    this._taskService.getJobCenters().subscribe(jobCenters => {
+      this.jobCenters = jobCenters.data
+      /*this.jobCentersFilter = jobCenters.data
+      this.jobCenters = this.taskForm.valueChanges.pipe(
+        startWith(''),
+        map(value => (typeof value === 'string' ? value : value.name)),
+        map(name => (name ? this._filter(name) : jobCenters.data.slice())),
+      )*/
+    })
 
     // Type Employees
     this._taskService.getEmployees().subscribe(employees => {this.employees = employees.data} )
@@ -250,6 +260,23 @@ export class CrudComponent implements OnInit {
   }
 
   /**
+   * delete a task.
+   */
+  deleteTask(): void {
+    this.setValueSubmit()
+    this.spinner.show()
+    this._taskService.deleteTask(this.task.idTask).subscribe(response => {
+        this.spinner.hide()
+        this.sharedService.showSnackBar(`Se ha eliminado correctamente la Tarea` );
+        this.dialogRef.close(ModalResponse.UPDATE);
+      }, (error => {
+        this.spinner.hide()
+        this.sharedService.errorDialog()
+      })
+    )
+  }
+
+  /**
    * Value Submit Before send
    */
   setValueSubmit(){
@@ -320,6 +347,16 @@ export class CrudComponent implements OnInit {
     if (this.dataSource.paginator) {
       this.dataSource.paginator.firstPage();
     }
+  }
+
+  displayFn(jobCenter: JobCenter): string {
+    return jobCenter && jobCenter.name ? jobCenter.name : '';
+  }
+
+  private _filter(name: string): JobCenter[] {
+    const filterValue = name.toLowerCase();
+
+    return this.jobCenters.filter(option => option.name.toLowerCase().includes(filterValue));
   }
 
  /* /!* Método que permite iniciar los filtros de rutas*!/

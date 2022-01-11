@@ -26,8 +26,12 @@ export class TaskService {
   }
 
   // Get Tasks
-  getTasks(): Observable<ModelTask> {
-    return this.http.get<ModelTask>(`${this.baseUrl}/tasks/`,)
+  getTasks(idCustomer: string | number, idEmployee: string | number, idJobCenter: string | number): Observable<ModelTask> {
+    let params = new HttpParams();
+    params = params.append('customer', idCustomer)
+    params = params.append('employee', idEmployee)
+    params = params.append('group', idJobCenter)
+    return this.http.get<ModelTask>(`${this.baseUrl}/tasks/`,{params})
   }
 
   // Add Task
@@ -50,10 +54,11 @@ export class TaskService {
     }
     return this.http.patch<Task>(`${this.baseUrl}/employees/update/${idTask}/`, updateFields)
   }
- /* // Delete Task
-  deleteTask(id: number) : Observable<number>{
-    return this.http.delete<number>(`${this.baseUrl}/tasks/${id}`)
-  }*/
+
+  // Delete Task
+  deleteTask(id: number) : Observable<Task>{
+    return this.http.delete<Task>(`${this.baseUrl}/tasks/${id}`)
+  }
 
   // Get Customer
   getCustomers() : Observable<ModelCustomer> {
