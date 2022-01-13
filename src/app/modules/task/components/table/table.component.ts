@@ -34,6 +34,7 @@ export class TableComponent implements OnInit {
   idEmployee : number | string = '';
   idJobCenter : number | string = '';
   status : number | string = '';
+  changeEvent : boolean = true;
 
   constructor(private taskService: TaskService,
               private dialog: MatDialog,
@@ -41,7 +42,6 @@ export class TableComponent implements OnInit {
               private sharedService: SharedService) {}
 
   ngOnInit(): void {
-
     // Type Customers
     this.taskService.getCustomers().subscribe(customers => {this.customers = customers.data} )
 
@@ -56,6 +56,9 @@ export class TableComponent implements OnInit {
     this.initCalendar()
     // Events From Api
     this.initTaskCalendar()
+
+    //Update Main Component
+    this.updateEventSharedService()
   }
 
   /**
@@ -248,6 +251,10 @@ export class TableComponent implements OnInit {
     });
   }
 
+  /**
+   * Filter By Customer in Task
+   * @param idCustomer
+   */
   filterSelectCustomer(idCustomer: number){
     this.taskService.getTasks(idCustomer, '', '', '').subscribe(res => {
       this.idCustomer = idCustomer
@@ -256,6 +263,10 @@ export class TableComponent implements OnInit {
     })
   }
 
+  /**
+   * Filter By Employee in Task
+   * @param idEmployee
+   */
   filterSelectEmployee(idEmployee: number){
     this.taskService.getTasks('', idEmployee, '', '').subscribe(res => {
       this.idEmployee = idEmployee
@@ -264,6 +275,10 @@ export class TableComponent implements OnInit {
     })
   }
 
+  /**
+   * Filter By Group in Task
+   * @param idJobCenter
+   */
   filterSelectJobCenter(idJobCenter: number){
     this.taskService.getTasks('', '', idJobCenter,'').subscribe(res => {
       this.idJobCenter = idJobCenter
@@ -272,10 +287,27 @@ export class TableComponent implements OnInit {
     })
   }
 
+  /**
+   * Filter By Status in Task
+   * @param status
+   */
   filterSelectStatus(status: number){
     this.taskService.getTasks('', '', '', status).subscribe(res => {
       this.status = status
       this.tasks = []
+      this.initTaskCalendar()
+    })
+  }
+
+  /**
+   * Services Shared for update any Component
+   */
+  updateEventSharedService(){
+    this.sharedService.changeEvent.subscribe(change => {
+      this.tasks = []
+      // Valuers Initials Calendar
+      this.initCalendar()
+      // Events From Api
       this.initTaskCalendar()
     })
   }

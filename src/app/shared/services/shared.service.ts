@@ -1,7 +1,5 @@
-import { Injectable } from '@angular/core';
+import {EventEmitter, Injectable} from '@angular/core';
 import {MatSnackBar} from "@angular/material/snack-bar";
-import {CommentCustomer} from "../../modules/customer/comments/models/comment.interface";
-import {ConfirmComponent} from "../components/confirm/confirm.component";
 import {MatDialog} from "@angular/material/dialog";
 import {ErrorComponent} from "../components/error/error.component";
 
@@ -13,6 +11,11 @@ export class SharedService {
   constructor(private snackBar: MatSnackBar,
               private dialog: MatDialog,) {}
 
+  // Default Paginate tables
+  pageSize = 10;
+  // Listen event boolean for update from components from son
+  changeEvent = new EventEmitter<boolean>()
+
   /**
    * Generate new snack bar with custom message.
    * @param msg
@@ -23,6 +26,9 @@ export class SharedService {
     })
   }
 
+  /**
+   * Component Error
+   */
   errorDialog() {
     // Show Dialog
     const dialog = this.dialog.open(ErrorComponent, {
@@ -33,8 +39,10 @@ export class SharedService {
   }
 
   /**
-   * Default Paginate Tables
+   * Method for called update Component Main
    */
-  pageSize = 10;
+  updateComponent(){
+    this.changeEvent.emit(true)
+  }
 
 }

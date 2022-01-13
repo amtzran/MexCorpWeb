@@ -1,19 +1,19 @@
-import {Component, Inject, OnInit, ViewChild} from '@angular/core';
+import {Component, Inject, Input, OnInit, ViewChild} from '@angular/core';
 import {FormBuilder, FormGroup, Validators} from "@angular/forms";
 import {Customer} from "../../../customer/customers/interfaces/customer.interface";
 import {SharedService} from "../../../../shared/services/shared.service";
-import {MAT_DIALOG_DATA, MatDialogRef} from "@angular/material/dialog";
+import {MAT_DIALOG_DATA, MatDialog, MatDialogRef} from "@angular/material/dialog";
 import {ModalResponse} from "../../../../core/utils/ModalResponse";
 import {TaskService} from "../../services/task.service";
 import {Employee, JobCenter} from "../../../employee/interfaces/employee.interface";
-import {CalendarDate, WorkType} from "../../models/task.interface";
+import {CalendarDate, Task, WorkType} from "../../models/task.interface";
 import {DateService} from "../../../../core/utils/date.service";
 import {Door, DoorType} from "../../../customer/doors/interfaces/door.interface";
 import {MatTableDataSource} from "@angular/material/table";
 import {MatPaginator} from "@angular/material/paginator";
 import {MatSort} from "@angular/material/sort";
 import {NgxSpinnerService} from "ngx-spinner";
-import {Observable, startWith, map} from "rxjs";
+import {ConfirmComponent} from "../../../../shared/components/confirm/confirm.component";
 
 @Component({
   selector: 'app-crud',
@@ -58,6 +58,7 @@ export class CrudComponent implements OnInit {
     private fb: FormBuilder,
     private sharedService: SharedService,
     private dialogRef: MatDialogRef<CrudComponent>,
+    private dialog: MatDialog,
     private _taskService: TaskService,
     private _dateService: DateService,
     private spinner: NgxSpinnerService,
@@ -263,17 +264,27 @@ export class CrudComponent implements OnInit {
    * delete a task.
    */
   deleteTask(): void {
-    this.setValueSubmit()
-    this.spinner.show()
-    this._taskService.deleteTask(this.task.idTask).subscribe(response => {
-        this.spinner.hide()
-        this.sharedService.showSnackBar(`Se ha eliminado correctamente la Tarea` );
-        this.dialogRef.close(ModalResponse.UPDATE);
-      }, (error => {
-        this.spinner.hide()
-        this.sharedService.errorDialog()
-      })
-    )
+    // Show Dialog
+    const dialog = this.dialog.open(ConfirmComponent, {
+      width: '250',
+      data: this.task
+    })
+
+    dialog.afterClosed().subscribe(
+      (result) => {
+        if (result) {
+          this.spinner.show()
+          this._taskService.deleteTask(this.task.idTask).subscribe(response => {
+            this.spinner.hide()
+            this.sharedService.showSnackBar(`Se ha eliminado correctamente la Tarea`);
+            this.sharedService.updateComponent()
+            }, (error => {
+              this.spinner.hide()
+              this.sharedService.errorDialog()
+            })
+          )
+        }
+    })
   }
 
   /**
