@@ -19,7 +19,7 @@ import {NgxSpinnerService} from "ngx-spinner";
 })
 export class ListComponent implements AfterViewInit, OnInit {
 
-  displayedColumns: string[] = ['id', 'name', 'reason_social', 'rfc', 'phone', 'address', 'contract_name', 'customer_type_name','options'];
+  displayedColumns: string[] = ['id', 'name', 'reason_social', 'phone', 'address', 'contract_name', 'customer_type_name', 'created_at', 'options'];
   dataSource!: MatTableDataSource<Customer>;
   totalItems!: number;
   pageSize = this.sharedService.pageSize;
