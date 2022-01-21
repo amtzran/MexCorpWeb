@@ -20,6 +20,7 @@ import { MatSortModule} from "@angular/material/sort";
 import {MatMenuModule} from "@angular/material/menu";
 import {MatDatepickerModule} from "@angular/material/datepicker";
 import {MatNativeDateModule} from "@angular/material/core";
+import {MatTabsModule} from "@angular/material/tabs";
 
 
 @NgModule({
@@ -48,7 +49,8 @@ import {MatNativeDateModule} from "@angular/material/core";
     MatSortModule,
     MatMenuModule,
     MatDatepickerModule,
-    MatNativeDateModule
+    MatNativeDateModule,
+    MatTabsModule,
   ]
 })
 export class MaterialModule { }

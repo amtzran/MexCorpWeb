@@ -43,3 +43,5 @@ To get more help on the Angular CLI use `ng help` or go check out the [Angular C
 3.-ngx-spinner ^13.0.0
 
 4.-ngx-multiple-dates ^13.0.0
+
+5.-FileSaver ^2.0.5

@@ -60,6 +60,11 @@ export class SideNavComponent implements OnInit {
       name: 'Tareas',
       route: '/dashboard/task',
       icon: 'schedule'
+    },
+    {
+      name: 'Reportes',
+      route: '/dashboard/report',
+      icon: 'show_chart'
     }
   ]
 
