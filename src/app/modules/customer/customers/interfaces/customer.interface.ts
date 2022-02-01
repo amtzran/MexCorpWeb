@@ -31,8 +31,9 @@ export interface Customer {
 
 // Pagination
 export interface CustomerPaginate {
-  page: string,
-  page_size: string
+  page?: string,
+  page_size?: string,
+  customer?: string
 }
 
 export interface CustomerDetail {
@@ -80,5 +81,14 @@ export interface TypeCustomer {
 export interface CustomerTitle {
   id?: number;
   name: string;
+}
+
+export interface reportCustomer {
+  type?: string;
+  initial_date?: string;
+  final_date?: string;
+  customer?: string;
+  contract?: string;
+  customer_type?: string;
 }
 

@@ -55,3 +55,11 @@ export interface DoorType {
   created_at?: Date;
   updated_at?: Date;
 }
+
+export interface reportDoor {
+  type?: string;
+  initial_date?: string;
+  final_date?: string;
+  customer?: string;
+  door_type?: string;
+}

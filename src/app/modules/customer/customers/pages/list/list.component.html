@@ -15,6 +15,12 @@
              fxLayout.xl="row"
              fxLayoutGap="20px">
 
+          <div fxFlex="100" fxLayoutAlign="center center">
+            <button (click)="openDialogCustomer(true, null, false)" mat-button color="primary">
+              <mat-icon>person_add</mat-icon> Nuevo Cliente
+            </button>
+          </div>
+
           <mat-form-field fxFlex="100">
 
             <mat-label>Ingresar Rango Fecha</mat-label>
@@ -24,65 +30,43 @@
             </mat-date-range-input>
             <mat-datepicker-toggle matSuffix [for]="picker"></mat-datepicker-toggle>
             <mat-date-range-picker #picker></mat-date-range-picker>
-            <mat-error *ngIf="fieldInvalid('initial_date')">
-              Favor de ingresar el rango
-            </mat-error>
 
           </mat-form-field>
-          <!--
-                    <mat-form-field fxFlex="100">
-                      <mat-label>Cliente</mat-label>
-                      <input
-                        matInput
-                        type="text"
-                        formControlName="name">
-                      <mat-error *ngIf="fieldInvalid('name')">
-                        Favor de Ingresar el Cliente
-                      </mat-error>
-                    </mat-form-field>
 
+          <ng-select fxFlex="100"
+                     bindLabel="name"
+                     placeholder="Clientes"
+                     formControlName="customer"
+                     [multiple]="false"
+                     appendTo="body"
+                     [searchable]="true"
+                     [clearable]="true"
+                     (change)="filterSelect()">
+            <ng-option value="">TODOS</ng-option>
+            <ng-option *ngFor="let customer of customers" [value]="customer.id">
+              {{customer.name}}
+            </ng-option>
+          </ng-select>
 
+          <mat-form-field fxFlex="100">
+            <mat-label>Convenio</mat-label>
+            <mat-select formControlName="contract" (selectionChange)="filterSelect()">
+              <mat-option value="">TODOS</mat-option>
+              <mat-option *ngFor="let contract of contracts" [value]="contract.id">
+                {{ contract.name }}
+              </mat-option>
+            </mat-select>
+          </mat-form-field>
 
-                    <mat-form-field fxFlex="100">
-                      <mat-label>Convenio</mat-label>
-                      <mat-select formControlName="employee">
-                        <mat-option value="">TODOS</mat-option>
-                     <mat-option *ngFor="let employee of employees" [value]="employee.id">
-                          {{ employee.name }}
-                        </mat-option>
-                      </mat-select>
-                    </mat-form-field>
-
-                    <mat-form-field fxFlex="100">
-                      <mat-label>Tipo Cliente</mat-label>
-                      <mat-select formControlName="employee">
-                        <mat-option value="">TODOS</mat-option>
-                         <mat-option *ngFor="let employee of employees" [value]="employee.id">
-                           {{ employee.name }}
-                         </mat-option>
-                      </mat-select>
-                    </mat-form-field>
-
-                    <mat-form-field fxFlex="100">
-                      <mat-label>Grupos</mat-label>
-                      <mat-select formControlName="job_center">
-                        <mat-option value="">TODOS</mat-option>
-                        <mat-option *ngFor="let jobCenter of jobCenters" [value]="jobCenter.id">
-                          {{ jobCenter.name}}
-                        </mat-option>
-                      </mat-select>
-                    </mat-form-field>
-
-                    <mat-form-field fxFlex="100">
-                      <mat-label>Estatus</mat-label>
-                      <mat-select formControlName="status">
-                        <mat-option value="">TODOS</mat-option>
-                        <mat-option value="Finalizado">Finalizado</mat-option>
-                        <mat-option value="Programado">Programado</mat-option>
-                        <mat-option value="En Proceso">En Proceso</mat-option>
-                      </mat-select>
-                    </mat-form-field>-->
-
+          <mat-form-field fxFlex="100">
+            <mat-label>Tipo Cliente</mat-label>
+            <mat-select formControlName="customer_type" (selectionChange)="filterSelect()">
+              <mat-option value="">TODOS</mat-option>
+               <mat-option *ngFor="let customerType of customerTypes" [value]="customerType.id">
+                 {{ customerType.name }}
+               </mat-option>
+            </mat-select>
+          </mat-form-field>
 
           <div fxFlex="100" fxLayoutAlign="center center">
             <button mat-button color="primary" (click)="downloadReport('excel')" [disabled]="filterForm.invalid">
@@ -97,19 +81,15 @@
 
   </mat-card>
 
-  <div fxLayout="row">
+ <!-- <div fxLayout="row">
     <div fxFlex="80">
       <mat-form-field appearance="standard">
         <mat-label>Filtrar Datos Clientes</mat-label>
         <input matInput (keyup)="applyFilter($event)" placeholder="Buscar en Tabla Clientes" #input>
       </mat-form-field>
     </div>
-    <div fxFlex="20" fxLayoutAlign="center center">
-      <button (click)="openDialogCustomer(true, null, false)" mat-button color="primary">
-        <mat-icon>person_add</mat-icon> Nuevo Cliente
-      </button>
-    </div>
-  </div>
+
+  </div>-->
 
 
   <div class="mat-elevation-z8 tableResponsive">
@@ -204,7 +184,7 @@
 
       <!-- Row shown when there is no matching data. -->
       <tr class="mat-row" *matNoDataRow>
-        <td class="mat-cell" colspan="4">No hay datos que mostrar "{{input.value}}"</td>
+        <td class="mat-cell" colspan="4">No hay datos que mostrar ""</td>
       </tr>
     </table>
 

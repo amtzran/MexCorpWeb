@@ -65,8 +65,8 @@ export class TableComponent implements OnInit {
     this.spinner.show()
     this.reportService.exportReportTask(this.reportForm.value, type).subscribe(res => {
       let file : any;
-      if (type === 'excel') file = this.reportService.createBlobToExcel(res);
-      else file = this.reportService.createBlobToPdf(res);
+      if (type === 'excel') file = this.sharedService.createBlobToExcel(res);
+      else file = this.sharedService.createBlobToPdf(res);
 
       let date_initial = this.dateService.getFormatDataDate(this.reportForm.value.initial_date)
       let final_date = this.dateService.getFormatDataDate(this.reportForm.value.final_date)

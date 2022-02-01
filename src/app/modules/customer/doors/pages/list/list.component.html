@@ -5,6 +5,54 @@
     </mat-card-title>
   </mat-card>
 
+  <mat-card fxLayoutAlign="center center">
+
+    <div class="container" fxFlex="100" fxLayout="column" [formGroup]="filterForm">
+
+      <div fxLayout="row"
+           fxLayout.xs="column"
+           fxLayout.sm="column"
+           fxLayout.md="column"
+           fxLayout.lg="row"
+           fxLayout.xl="row"
+           fxLayoutGap="20px">
+
+        <mat-form-field fxFlex="100">
+
+          <mat-label>Ingresar Rango Fecha</mat-label>
+          <mat-date-range-input [rangePicker]="picker">
+            <input matStartDate formControlName="initial_date" placeholder="Fecha Inicial">
+            <input matEndDate formControlName="final_date" placeholder="Fecha Final">
+          </mat-date-range-input>
+          <mat-datepicker-toggle matSuffix [for]="picker"></mat-datepicker-toggle>
+          <mat-date-range-picker #picker></mat-date-range-picker>
+
+        </mat-form-field>
+
+        <mat-form-field fxFlex="100">
+          <mat-label>Tipo Acceso</mat-label>
+          <mat-select formControlName="door_type">
+            <mat-option value="">TODOS</mat-option>
+            <mat-option *ngFor="let doorType of doorTypes" [value]="doorType.id">
+              {{ doorType.name }}
+            </mat-option>
+          </mat-select>
+        </mat-form-field>
+
+
+        <div fxFlex="100" fxLayoutAlign="center center">
+          <button mat-button color="primary" (click)="downloadReport('excel')" [disabled]="filterForm.invalid">
+            Excel
+            <mat-icon mat-list-icon>view_list</mat-icon>
+          </button>
+        </div>
+
+      </div>
+
+    </div>
+
+  </mat-card>
+
   <div fxLayout="row">
     <div fxFlex="50">
       <mat-form-field appearance="standard">

@@ -2,14 +2,17 @@ import { Injectable } from '@angular/core';
 import {HttpClient, HttpParams} from "@angular/common/http";
 import {environment} from "../../../../../environments/environment";
 import {Observable} from "rxjs";
-import {Door, DoorDetail, DoorPaginate, ModelDoor, ModelDoorType} from "../interfaces/door.interface";
+import {Door, DoorDetail, DoorPaginate, ModelDoor, ModelDoorType, reportDoor} from "../interfaces/door.interface";
+import {reportCustomer} from "../../customers/interfaces/customer.interface";
+import {DateService} from "../../../../core/utils/date.service";
 
 @Injectable({
   providedIn: 'root'
 })
 export class DoorService {
 
-  constructor( private http: HttpClient) { }
+  constructor(private http: HttpClient,
+              private dateService: DateService) { }
   private baseUrl: string = environment.baseUrl
 
   // Get Doors
@@ -44,6 +47,29 @@ export class DoorService {
   // Get Door Types
   getDoorTypes() : Observable<ModelDoorType> {
     return this.http.get<ModelDoorType>(`${this.baseUrl}/door-types/`)
+  }
+
+  // Report Doors By Customer
+  exportReportDoorsBYCustomer(filterDoor: reportDoor, type: string) : Observable<any> {
+    let initial_date, final_date;
+    if (filterDoor.initial_date === '')  {
+      initial_date = '';
+      final_date = '';
+    }
+    else {
+      initial_date = this.dateService.getFormatDataDate(filterDoor.initial_date)
+      final_date = this.dateService.getFormatDataDate(filterDoor.final_date)
+    }
+
+    let customer = String(filterDoor.customer)
+    let door_type = String(filterDoor.door_type)
+    let params = new HttpParams();
+    params = params.append('initial_date', initial_date);
+    params = params.append('final_date', final_date);
+    params = params.append('customer', customer);
+    params = params.append('door_type', door_type);
+    params = params.append('type', type);
+    return this.http.post(`${this.baseUrl}/doors-export/`, '',{responseType: 'blob', params})
   }
 
 }

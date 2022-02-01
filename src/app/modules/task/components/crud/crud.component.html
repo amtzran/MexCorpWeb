@@ -94,8 +94,8 @@
                        [clearable]="true"
                        bindValue="id"
                        [compareWith]="setValueSelectObjectMultiple">
-              <ng-option *ngFor="let customer of customers" [value]="customer.id">
-                {{customer.name}}
+              <ng-option *ngFor="let doorType of doorTypes" [value]="doorType.id">
+                {{doorType.name}}
               </ng-option>
             </ng-select>
             <mat-error *ngIf="fieldInvalid('doors')">

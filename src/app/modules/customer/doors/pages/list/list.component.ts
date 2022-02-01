@@ -3,7 +3,7 @@ import {MatTableDataSource} from "@angular/material/table";
 import {FormBuilder, FormGroup} from "@angular/forms";
 import {MatPaginator} from "@angular/material/paginator";
 import {MatSort} from "@angular/material/sort";
-import {Door} from "../../interfaces/door.interface";
+import {Door, DoorType} from "../../interfaces/door.interface";
 import {DoorService} from "../../services/door.service";
 import {MatDialog} from "@angular/material/dialog";
 import {ActivatedRoute} from "@angular/router";
@@ -12,8 +12,11 @@ import {ModalResponse} from "../../../../../core/utils/ModalResponse";
 import {CrudComponent} from "../../components/crud/crud.component";
 import {SharedService} from "../../../../../shared/services/shared.service";
 import {ConfirmComponent} from "../../../../../shared/components/confirm/confirm.component";
-import {Customer, CustomerDetail, CustomerTitle} from "../../../customers/interfaces/customer.interface";
+import {CustomerTitle} from "../../../customers/interfaces/customer.interface";
 import {NgxSpinnerService} from "ngx-spinner";
+import * as fileSaver from "file-saver";
+import {DateService} from "../../../../../core/utils/date.service";
+import {DoorTypeService} from "../../../../catalog/door-types/services/door-type.service";
 
 @Component({
   selector: 'app-list',
@@ -36,6 +39,9 @@ export class ListComponent implements OnInit {
   @ViewChild(MatSort) sort!: MatSort;
   idCustomer!: string | null;
   private sub : any;
+  doorTypes!: DoorType[];
+  filterForm!: FormGroup;
+  submit!: boolean;
   customer: CustomerTitle = {
     name : '',
   };
@@ -46,9 +52,10 @@ export class ListComponent implements OnInit {
               private dialog : MatDialog,
               private sharedService: SharedService,
               private activateRoute: ActivatedRoute,
-              private spinner: NgxSpinnerService,) {
-
-  }
+              private spinner: NgxSpinnerService,
+              private dateService: DateService,
+              private doorTypeService: DoorTypeService,
+              ) {}
 
   ngOnInit(): void {
     // get Id Route Customer
@@ -64,10 +71,13 @@ export class ListComponent implements OnInit {
     )
     /*Formulario*/
     this.loadDoorFilterForm();
+    this.loadFilterForm();
+    this.loadDoorTypes();
 
     // Assign the data to the data source for the table to render
     this.dataSource = new MatTableDataSource();
     this.getDoorsPaginator(this.paginator);
+
   }
 
   ngAfterViewInit() {
@@ -137,6 +147,68 @@ export class ListComponent implements OnInit {
         this.getDoorsPaginator(this.paginator);
       }
     });
+  }
+
+  /**
+   * Export Excel and Pdf with filters
+   * @param type
+   */
+  downloadReport(type: string){
+    this.validateForm()
+    this.spinner.show()
+    this.doorService.exportReportDoorsBYCustomer(this.filterForm.value, type).subscribe(res => {
+        let file : any;
+        if (type === 'excel') file = this.sharedService.createBlobToExcel(res);
+        else file = this.sharedService.createBlobToPdf(res);
+        let currentDate = new Date();
+        let date_initial, final_date;
+        if (this.filterForm.value.initial_date) {
+          date_initial = this.dateService.getFormatDataDate(this.filterForm.value.initial_date)
+          final_date = this.dateService.getFormatDataDate(this.filterForm.value.final_date)
+        }
+        else {
+          date_initial = this.dateService.getFormatDataDate(currentDate);
+          final_date = this.dateService.getFormatDataDate(currentDate);
+        }
+
+        fileSaver.saveAs(file, `Reporte-Accesos-${date_initial}-${final_date}`);
+
+        this.spinner.hide()
+      }, (error => {
+        this.spinner.hide()
+        this.sharedService.errorDialog()
+      })
+    )
+  }
+
+  /**
+   * load Form Reactive Form
+   */
+  loadFilterForm() : void {
+    this.filterForm = this.formBuilder.group({
+      initial_date: [{value: '', disabled:false},],
+      final_date: [{value: '', disabled:false},],
+      customer: [{value: this.idCustomer, disabled:false},],
+      door_type: [{value: '', disabled:false},],
+    });
+  }
+
+  /**
+   * Validate form in general
+   */
+  validateForm(){
+    this.submit = true;
+    if(this.filterForm.invalid){
+      this.sharedService.showSnackBar('Los campos con * son obligatorios.');
+      return
+    }
+  }
+
+  /**
+   * Service Customer Types
+   */
+  loadDoorTypes(){
+    this.doorTypeService.getDoorTypes(this.doorPaginateForm.value).subscribe(doorTypes => {this.doorTypes = doorTypes.data} )
   }
 
   /* Método que permite iniciar los filtros de rutas*/

@@ -70,7 +70,7 @@ export class TaskService {
     return this.http.get<ModelCustomer>(`${this.baseUrl}/customers/?not_paginate=true`)
   }
 
-  // Get Customer
+  // Get Job Centers
   getJobCenters() : Observable<ModelJobCenter> {
     return this.http.get<ModelJobCenter>(`${this.baseUrl}/groups/`)
   }

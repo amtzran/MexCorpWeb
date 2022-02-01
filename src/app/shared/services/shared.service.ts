@@ -45,4 +45,20 @@ export class SharedService {
     this.changeEvent.emit(true)
   }
 
+  /**
+   * Export Data excel
+   * @param data
+   */
+  createBlobToExcel(data: any){
+    return new Blob([data], { type: 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet' });
+  }
+
+  /**
+   * Export Data Pdf
+   * @param data
+   */
+  createBlobToPdf(data: any){
+    return new Blob([data], { type: 'application/pdf' });
+  }
+
 }

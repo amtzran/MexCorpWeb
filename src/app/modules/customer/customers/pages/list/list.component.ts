@@ -2,9 +2,9 @@ import {AfterViewInit, Component, OnInit, ViewChild} from '@angular/core';
 import {MatTableDataSource} from "@angular/material/table";
 import {MatPaginator} from "@angular/material/paginator";
 import {MatSort} from "@angular/material/sort";
-import {Customer, ModelCustomer} from "../../interfaces/customer.interface";
+import {Contract, Customer, ModelCustomer} from "../../interfaces/customer.interface";
 import {CustomerServiceService} from "../../services/customer-service.service";
-import {FormBuilder, FormGroup, Validators} from "@angular/forms";
+import {FormBuilder, FormControl, FormGroup, Validators} from "@angular/forms";
 import {MatDialog} from "@angular/material/dialog";
 import {ModalResponse} from "../../../../../core/utils/ModalResponse";
 import {CrudComponent} from "../../components/crud/crud.component";
@@ -14,6 +14,10 @@ import {NgxSpinnerService} from "ngx-spinner";
 import * as fileSaver from "file-saver";
 import {DateService} from "../../../../../core/utils/date.service";
 import {ReportService} from "../../../../report/services/report.service";
+import {CustomerType} from "../../../../catalog/customer-types/models/customer-type.interface";
+import {TaskService} from "../../../../task/services/task.service";
+import {ContractService} from "../../../../catalog/contracts/services/contract.service";
+import {CustomerTypeService} from "../../../../catalog/customer-types/services/customer-type.service";
 
 @Component({
   selector: 'app-list',
@@ -29,8 +33,9 @@ export class ListComponent implements AfterViewInit, OnInit {
   customerFilterForm!: FormGroup;
   @ViewChild(MatPaginator, {static: true}) paginator!: MatPaginator;
   @ViewChild(MatSort) sort!: MatSort;
-
-  // Filters
+  customers!: Customer[];
+  contracts!: Contract[];
+  customerTypes!: CustomerType[];
   filterForm!: FormGroup;
   submit!: boolean;
 
@@ -41,6 +46,9 @@ export class ListComponent implements AfterViewInit, OnInit {
                private spinner: NgxSpinnerService,
                private dateService: DateService,
                private reportService: ReportService,
+               private taskService: TaskService,
+               private contractService: ContractService,
+               private customerTypeService: CustomerTypeService
                ) {}
 
   ngOnInit() {
@@ -50,6 +58,9 @@ export class ListComponent implements AfterViewInit, OnInit {
     this.loadFilterForm();
     this.loadCustomerFilterForm();
     this.getCustomersPaginator(this.paginator);
+    this.loadCustomers();
+    this.loadContracts();
+    this.loadCustomerTypes();
   }
 
   ngAfterViewInit() {
@@ -64,7 +75,7 @@ export class ListComponent implements AfterViewInit, OnInit {
     const paginator: MatPaginator = event;
     this.customerFilterForm.get('page')?.setValue(paginator.pageIndex + 1);
     this.spinner.show()
-    this.customerService.getCustomers(this.customerFilterForm.value)
+    this.customerService.getCustomers(this.customerFilterForm.value, this.filterForm.value)
       .subscribe((customers : ModelCustomer) => {
         this.spinner.hide()
         this.dataSource.data = customers.data
@@ -144,15 +155,22 @@ export class ListComponent implements AfterViewInit, OnInit {
   downloadReport(type: string){
     this.validateForm()
     this.spinner.show()
-    this.reportService.exportReportTask(this.filterForm.value, type).subscribe(res => {
+    this.customerService.exportReportCustomer(this.filterForm.value, type).subscribe(res => {
         let file : any;
-        if (type === 'excel') file = this.reportService.createBlobToExcel(res);
-        else file = this.reportService.createBlobToPdf(res);
+        if (type === 'excel') file = this.sharedService.createBlobToExcel(res);
+        else file = this.sharedService.createBlobToPdf(res);
+        let currentDate = new Date();
+        let date_initial, final_date;
+        if (this.filterForm.value.initial_date) {
+          date_initial = this.dateService.getFormatDataDate(this.filterForm.value.initial_date)
+          final_date = this.dateService.getFormatDataDate(this.filterForm.value.final_date)
+        }
+        else {
+          date_initial = this.dateService.getFormatDataDate(currentDate);
+          final_date = this.dateService.getFormatDataDate(currentDate);
+        }
 
-        let date_initial = this.dateService.getFormatDataDate(this.filterForm.value.initial_date)
-        let final_date = this.dateService.getFormatDataDate(this.filterForm.value.final_date)
-
-        fileSaver.saveAs(file, `Reporte-Tareas-${date_initial}-${final_date}`);
+        fileSaver.saveAs(file, `Reporte-Clientes-${date_initial}-${final_date}`);
 
         this.spinner.hide()
       }, (error => {
@@ -167,10 +185,44 @@ export class ListComponent implements AfterViewInit, OnInit {
    */
   loadFilterForm() : void {
     this.filterForm = this.formBuilder.group({
-      initial_date: [{value: '', disabled:false}, Validators.required],
-      final_date: [{value: '', disabled:false}, Validators.required],
+      initial_date: [{value: '', disabled:false},],
+      final_date: [{value: '', disabled:false},],
+      customer: [{value: '', disabled:false},],
+      contract: [{value: '', disabled:false},],
+      customer_type: [{value: '', disabled:false},],
     });
   }
+
+  /**
+   * Filter By Customer
+   */
+  filterSelect(){
+    this.customerService.getCustomers(this.customerFilterForm.value, this.filterForm.value).subscribe(res => {
+      this.getCustomersPaginator(this.paginator);
+    })
+  }
+
+  /**
+   * Service Customers
+   */
+  loadCustomers(){
+    this.taskService.getCustomers().subscribe(customers => {this.customers = customers.data} )
+  }
+
+  /**
+   * Service Contracts
+   */
+  loadContracts(){
+    this.contractService.getContracts(this.customerFilterForm.value).subscribe(contracts => {this.contracts = contracts.data} )
+  }
+
+  /**
+   * Service Customer Types
+   */
+  loadCustomerTypes(){
+    this.customerTypeService.getCustomerTypes(this.customerFilterForm.value).subscribe(customerTypes => {this.customerTypes = customerTypes.data} )
+  }
+
 
   /**
    * Validate form in general

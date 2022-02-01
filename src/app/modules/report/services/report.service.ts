@@ -33,12 +33,4 @@ export class ReportService {
     return this.http.post(`${this.baseUrl}/tasks-export/`, '',{responseType: 'blob', params})
   }
 
-  createBlobToExcel(data: any){
-    return new Blob([data], { type: 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet' });
-  }
-
-  createBlobToPdf(data: any){
-    return new Blob([data], { type: 'application/pdf' });
-  }
-
 }
