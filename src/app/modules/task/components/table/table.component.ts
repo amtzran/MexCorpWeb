@@ -12,6 +12,7 @@ import {NgxSpinnerService} from "ngx-spinner";
 import {SharedService} from "../../../../shared/services/shared.service";
 import {Customer} from "../../../customer/customers/interfaces/customer.interface";
 import {Employee, JobCenter} from "../../../employee/interfaces/employee.interface";
+import {FormBuilder, FormGroup} from "@angular/forms";
 
 @Component({
   selector: 'app-table',
@@ -35,31 +36,7 @@ export class TableComponent implements OnInit {
   idJobCenter : number | string = '';
   status : number | string = '';
   changeEvent : boolean = true;
-
-  constructor(private taskService: TaskService,
-              private dialog: MatDialog,
-              private spinner: NgxSpinnerService,
-              private sharedService: SharedService) {}
-
-  ngOnInit(): void {
-    // Type Customers
-    this.taskService.getCustomers().subscribe(customers => {this.customers = customers.data} )
-
-    // Type Groups
-    this.taskService.getJobCenters().subscribe(jobCenters => {this.jobCenters = jobCenters.data} )
-
-    // Type Employees
-    this.taskService.getEmployees().subscribe(employees => {this.employees = employees.data} )
-
-    forwardRef(() => Calendar)
-    // Valuers Initials Calendar
-    this.initCalendar()
-    // Events From Api
-    this.initTaskCalendar()
-
-    //Update Main Component
-    this.updateEventSharedService()
-  }
+  calendarForm!: FormGroup;
 
   /**
    * Values Initials Calendar
@@ -83,6 +60,33 @@ export class TableComponent implements OnInit {
 
   //This Values Ranges Date
   modeFull = true;
+
+  constructor(private taskService: TaskService,
+              private dialog: MatDialog,
+              private spinner: NgxSpinnerService,
+              private sharedService: SharedService,
+              private formBuilder : FormBuilder) {}
+
+  ngOnInit(): void {
+    // Selects
+    this.loadCalendarGroup()
+    // Type Customers
+    this.loadDataCustomers()
+    // Type Groups
+    this.taskService.getJobCenters().subscribe(jobCenters => {this.jobCenters = jobCenters.data} )
+
+    // Type Employees
+    this.taskService.getEmployees().subscribe(employees => {this.employees = employees.data} )
+
+    forwardRef(() => Calendar)
+    // Valuers Initials Calendar
+    this.initCalendar()
+    // Events From Api
+    this.initTaskCalendar()
+
+    //Update Main Component
+    this.updateEventSharedService()
+  }
 
   /**
    * initialization Calendar Main View
@@ -252,18 +256,6 @@ export class TableComponent implements OnInit {
   }
 
   /**
-   * Filter By Customer in Task
-   * @param idCustomer
-   */
-  filterSelectCustomer(idCustomer: number){
-    this.taskService.getTasks(idCustomer, '', '', '').subscribe(res => {
-      this.idCustomer = idCustomer
-      this.tasks = []
-      this.initTaskCalendar()
-    })
-  }
-
-  /**
    * Filter By Employee in Task
    * @param idEmployee
    */
@@ -310,6 +302,36 @@ export class TableComponent implements OnInit {
       // Events From Api
       this.initTaskCalendar()
     })
+  }
+
+  /**
+   * Filter Customer and Search
+   * @param customer
+   */
+  setCustomer(customer: Customer){
+    this.taskService.getTasks(String(customer), '', '', '').subscribe(res => {
+      this.idCustomer = String(customer)
+      this.tasks = []
+      this.initTaskCalendar()
+    })
+  }
+
+  /**
+   * Load Form
+   */
+  loadCalendarGroup() {
+    this.calendarForm = this.formBuilder.group({
+      'customer' : ['']
+    })
+  }
+
+  /**
+   * Array from service for Customers
+   */
+  loadDataCustomers(){
+    this.taskService.getCustomers().subscribe(customers => {
+      this.customers = customers.data
+    } )
   }
 
 }

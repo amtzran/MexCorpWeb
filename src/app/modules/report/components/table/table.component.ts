@@ -42,6 +42,9 @@ export class TableComponent implements OnInit {
     this.loadReportForm()
   }
 
+  /**
+   * load Form Reactive Form
+   */
   loadReportForm() : void {
     this.reportForm = this.formBuilder.group({
       initial_date: [{value: '', disabled:false}, Validators.required],
@@ -53,6 +56,10 @@ export class TableComponent implements OnInit {
     });
   }
 
+  /**
+   * Export Excel and Pdf with filters
+   * @param type
+   */
   downloadReport(type: string){
     this.validateForm()
     this.spinner.show()

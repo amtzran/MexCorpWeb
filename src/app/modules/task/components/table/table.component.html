@@ -2,7 +2,7 @@
 
 <div fxLayout="row" fxLayoutGap="10px" fxLayout.xs="column">
 
-  <div class="container" fxFlex="100" fxLayout="column" fxLayout.xs="column">
+  <div class="container" fxFlex="100" fxLayout="column" fxLayout.xs="column" [formGroup]="calendarForm">
 
     <div fxLayout="row"
          fxLayout.xs="column"
@@ -16,16 +16,20 @@
       </button>
       </div>
 
-      <mat-form-field fxFlex="100">
-        <mat-label>Clientes</mat-label>
-        <mat-select
-          (selectionChange)="filterSelectCustomer($event.value)">
-          <mat-option value="">TODOS</mat-option>
-          <mat-option *ngFor="let customer of customers" [value]="customer.id">
-            {{ customer.name}}
-          </mat-option>
-        </mat-select>
-      </mat-form-field>
+      <ng-select fxFlex="100"
+                 bindLabel="name"
+                 placeholder="Clientes"
+                 formControlName="customer"
+                 [multiple]="false"
+                 appendTo="body"
+                 [searchable]="true"
+                 [clearable]="true"
+                 (change)="setCustomer($event)">
+        <ng-option value="">TODOS</ng-option>
+        <ng-option *ngFor="let customer of customers" [value]="customer.id">
+          {{customer.name}}
+        </ng-option>
+      </ng-select>
 
       <mat-form-field fxFlex="100">
         <mat-label>Empleados</mat-label>

@@ -45,3 +45,5 @@ To get more help on the Angular CLI use `ng help` or go check out the [Angular C
 4.-ngx-multiple-dates ^13.0.0
 
 5.-FileSaver ^2.0.5
+
+6.-ng-select" ^8.1.1

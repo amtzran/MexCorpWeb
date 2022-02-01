@@ -37,7 +37,6 @@ export class CrudComponent implements OnInit {
 
   // Fill Selects Crud
   customers!: Customer[];
-  //jobCenters!: Observable<JobCenter[]>;
   jobCenters!: JobCenter[];
   employees!: Employee[];
   workTypes!: WorkType[];
@@ -73,19 +72,11 @@ export class CrudComponent implements OnInit {
   ) { }
 
   ngOnInit(): void {
-    // Customers init
-    this._taskService.getCustomers().subscribe(customers => {this.customers = customers.data} )
+    // Customers
+    this.loadDataCustomers()
 
     // Type Job Centers
-    this._taskService.getJobCenters().subscribe(jobCenters => {
-      this.jobCenters = jobCenters.data
-      /*this.jobCentersFilter = jobCenters.data
-      this.jobCenters = this.taskForm.valueChanges.pipe(
-        startWith(''),
-        map(value => (typeof value === 'string' ? value : value.name)),
-        map(name => (name ? this._filter(name) : jobCenters.data.slice())),
-      )*/
-    })
+    this._taskService.getJobCenters().subscribe(jobCenters => {this.jobCenters = jobCenters.data})
 
     // Type Employees
     this._taskService.getEmployees().subscribe(employees => {this.employees = employees.data} )
@@ -125,6 +116,13 @@ export class CrudComponent implements OnInit {
     /*Formulario*/
     //this.loadDoorFilterForm();
     if (this.task.info) this.getDoorsPaginator(this.paginator);
+  }
+
+  // Data Customers
+  loadDataCustomers(){
+    this._taskService.getCustomers().subscribe(customers => {
+      this.customers = customers.data
+    } )
   }
 
   /**
@@ -358,16 +356,6 @@ export class CrudComponent implements OnInit {
     if (this.dataSource.paginator) {
       this.dataSource.paginator.firstPage();
     }
-  }
-
-  displayFn(jobCenter: JobCenter): string {
-    return jobCenter && jobCenter.name ? jobCenter.name : '';
-  }
-
-  private _filter(name: string): JobCenter[] {
-    const filterValue = name.toLowerCase();
-
-    return this.jobCenters.filter(option => option.name.toLowerCase().includes(filterValue));
   }
 
  /* /!* Método que permite iniciar los filtros de rutas*!/
