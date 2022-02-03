@@ -1,5 +1,5 @@
 import {Component, Inject, Input, OnInit, ViewChild} from '@angular/core';
-import {FormBuilder, FormGroup, Validators} from "@angular/forms";
+import {FormBuilder, FormControl, FormGroup, Validators} from "@angular/forms";
 import {Customer} from "../../../customer/customers/interfaces/customer.interface";
 import {SharedService} from "../../../../shared/services/shared.service";
 import {MAT_DIALOG_DATA, MatDialog, MatDialogRef} from "@angular/material/dialog";
@@ -14,6 +14,7 @@ import {MatPaginator} from "@angular/material/paginator";
 import {MatSort} from "@angular/material/sort";
 import {NgxSpinnerService} from "ngx-spinner";
 import {ConfirmComponent} from "../../../../shared/components/confirm/confirm.component";
+import * as moment from "moment";
 
 @Component({
   selector: 'app-crud',
@@ -58,8 +59,8 @@ export class CrudComponent implements OnInit {
     private sharedService: SharedService,
     private dialogRef: MatDialogRef<CrudComponent>,
     private dialog: MatDialog,
-    private _taskService: TaskService,
-    private _dateService: DateService,
+    private taskService: TaskService,
+    private dateService: DateService,
     private spinner: NgxSpinnerService,
     @Inject(MAT_DIALOG_DATA) public task : {
       idTask: number,
@@ -67,7 +68,8 @@ export class CrudComponent implements OnInit {
       info: boolean,
       calendar: CalendarDate,
       eventDrag: boolean,
-      eventDragUpdate: boolean
+      eventDragUpdate: boolean,
+      multiple: boolean
     }
   ) { }
 
@@ -76,13 +78,13 @@ export class CrudComponent implements OnInit {
     this.loadDataCustomers()
 
     // Type Job Centers
-    this._taskService.getJobCenters().subscribe(jobCenters => {this.jobCenters = jobCenters.data})
+    this.taskService.getJobCenters().subscribe(jobCenters => {this.jobCenters = jobCenters.data})
 
     // Type Employees
-    this._taskService.getEmployees().subscribe(employees => {this.employees = employees.data} )
+    this.taskService.getEmployees().subscribe(employees => {this.employees = employees.data} )
 
     // Type Customers
-    this._taskService.getWorkTypes().subscribe(workTypes => {this.workTypes = workTypes.data} )
+    this.taskService.getWorkTypes().subscribe(workTypes => {this.workTypes = workTypes.data} )
 
     /*Formulario*/
     this.loadTaskForm();
@@ -120,7 +122,7 @@ export class CrudComponent implements OnInit {
 
   // Data Customers
   loadDataCustomers(){
-    this._taskService.getCustomers().subscribe(customers => {
+    this.taskService.getCustomers().subscribe(customers => {
       this.customers = customers.data
     } )
   }
@@ -130,7 +132,7 @@ export class CrudComponent implements OnInit {
    */
   loadTaskById(): void{
     this.spinner.show()
-    this._taskService.getTaskById(this.task.idTask).subscribe(response => {
+    this.taskService.getTaskById(this.task.idTask).subscribe(response => {
       this.spinner.hide()
       this.title = `Información de la Tarea | ${response.data.status} | ${response.data.folio}`;
       // Data Doors by Customer
@@ -145,8 +147,8 @@ export class CrudComponent implements OnInit {
         work_type_id: response.data.work_type_id,
         initial_hour: response.data.initial_hour,
         final_hour: response.data.final_hour,
-        initial_date: this._dateService.getFormatDateSetInputRangePicker(response.data.initial_date),
-        final_date: this._dateService.getFormatDateSetInputRangePicker(response.data.final_date)
+        initial_date: this.dateService.getFormatDateSetInputRangePicker(response.data.initial_date!),
+        final_date: this.dateService.getFormatDateSetInputRangePicker(response.data.final_date!)
       })
     }, (error => {
         this.spinner.hide()
@@ -160,7 +162,7 @@ export class CrudComponent implements OnInit {
    */
   loadTaskByIdDrag(): void{
     this.spinner.show()
-    this._taskService.getTaskById(this.task.idTask).subscribe(response => {
+    this.taskService.getTaskById(this.task.idTask).subscribe(response => {
       this.spinner.hide()
       // Data Doors by Customer
       this.loadAccess(response.data.customer_id)
@@ -195,13 +197,15 @@ export class CrudComponent implements OnInit {
       employee_id:[{value:'', disabled:this.task.info}, Validators.required],
       work_type_id:[{value:'', disabled:this.task.info}, Validators.required],
       doors:[{value: [], disabled:this.task.info}, Validators.required],
-      initial_date: [{value: '', disabled:this.task.info}, Validators.required],
-      final_date: [{value: '', disabled:this.task.info}, Validators.required],
       initial_hour: [{value: '', disabled:this.task.info}, Validators.required],
       final_hour: [{value: '', disabled:this.task.info}, Validators.required],
       comments: [{value: '', disabled:this.task.info},],
-      //multiple_date: [{value: [], disabled:this.task.info},],
+      dates: [{value: [], disabled:this.task.info}, Validators.required],
     });
+    if (!this.task.multiple) {
+      this.taskForm.addControl('initial_date', new FormControl('', Validators.required))
+      this.taskForm.addControl('final_date', new FormControl('', Validators.required))
+    }
   }
 
   /**
@@ -220,7 +224,6 @@ export class CrudComponent implements OnInit {
       initial_hour: [{value: this.task.calendar.initial_hour, disabled:this.task.info}, Validators.required],
       final_hour: [{value: this.task.calendar.final_hour, disabled:this.task.info}, Validators.required],
       comments: [{value: '', disabled:this.task.info},],
-      //multiple_date: [{value: [], disabled:this.task.info},],
     });
   }
 
@@ -230,15 +233,34 @@ export class CrudComponent implements OnInit {
   addTask(): void {
     this.setValueSubmit()
     this.spinner.show()
-    this._taskService.addTask(this.taskForm.value).subscribe(response => {
-      this.spinner.hide()
-      this.sharedService.showSnackBar(`Se ha agregado correctamente la Tarea: ${response.data.title}`);
-      this.dialogRef.close(ModalResponse.UPDATE);
-      }, (error => {
-        this.spinner.hide()
-        this.sharedService.errorDialog()
+    if (this.task.multiple) {
+      let convertDate: any = [];
+      this.taskForm.value.dates?.forEach(function (value : any) : string {
+        return convertDate.push(moment(new Date(value)).format('YYYY-MM-DD').toString())
       })
-    )
+      this.taskForm.value.dates = convertDate;
+      this.taskService.multipleTask(this.taskForm.value).subscribe(response => {
+          this.spinner.hide()
+          this.sharedService.showSnackBar(`Se ha agregado correctamente las Tareas.`);
+          this.dialogRef.close(ModalResponse.UPDATE);
+        }, (error => {
+          this.spinner.hide()
+          this.sharedService.errorDialog()
+        })
+      )
+    }
+    else {
+      this.taskService.addTask(this.taskForm.value).subscribe(response => {
+          this.spinner.hide()
+          this.sharedService.showSnackBar(`Se ha agregado correctamente la Tarea: ${response.data.title}`);
+          this.dialogRef.close(ModalResponse.UPDATE);
+        }, (error => {
+          this.spinner.hide()
+          this.sharedService.errorDialog()
+        })
+      )
+    }
+
   }
 
   /**
@@ -247,7 +269,7 @@ export class CrudComponent implements OnInit {
   updateTask(): void {
     this.setValueSubmit()
     this.spinner.show()
-    this._taskService.updateTask(this.task.idTask, this.taskForm.value).subscribe(response => {
+    this.taskService.updateTask(this.task.idTask, this.taskForm.value).subscribe(response => {
       this.spinner.hide()
       this.sharedService.showSnackBar(`Se ha actualizado correctamente la Tarea: ${response.data.title}` );
       this.dialogRef.close(ModalResponse.UPDATE);
@@ -272,7 +294,7 @@ export class CrudComponent implements OnInit {
       (result) => {
         if (result) {
           this.spinner.show()
-          this._taskService.deleteTask(this.task.idTask).subscribe(response => {
+          this.taskService.deleteTask(this.task.idTask).subscribe(response => {
             this.spinner.hide()
             this.sharedService.showSnackBar(`Se ha eliminado correctamente la Tarea`);
             this.sharedService.updateComponent()
@@ -294,9 +316,9 @@ export class CrudComponent implements OnInit {
       this.sharedService.showSnackBar('Los campos con * son obligatorios.');
       return
     }
-    this.initialDate = this._dateService.getFormatDataDate(this.taskForm.get('initial_date')?.value)
+    this.initialDate = this.dateService.getFormatDataDate(this.taskForm.get('initial_date')?.value)
     this.taskForm.get('initial_date')?.setValue(this.initialDate)
-    this.finalDate = this._dateService.getFormatDataDate(this.taskForm.get('final_date')?.value)
+    this.finalDate = this.dateService.getFormatDataDate(this.taskForm.get('final_date')?.value)
     this.taskForm.get('final_date')?.setValue(this.finalDate)
   }
 
@@ -313,7 +335,7 @@ export class CrudComponent implements OnInit {
    * @param idCustomer
    */
   loadAccess(idCustomer: number) {
-    this._taskService.getDoorTypes(idCustomer).subscribe(
+    this.taskService.getDoorTypes(idCustomer).subscribe(
       doorTypesByCustomer => {
         this.doorTypes = doorTypesByCustomer.data
         if (this.doorTypes.length === 0) {
@@ -331,7 +353,7 @@ export class CrudComponent implements OnInit {
     /*const paginator: MatPaginator = event;
     this.doorPaginateForm.get('page')?.setValue(paginator.pageIndex + 1);*/
     this.spinner.show()
-    this._taskService.getTaskByIdDoors(this.task.idTask)
+    this.taskService.getTaskByIdDoors(this.task.idTask)
       .subscribe(task => {
         this.spinner.hide()
         this.dataSource.data = task.data

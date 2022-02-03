@@ -183,7 +183,7 @@ export class TableComponent implements OnInit {
       final_date: finalDate
     }
 
-    this.openDialogTask(true, Number(selectInfoEventDrag.event.id), false, data, true)
+    this.openDialogTask(true, Number(selectInfoEventDrag.event.id), false, data, true, false)
 
   }
 
@@ -205,7 +205,7 @@ export class TableComponent implements OnInit {
       final_date: finalDate
     }
 
-    this.openDialogTask(false, null, false, data, false)
+    this.openDialogTask(false, null, false, data, false, false)
 
   }
 
@@ -217,10 +217,10 @@ export class TableComponent implements OnInit {
 
     this.taskService.getTaskById(Number(clickInfo.event.id)).subscribe(res => {
       if (res.data.status === 'Programado') {
-        this.openDialogTask(true, Number(clickInfo.event.id), false, null, false)
+        this.openDialogTask(true, Number(clickInfo.event.id), false, null, false, false)
       }
       if (res.data.status === 'Finalizado' || res.data.status === 'En Proceso') {
-        this.openDialogTask(false, Number(clickInfo.event.id), true, null, false)
+        this.openDialogTask(false, Number(clickInfo.event.id), true, null, false, false)
       }
     })
 
@@ -241,13 +241,14 @@ export class TableComponent implements OnInit {
    * @param info
    * @param calendar
    * @param eventDrag
+   * @param multiple
    */
-  openDialogTask(edit: boolean, idTask: number | null, info: boolean, calendar: CalendarDate | null, eventDrag: boolean): void {
+  openDialogTask(edit: boolean, idTask: number | null, info: boolean, calendar: CalendarDate | null, eventDrag: boolean, multiple: boolean): void {
     const dialogRef = this.dialog.open(CrudComponent, {
       autoFocus: false,
       disableClose: true,
       width: '250vw',
-      data: {edit: edit, idTask: idTask, info: info, calendar, eventDrag: eventDrag}
+      data: {edit: edit, idTask: idTask, info: info, calendar, eventDrag: eventDrag, multiple: multiple}
     });
     dialogRef.afterClosed().subscribe(res => {
       this.tasks = []

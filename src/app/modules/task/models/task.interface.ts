@@ -21,8 +21,8 @@ export interface Task {
   employee_name?: string;
   work_type_id: number;
   work_type_name?: string
-  initial_date: string;
-  final_date: string;
+  initial_date?: string;
+  final_date?: string;
   initial_hour: string;
   final_hour: string;
   start_task_hour?: string | null;
@@ -31,6 +31,7 @@ export interface Task {
   created_at?: string;
   updated_at?: string;
   comments: null | string;
+  dates?: [];
   doors: Door[]
 }
 

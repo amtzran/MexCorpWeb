@@ -6,13 +6,16 @@ import {CalendarDate, ModelTask, ModelWorkType, Task, TaskDetail} from "../model
 import {ModelCustomer} from "../../customer/customers/interfaces/customer.interface";
 import {Employee, ModelEmployee, ModelJobCenter} from "../../employee/interfaces/employee.interface";
 import {Door, DoorDetailTask, ModelDoorType} from "../../customer/doors/interfaces/door.interface";
+import {DateService} from "../../../core/utils/date.service";
+import * as moment from "moment";
 
 @Injectable({
   providedIn: 'root'
 })
 export class TaskService {
 
-  constructor( private http: HttpClient) { }
+  constructor(private http: HttpClient,
+              private dateService: DateService) { }
   private baseUrl: string = environment.baseUrl
 
   // Get Task
@@ -42,6 +45,11 @@ export class TaskService {
   // Add Task
   addTask(task: Task): Observable<TaskDetail> {
     return this.http.post<TaskDetail>(`${this.baseUrl}/tasks/`, task)
+  }
+
+  // multiple Task
+  multipleTask(task: Task): Observable<TaskDetail> {
+    return this.http.post<TaskDetail>(`${this.baseUrl}/tasks-multiple/`, task)
   }
 
   // Update Contract

@@ -34,7 +34,9 @@ table {
   text-align: center;
 }
 
-/*td, th {
-  width: 25%;
-}*/
+/** Ng Select Search design*/
+.ng-select {
+  padding-bottom: 0;
+  bottom: 12px;
+}
 
