@@ -82,6 +82,27 @@ export class TableComponent implements OnInit {
   }
 
   /**
+   * Export Excel and Pdf with filters
+   */
+  reportTaskPdf(){
+    this.validateForm()
+    this.spinner.show()
+    this.reportService.reportTaskPdf(this.reportForm.value).subscribe(res => {
+        let file = this.sharedService.createBlobToPdf(res);
+        let date_initial = this.dateService.getFormatDataDate(this.reportForm.value.initial_date)
+        let final_date = this.dateService.getFormatDataDate(this.reportForm.value.final_date)
+
+        fileSaver.saveAs(file, `Reporte-General-Tareas-${date_initial}-${final_date}`);
+
+        this.spinner.hide()
+      }, (error => {
+        this.spinner.hide()
+        this.sharedService.errorDialog(error)
+      })
+    )
+  }
+
+  /**
    * Validate form in general
    */
   validateForm(){

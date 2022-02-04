@@ -78,8 +78,15 @@
               </mat-form-field>
 
               <div fxFlex="100" fxLayoutAlign="center center">
-                <button mat-button color="warn" (click)="downloadReport('pdf')" [disabled]="reportForm.invalid">
+                <button mat-button color="warn" (click)="reportTaskPdf()" [disabled]="reportForm.invalid">
                   Reporte
+                  <mat-icon mat-list-icon>picture_as_pdf</mat-icon>
+                </button>
+              </div>
+
+              <div fxFlex="100" fxLayoutAlign="center center">
+                <button mat-button color="warn" (click)="downloadReport('pdf')" [disabled]="reportForm.invalid">
+                  Exportar
                   <mat-icon mat-list-icon>picture_as_pdf</mat-icon>
                 </button>
               </div>

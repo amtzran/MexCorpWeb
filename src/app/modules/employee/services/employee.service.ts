@@ -52,6 +52,11 @@ export class EmployeeService {
     return this.http.delete<number>(`${this.baseUrl}/employees/${id}`)
   }
 
+  // reset Password Employee
+  resetPassword(employee: Employee): Observable<Employee> {
+    return this.http.post<Employee>(`${this.baseUrl}/employees-reset-password/`, employee)
+  }
+
   // Get Job Centers
   getJobCenters() : Observable<ModelJobCenter> {
     return this.http.get<ModelJobCenter>(`${this.baseUrl}/groups/`)

@@ -33,4 +33,19 @@ export class ReportService {
     return this.http.post(`${this.baseUrl}/tasks-export/`, '',{responseType: 'blob', params})
   }
 
+  reportTaskPdf(filterTask: reportTask) : Observable<any> {
+    let initial_date = this.dateService.getFormatDataDate(filterTask.initial_date)
+    let final_date = this.dateService.getFormatDataDate(filterTask.final_date)
+    let customer = String(filterTask.customer)
+    let employee = String(filterTask.employee)
+    let group = String(filterTask.job_center)
+    let params = new HttpParams();
+    params = params.append('initial_date', initial_date);
+    params = params.append('final_date', final_date);
+    params = params.append('customer', customer);
+    params = params.append('employee', employee);
+    params = params.append('group', group);
+    return this.http.post(`${this.baseUrl}/task-summary-report/`, '',{responseType: 'blob', params})
+  }
+
 }

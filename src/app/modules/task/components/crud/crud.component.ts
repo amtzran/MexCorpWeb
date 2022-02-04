@@ -269,6 +269,11 @@ export class CrudComponent implements OnInit {
   updateTask(): void {
     this.setValueSubmit()
     this.spinner.show()
+    // Set Date for Input.
+    let initialDate = this.dateService.getFormatDateSetInputRangePicker(this.taskForm.value.initial_date);
+    let finalDate = this.dateService.getFormatDateSetInputRangePicker(this.taskForm.value.final_date);
+    this.taskForm.get('initial_date')?.setValue(initialDate);
+    this.taskForm.get('final_date')?.setValue(finalDate);
     this.taskService.updateTask(this.task.idTask, this.taskForm.value).subscribe(response => {
       this.spinner.hide()
       this.sharedService.showSnackBar(`Se ha actualizado correctamente la Tarea: ${response.data.title}` );

@@ -12,6 +12,8 @@ import {SharedService} from "../../../../shared/services/shared.service";
 import {ConfirmComponent} from "../../../../shared/components/confirm/confirm.component";
 import {ActiveComponent} from "../../../../shared/components/active/active.component";
 import {NgxSpinnerService} from "ngx-spinner";
+import {ProfileUser} from "../../../auth/interfaces/login.interface";
+import {ResetPasswordComponent} from "../../components/reset-password/reset-password.component";
 
 @Component({
   selector: 'app-list',
@@ -119,6 +121,24 @@ export class ListComponent implements OnInit {
       disableClose: true,
       width: '50vw',
       data: {edit: edit, idEmployee: idEmployee, info: info}
+    });
+    dialogRef.afterClosed().subscribe(res => {
+      if (res === ModalResponse.UPDATE) {
+        this.getEmployeesPaginator(this.paginator);
+      }
+    });
+  }
+
+  /**
+   *
+   * @param employee
+   */
+  resetPassword(employee: ProfileUser){
+    const dialogRef = this.dialog.open(ResetPasswordComponent, {
+      autoFocus: false,
+      disableClose: true,
+      width: '50vw',
+      data: employee
     });
     dialogRef.afterClosed().subscribe(res => {
       if (res === ModalResponse.UPDATE) {
