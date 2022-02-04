@@ -1,11 +1,22 @@
 <div fxLayout="column" fxLayoutAlign="center center">
-<h1>Algo salió Mal</h1>
-<hr>
-<p>
-  Los datos que ingresaste no son correctos
-  <br>
-  Ó verifica tu conexión a internet
-</p>
+
+  <div *ngIf="data.status == 401; else errorGeneral">
+    <h1>Permisos No Autorizados</h1>
+    <hr>
+    <p>
+      {{ data.error.message }}
+    </p>
+  </div>
+
+  <ng-template #errorGeneral>
+    <h1>Algo salió Mal</h1>
+    <hr>
+    <p>
+      Los datos que ingresaste no son correctos
+      <br>
+      Ó verifica tu conexión a internet
+    </p>
+  </ng-template>
 
   <div fxFlex="100">
     <button mat-button (click)="cancel()" color="warn">De acuerdo</button>

@@ -10,6 +10,7 @@ import { ReactiveFormsModule} from "@angular/forms";
 import { CrudComponent } from './components/crud/crud.component';
 import { EmployeeComponent } from './employee.component';
 import {NgxSpinnerModule} from "ngx-spinner";
+import {NgSelectModule} from "@ng-select/ng-select";
 
 
 @NgModule({
@@ -19,13 +20,14 @@ import {NgxSpinnerModule} from "ngx-spinner";
     CrudComponent,
     EmployeeComponent
   ],
-    imports: [
-        CommonModule,
-        EmployeeRoutingModule,
-        MaterialModule,
-        FlexLayoutModule,
-        ReactiveFormsModule,
-        NgxSpinnerModule
-    ]
+  imports: [
+    CommonModule,
+    EmployeeRoutingModule,
+    MaterialModule,
+    FlexLayoutModule,
+    ReactiveFormsModule,
+    NgxSpinnerModule,
+    NgSelectModule,
+  ]
 })
 export class EmployeeModule { }

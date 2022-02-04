@@ -82,6 +82,30 @@
 
           </div>
 
+          <div fxLayout="row"
+               fxLayout.xs="column"
+               fxLayoutGap="20px">
+
+            <ng-select fxFlex="100"
+                       bindLabel="description"
+                       placeholder="Permisos"
+                       formControlName="permissions_user"
+                       [multiple]="true"
+                       appendTo="body"
+                       [searchable]="true"
+                       [clearable]="true"
+                       bindValue="id"
+                       [compareWith]="setValueSelectObjectMultiple">
+              <ng-option *ngFor="let permission of permissions" [value]="permission.id">
+                {{permission.description}}
+              </ng-option>
+            </ng-select>
+            <mat-error *ngIf="fieldInvalid('permissions_user')">
+              *
+            </mat-error>
+
+          </div>
+
         </div>
 
       </div>

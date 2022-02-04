@@ -19,3 +19,15 @@ export interface MetaModel {
   total: number
 }
 
+export interface Permission {
+  data: DataPermission[]
+}
+
+export interface DataPermission {
+  id: number;
+  name: string;
+  description?: string;
+  created_at?: string;
+  updated_at?: string
+}
+

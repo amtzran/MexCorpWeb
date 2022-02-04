@@ -65,7 +65,7 @@ export class CrudComponent implements OnInit {
         },
         (error => {
           this.spinner.hide()
-          this.sharedService.errorDialog()
+          this.sharedService.errorDialog(error)
         })
       );
       this.doorForm.updateValueAndValidity();
@@ -94,7 +94,7 @@ export class CrudComponent implements OnInit {
       this.doorForm.setValue(response.data);
       }, (error => {
         this.spinner.hide()
-        this.sharedService.errorDialog()
+        this.sharedService.errorDialog(error)
       } )
     )
   }

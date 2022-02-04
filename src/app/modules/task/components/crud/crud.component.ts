@@ -152,7 +152,7 @@ export class CrudComponent implements OnInit {
       })
     }, (error => {
         this.spinner.hide()
-        this.sharedService.errorDialog()
+        this.sharedService.errorDialog(error)
       })
     )
   }
@@ -181,7 +181,7 @@ export class CrudComponent implements OnInit {
       })
       }, (error => {
         this.spinner.hide()
-        this.sharedService.errorDialog()
+        this.sharedService.errorDialog(error)
       })
     )
   }
@@ -245,7 +245,7 @@ export class CrudComponent implements OnInit {
           this.dialogRef.close(ModalResponse.UPDATE);
         }, (error => {
           this.spinner.hide()
-          this.sharedService.errorDialog()
+          this.sharedService.errorDialog(error)
         })
       )
     }
@@ -256,7 +256,7 @@ export class CrudComponent implements OnInit {
           this.dialogRef.close(ModalResponse.UPDATE);
         }, (error => {
           this.spinner.hide()
-          this.sharedService.errorDialog()
+          this.sharedService.errorDialog(error)
         })
       )
     }
@@ -275,7 +275,7 @@ export class CrudComponent implements OnInit {
       this.dialogRef.close(ModalResponse.UPDATE);
       }, (error => {
         this.spinner.hide()
-        this.sharedService.errorDialog()
+        this.sharedService.errorDialog(error)
       })
     )
   }
@@ -300,7 +300,7 @@ export class CrudComponent implements OnInit {
             this.sharedService.updateComponent()
             }, (error => {
               this.spinner.hide()
-              this.sharedService.errorDialog()
+              this.sharedService.errorDialog(error)
             })
           )
         }
@@ -361,7 +361,7 @@ export class CrudComponent implements OnInit {
         //this.totalItems = task.meta.total;
         }, (error => {
           this.spinner.hide()
-          this.sharedService.errorDialog()
+          this.sharedService.errorDialog(error)
         })
       )
   }

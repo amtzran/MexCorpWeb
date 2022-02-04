@@ -64,7 +64,7 @@ export class TableGroupComponent implements OnInit {
       this.totalItems = response.meta.total;
       }, (error => {
         this.spinner.hide()
-        this.sharedService.errorDialog()
+        this.sharedService.errorDialog(error)
       } )
     )
   }

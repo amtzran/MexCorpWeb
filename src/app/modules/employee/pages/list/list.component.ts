@@ -58,7 +58,7 @@ export class ListComponent implements OnInit {
         this.totalItems = employees.meta.total;
         }, (error => {
           this.spinner.hide()
-          this.sharedService.errorDialog()
+          this.sharedService.errorDialog(error)
         } )
       )
   }

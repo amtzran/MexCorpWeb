@@ -6,6 +6,7 @@ import {Job, JobCenter} from "../../interfaces/employee.interface";
 import {ModalResponse} from "../../../../core/utils/ModalResponse";
 import {SharedService} from "../../../../shared/services/shared.service";
 import {NgxSpinnerService} from "ngx-spinner";
+import {DataPermission} from "../../../../shared/interfaces/shared.interface";
 
 @Component({
   selector: 'app-crud',
@@ -28,29 +29,22 @@ export class CrudComponent implements OnInit {
   // Fill Selects Job Centers and Jobs
   jobCenters: JobCenter[] = [];
   jobs: Job[] = []
+  permissions!: DataPermission[];
 
   constructor(
     private fb: FormBuilder,
     private sharedService: SharedService,
     private dialogRef: MatDialogRef<CrudComponent>,
-    private _employeeService: EmployeeService,
+    private employeeService: EmployeeService,
     private spinner: NgxSpinnerService,
     @Inject(MAT_DIALOG_DATA) public employee : {idEmployee: number, edit: boolean, info: boolean}
   ) { }
 
   ngOnInit(): void {
-
-    // Job Centers
-    this._employeeService.getJobCenters()
-      .subscribe(jobCenters => {
-        this.jobCenters = jobCenters.data
-      } )
-
-    // Type Jobs
-    this._employeeService.getJobs()
-      .subscribe(jobs => {
-        this.jobs = jobs.data
-      } )
+    // Service selects
+    this.employeeService.getJobCenters().subscribe(jobCenters => {this.jobCenters = jobCenters.data} )
+    this.employeeService.getJobs().subscribe(jobs => {this.jobs = jobs.data} )
+    this.sharedService.getPermissions().subscribe( permissions => {this.permissions = permissions.data})
 
     /*Formulario*/
     this.loadEmployeeForm();
@@ -76,7 +70,7 @@ export class CrudComponent implements OnInit {
    */
   loadEmployeeById(): void{
     this.spinner.show()
-    this._employeeService.getEmployeeById(this.employee.idEmployee).subscribe(response => {
+    this.employeeService.getEmployeeById(this.employee.idEmployee).subscribe(response => {
       this.spinner.hide()
       delete response.data.id;
       delete response.data.user_id;
@@ -89,7 +83,7 @@ export class CrudComponent implements OnInit {
       this.employeeForm.setValue(response.data);
       }, (error => {
         this.spinner.hide()
-        this.sharedService.errorDialog()
+        this.sharedService.errorDialog(error)
       } )
     )
   }
@@ -106,6 +100,7 @@ export class CrudComponent implements OnInit {
       is_active:[{value:true, disabled:this.employee.info}],
       job_center_id: [{value: '', disabled:this.employee.info}, Validators.required],
       job_title_id: [{value: '', disabled:this.employee.info}, Validators.required],
+      permissions_user:[{value: [], disabled:this.employee.info}, Validators.required],
     });
   }
 
@@ -115,13 +110,13 @@ export class CrudComponent implements OnInit {
   addEmployee(): void {
     this.validateForm()
     this.spinner.show()
-    this._employeeService.addEmployee(this.employeeForm.value).subscribe(response => {
+    this.employeeService.addEmployee(this.employeeForm.value).subscribe(response => {
       this.spinner.hide()
       this.sharedService.showSnackBar('Se ha agregado correctamente el empleado.');
       this.dialogRef.close(ModalResponse.UPDATE);
       }, (error => {
         this.spinner.hide()
-        this.sharedService.errorDialog()
+        this.sharedService.errorDialog(error)
       } )
     )
   }
@@ -132,13 +127,13 @@ export class CrudComponent implements OnInit {
   updateEmployee(): void {
     this.validateForm()
     this.spinner.show()
-    this._employeeService.updateEmployee(this.employee.idEmployee, this.employeeForm.value).subscribe(response => {
+    this.employeeService.updateEmployee(this.employee.idEmployee, this.employeeForm.value).subscribe(response => {
       this.spinner.hide()
       this.sharedService.showSnackBar(`Se ha actualizado correctamente el empleado: ${response.data.name}` );
       this.dialogRef.close(ModalResponse.UPDATE);
       }, (error => {
         this.spinner.hide()
-        this.sharedService.errorDialog()
+        this.sharedService.errorDialog(error)
       } )
     )
   }
@@ -168,6 +163,19 @@ export class CrudComponent implements OnInit {
    */
   close(): void{
     this.dialogRef.close(ModalResponse.UPDATE);
+  }
+
+  /**
+   * Function for set value in select multiple with json
+   * Error Documentation versión 13.1.1
+   * @param objInitial
+   * @param objSelected
+   */
+  setValueSelectObjectMultiple(objInitial: any, objSelected: any) : any {
+
+    if (typeof objInitial !== 'undefined' && typeof objSelected !== 'undefined') {
+      return objInitial && objSelected ? objInitial === objSelected : objInitial === objSelected;
+    }
   }
 
 }

@@ -89,7 +89,7 @@ export class CrudComponent implements OnInit {
       this.customerForm.setValue(response.data);
       }, (error => {
         this.spinner.hide()
-        this.sharedService.errorDialog()
+        this.sharedService.errorDialog(error)
       } )
     )
   }
@@ -124,7 +124,7 @@ export class CrudComponent implements OnInit {
       this.dialogRef.close(ModalResponse.UPDATE);
       }, (error => {
         this.spinner.hide()
-        this.sharedService.errorDialog()
+        this.sharedService.errorDialog(error)
       })
     )
   }
@@ -141,7 +141,7 @@ export class CrudComponent implements OnInit {
       this.dialogRef.close(ModalResponse.UPDATE);
       }, (error => {
         this.spinner.hide()
-        this.sharedService.errorDialog()
+        this.sharedService.errorDialog(error)
       })
     )
   }

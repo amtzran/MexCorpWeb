@@ -2,20 +2,17 @@ import { Injectable } from '@angular/core';
 import {Observable} from "rxjs";
 import {HttpClient, HttpParams} from "@angular/common/http";
 import {environment} from "../../../../environments/environment";
-import {CalendarDate, ModelTask, ModelWorkType, Task, TaskDetail} from "../models/task.interface";
+import {ModelTask, ModelWorkType, Task, TaskDetail} from "../models/task.interface";
 import {ModelCustomer} from "../../customer/customers/interfaces/customer.interface";
-import {Employee, ModelEmployee, ModelJobCenter} from "../../employee/interfaces/employee.interface";
-import {Door, DoorDetailTask, ModelDoorType} from "../../customer/doors/interfaces/door.interface";
-import {DateService} from "../../../core/utils/date.service";
-import * as moment from "moment";
+import {ModelEmployee, ModelJobCenter} from "../../employee/interfaces/employee.interface";
+import {DoorDetailTask, ModelDoorType} from "../../customer/doors/interfaces/door.interface";
 
 @Injectable({
   providedIn: 'root'
 })
 export class TaskService {
 
-  constructor(private http: HttpClient,
-              private dateService: DateService) { }
+  constructor(private http: HttpClient) { }
   private baseUrl: string = environment.baseUrl
 
   // Get Task
@@ -57,7 +54,7 @@ export class TaskService {
     return this.http.put<TaskDetail>(`${this.baseUrl}/tasks/${idTask}/`, task)
   }
 
-  // Patch Date And Hour
+  /*// Patch Date And Hour
   patchTaskDateAndHour(idTask: number, date: CalendarDate) : Observable<Task> {
     let updateFields = {
       initial_date: date.initial_date,
@@ -66,7 +63,7 @@ export class TaskService {
       final_hour: date.final_hour
     }
     return this.http.patch<Task>(`${this.baseUrl}/employees/update/${idTask}/`, updateFields)
-  }
+  }*/
 
   // Delete Task
   deleteTask(id: number) : Observable<Task>{

@@ -2,14 +2,21 @@ import {EventEmitter, Injectable} from '@angular/core';
 import {MatSnackBar} from "@angular/material/snack-bar";
 import {MatDialog} from "@angular/material/dialog";
 import {ErrorComponent} from "../components/error/error.component";
+import {Observable} from "rxjs";
+import {HttpClient} from "@angular/common/http";
+import {environment} from "../../../environments/environment";
+import {Permission} from "../interfaces/shared.interface";
 
 @Injectable({
   providedIn: 'root'
 })
 export class SharedService {
 
-  constructor(private snackBar: MatSnackBar,
+  constructor(private http: HttpClient,
+              private snackBar: MatSnackBar,
               private dialog: MatDialog,) {}
+
+  private baseUrl: string = environment.baseUrl
 
   // Default Paginate tables
   pageSize = 10;
@@ -29,11 +36,11 @@ export class SharedService {
   /**
    * Component Error
    */
-  errorDialog() {
+  errorDialog(error: any) {
     // Show Dialog
-    const dialog = this.dialog.open(ErrorComponent, {
+    this.dialog.open(ErrorComponent, {
       width: '250',
-      data: 'error'
+      data: error
     })
 
   }
@@ -59,6 +66,13 @@ export class SharedService {
    */
   createBlobToPdf(data: any){
     return new Blob([data], { type: 'application/pdf' });
+  }
+
+  /**
+   * Get Permissions
+   */
+  getPermissions() : Observable<Permission> {
+    return this.http.get<Permission>(`${this.baseUrl}/permissions/`)
   }
 
 }

@@ -95,7 +95,7 @@ export class ListComponent implements OnInit {
         this.totalItems = doors.meta.total;
         }, (error => {
           this.spinner.hide()
-          this.sharedService.errorDialog()
+          this.sharedService.errorDialog(error)
         } )
       )
   }
@@ -176,7 +176,7 @@ export class ListComponent implements OnInit {
         this.spinner.hide()
       }, (error => {
         this.spinner.hide()
-        this.sharedService.errorDialog()
+        this.sharedService.errorDialog(error)
       })
     )
   }

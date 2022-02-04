@@ -76,7 +76,7 @@ export class TableComponent implements OnInit {
       this.spinner.hide()
       }, (error => {
         this.spinner.hide()
-        this.sharedService.errorDialog()
+        this.sharedService.errorDialog(error)
       })
     )
   }

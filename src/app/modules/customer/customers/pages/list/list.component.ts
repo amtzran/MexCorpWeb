@@ -82,7 +82,7 @@ export class ListComponent implements AfterViewInit, OnInit {
         this.totalItems = customers.meta.total;
         }, (error => {
           this.spinner.hide()
-          this.sharedService.errorDialog()
+          this.sharedService.errorDialog(error)
         })
       )
   }
@@ -175,7 +175,7 @@ export class ListComponent implements AfterViewInit, OnInit {
         this.spinner.hide()
       }, (error => {
         this.spinner.hide()
-        this.sharedService.errorDialog()
+        this.sharedService.errorDialog(error)
       })
     )
   }

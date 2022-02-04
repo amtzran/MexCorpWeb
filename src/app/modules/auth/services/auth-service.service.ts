@@ -1,9 +1,8 @@
 import { Injectable } from '@angular/core';
-import {HttpClient, HttpHeaders} from "@angular/common/http";
+import {HttpClient} from "@angular/common/http";
 import {catchError, map, Observable, of, tap} from "rxjs";
 import { environment } from "../../../../environments/environment";
 import {ChangePassword, Login, MessagePassword, NameUser, ProfileUser, User} from "../interfaces/login.interface";
-import {CommentCustomerDetail} from "../../customer/comments/models/comment.interface";
 
 @Injectable({
   providedIn: 'root'
@@ -28,7 +27,6 @@ export class AuthServiceService {
         tap(resp => {
           if (resp.access_token){
             localStorage.setItem('access_token', resp.access_token)
-            //localStorage.setItem('refresh', resp.refresh)
             this._user = {
               access: resp.access_token,
             }
@@ -41,7 +39,7 @@ export class AuthServiceService {
   // Method Validate Token
   validateToken(): Observable<boolean>{
     const url = `${this.baseUrl}/auth/users`
-    return this.http.get<any>(url)
+    return this.http.get<ProfileUser>(url)
       .pipe(
         map(resp => {
           // If exist Email is authenticated
@@ -71,6 +69,10 @@ export class AuthServiceService {
 
   changeNameUser(data: NameUser): Observable<MessagePassword>{
     return this.http.put<MessagePassword>(`${this.baseUrl}/auth/users/`, data)
+  }
+
+  validatePermission() : Observable<any> {
+    return this.http.get<any>(`${this.baseUrl}/auth/users/`)
   }
 
 }

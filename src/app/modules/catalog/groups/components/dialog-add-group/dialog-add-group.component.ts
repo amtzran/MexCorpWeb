@@ -57,7 +57,7 @@ export class DialogAddGroupComponent implements OnInit {
         },
         (error => {
           this.spinner.hide()
-          this.sharedService.errorDialog()
+          this.sharedService.errorDialog(error)
         })
       );
       this.groupForm.updateValueAndValidity();
@@ -83,7 +83,7 @@ export class DialogAddGroupComponent implements OnInit {
       this.groupForm.setValue(response.data);
     }, (error => {
       this.spinner.hide()
-      this.sharedService.errorDialog()
+      this.sharedService.errorDialog(error)
     } )
     )
   }
@@ -118,7 +118,7 @@ export class DialogAddGroupComponent implements OnInit {
       this.spinner.hide()
     }, (error => {
       this.spinner.hide()
-      this.sharedService.errorDialog()
+      this.sharedService.errorDialog(error)
     } )
     )
   }
@@ -136,7 +136,7 @@ export class DialogAddGroupComponent implements OnInit {
       this.dialogRef.close(ModalResponse.UPDATE);
     }, (error => {
         this.spinner.hide()
-        this.sharedService.errorDialog()
+        this.sharedService.errorDialog(error)
     })
     )
   }

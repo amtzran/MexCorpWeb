@@ -79,7 +79,7 @@ export class TableComponent implements OnInit {
         this.totalItems = comments.meta.total;
         }, (error => {
           this.spinner.hide()
-          this.sharedService.errorDialog()
+          this.sharedService.errorDialog(error)
         } )
       )
   }

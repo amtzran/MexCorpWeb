@@ -22,6 +22,7 @@ export interface Employee {
   is_active?: boolean;
   user_id?: number;
   user_name?: string;
+  permissions_user?: [];
   created_at?: string;
   updated_at?: string;
 }

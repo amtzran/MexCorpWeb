@@ -58,7 +58,7 @@ export class TableComponent implements OnInit {
         this.totalItems = jobTitles.meta.total;
         }, (error => {
           this.spinner.hide()
-          this.sharedService.errorDialog()
+          this.sharedService.errorDialog(error)
         } )
       )
   }
