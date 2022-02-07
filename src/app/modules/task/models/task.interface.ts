@@ -73,3 +73,15 @@ export interface MessageEdit {
   id?:    number;
   title:     string;
 }
+
+export interface reportTask {
+  customer?: string | number
+  employee?: string | number
+  group?: string | number
+  job_center?: string | number
+  status?: string | number
+  work_type?: string |number
+  initial_date?: string
+  final_date?: string,
+  type?: string;
+}

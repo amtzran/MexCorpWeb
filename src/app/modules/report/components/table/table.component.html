@@ -10,107 +10,18 @@
     <div fxFlex="100" fxLayoutGap="10px">
       <mat-tab-group animationDuration="2000ms">
         <mat-tab label="Tareas">
-          <div class="container" fxFlex="100" fxLayout="column"
-               [formGroup]="reportForm">
-
-            <div fxLayout="row"
-                 fxLayout.xs="column"
-                 fxLayout.sm="column"
-                 fxLayout.md="column"
-                 fxLayout.lg="row"
-                 fxLayout.xl="row"
-                 fxLayoutGap="20px">
-
-              <mat-form-field fxFlex="100">
-
-                <mat-label>Ingresar Rango Fecha</mat-label>
-                <mat-date-range-input [rangePicker]="picker">
-                  <input matStartDate formControlName="initial_date" placeholder="Fecha Inicial">
-                  <input matEndDate formControlName="final_date" placeholder="Fecha Final">
-                </mat-date-range-input>
-                <mat-datepicker-toggle matSuffix [for]="picker"></mat-datepicker-toggle>
-                <mat-date-range-picker #picker></mat-date-range-picker>
-                <mat-error *ngIf="fieldInvalid('initial_date')">
-                  Favor de ingresar el rango
-                </mat-error>
-
-              </mat-form-field>
-
-              <mat-form-field fxFlex="100">
-                <mat-label>Clientes</mat-label>
-                <mat-select
-                  formControlName="customer">
-                  <mat-option value="">TODOS</mat-option>
-                  <mat-option *ngFor="let customer of customers" [value]="customer.id">
-                    {{ customer.name}}
-                  </mat-option>
-                </mat-select>
-              </mat-form-field>
-
-              <mat-form-field fxFlex="100">
-                <mat-label>Empleados</mat-label>
-                <mat-select formControlName="employee">
-                  <mat-option value="">TODOS</mat-option>
-                  <mat-option *ngFor="let employee of employees" [value]="employee.id">
-                    {{ employee.name }}
-                  </mat-option>
-                </mat-select>
-              </mat-form-field>
-
-              <mat-form-field fxFlex="100">
-                <mat-label>Grupos</mat-label>
-                <mat-select formControlName="job_center">
-                  <mat-option value="">TODOS</mat-option>
-                  <mat-option *ngFor="let jobCenter of jobCenters" [value]="jobCenter.id">
-                    {{ jobCenter.name}}
-                  </mat-option>
-                </mat-select>
-              </mat-form-field>
-
-              <mat-form-field fxFlex="100">
-                <mat-label>Estatus</mat-label>
-                <mat-select formControlName="status">
-                  <mat-option value="">TODOS</mat-option>
-                  <mat-option value="Finalizado">Finalizado</mat-option>
-                  <mat-option value="Programado">Programado</mat-option>
-                  <mat-option value="En Proceso">En Proceso</mat-option>
-                </mat-select>
-              </mat-form-field>
-
-              <div fxFlex="100" fxLayoutAlign="center center">
-                <button mat-button color="warn" (click)="reportTaskPdf()" [disabled]="reportForm.invalid">
-                  Reporte
-                  <mat-icon mat-list-icon>picture_as_pdf</mat-icon>
-                </button>
-              </div>
-
-              <div fxFlex="100" fxLayoutAlign="center center">
-                <button mat-button color="warn" (click)="downloadReport('pdf')" [disabled]="reportForm.invalid">
-                  Exportar
-                  <mat-icon mat-list-icon>picture_as_pdf</mat-icon>
-                </button>
-              </div>
-
-              <div fxFlex="100" fxLayoutAlign="center center">
-                <button mat-button color="primary" (click)="downloadReport('excel')" [disabled]="reportForm.invalid">
-                  Excel
-                  <mat-icon mat-list-icon >view_list</mat-icon>
-                </button>
-              </div>
-
-            </div>
-
-          </div>
+          <iframe width="1860" height="900" src="https://datastudio.google.com/embed/reporting/17c1c397-e266-4f9f-8629-a49f0c26610e/page/Bs7kC" frameborder="0" style="border:0" allowfullscreen></iframe>
         </mat-tab>
-        <mat-tab label="Catálogos">
 
-        </mat-tab>
+      <!--  <mat-tab label="Catálogos">
+
+        </mat-tab>-->
 
       </mat-tab-group>
     </div>
   </div>
 
-  <iframe width="1860" height="900" src="https://datastudio.google.com/embed/reporting/17c1c397-e266-4f9f-8629-a49f0c26610e/page/Bs7kC" frameborder="0" style="border:0" allowfullscreen></iframe>
+
 
 </div>
 

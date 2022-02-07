@@ -12,7 +12,10 @@ import {NgxSpinnerService} from "ngx-spinner";
 import {SharedService} from "../../../../shared/services/shared.service";
 import {Customer} from "../../../customer/customers/interfaces/customer.interface";
 import {Employee, JobCenter} from "../../../employee/interfaces/employee.interface";
-import {FormBuilder, FormGroup} from "@angular/forms";
+import {FormBuilder, FormGroup, Validators} from "@angular/forms";
+import * as fileSaver from "file-saver";
+import {DateService} from "../../../../core/utils/date.service";
+import {ModelWorkType, WorkType} from "../../../catalog/work-types/models/work-type.interface";
 
 @Component({
   selector: 'app-table',
@@ -31,12 +34,14 @@ export class TableComponent implements OnInit {
   customers: Customer[] = [];
   jobCenters: JobCenter[] = [];
   employees: Employee[] = [];
+  workTypes: WorkType[] = [];
   idCustomer : number | string = '';
   idEmployee : number | string = '';
   idJobCenter : number | string = '';
   status : number | string = '';
   changeEvent : boolean = true;
   calendarForm!: FormGroup;
+  submit!: boolean;
 
   /**
    * Values Initials Calendar
@@ -65,18 +70,17 @@ export class TableComponent implements OnInit {
               private dialog: MatDialog,
               private spinner: NgxSpinnerService,
               private sharedService: SharedService,
-              private formBuilder : FormBuilder) {}
+              private formBuilder : FormBuilder,
+              private dateService: DateService,) {}
 
   ngOnInit(): void {
     // Selects
-    this.loadCalendarGroup()
-    // Type Customers
+    this.loadCalendarForm()
+    // Service Selects
     this.loadDataCustomers()
-    // Type Groups
-    this.taskService.getJobCenters().subscribe(jobCenters => {this.jobCenters = jobCenters.data} )
-
-    // Type Employees
-    this.taskService.getEmployees().subscribe(employees => {this.employees = employees.data} )
+    this.loadDataGroups()
+    this.loadDataEmployees()
+    this.loadDataWorkTypes()
 
     forwardRef(() => Calendar)
     // Valuers Initials Calendar
@@ -257,6 +261,17 @@ export class TableComponent implements OnInit {
   }
 
   /**
+   * Filter Customer and Search
+   */
+  filterSelectCustomer(idCustomer: number){
+    this.taskService.getTasks(idCustomer, '', '', '').subscribe(res => {
+      this.idCustomer = idCustomer
+      this.tasks = []
+      this.initTaskCalendar()
+    })
+  }
+
+  /**
    * Filter By Employee in Task
    * @param idEmployee
    */
@@ -306,33 +321,132 @@ export class TableComponent implements OnInit {
   }
 
   /**
-   * Filter Customer and Search
-   * @param customer
+   * load Form Reactive Form
    */
-  setCustomer(customer: Customer){
-    this.taskService.getTasks(String(customer), '', '', '').subscribe(res => {
-      this.idCustomer = String(customer)
-      this.tasks = []
-      this.initTaskCalendar()
-    })
-  }
-
-  /**
-   * Load Form
-   */
-  loadCalendarGroup() {
+  loadCalendarForm() : void {
     this.calendarForm = this.formBuilder.group({
-      'customer' : ['']
-    })
+      initial_date: [{value: '', disabled:false}, Validators.required],
+      final_date: [{value: '', disabled:false}, Validators.required],
+      customer: [{value: '', disabled:false},],
+      employee: [{value: '', disabled:false},],
+      job_center: [{value: '', disabled:false},],
+      work_type: [{value: '', disabled:false},],
+      status : [{value: '', disabled:false},]
+    });
   }
 
   /**
    * Array from service for Customers
    */
   loadDataCustomers(){
-    this.taskService.getCustomers().subscribe(customers => {
-      this.customers = customers.data
-    } )
+    this.taskService.getCustomers().subscribe(customers => {this.customers = customers.data} )
+  }
+
+  /**
+   * Array from service for Groups
+   */
+  loadDataGroups(){
+    this.taskService.getJobCenters().subscribe(jobCenters => {this.jobCenters = jobCenters.data} )
+  }
+
+  /**
+   * Array from service for Employees
+   */
+  loadDataEmployees(){
+    this.taskService.getEmployees().subscribe(employees => {this.employees = employees.data} )
+  }
+
+  /**
+   * Array from service for Employees
+   */
+  loadDataWorkTypes(){
+    this.taskService.getWorkTypes().subscribe(workTypes => {this.workTypes = workTypes.data} )
+  }
+
+  /**
+   * Export Excel and Pdf with filters
+   * @param type
+   */
+  downloadReport(type: string){
+    this.validateForm()
+    this.spinner.show()
+    this.taskService.exportReportTask(this.calendarForm.value, type).subscribe(res => {
+        let file : any;
+        if (type === 'excel') file = this.sharedService.createBlobToExcel(res);
+        else file = this.sharedService.createBlobToPdf(res);
+
+        let date_initial = this.dateService.getFormatDataDate(this.calendarForm.value.initial_date)
+        let final_date = this.dateService.getFormatDataDate(this.calendarForm.value.final_date)
+
+        fileSaver.saveAs(file, `Reporte-Tareas-${date_initial}-${final_date}`);
+
+        this.spinner.hide()
+      }, (error => {
+        this.spinner.hide()
+        this.sharedService.errorDialog(error)
+      })
+    )
+  }
+
+  /**
+   * Export Pdf Summary
+   */
+  reportTaskPdf(){
+    this.validateForm()
+    this.spinner.show()
+    this.taskService.reportTaskPdf(this.calendarForm.value).subscribe(res => {
+        let file = this.sharedService.createBlobToPdf(res);
+        let date_initial = this.dateService.getFormatDataDate(this.calendarForm.value.initial_date)
+        let final_date = this.dateService.getFormatDataDate(this.calendarForm.value.final_date)
+
+        fileSaver.saveAs(file, `Reporte-General-Tareas-${date_initial}-${final_date}`);
+
+        this.spinner.hide()
+      }, (error => {
+        this.spinner.hide()
+        this.sharedService.errorDialog(error)
+      })
+    )
+  }
+
+  /**
+   * Export Pdf Calendar
+   */
+  reportCalendarPdf(){
+    this.validateForm()
+    this.spinner.show()
+    this.taskService.reportCalendarPdf(this.calendarForm.value).subscribe(res => {
+        let file = this.sharedService.createBlobToPdf(res);
+        let date_initial = this.dateService.getFormatDataDate(this.calendarForm.value.initial_date)
+        let final_date = this.dateService.getFormatDataDate(this.calendarForm.value.final_date)
+
+        fileSaver.saveAs(file, `Reporte-Calendario-Tareas-${date_initial}-${final_date}`);
+
+        this.spinner.hide()
+      }, (error => {
+        this.spinner.hide()
+        this.sharedService.errorDialog(error)
+      })
+    )
+  }
+
+  /**
+   * Validate form in general
+   */
+  validateForm(){
+    this.submit = true;
+    if(this.calendarForm.invalid){
+      this.sharedService.showSnackBar('Los campos con * son obligatorios.');
+      return
+    }
+  }
+
+  /**
+   * Validations
+   * @param field
+   */
+  fieldInvalid(field: string) {
+    return this.calendarForm.get(field)?.invalid && this.calendarForm.get(field)?.touched
   }
 
 }
