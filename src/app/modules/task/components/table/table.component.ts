@@ -187,7 +187,7 @@ export class TableComponent implements OnInit {
       final_date: finalDate
     }
 
-    this.openDialogTask(true, Number(selectInfoEventDrag.event.id), false, data, true, false)
+    this.openDialogTask(true, Number(selectInfoEventDrag.event.id), false, data, true, false, false)
 
   }
 
@@ -209,7 +209,7 @@ export class TableComponent implements OnInit {
       final_date: finalDate
     }
 
-    this.openDialogTask(false, null, false, data, false, false)
+    this.openDialogTask(false, null, false, data, false, false, false)
 
   }
 
@@ -221,10 +221,10 @@ export class TableComponent implements OnInit {
 
     this.taskService.getTaskById(Number(clickInfo.event.id)).subscribe(res => {
       if (res.data.status === 'Programado') {
-        this.openDialogTask(true, Number(clickInfo.event.id), false, null, false, false)
+        this.openDialogTask(true, Number(clickInfo.event.id), false, null, false, false, false)
       }
       if (res.data.status === 'Finalizado' || res.data.status === 'En Proceso') {
-        this.openDialogTask(false, Number(clickInfo.event.id), true, null, false, false)
+        this.openDialogTask(false, Number(clickInfo.event.id), true, null, false, false, true)
       }
     })
 
@@ -246,13 +246,20 @@ export class TableComponent implements OnInit {
    * @param calendar
    * @param eventDrag
    * @param multiple
+   * @param editCustom
    */
-  openDialogTask(edit: boolean, idTask: number | null, info: boolean, calendar: CalendarDate | null, eventDrag: boolean, multiple: boolean): void {
+  openDialogTask(edit: boolean,
+                 idTask: number | null,
+                 info: boolean,
+                 calendar: CalendarDate | null,
+                 eventDrag: boolean,
+                 multiple: boolean,
+                 editCustom: boolean): void {
     const dialogRef = this.dialog.open(CrudComponent, {
       autoFocus: false,
       disableClose: true,
       width: '250vw',
-      data: {edit: edit, idTask: idTask, info: info, calendar, eventDrag: eventDrag, multiple: multiple}
+      data: {edit: edit, idTask: idTask, info: info, calendar, eventDrag: eventDrag, multiple: multiple, editCustom: editCustom}
     });
     dialogRef.afterClosed().subscribe(res => {
       this.tasks = []

@@ -6,6 +6,8 @@ import {ModalResponse} from "../../../../core/utils/ModalResponse";
 import {SharedService} from "../../../../shared/services/shared.service";
 import {NgxSpinnerService} from "ngx-spinner";
 import {TaskService} from "../../services/task.service";
+import {Customer} from "../../../customer/customers/interfaces/customer.interface";
+import {CustomerServiceService} from "../../../customer/customers/services/customer-service.service";
 
 @Component({
   selector: 'app-send-email',
@@ -19,16 +21,34 @@ export class SendEmailComponent implements OnInit {
   hide = true;
   submit!: boolean;
   emailForm!: FormGroup;
+  customer!: Customer;
 
   constructor(private dialogRef: MatDialogRef<SendEmailComponent>,
               private formBuilder: FormBuilder,
               private sharedService: SharedService,
               private spinner: NgxSpinnerService,
               private taskService: TaskService,
+              private customerService: CustomerServiceService,
               @Inject(MAT_DIALOG_DATA) public data : { doorTask: DoorByTask, taskId: number }) { }
 
   ngOnInit(): void {
+    this.loadCustomer()
     this.loadEmailForm()
+  }
+
+  /**
+   * Load the form Task.
+   */
+  loadCustomer():void{
+    this.spinner.show()
+    this.customerService.getCustomerById(this.data.doorTask.customer_id).subscribe(res => {
+      this.spinner.hide()
+      this.emailForm.patchValue({email: res.data.email,})
+      }, (error => {
+        this.spinner.hide()
+        this.sharedService.errorDialog(error)
+      })
+    )
   }
 
   /**

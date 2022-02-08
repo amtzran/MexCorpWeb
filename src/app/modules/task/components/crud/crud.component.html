@@ -237,10 +237,16 @@
         <ng-container matColumnDef="options">
           <th mat-header-cell *matHeaderCellDef mat-sort-header=""> Links</th>
           <td mat-cell *matCellDef="let row">
-            <button color="warn" mat-button (click)="viewPdf(row.report_pdf)">
+            <button color="warn" mat-button
+                    (click)="viewPdf(row.report_pdf)"
+                    #tooltip="matTooltip"
+                    matTooltip="Descargar Reporte">
               <mat-icon>picture_as_pdf</mat-icon>
             </button>
-            <button color="primary" mat-button (click)="sendPdf(row, task.idTask)">
+            <button color="primary" mat-button
+                    (click)="sendPdf(row, task.idTask)"
+                    #tooltip="matTooltip"
+                    matTooltip="Enviar Reporte">
               <mat-icon>mail_outline</mat-icon>
             </button>
           </td>
@@ -274,6 +280,7 @@
 
   <div fxFlex="60" fxLayoutAlign="end">
     <button (click)="close()" mat-stroked-button color="primary" mat-dialog-close="true">Cancelar</button>
+    <button *ngIf="task.editCustom" (click)="updateTaskCustom()" mat-flat-button color="primary">Editar Finalizado</button>
     <button *ngIf="!task.idTask" (click)="addTask()" mat-flat-button color="primary" cdkFocusInitial [disabled]="taskForm.invalid">Guardar Tarea</button>
     <button *ngIf="task.idTask && task.edit" (click)="updateTask()" mat-flat-button color="primary" cdkFocusInitial>Editar</button>
   </div>

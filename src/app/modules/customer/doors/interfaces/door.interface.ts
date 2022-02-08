@@ -11,9 +11,9 @@ export interface ModelDoor {
 export interface Door {
   id?: number;
   folio?: string;
-  brand: string;
-  model: string;
-  name: string;
+  brand?: string;
+  model?: string;
+  name?: string;
   observations?: string;
   door_type_id?: number;
   door_type_name?: string;

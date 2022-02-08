@@ -34,7 +34,7 @@ export class LoginComponent implements OnInit {
     if (localStorage.getItem('access_token')) {
       this.loading = true;
       setTimeout(() => {
-        this.router.navigate(['./dashboard/customer'])
+        this.router.navigate(['./dashboard/task'])
       }, 1000)
     }
 
@@ -49,13 +49,13 @@ export class LoginComponent implements OnInit {
         if (result.message === 'Ya estás autenticado') {
           this.loading = true;
           setTimeout(() => {
-            this.router.navigate(['./dashboard/customer'])
+            this.router.navigate(['./dashboard/task'])
           }, 1000)
         }
         if (result.access_token){
           this.loading = true;
           setTimeout(() => {
-            this.router.navigate(['./dashboard/customer'])
+            this.router.navigate(['./dashboard/task'])
           }, 1000)
         }
         if (result.error) {

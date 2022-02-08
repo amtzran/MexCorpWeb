@@ -2,7 +2,7 @@ import { Injectable } from '@angular/core';
 import {Observable} from "rxjs";
 import {HttpClient, HttpParams} from "@angular/common/http";
 import {environment} from "../../../../environments/environment";
-import {DoorByTask, EmailSend, ModelTask, ModelWorkType, reportTask, Task, TaskDetail} from "../models/task.interface";
+import {EmailSend, ModelTask, ModelWorkType, reportTask, Task, TaskDetail} from "../models/task.interface";
 import {ModelCustomer} from "../../customer/customers/interfaces/customer.interface";
 import {ModelEmployee, ModelJobCenter} from "../../employee/interfaces/employee.interface";
 import {DoorDetailTask, ModelDoorType} from "../../customer/doors/interfaces/door.interface";
@@ -52,8 +52,8 @@ export class TaskService {
     return this.http.post<TaskDetail>(`${this.baseUrl}/tasks-multiple/`, task)
   }
 
-  // Update Contract
-  updateTask(idTask: number, task: TaskDetail) : Observable<TaskDetail> {
+  // Update Task
+  updateTask(idTask: number, task: Task) : Observable<TaskDetail> {
     return this.http.put<TaskDetail>(`${this.baseUrl}/tasks/${idTask}/`, task)
   }
 

@@ -44,6 +44,7 @@ export class CrudComponent implements OnInit {
   workTypes!: WorkType[];
   doorTypes!:  DoorType[];
   taskId!: number;
+  dataTask!: Task
 
   /**
    * Table Access Files
@@ -71,7 +72,8 @@ export class CrudComponent implements OnInit {
       calendar: CalendarDate,
       eventDrag: boolean,
       eventDragUpdate: boolean,
-      multiple: boolean
+      multiple: boolean,
+      editCustom: boolean
     }
   ) { }
 
@@ -137,6 +139,7 @@ export class CrudComponent implements OnInit {
     this.spinner.show()
     this.taskService.getTaskById(this.task.idTask).subscribe(response => {
       this.spinner.hide()
+      this.dataTask = response.data
       this.title = `Información de la Tarea | ${response.data.status} | ${response.data.folio}`;
       // Data Doors by Customer
       this.loadAccess(response.data.customer_id)
@@ -145,7 +148,7 @@ export class CrudComponent implements OnInit {
         employee_id: response.data.employee_id,
         job_center_id: response.data.job_center_id,
         customer_id: response.data.customer_id,
-        doors: response.data.doors.map( door => door.id),
+        doors: response.data.doors.map( (door :any) => door.id),
         comments: response.data.comments,
         work_type_id: response.data.work_type_id,
         initial_hour: response.data.initial_hour,
@@ -174,7 +177,7 @@ export class CrudComponent implements OnInit {
         employee_id: response.data.employee_id,
         job_center_id: response.data.job_center_id,
         customer_id: response.data.customer_id,
-        doors: response.data.doors.map( door => door.id),
+        doors: response.data.doors.map( (door: any) => door.id),
         comments: response.data.comments,
         work_type_id: response.data.work_type_id,
         initial_hour: this.task.calendar.initial_hour,
@@ -194,11 +197,11 @@ export class CrudComponent implements OnInit {
    */
   loadTaskForm():void{
     this.taskForm = this.fb.group({
-      title:[{value:'', disabled:this.task.info}, Validators.required],
+      title:[{value:'', disabled:false}, Validators.required],
       job_center_id:[{value:'', disabled:this.task.info}, Validators.required],
       customer_id:[{value:'', disabled:this.task.info}, Validators.required],
-      employee_id:[{value:'', disabled:this.task.info}, Validators.required],
-      work_type_id:[{value:'', disabled:this.task.info}, Validators.required],
+      employee_id:[{value:'', disabled:false}, Validators.required],
+      work_type_id:[{value:'', disabled:false}, Validators.required],
       doors:[{value: [], disabled:this.task.info}, Validators.required],
       initial_hour: [{value: '', disabled:this.task.info}, Validators.required],
       final_hour: [{value: '', disabled:this.task.info}, Validators.required],
@@ -206,8 +209,24 @@ export class CrudComponent implements OnInit {
       dates: [{value: [], disabled:this.task.info}, Validators.required],
     });
     if (!this.task.multiple) {
-      this.taskForm.addControl('initial_date', new FormControl('', Validators.required))
-      this.taskForm.addControl('final_date', new FormControl('', Validators.required))
+      this.taskForm.addControl('initial_date', new FormControl(
+        {
+          value: '',
+          disabled: this.task.info
+        },
+        [
+          Validators.required,
+        ]
+      ))
+      this.taskForm.addControl('final_date', new FormControl(
+        {
+          value: '',
+          disabled: this.task.info
+        },
+        [
+          Validators.required,
+        ]
+      ))
     }
   }
 
@@ -216,11 +235,11 @@ export class CrudComponent implements OnInit {
    */
   loadTaskFormDate():void{
     this.taskForm = this.fb.group({
-      title:[{value:'', disabled:this.task.info}, Validators.required],
+      title:[{value:'', disabled:false}, Validators.required],
       job_center_id:[{value:'', disabled:this.task.info}, Validators.required],
       customer_id:[{value:'', disabled:this.task.info}, Validators.required],
-      employee_id:[{value:'', disabled:this.task.info}, Validators.required],
-      work_type_id:[{value:'', disabled:this.task.info}, Validators.required],
+      employee_id:[{value:'', disabled:false}, Validators.required],
+      work_type_id:[{value:'', disabled:false}, Validators.required],
       doors:[{value: [], disabled:this.task.info}, Validators.required],
       initial_date: [{value: this.task.calendar.initial_date, disabled:this.task.info}, Validators.required],
       final_date: [{value: this.task.calendar.final_date, disabled:this.task.info}, Validators.required],
@@ -286,6 +305,30 @@ export class CrudComponent implements OnInit {
         this.sharedService.errorDialog(error)
       })
     )
+  }
+
+  /**
+   * Update a task Custom Finalized.
+   */
+  updateTaskCustom(): void {
+    this.setValueSubmit()
+    this.spinner.show()
+
+    this.dataTask.title = this.taskForm.value.title
+    this.dataTask.employee_id = this.taskForm.value.employee_id
+    this.dataTask.work_type_id = this.taskForm.value.work_type_id
+    this.dataTask.doors = this.dataTask.doors.map( (door: any) => door.id)
+
+    this.taskService.updateTask(this.task.idTask, this.dataTask).subscribe(response => {
+        this.spinner.hide()
+        this.sharedService.showSnackBar(`Se ha actualizado correctamente la Tarea: ${response.data.title}` );
+        this.dialogRef.close(ModalResponse.UPDATE);
+      }, (error => {
+        this.spinner.hide()
+        this.sharedService.errorDialog(error)
+      })
+    )
+
   }
 
   /**
