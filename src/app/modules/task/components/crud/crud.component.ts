@@ -6,7 +6,7 @@ import {MAT_DIALOG_DATA, MatDialog, MatDialogRef} from "@angular/material/dialog
 import {ModalResponse} from "../../../../core/utils/ModalResponse";
 import {TaskService} from "../../services/task.service";
 import {Employee, JobCenter} from "../../../employee/interfaces/employee.interface";
-import {CalendarDate, Task, WorkType} from "../../models/task.interface";
+import {CalendarDate, DoorByTask, Task, WorkType} from "../../models/task.interface";
 import {DateService} from "../../../../core/utils/date.service";
 import {Door, DoorType} from "../../../customer/doors/interfaces/door.interface";
 import {MatTableDataSource} from "@angular/material/table";
@@ -15,6 +15,7 @@ import {MatSort} from "@angular/material/sort";
 import {NgxSpinnerService} from "ngx-spinner";
 import {ConfirmComponent} from "../../../../shared/components/confirm/confirm.component";
 import * as moment from "moment";
+import {SendEmailComponent} from "../send-email/send-email.component";
 
 @Component({
   selector: 'app-crud',
@@ -42,6 +43,7 @@ export class CrudComponent implements OnInit {
   employees!: Employee[];
   workTypes!: WorkType[];
   doorTypes!:  DoorType[];
+  taskId!: number;
 
   /**
    * Table Access Files
@@ -74,6 +76,7 @@ export class CrudComponent implements OnInit {
   ) { }
 
   ngOnInit(): void {
+    this.taskId = this.task.idTask
     // Customers
     this.loadDataCustomers()
 
@@ -399,6 +402,20 @@ export class CrudComponent implements OnInit {
    */
   viewPdf(reportPdf: string){
     window.open(reportPdf)
+  }
+
+  /**
+   * Event click show url (Pdf)
+   * @param doorTask
+   * @param taskId
+   */
+  sendPdf(doorTask: DoorByTask, taskId: number){
+    // Show Dialog
+    const dialog = this.dialog.open(SendEmailComponent, {
+      width: '40vw',
+      data: {doorTask: doorTask, taskId: taskId}
+    })
+
   }
 
   /**

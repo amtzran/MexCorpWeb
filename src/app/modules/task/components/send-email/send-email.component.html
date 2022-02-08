@@ -1,10 +1,10 @@
+<ngx-spinner></ngx-spinner>
 <div fxFlex="100" fxLayoutGap="10px" fxLayout="column">
-
   <div fxFlex="50">
-    <h4 mat-dialog-title class="title-subsection">{{title}} : {{data.name}}</h4>
+    <h4 mat-dialog-title class="title-subsection">{{title}} : {{data.doorTask.name}}</h4>
     <mat-divider></mat-divider>
     <br>
-    <mat-dialog-content class="mat-typography" [formGroup]="resetForm">
+    <mat-dialog-content class="mat-typography" [formGroup]="emailForm">
 
       <mat-card>
         <mat-card-content>
@@ -12,13 +12,11 @@
           <div fxLayout="column" fxLayoutGap="20px" fxLayout.xs="column">
 
             <mat-form-field>
-              <mat-label>Contraseña Nueva</mat-label>
-              <input autocomplete="new-password" matInput type="text" formControlName="new_password">
-              <button mat-icon-button matSuffix (click)="hide = !hide" [attr.aria-label]="'Hide password'" [attr.aria-pressed]="hide">
-                <mat-icon>{{hide ? 'visibility_off' : 'visibility'}}</mat-icon>
-              </button>
-              <mat-error *ngIf="fieldInvalid('new_password')">
-                Favor de ingresar la Contraseña Nueva
+              <mat-label>Correo</mat-label>
+              <input matInput type="email" formControlName="email">
+              <button mat-icon-button matSuffix></button>
+              <mat-error *ngIf="fieldInvalid('email')">
+                Favor de ingresar el correo
               </mat-error>
             </mat-form-field>
 
@@ -36,7 +34,7 @@
       </div>
       <div class="spacer"></div>
       <div fxLayoutAlign="center center">
-        <button (click)="changePassword()" mat-raised-button color="primary" cdkFocusInitial>Resetear Contraseña</button>
+        <button (click)="sendEmail()" mat-raised-button color="primary" [disabled]="emailForm.invalid">Enviar</button>
       </div>
     </mat-dialog-actions>
   </div>

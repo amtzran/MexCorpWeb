@@ -2,7 +2,7 @@ import { Injectable } from '@angular/core';
 import {Observable} from "rxjs";
 import {HttpClient, HttpParams} from "@angular/common/http";
 import {environment} from "../../../../environments/environment";
-import {ModelTask, ModelWorkType, reportTask, Task, TaskDetail} from "../models/task.interface";
+import {DoorByTask, EmailSend, ModelTask, ModelWorkType, reportTask, Task, TaskDetail} from "../models/task.interface";
 import {ModelCustomer} from "../../customer/customers/interfaces/customer.interface";
 import {ModelEmployee, ModelJobCenter} from "../../employee/interfaces/employee.interface";
 import {DoorDetailTask, ModelDoorType} from "../../customer/doors/interfaces/door.interface";
@@ -151,6 +151,11 @@ export class TaskService {
     params = params.append('group', group);
     params = params.append('work_type', work_type)
     return this.http.post(`${this.baseUrl}/task-calendar-report/`, '',{responseType: 'blob', params})
+  }
+
+  // send email door By Task
+  sendEmail(email: EmailSend) : Observable<any> {
+    return this.http.post<any>(`${this.baseUrl}/tasks-form-report-send-email/`, email)
   }
 
 }

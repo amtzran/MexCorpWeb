@@ -35,6 +35,29 @@ export interface Task {
   doors: Door[]
 }
 
+export interface EmailSend {
+  task_id: number,
+  door_id: number,
+  email: string
+}
+
+export interface DoorByTask {
+  id?: number
+  name: string
+  brand?: string
+  customer_id: number
+  door_type_id: number
+  door_type_name: string
+  folio:string
+  is_active: number
+  model?: string
+  observations?: string
+  photo?: string
+  report_pdf: string
+  created_at?: string
+  updated_at?: string
+}
+
 export interface TaskDetail {
   data: Task
 }

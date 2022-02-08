@@ -17,6 +17,7 @@ import {ConfirmEditComponent} from './components/confirm-edit/confirm-edit.compo
 import {NgxSpinnerModule} from "ngx-spinner";
 import {NgxMultipleDatesModule} from "ngx-multiple-dates";
 import {NgSelectModule} from "@ng-select/ng-select";
+import { SendEmailComponent } from './components/send-email/send-email.component';
 
 FullCalendarModule.registerPlugins([ // register FullCalendar plugins
   dayGridPlugin,
@@ -30,7 +31,8 @@ FullCalendarModule.registerPlugins([ // register FullCalendar plugins
     TaskComponent,
     TableComponent,
     CrudComponent,
-    ConfirmEditComponent
+    ConfirmEditComponent,
+    SendEmailComponent
   ],
   imports: [
     CommonModule,
