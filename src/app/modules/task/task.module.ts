@@ -18,6 +18,7 @@ import {NgxSpinnerModule} from "ngx-spinner";
 import {NgxMultipleDatesModule} from "ngx-multiple-dates";
 import {NgSelectModule} from "@ng-select/ng-select";
 import { SendEmailComponent } from './components/send-email/send-email.component';
+import { ImageDetailComponent } from './components/image-detail/image-detail.component';
 
 FullCalendarModule.registerPlugins([ // register FullCalendar plugins
   dayGridPlugin,
@@ -32,7 +33,8 @@ FullCalendarModule.registerPlugins([ // register FullCalendar plugins
     TableComponent,
     CrudComponent,
     ConfirmEditComponent,
-    SendEmailComponent
+    SendEmailComponent,
+    ImageDetailComponent
   ],
   imports: [
     CommonModule,

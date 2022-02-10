@@ -53,7 +53,18 @@ export interface DoorByTask {
   model?: string
   observations?: string
   photo?: string
+  photos?: any
   report_pdf: string
+  created_at?: string
+  updated_at?: string
+}
+
+export interface PhotoByDoor {
+  id?: number,
+  task_id?: number,
+  door_id?: number,
+  photo?: string,
+  section?: string,
   created_at?: string
   updated_at?: string
 }

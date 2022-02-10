@@ -16,6 +16,7 @@ import {NgxSpinnerService} from "ngx-spinner";
 import {ConfirmComponent} from "../../../../shared/components/confirm/confirm.component";
 import * as moment from "moment";
 import {SendEmailComponent} from "../send-email/send-email.component";
+import {ImageDetailComponent} from "../image-detail/image-detail.component";
 
 @Component({
   selector: 'app-crud',
@@ -457,6 +458,19 @@ export class CrudComponent implements OnInit {
     const dialog = this.dialog.open(SendEmailComponent, {
       width: '40vw',
       data: {doorTask: doorTask, taskId: taskId}
+    })
+
+  }
+
+  /**
+   * Event click show url (Pdf)
+   * @param doorTask
+   */
+  imgDetail(doorTask: DoorByTask){
+    // Show Dialog
+    const dialog = this.dialog.open(ImageDetailComponent, {
+      width: '100vw',
+      data: doorTask
     })
 
   }
