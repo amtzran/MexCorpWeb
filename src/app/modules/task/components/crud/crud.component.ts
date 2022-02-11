@@ -199,9 +199,9 @@ export class CrudComponent implements OnInit {
   loadTaskForm():void{
     this.taskForm = this.fb.group({
       title:[{value:'', disabled:false}, Validators.required],
-      job_center_id:[{value:'', disabled:this.task.info}, Validators.required],
+      job_center_id:[{value:'', disabled:false}, Validators.required],
       customer_id:[{value:'', disabled:this.task.info}, Validators.required],
-      employee_id:[{value:'', disabled:false}, Validators.required],
+      employee_id:[{value:'', disabled:this.task.info}, Validators.required],
       work_type_id:[{value:'', disabled:false}, Validators.required],
       doors:[{value: [], disabled:this.task.info}, Validators.required],
       initial_hour: [{value: '', disabled:this.task.info}, Validators.required],
@@ -237,9 +237,9 @@ export class CrudComponent implements OnInit {
   loadTaskFormDate():void{
     this.taskForm = this.fb.group({
       title:[{value:'', disabled:false}, Validators.required],
-      job_center_id:[{value:'', disabled:this.task.info}, Validators.required],
+      job_center_id:[{value:'', disabled:false}, Validators.required],
       customer_id:[{value:'', disabled:this.task.info}, Validators.required],
-      employee_id:[{value:'', disabled:false}, Validators.required],
+      employee_id:[{value:'', disabled:this.task.info}, Validators.required],
       work_type_id:[{value:'', disabled:false}, Validators.required],
       doors:[{value: [], disabled:this.task.info}, Validators.required],
       initial_date: [{value: this.task.calendar.initial_date, disabled:this.task.info}, Validators.required],
@@ -316,7 +316,7 @@ export class CrudComponent implements OnInit {
     this.spinner.show()
 
     this.dataTask.title = this.taskForm.value.title
-    this.dataTask.employee_id = this.taskForm.value.employee_id
+    this.dataTask.job_center_id = this.taskForm.value.job_center_id
     this.dataTask.work_type_id = this.taskForm.value.work_type_id
     this.dataTask.doors = this.dataTask.doors.map( (door: any) => door.id)
 

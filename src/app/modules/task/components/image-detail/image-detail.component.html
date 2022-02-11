@@ -39,8 +39,10 @@
         <!-- Name Column -->
         <ng-container matColumnDef="photo">
           <th mat-header-cell *matHeaderCellDef mat-sort-header=""> Foto</th>
-          <td mat-cell *matCellDef="let row">
-            <img src="{{ row.photo}} " alt="">
+          <td fxLayoutAlign="center" mat-cell *matCellDef="let row">
+            <div fxFlex="70">
+              <img src="{{ row.photo}} " alt="{{row.photo}}">
+            </div>
           </td>
         </ng-container>
 
