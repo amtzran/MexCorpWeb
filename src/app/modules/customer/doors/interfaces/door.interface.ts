@@ -62,4 +62,5 @@ export interface reportDoor {
   final_date?: string;
   customer?: string;
   door_type?: string;
+  door?: string
 }

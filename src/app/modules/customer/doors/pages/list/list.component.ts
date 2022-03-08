@@ -40,6 +40,7 @@ export class ListComponent implements OnInit {
   idCustomer!: string | null;
   private sub : any;
   doorTypes!: DoorType[];
+  doors!: Door[];
   filterForm!: FormGroup;
   submit!: boolean;
   customer: CustomerTitle = {
@@ -73,6 +74,7 @@ export class ListComponent implements OnInit {
     this.loadDoorFilterForm();
     this.loadFilterForm();
     this.loadDoorTypes();
+    this.loadDoors()
 
     // Assign the data to the data source for the table to render
     this.dataSource = new MatTableDataSource();
@@ -88,7 +90,7 @@ export class ListComponent implements OnInit {
     const paginator: MatPaginator = event;
     this.doorPaginateForm.get('page')?.setValue(paginator.pageIndex + 1);
     this.spinner.show()
-    this.doorService.getDoors(this.doorPaginateForm.value,  this.idCustomer )
+    this.doorService.getDoors(this.doorPaginateForm.value,  this.idCustomer, this.filterForm.value)
       .subscribe(doors => {
         this.spinner.hide()
         this.dataSource.data = doors.data
@@ -190,6 +192,7 @@ export class ListComponent implements OnInit {
       final_date: [{value: '', disabled:false},],
       customer: [{value: this.idCustomer, disabled:false},],
       door_type: [{value: '', disabled:false},],
+      door: [{value: '', disabled:false},],
     });
   }
 
@@ -209,6 +212,22 @@ export class ListComponent implements OnInit {
    */
   loadDoorTypes(){
     this.doorTypeService.getDoorTypes(this.doorPaginateForm.value).subscribe(doorTypes => {this.doorTypes = doorTypes.data} )
+  }
+
+  /**
+   * Service doors By Customer
+   */
+  loadDoors(){
+    this.doorService.getDoorsAll(this.idCustomer).subscribe(doors => {this.doors = doors.data} )
+  }
+
+  /**
+   * Filter By Doors
+   */
+  filterSelect(){
+    this.doorService.getDoors(this.doorPaginateForm.value, this.idCustomer, this.filterForm.value).subscribe(res => {
+      this.getDoorsPaginator(this.paginator);
+    })
   }
 
   /* Método que permite iniciar los filtros de rutas*/

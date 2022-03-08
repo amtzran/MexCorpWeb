@@ -201,7 +201,7 @@ export class CrudComponent implements OnInit {
       title:[{value:'', disabled:false}, Validators.required],
       job_center_id:[{value:'', disabled:false}, Validators.required],
       customer_id:[{value:'', disabled:this.task.info}, Validators.required],
-      employee_id:[{value:'', disabled:this.task.info}, Validators.required],
+      employee_id:[{value:'', disabled:false}, Validators.required],
       work_type_id:[{value:'', disabled:false}, Validators.required],
       doors:[{value: [], disabled:this.task.info}, Validators.required],
       initial_hour: [{value: '', disabled:this.task.info}, Validators.required],
@@ -318,6 +318,7 @@ export class CrudComponent implements OnInit {
     this.dataTask.title = this.taskForm.value.title
     this.dataTask.job_center_id = this.taskForm.value.job_center_id
     this.dataTask.work_type_id = this.taskForm.value.work_type_id
+    this.dataTask.employee_id = this.taskForm.value.employee_id
     this.dataTask.doors = this.dataTask.doors.map( (door: any) => door.id)
 
     this.taskService.updateTask(this.task.idTask, this.dataTask).subscribe(response => {

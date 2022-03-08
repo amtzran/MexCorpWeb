@@ -17,6 +17,21 @@
            fxLayout.xl="row"
            fxLayoutGap="20px">
 
+        <ng-select fxFlex="100"
+                   bindLabel="name"
+                   placeholder="Accesos"
+                   formControlName="door"
+                   [multiple]="false"
+                   appendTo="body"
+                   [searchable]="true"
+                   [clearable]="true"
+                   (change)="filterSelect()">
+          <ng-option value="">TODOS</ng-option>
+          <ng-option *ngFor="let door of doors" [value]="door.id">
+            {{door.name}}
+          </ng-option>
+        </ng-select>
+
         <mat-form-field fxFlex="100">
 
           <mat-label>Ingresar Rango Fecha</mat-label>

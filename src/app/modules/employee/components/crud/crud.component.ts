@@ -173,8 +173,8 @@ export class CrudComponent implements OnInit {
    */
   setValueSelectObjectMultiple(objInitial: any, objSelected: any) : any {
 
-    if (typeof objInitial !== 'undefined' && typeof objSelected !== 'undefined') {
-      return objInitial && objSelected ? objInitial === objSelected : objInitial === objSelected;
+    if (typeof objInitial !== 'undefined' && typeof objSelected.id !== 'undefined') {
+      return objInitial && objSelected.id ? objInitial === objSelected.id : objInitial === objSelected.id;
     }
   }
 

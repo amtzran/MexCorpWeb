@@ -2,8 +2,15 @@ import { Injectable } from '@angular/core';
 import {HttpClient, HttpParams} from "@angular/common/http";
 import {environment} from "../../../../../environments/environment";
 import {Observable} from "rxjs";
-import {Door, DoorDetail, DoorPaginate, ModelDoor, ModelDoorType, reportDoor} from "../interfaces/door.interface";
-import {reportCustomer} from "../../customers/interfaces/customer.interface";
+import {
+  Door,
+  DoorDetail,
+  DoorDetailTask,
+  DoorPaginate,
+  ModelDoor,
+  ModelDoorType,
+  reportDoor
+} from "../interfaces/door.interface";
 import {DateService} from "../../../../core/utils/date.service";
 
 @Injectable({
@@ -16,11 +23,19 @@ export class DoorService {
   private baseUrl: string = environment.baseUrl
 
   // Get Doors
-  getDoors(filter: DoorPaginate, customerId: any): Observable<ModelDoor> {
+  getDoorsAll(customerId: string | null) : Observable<DoorDetailTask> {
+    let params = new HttpParams();
+    customerId ? params = params.append('customer', customerId) : null;
+    params = params.append('not_paginate', true);
+    return this.http.get<DoorDetailTask>(`${this.baseUrl}/doors/`, {params})
+  }
+
+  getDoors(filter: DoorPaginate, customerId: string | null, filterForm : reportDoor): Observable<ModelDoor> {
     let params = new HttpParams();
     filter.page ? params = params.append('page', filter.page) : null;
     filter.page_size ? params = params.append('page_size', filter.page_size) : null;
     customerId ? params = params.append('customer', customerId) : null;
+    filterForm.door ? params = params.append('door', filterForm.door) : null;
     return this.http.get<ModelDoor>(`${this.baseUrl}/doors/`, {params})
   }
 
