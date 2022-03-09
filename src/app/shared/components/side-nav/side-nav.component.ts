@@ -99,6 +99,11 @@ export class SideNavComponent implements OnInit {
       route: '/dashboard/work-type',
       icon: 'work'
     },
+    {
+      name: 'Productos',
+      route: '/dashboard/product',
+      icon: 'inventory'
+    },
   ]
 
   logout(){

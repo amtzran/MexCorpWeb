@@ -62,39 +62,28 @@
           </button>
         </div>
 
+        <div fxFlex="25" fxLayoutAlign="center center">
+          <button (click)="openDialogDoor(true, null, false)" mat-button color="primary">
+            <mat-icon>phonelink_lock</mat-icon>
+            Nuevo Acceso
+          </button>
+        </div>
+
+        <div fxFlex="25" fxLayoutAlign="center center">
+          <button mat-button
+                  color="primary"
+                  type="button"
+                  [routerLink]="['/dashboard/customer']">
+            <mat-icon>reply</mat-icon>
+            Regresar
+          </button>
+        </div>
+
       </div>
 
     </div>
 
   </mat-card>
-
-  <div fxLayout="row">
-    <div fxFlex="50">
-      <mat-form-field appearance="standard">
-        <mat-label>Filtrar Datos Accesos</mat-label>
-        <input matInput (keyup)="applyFilter($event)" placeholder="Buscar en Tabla Accesos" #input>
-      </mat-form-field>
-    </div>
-
-    <div fxFlex="25" fxLayoutAlign="center center">
-      <button (click)="openDialogDoor(true, null, false)" mat-button color="primary">
-        <mat-icon>phonelink_lock</mat-icon>
-        Nuevo Acceso
-      </button>
-    </div>
-
-    <div fxFlex="25" fxLayoutAlign="center center">
-      <button mat-button
-              color="primary"
-              type="button"
-              [routerLink]="['/dashboard/customer']">
-        <mat-icon>reply</mat-icon>
-        Regresar
-      </button>
-    </div>
-
-  </div>
-
 
   <div class="mat-elevation-z8 tableResponsive">
     <ngx-spinner></ngx-spinner>
@@ -174,7 +163,7 @@
 
       <!-- Row shown when there is no matching data. -->
       <tr class="mat-row" *matNoDataRow>
-        <td class="mat-cell" colspan="4">No hay datos que mostrar "{{input.value}}"</td>
+        <td class="mat-cell" colspan="4">No hay datos que mostrar</td>
       </tr>
     </table>
 

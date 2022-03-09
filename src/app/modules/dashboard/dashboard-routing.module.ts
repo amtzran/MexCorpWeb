@@ -74,11 +74,17 @@ const routes: Routes = [
     canActivate: [ ValidateTokenGuard ],
     canLoad: [ ValidateTokenGuard ]
   },
-
   {
     path: 'work-type',
     component: HomeComponent,
     loadChildren: () => import('../catalog/work-types/work-type.module').then(m => m.WorkTypeModule),
+    canActivate: [ ValidateTokenGuard ],
+    canLoad: [ ValidateTokenGuard ]
+  },
+  {
+    path: 'product',
+    component: HomeComponent,
+    loadChildren: () => import('../catalog/product/product.module').then(m => m.ProductModule),
     canActivate: [ ValidateTokenGuard ],
     canLoad: [ ValidateTokenGuard ]
   },
