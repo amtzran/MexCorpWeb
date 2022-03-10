@@ -8,10 +8,12 @@ import {MaterialModule} from "../../../material/material.module";
 import {FlexLayoutModule} from "@angular/flex-layout";
 import {ReactiveFormsModule} from "@angular/forms";
 import {NgxSpinnerModule} from "ngx-spinner";
+import {ProductComponent} from "./product.component";
 
 
 @NgModule({
   declarations: [
+    ProductComponent,
     TableComponent,
     CrudComponent
   ],
