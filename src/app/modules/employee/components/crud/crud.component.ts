@@ -2,11 +2,12 @@ import {Component, Inject, OnInit} from '@angular/core';
 import {FormBuilder, FormGroup, Validators} from "@angular/forms";
 import {MAT_DIALOG_DATA, MatDialogRef} from "@angular/material/dialog";
 import {EmployeeService} from "../../services/employee.service";
-import {Job, JobCenter} from "../../interfaces/employee.interface";
+import {Employee, Job, JobCenter} from "../../interfaces/employee.interface";
 import {ModalResponse} from "../../../../core/utils/ModalResponse";
 import {SharedService} from "../../../../shared/services/shared.service";
 import {NgxSpinnerService} from "ngx-spinner";
 import {DataPermission} from "../../../../shared/interfaces/shared.interface";
+import {Product} from "../../../catalog/product/interfaces/product.interface";
 
 @Component({
   selector: 'app-crud',
@@ -30,6 +31,7 @@ export class CrudComponent implements OnInit {
   jobCenters: JobCenter[] = [];
   jobs: Job[] = []
   permissions!: DataPermission[];
+  products!: Product[];
 
   constructor(
     private fb: FormBuilder,
@@ -44,6 +46,7 @@ export class CrudComponent implements OnInit {
     // Service selects
     this.employeeService.getJobCenters().subscribe(jobCenters => {this.jobCenters = jobCenters.data} )
     this.employeeService.getJobs().subscribe(jobs => {this.jobs = jobs.data} )
+    this.employeeService.getProducts().subscribe(products => {this.products = products.data})
     this.sharedService.getPermissions().subscribe( permissions => {this.permissions = permissions.data})
 
     /*Formulario*/
@@ -72,15 +75,15 @@ export class CrudComponent implements OnInit {
     this.spinner.show()
     this.employeeService.getEmployeeById(this.employee.idEmployee).subscribe(response => {
       this.spinner.hide()
-      delete response.data.id;
-      delete response.data.user_id;
-      delete response.data.created_at;
-      delete response.data.updated_at;
-      delete response.data.job_center_name;
-      delete response.data.job_title_name;
-      delete response.data.user_name;
-      delete response.data.avatar;
-      this.employeeForm.setValue(response.data);
+      this.employeeForm.patchValue({
+        name: response.data.name,
+        email: response.data.email,
+        color: response.data.color,
+        job_center_id: response.data.job_center_id,
+        job_title_id: response.data.job_title_id,
+        permissions_user: response.data.permissions_user.map( (permission: any) => permission.id),
+        products_employee: response.data.products_employee?.map( (product: any) => product.id)
+      })
       }, (error => {
         this.spinner.hide()
         this.sharedService.errorDialog(error)
@@ -101,6 +104,7 @@ export class CrudComponent implements OnInit {
       job_center_id: [{value: '', disabled:this.employee.info}, Validators.required],
       job_title_id: [{value: '', disabled:this.employee.info}, Validators.required],
       permissions_user:[{value: [], disabled:this.employee.info}, Validators.required],
+      products_employee:[{value: [], disabled:this.employee.info}],
     });
   }
 
@@ -173,8 +177,8 @@ export class CrudComponent implements OnInit {
    */
   setValueSelectObjectMultiple(objInitial: any, objSelected: any) : any {
 
-    if (typeof objInitial !== 'undefined' && typeof objSelected.id !== 'undefined') {
-      return objInitial && objSelected.id ? objInitial === objSelected.id : objInitial === objSelected.id;
+    if (typeof objInitial !== 'undefined' && typeof objSelected !== 'undefined') {
+      return objInitial && objSelected ? objInitial === objSelected : objInitial === objSelected;
     }
   }
 

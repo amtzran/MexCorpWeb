@@ -9,6 +9,7 @@ import {
   ModelJob,
   ModelJobCenter,
 } from "../interfaces/employee.interface";
+import {ModelProduct} from "../../catalog/product/interfaces/product.interface";
 
 @Injectable({
   providedIn: 'root'
@@ -65,6 +66,13 @@ export class EmployeeService {
   // Get Jobs
   getJobs() : Observable<ModelJob> {
     return this.http.get<ModelJob>(`${this.baseUrl}/jobs/`)
+  }
+
+  // Get Jobs
+  getProducts() : Observable<ModelProduct> {
+    let params = new HttpParams();
+    params = params.append('not_paginate', 'true')
+    return this.http.get<ModelProduct>(`${this.baseUrl}/products/`, {params})
   }
 
 }

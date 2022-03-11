@@ -1,5 +1,6 @@
 // DataSource for Customer
-import {Links, MetaModel} from "../../../shared/interfaces/shared.interface";
+import {DataPermission, Links, MetaModel} from "../../../shared/interfaces/shared.interface";
+import {Product} from "../../catalog/product/interfaces/product.interface";
 
 export interface ModelEmployee {
   meta: MetaModel;
@@ -22,7 +23,8 @@ export interface Employee {
   is_active?: boolean;
   user_id?: number;
   user_name?: string;
-  permissions_user?: [];
+  permissions_user: DataPermission[] | [];
+  products_employee?: Product[] | [];
   created_at?: string;
   updated_at?: string;
 }

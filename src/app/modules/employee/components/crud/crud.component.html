@@ -104,6 +104,21 @@
               *
             </mat-error>
 
+            <ng-select fxFlex="100"
+                       bindLabel="description"
+                       placeholder="Herramientas"
+                       formControlName="products_employee"
+                       [multiple]="true"
+                       appendTo="body"
+                       [searchable]="true"
+                       [clearable]="true"
+                       bindValue="id"
+                       [compareWith]="setValueSelectObjectMultiple">
+              <ng-option *ngFor="let product of products" [value]="product.id">
+                {{product.description}}
+              </ng-option>
+            </ng-select>
+
           </div>
 
         </div>

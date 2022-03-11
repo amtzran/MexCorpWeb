@@ -28,3 +28,8 @@ export interface ProductPaginate {
 export interface ProductDetail {
   data: Product
 }
+
+// List Products
+export interface ModelProduct {
+  data: Product[]
+}

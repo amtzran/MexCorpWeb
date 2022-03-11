@@ -45,7 +45,7 @@ export class CrudComponent implements OnInit {
   workTypes!: WorkType[];
   doorTypes!:  DoorType[];
   taskId!: number;
-  dataTask!: Task
+  dataTask!: Task;
 
   /**
    * Table Access Files
