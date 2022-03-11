@@ -2,11 +2,20 @@ import { Injectable } from '@angular/core';
 import {Observable} from "rxjs";
 import {HttpClient, HttpParams} from "@angular/common/http";
 import {environment} from "../../../../environments/environment";
-import {EmailSend, ModelTask, ModelWorkType, reportTask, Task, TaskDetail} from "../models/task.interface";
+import {
+  CalendarForm,
+  EmailSend,
+  ModelTask,
+  ModelWorkType,
+  reportTask,
+  Task,
+  TaskDetail
+} from "../models/task.interface";
 import {ModelCustomer} from "../../customer/customers/interfaces/customer.interface";
 import {ModelEmployee, ModelJobCenter} from "../../employee/interfaces/employee.interface";
 import {DoorDetailTask, ModelDoorType} from "../../customer/doors/interfaces/door.interface";
 import {DateService} from "../../../core/utils/date.service";
+import {paginateGeneral} from "../../../shared/interfaces/shared.interface";
 
 @Injectable({
   providedIn: 'root'
@@ -39,6 +48,19 @@ export class TaskService {
     params = params.append('employee', idEmployee)
     params = params.append('group', idJobCenter)
     params = params.append('status', status)
+    return this.http.get<ModelTask>(`${this.baseUrl}/tasks/`,{params})
+  }
+
+  // get Tasks Table
+  getTasksPaginate(filter : paginateGeneral, calendar: CalendarForm){
+    let params = new HttpParams();
+    filter.page ? params = params.append('page', filter.page) : null;
+    filter.page_size ? params = params.append('page_size', filter.page_size) : null;
+    calendar.customer ? params = params.append('customer', calendar.customer) : null;
+    calendar.employee ? params = params.append('employee', calendar.employee) : null;
+    calendar.job_center ? params = params.append('group', calendar.job_center) : null;
+    calendar.status ? params = params.append('status', calendar.status) : null;
+    params = params.append('with_paginate', 'true');
     return this.http.get<ModelTask>(`${this.baseUrl}/tasks/`,{params})
   }
 

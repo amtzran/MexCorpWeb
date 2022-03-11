@@ -31,3 +31,9 @@ export interface DataPermission {
   updated_at?: string
 }
 
+// Data Paginate
+export interface paginateGeneral {
+  page: string,
+  page_size: string
+}
+

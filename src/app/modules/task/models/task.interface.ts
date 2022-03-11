@@ -2,7 +2,7 @@ import {Links} from "../../../shared/interfaces/shared.interface";
 import {Door} from "../../customer/doors/interfaces/door.interface";
 
 export interface ModelTask {
-  total: number;
+  meta: MetaModel;
   next?: Links["next"];
   previous?: Links["prev"];
   data: Task[];
@@ -118,4 +118,18 @@ export interface reportTask {
   initial_date?: string
   final_date?: string,
   type?: string;
+}
+
+export interface MetaModel {
+  total: number
+}
+
+export interface CalendarForm {
+  initial_date?: string,
+  final_date?: string,
+  customer?: string,
+  employee?: string,
+  job_center?: string,
+  work_type?: string,
+  status?: string
 }

@@ -1,6 +1,6 @@
-import {Component, ElementRef, forwardRef, OnInit, ViewChild} from '@angular/core';
+import {AfterViewInit, Component, ElementRef, forwardRef, OnInit, ViewChild} from '@angular/core';
 import {Calendar, CalendarOptions, DateSelectArg, EventClickArg, FullCalendarComponent} from "@fullcalendar/angular";
-import {CalendarDate} from "../../models/task.interface";
+import {CalendarDate, ModelTask, Task} from "../../models/task.interface";
 import {TaskService} from "../../services/task.service";
 import {MatDialog} from "@angular/material/dialog";
 import * as moment from "moment";
@@ -15,15 +15,21 @@ import {Employee, JobCenter} from "../../../employee/interfaces/employee.interfa
 import {FormBuilder, FormGroup, Validators} from "@angular/forms";
 import * as fileSaver from "file-saver";
 import {DateService} from "../../../../core/utils/date.service";
-import {ModelWorkType, WorkType} from "../../../catalog/work-types/models/work-type.interface";
+import {WorkType} from "../../../catalog/work-types/models/work-type.interface";
+import {MatTableDataSource} from "@angular/material/table";
+import {Contract, ModelContract} from "../../../catalog/contracts/models/contract.interface";
+import {MatPaginator} from "@angular/material/paginator";
+import {MatSort} from "@angular/material/sort";
+import {ConfirmComponent} from "../../../../shared/components/confirm/confirm.component";
+import {ModalResponse} from "../../../../core/utils/ModalResponse";
 
 @Component({
   selector: 'app-table',
   templateUrl: './table.component.html',
-  styleUrls: ['./app.component.scss']
+  styleUrls: ['./table.component.scss']
   /*styles: [``]*/
 })
-export class TableComponent implements OnInit {
+export class TableComponent implements OnInit, AfterViewInit {
   // Declare any for model EventApi
   tasks: any = []
   calendarOptions!: CalendarOptions
@@ -43,18 +49,14 @@ export class TableComponent implements OnInit {
   calendarForm!: FormGroup;
   submit!: boolean;
 
-  /**
-   * Values Initials Calendar
-   */
+  // Values Initials Calendar
   headerToolbar = {
     left: 'prev,next,today,changeRange',
     center: 'title',
     right: 'dayGridMonth,timeGridWeek,timeGridDay,listWeek,listDay'
   }
 
-  /**
-   * Values in Spanish Buttons
-   */
+  // Values in Spanish Buttons
   buttonText = {
     today: 'Hoy',
     month: 'Mes',
@@ -65,6 +67,24 @@ export class TableComponent implements OnInit {
 
   //This Values Ranges Date
   modeFull = true;
+
+  // Variables Table Events
+  displayedColumns: string[] = [
+    'id',
+    'folio',
+    'title',
+    'initial_date',
+    'status',
+    'customer_name',
+    'employee_name',
+    'job_center_name',
+    'options'];
+  dataSource!: MatTableDataSource<Task>;
+  totalItems!: number;
+  pageSize = this.sharedService.pageSize
+  taskPaginateForm!: FormGroup;
+  @ViewChild(MatPaginator, {static: true}) paginator!: MatPaginator;
+  @ViewChild(MatSort) sort!: MatSort;
 
   constructor(private taskService: TaskService,
               private dialog: MatDialog,
@@ -90,6 +110,15 @@ export class TableComponent implements OnInit {
 
     //Update Main Component
     this.updateEventSharedService()
+
+    this.dataSource = new MatTableDataSource();
+    /*Formulario*/
+    this.loadTaskFilterForm();
+    this.getTasksPaginator(this.paginator);
+  }
+
+  ngAfterViewInit() {
+    this.dataSource.sort = this.sort;
   }
 
   /**
@@ -276,6 +305,9 @@ export class TableComponent implements OnInit {
       this.tasks = []
       this.initTaskCalendar()
     })
+    this.taskService.getTasksPaginate(this.taskPaginateForm.value, this.calendarForm.value).subscribe(res => {
+      this.getTasksPaginator(this.paginator);
+    })
   }
 
   /**
@@ -287,6 +319,9 @@ export class TableComponent implements OnInit {
       this.idEmployee = idEmployee
       this.tasks = []
       this.initTaskCalendar()
+    })
+    this.taskService.getTasksPaginate(this.taskPaginateForm.value, this.calendarForm.value).subscribe(res => {
+      this.getTasksPaginator(this.paginator);
     })
   }
 
@@ -300,6 +335,9 @@ export class TableComponent implements OnInit {
       this.tasks = []
       this.initTaskCalendar()
     })
+    this.taskService.getTasksPaginate(this.taskPaginateForm.value, this.calendarForm.value).subscribe(res => {
+      this.getTasksPaginator(this.paginator);
+    })
   }
 
   /**
@@ -311,6 +349,9 @@ export class TableComponent implements OnInit {
       this.status = status
       this.tasks = []
       this.initTaskCalendar()
+    })
+    this.taskService.getTasksPaginate(this.taskPaginateForm.value, this.calendarForm.value).subscribe(res => {
+      this.getTasksPaginator(this.paginator);
     })
   }
 
@@ -324,6 +365,7 @@ export class TableComponent implements OnInit {
       this.initCalendar()
       // Events From Api
       this.initTaskCalendar()
+      this.getTasksPaginator(this.paginator)
     })
   }
 
@@ -454,6 +496,81 @@ export class TableComponent implements OnInit {
    */
   fieldInvalid(field: string) {
     return this.calendarForm.get(field)?.invalid && this.calendarForm.get(field)?.touched
+  }
+
+  getTasksPaginator(event: any) {
+    const paginator: MatPaginator = event;
+    this.taskPaginateForm.get('page')?.setValue(paginator.pageIndex + 1);
+    this.spinner.show()
+    this.taskService.getTasksPaginate(this.taskPaginateForm.value, this.calendarForm.value)
+      .subscribe(
+        (tasks: ModelTask) => {
+          this.spinner.hide()
+          this.dataSource.data = tasks.data
+          this.totalItems = tasks.meta.total;
+        },
+        (error => {
+          this.spinner.hide()
+          this.sharedService.errorDialog(error)
+        })
+      )
+  }
+
+  applyFilter(event: Event) {
+    const filterValue = (event.target as HTMLInputElement).value;
+    this.dataSource.filter = filterValue.trim().toLowerCase();
+
+    if (this.dataSource.paginator) {
+      this.dataSource.paginator.firstPage();
+    }
+  }
+
+  deleteContract(contract: Contract) {
+   /* // Show Dialog
+    const dialog = this.dialog.open(ConfirmComponent, {
+      width: '250',
+      data: contract
+    })
+
+    dialog.afterClosed().subscribe(
+      (result) => {
+        if (result) {
+          this.contractService.deleteContract(contract.id!)
+            .subscribe(resp => {
+              this.sharedService.showSnackBar('Registro Eliminado')
+              this.getContractsPaginator(this.paginator);
+            })
+        }
+      })*/
+
+  }
+
+  /**
+   * Open dialog for add and update group.
+   * @param edit
+   * @param idContract
+   * @param info
+   */
+  openDialogContract(edit: boolean, idContract: number | null, info: boolean): void {
+    const dialogRef = this.dialog.open(CrudComponent, {
+      autoFocus: false,
+      disableClose: true,
+      width: '50vw',
+      data: {edit: edit, idContract: idContract, info: info}
+    });
+    dialogRef.afterClosed().subscribe(res => {
+      if (res === ModalResponse.UPDATE) {
+        this.getTasksPaginator(this.paginator);
+      }
+    });
+  }
+
+  /* Método que permite iniciar los filtros de rutas*/
+  loadTaskFilterForm(): void {
+    this.taskPaginateForm = this.formBuilder.group({
+      page: [],
+      page_size: this.pageSize
+    })
   }
 
 }
