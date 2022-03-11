@@ -17,7 +17,6 @@ import * as fileSaver from "file-saver";
 import {DateService} from "../../../../core/utils/date.service";
 import {WorkType} from "../../../catalog/work-types/models/work-type.interface";
 import {MatTableDataSource} from "@angular/material/table";
-import {Contract, ModelContract} from "../../../catalog/contracts/models/contract.interface";
 import {MatPaginator} from "@angular/material/paginator";
 import {MatSort} from "@angular/material/sort";
 import {ConfirmComponent} from "../../../../shared/components/confirm/confirm.component";
@@ -525,23 +524,48 @@ export class TableComponent implements OnInit, AfterViewInit {
     }
   }
 
-  deleteContract(contract: Contract) {
-   /* // Show Dialog
+  /**
+   * Update a task.
+   */
+  updateTask(task: Task): void {
+
+    let data: CalendarDate = {
+      initial_hour: task.initial_hour,
+      final_hour: task.final_hour,
+      initial_date: task.initial_date,
+      final_date: task.final_date
+    }
+    let isEdit, isEditCustom : boolean;
+    isEditCustom = task.status !== 'Programado';
+    isEdit = !(task.status === 'Finalizado' || task.status === 'En Proceso');
+    this.openDialogTask(isEdit, Number(task.id), isEditCustom, data, false, false, isEditCustom)
+  }
+
+  /**
+   * delete a task.
+   */
+  deleteTask(task: Task): void {
+    // Show Dialog
     const dialog = this.dialog.open(ConfirmComponent, {
       width: '250',
-      data: contract
+      data: task
     })
 
     dialog.afterClosed().subscribe(
       (result) => {
         if (result) {
-          this.contractService.deleteContract(contract.id!)
-            .subscribe(resp => {
-              this.sharedService.showSnackBar('Registro Eliminado')
-              this.getContractsPaginator(this.paginator);
+          this.spinner.show()
+          this.taskService.deleteTask(Number(task.id)).subscribe(response => {
+              this.spinner.hide()
+              this.sharedService.showSnackBar(`Se ha eliminado correctamente la Tarea`);
+              this.sharedService.updateComponent()
+            }, (error => {
+              this.spinner.hide()
+              this.sharedService.errorDialog(error)
             })
+          )
         }
-      })*/
+      })
 
   }
 

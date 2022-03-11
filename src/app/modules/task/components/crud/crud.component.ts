@@ -239,7 +239,7 @@ export class CrudComponent implements OnInit {
       title:[{value:'', disabled:false}, Validators.required],
       job_center_id:[{value:'', disabled:false}, Validators.required],
       customer_id:[{value:'', disabled:this.task.info}, Validators.required],
-      employee_id:[{value:'', disabled:this.task.info}, Validators.required],
+      employee_id:[{value:'', disabled:false}, Validators.required],
       work_type_id:[{value:'', disabled:false}, Validators.required],
       doors:[{value: [], disabled:this.task.info}, Validators.required],
       initial_date: [{value: this.task.calendar.initial_date, disabled:this.task.info}, Validators.required],

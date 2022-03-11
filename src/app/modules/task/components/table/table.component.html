@@ -219,12 +219,12 @@
 <!--            <mat-icon color="info">visibility</mat-icon>-->
 <!--            Ver-->
 <!--          </button>-->
-          <button mat-menu-item (click)="openDialogContract(true, row.id, false)">
+          <button mat-menu-item (click)="updateTask(row)">
             <mat-icon color="primary">edit</mat-icon>
             Editar
           </button>
           <button mat-menu-item
-                  (click)="deleteContract(row)">
+                  (click)="deleteTask(row)">
             <mat-icon color="warn">delete</mat-icon>
             Eliminar
           </button>

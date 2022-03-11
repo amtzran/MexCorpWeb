@@ -74,8 +74,8 @@ export interface TaskDetail {
 }
 
 export interface CalendarDate {
-  initial_date: string;
-  final_date: string;
+  initial_date: string | undefined;
+  final_date: string | undefined;
   initial_hour: string;
   final_hour: string;
 }
