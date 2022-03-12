@@ -10,6 +10,7 @@ import {
   ModelJobCenter,
 } from "../interfaces/employee.interface";
 import {ModelProduct} from "../../catalog/product/interfaces/product.interface";
+import {reportTask} from "../../task/models/task.interface";
 
 @Injectable({
   providedIn: 'root'
@@ -73,6 +74,11 @@ export class EmployeeService {
     let params = new HttpParams();
     params = params.append('not_paginate', 'true')
     return this.http.get<ModelProduct>(`${this.baseUrl}/products/`, {params})
+  }
+
+  // Report Tools Employee
+  exportReportTools(id: number) : Observable<any> {
+    return this.http.post(`${this.baseUrl}/employees-receipt-tools/${id}`, '',{responseType: 'blob'})
   }
 
 }

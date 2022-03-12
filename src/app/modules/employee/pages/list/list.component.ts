@@ -14,6 +14,7 @@ import {ActiveComponent} from "../../../../shared/components/active/active.compo
 import {NgxSpinnerService} from "ngx-spinner";
 import {ProfileUser} from "../../../auth/interfaces/login.interface";
 import {ResetPasswordComponent} from "../../components/reset-password/reset-password.component";
+import * as fileSaver from "file-saver";
 
 @Component({
   selector: 'app-list',
@@ -145,6 +146,18 @@ export class ListComponent implements OnInit {
         this.getEmployeesPaginator(this.paginator);
       }
     });
+  }
+
+  toolsReport(employee : Employee){
+    this.spinner.show()
+    this.employeeService.exportReportTools(Number(employee.id)).subscribe(res => {
+    this.spinner.hide()
+    let file = this.sharedService.createBlobToPdf(res);
+    fileSaver.saveAs(file, `Reporte-Herramientas-${employee.name}`);
+  },error => {
+      this.spinner.hide()
+      this.sharedService.errorDialog(error)
+    })
   }
 
   /* Método que permite iniciar los filtros de rutas*/
