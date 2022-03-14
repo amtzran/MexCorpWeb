@@ -82,6 +82,8 @@ export class CrudComponent implements OnInit {
     this.workTypeForm = this.fb.group({
       name:[{value:null, disabled:this.workType.info}, Validators.required],
       description:[{value:'', disabled:this.workType.info}],
+      cost_one:[{value:'', disabled:this.workType.info}],
+      cost_two:[{value:'', disabled:this.workType.info}],
     });
   }
 

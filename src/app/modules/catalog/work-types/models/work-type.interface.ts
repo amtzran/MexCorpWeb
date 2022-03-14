@@ -13,6 +13,8 @@ export interface WorkType {
   name: string;
   description?: string;
   is_active?: boolean;
+  cost_one?: number;
+  cost_two?: number;
   created_at?: Date;
   updated_at?: Date;
 }

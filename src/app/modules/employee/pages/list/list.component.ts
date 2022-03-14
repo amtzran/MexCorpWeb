@@ -15,6 +15,7 @@ import {NgxSpinnerService} from "ngx-spinner";
 import {ProfileUser} from "../../../auth/interfaces/login.interface";
 import {ResetPasswordComponent} from "../../components/reset-password/reset-password.component";
 import * as fileSaver from "file-saver";
+import {DateService} from "../../../../core/utils/date.service";
 
 @Component({
   selector: 'app-list',
@@ -35,7 +36,8 @@ export class ListComponent implements OnInit {
               private formBuilder: FormBuilder,
               private dialog: MatDialog,
               private sharedService: SharedService,
-              private spinner: NgxSpinnerService,) {
+              private spinner: NgxSpinnerService,
+              private dateService: DateService,) {
   }
 
   ngOnInit(): void {
@@ -152,8 +154,9 @@ export class ListComponent implements OnInit {
     this.spinner.show()
     this.employeeService.exportReportTools(Number(employee.id)).subscribe(res => {
     this.spinner.hide()
+    let date = this.dateService.getFormatDataDate(new Date())
     let file = this.sharedService.createBlobToPdf(res);
-    fileSaver.saveAs(file, `Reporte-Herramientas-${employee.name}`);
+    fileSaver.saveAs(file, `Reporte-Herramientas-${employee.name}-${date}`);
   },error => {
       this.spinner.hide()
       this.sharedService.errorDialog(error)
