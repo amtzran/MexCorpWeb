@@ -52,6 +52,8 @@
 
 <mat-dialog-actions fxLayoutAlign="end">
   <button (click)="close()" mat-stroked-button color="primary" mat-dialog-close="true">Cancelar</button>
-  <button *ngIf="tool.data === 0 " (click)="addTool()" mat-flat-button color="primary" cdkFocusInitial [disabled]="toolForm.invalid">Guardar Herramienta</button>
-  <button *ngIf="tool.data !== 0 && tool.edit" (click)="updateTool()" mat-flat-button color="primary" cdkFocusInitial>Editar</button>
+  <button *ngIf="tool.data === 0; else buttonEdit" (click)="addTool()" mat-flat-button color="primary" cdkFocusInitial [disabled]="toolForm.invalid">Guardar Herramienta</button>
+  <ng-template #buttonEdit>
+    <button (click)="updateTool()" mat-flat-button color="primary" cdkFocusInitial>Editar</button>
+  </ng-template>
 </mat-dialog-actions>

@@ -88,8 +88,8 @@ export class EmployeeService {
   }
 
   // Update Tools By Employee
-  updateTool(tool: Product, tools: ToolsEmployee): Observable<any> {
-    return this.http.post<any>(`${this.baseUrl}/employees/${tool.id}/product/`, tools)
+  updateTool(idEmployee: number, tools: ToolsEmployee): Observable<any> {
+    return this.http.put<any>(`${this.baseUrl}/employees/${idEmployee}/product/`, tools)
   }
 
   // Update Tools By Employee

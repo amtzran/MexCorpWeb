@@ -95,9 +95,9 @@ export class CrudToolComponent implements OnInit {
   updateTool(): void {
     this.validateForm()
     this.spinner.show()
-    this.employeeService.updateTool(this.tool.data, this.toolForm.value).subscribe(response => {
+    this.employeeService.updateTool(this.tool.idEmployee, this.toolForm.value).subscribe(response => {
         this.spinner.hide()
-        this.sharedService.showSnackBar(`Se ha actualizado correctamente la herramienta: ${response.data.name}` );
+        this.sharedService.showSnackBar(`${response.message}` );
         this.dialogRef.close(ModalResponse.UPDATE);
       }, (error => {
         this.spinner.hide()
