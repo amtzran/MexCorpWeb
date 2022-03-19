@@ -104,21 +104,6 @@
               *
             </mat-error>
 
-            <ng-select fxFlex="100"
-                       bindLabel="description"
-                       placeholder="Herramientas"
-                       formControlName="products_employee"
-                       [multiple]="true"
-                       appendTo="body"
-                       [searchable]="true"
-                       [clearable]="true"
-                       bindValue="id"
-                       [compareWith]="setValueSelectObjectMultiple">
-              <ng-option *ngFor="let product of products" [value]="product.id">
-                {{product.description}}
-              </ng-option>
-            </ng-select>
-
           </div>
 
         </div>
@@ -180,7 +165,13 @@
           <td mat-cell *matCellDef="let row"> {{row.cost}} </td>
         </ng-container>
 
-        <!-- Teléfono Column -->
+        <!-- Cost Column -->
+        <ng-container matColumnDef="quantity">
+          <th mat-header-cell *matHeaderCellDef mat-sort-header=""> Cantidad</th>
+          <td mat-cell *matCellDef="let row"> {{row.quantity}} </td>
+        </ng-container>
+
+        <!-- Settings Column -->
         <ng-container matColumnDef="options">
           <th mat-header-cell *matHeaderCellDef mat-sort-header=""> Opciones</th>
           <td mat-cell *matCellDef="let row">

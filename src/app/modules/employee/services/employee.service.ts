@@ -92,4 +92,9 @@ export class EmployeeService {
     return this.http.post<any>(`${this.baseUrl}/employees/${id}/product/`, tools)
   }
 
+  // Update Tools By Employee
+  deleteTool(idEmployee: number, idTool: number): Observable<any> {
+    return this.http.delete<any>(`${this.baseUrl}/employees/${idEmployee}/product/${idTool}`)
+  }
+
 }

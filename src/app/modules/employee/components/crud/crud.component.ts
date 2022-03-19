@@ -36,12 +36,11 @@ export class CrudComponent implements OnInit {
   jobCenters: JobCenter[] = [];
   jobs: Job[] = []
   permissions!: DataPermission[];
-  products!: Product[];
 
   /**
    * Table Tools Files
    */
-  displayedColumns: string[] = ['id', 'name', 'description', 'brand', 'cost', 'options'];
+  displayedColumns: string[] = ['id', 'name', 'description', 'brand', 'cost', 'quantity', 'options'];
   dataSource!: MatTableDataSource<EmployeeDetail>;
   totalItems!: number;
   pageSize = 30;
@@ -62,7 +61,6 @@ export class CrudComponent implements OnInit {
     // Service selects
     this.employeeService.getJobCenters().subscribe(jobCenters => {this.jobCenters = jobCenters.data} )
     this.employeeService.getJobs().subscribe(jobs => {this.jobs = jobs.data} )
-    this.employeeService.getProducts().subscribe(products => {this.products = products.data})
     this.sharedService.getPermissions().subscribe( permissions => {this.permissions = permissions.data})
 
     /*Formulario*/
@@ -242,14 +240,14 @@ export class CrudComponent implements OnInit {
   deleteTool(tool: any) {
     // Show Dialog
     const dialog = this.dialog.open(ConfirmComponent, {
-      width: '250',
+      width: '25vw',
       data: tool
     })
 
     dialog.afterClosed().subscribe(
       (result) => {
         if (result) {
-          this.employeeService.deleteEmployee(tool.id!)
+          this.employeeService.deleteTool(this.employee.idEmployee, tool.id)
             .subscribe(resp => {
               this.sharedService.showSnackBar('Registro Eliminado')
               this.getToolsPaginator(this.paginator);

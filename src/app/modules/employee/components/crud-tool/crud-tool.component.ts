@@ -6,6 +6,7 @@ import {SharedService} from "../../../../shared/services/shared.service";
 import {NgxSpinnerService} from "ngx-spinner";
 import {ModalResponse} from "../../../../core/utils/ModalResponse";
 import {EmployeeService} from "../../services/employee.service";
+import {Product} from "../../../catalog/product/interfaces/product.interface";
 
 @Component({
   selector: 'app-crud-tool',
@@ -20,6 +21,8 @@ export class CrudToolComponent implements OnInit {
   /*Variables display errors modal*/
   showError!: boolean;
   submit!: boolean;
+  // Select Products
+  products!: Product[];
 
   constructor(
     private fb: FormBuilder,
@@ -35,6 +38,7 @@ export class CrudToolComponent implements OnInit {
 
     /*Formulario*/
     this.loadToolForm();
+    this.employeeService.getProducts().subscribe(products => {this.products = products.data})
 
     if(this.tool.idTool && this.tool.edit){
       this.title = 'Editar Cantidad';
@@ -47,8 +51,7 @@ export class CrudToolComponent implements OnInit {
     }
 
     if(this.tool.idTool){
-      console.log(this.tool.idTool)
-      //this.loadContractById();
+      this.loadToolById();
     }
 
   }
@@ -78,7 +81,7 @@ export class CrudToolComponent implements OnInit {
    */
   loadToolForm():void{
     this.toolForm = this.fb.group({
-      //product_id:[{value: this.tool.idTool, disabled:this.tool.info},],
+      product_id:[{value: '', disabled:this.tool.info}, Validators.required],
       quantity:[{value:'', disabled:this.tool.info,}, Validators.required],
     });
   }
@@ -89,7 +92,7 @@ export class CrudToolComponent implements OnInit {
   addTool(): void {
     this.validateForm()
     this.spinner.show()
-    this.employeeService.addTool(this.tool.idTool, this.toolForm.value).subscribe(response => {
+    this.employeeService.addTool(this.tool.idEmployee, this.toolForm.value).subscribe(response => {
         this.spinner.hide()
         this.sharedService.showSnackBar('Se ha agregado correctamente la Herramienta.');
         this.dialogRef.close(ModalResponse.UPDATE);
