@@ -24,7 +24,7 @@ export interface Employee {
   user_id?: number;
   user_name?: string;
   permissions_user: DataPermission[] | [];
-  products_employee?: Product[] | [];
+  products_employee?: any;
   created_at?: string;
   updated_at?: string;
 }
@@ -69,4 +69,10 @@ export interface Job {
   description?: string;
   created_at?: Date;
   updated_at?: Date;
+}
+
+//Tools Employees
+export interface ToolsEmployee {
+  product_id?: number,
+  quantity?: number
 }

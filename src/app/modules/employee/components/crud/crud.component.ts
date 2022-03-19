@@ -1,13 +1,18 @@
-import {Component, Inject, OnInit} from '@angular/core';
+import {Component, Inject, OnInit, ViewChild} from '@angular/core';
 import {FormBuilder, FormGroup, Validators} from "@angular/forms";
-import {MAT_DIALOG_DATA, MatDialogRef} from "@angular/material/dialog";
+import {MAT_DIALOG_DATA, MatDialog, MatDialogRef} from "@angular/material/dialog";
 import {EmployeeService} from "../../services/employee.service";
-import {Employee, Job, JobCenter} from "../../interfaces/employee.interface";
+import {Employee, EmployeeDetail, Job, JobCenter} from "../../interfaces/employee.interface";
 import {ModalResponse} from "../../../../core/utils/ModalResponse";
 import {SharedService} from "../../../../shared/services/shared.service";
 import {NgxSpinnerService} from "ngx-spinner";
 import {DataPermission} from "../../../../shared/interfaces/shared.interface";
 import {Product} from "../../../catalog/product/interfaces/product.interface";
+import {MatTableDataSource} from "@angular/material/table";
+import {MatPaginator} from "@angular/material/paginator";
+import {MatSort} from "@angular/material/sort";
+import {CrudToolComponent} from "../crud-tool/crud-tool.component";
+import {ConfirmComponent} from "../../../../shared/components/confirm/confirm.component";
 
 @Component({
   selector: 'app-crud',
@@ -33,12 +38,23 @@ export class CrudComponent implements OnInit {
   permissions!: DataPermission[];
   products!: Product[];
 
+  /**
+   * Table Tools Files
+   */
+  displayedColumns: string[] = ['id', 'name', 'description', 'brand', 'cost', 'options'];
+  dataSource!: MatTableDataSource<EmployeeDetail>;
+  totalItems!: number;
+  pageSize = 30;
+  @ViewChild(MatPaginator, {static: true}) paginator!: MatPaginator;
+  @ViewChild(MatSort) sort!: MatSort;
+
   constructor(
     private fb: FormBuilder,
     private sharedService: SharedService,
     private dialogRef: MatDialogRef<CrudComponent>,
     private employeeService: EmployeeService,
     private spinner: NgxSpinnerService,
+    private dialog: MatDialog,
     @Inject(MAT_DIALOG_DATA) public employee : {idEmployee: number, edit: boolean, info: boolean}
   ) { }
 
@@ -65,6 +81,9 @@ export class CrudComponent implements OnInit {
     if(this.employee.idEmployee){
       this.loadEmployeeById();
     }
+
+    this.dataSource = new MatTableDataSource();
+    this.getToolsPaginator(this.paginator);
 
   }
 
@@ -167,6 +186,77 @@ export class CrudComponent implements OnInit {
    */
   close(): void{
     this.dialogRef.close(ModalResponse.UPDATE);
+  }
+
+  ngAfterViewInit() {
+    this.dataSource.sort = this.sort;
+  }
+
+  applyFilter(event: Event) {
+    const filterValue = (event.target as HTMLInputElement).value;
+    this.dataSource.filter = filterValue.trim().toLowerCase();
+
+    if (this.dataSource.paginator) {
+      this.dataSource.paginator.firstPage();
+    }
+  }
+
+  /**
+   * Get Data for table from Api
+   * @param event
+   */
+  getToolsPaginator(event: any) {
+    this.spinner.show()
+    this.employeeService.getEmployeeById(this.employee.idEmployee)
+      .subscribe(res => {
+          this.spinner.hide()
+          this.dataSource.data = res.data.products_employee
+        }, (error => {
+          this.spinner.hide()
+          this.sharedService.errorDialog(error)
+        })
+      )
+  }
+
+  /**
+   * Open dialog for add and update Tools.
+   * @param edit
+   * @param idTool
+   * @param info
+   * @param idEmployee
+   */
+  openDialogTool(edit: boolean, idTool: number | null, info: boolean, idEmployee: number): void {
+    const dialogRef = this.dialog.open(CrudToolComponent, {
+      autoFocus: false,
+      disableClose: true,
+      width: '50vw',
+      data: {edit: edit, idTool: idTool, info: info, idEmployee: idEmployee}
+    });
+    dialogRef.afterClosed().subscribe(res => {
+      if (res === ModalResponse.UPDATE) {
+        this.getToolsPaginator(this.paginator);
+      }
+    });
+  }
+
+  deleteTool(tool: any) {
+    // Show Dialog
+    const dialog = this.dialog.open(ConfirmComponent, {
+      width: '250',
+      data: tool
+    })
+
+    dialog.afterClosed().subscribe(
+      (result) => {
+        if (result) {
+          this.employeeService.deleteEmployee(tool.id!)
+            .subscribe(resp => {
+              this.sharedService.showSnackBar('Registro Eliminado')
+              this.getToolsPaginator(this.paginator);
+            })
+        }
+      })
+
   }
 
   /**

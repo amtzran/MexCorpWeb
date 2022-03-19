@@ -12,6 +12,7 @@ import { EmployeeComponent } from './employee.component';
 import {NgxSpinnerModule} from "ngx-spinner";
 import {NgSelectModule} from "@ng-select/ng-select";
 import { ResetPasswordComponent } from './components/reset-password/reset-password.component';
+import { CrudToolComponent } from './components/crud-tool/crud-tool.component';
 
 
 @NgModule({
@@ -20,7 +21,8 @@ import { ResetPasswordComponent } from './components/reset-password/reset-passwo
     ListComponent,
     CrudComponent,
     EmployeeComponent,
-    ResetPasswordComponent
+    ResetPasswordComponent,
+    CrudToolComponent
   ],
   imports: [
     CommonModule,

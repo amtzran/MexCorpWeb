@@ -7,10 +7,11 @@ import {
   EmployeePaginate,
   ModelEmployee,
   ModelJob,
-  ModelJobCenter,
+  ModelJobCenter, ToolsEmployee,
 } from "../interfaces/employee.interface";
 import {ModelProduct} from "../../catalog/product/interfaces/product.interface";
 import {reportTask} from "../../task/models/task.interface";
+import {ContractDetail} from "../../catalog/contracts/models/contract.interface";
 
 @Injectable({
   providedIn: 'root'
@@ -79,6 +80,16 @@ export class EmployeeService {
   // Report Tools Employee
   exportReportTools(id: number) : Observable<any> {
     return this.http.post(`${this.baseUrl}/employees-receipt-tools/${id}`, '',{responseType: 'blob'})
+  }
+
+  // Add Tools By Employee
+  addTool(id: number, tools: ToolsEmployee): Observable<any> {
+    return this.http.post<any>(`${this.baseUrl}/employees/${id}/product/`, tools)
+  }
+
+  // Update Tools By Employee
+  updateTool(id: number, tools: ToolsEmployee): Observable<any> {
+    return this.http.post<any>(`${this.baseUrl}/employees/${id}/product/`, tools)
   }
 
 }
