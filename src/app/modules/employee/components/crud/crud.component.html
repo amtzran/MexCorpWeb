@@ -14,7 +14,7 @@
           <div fxLayout="row"
                fxLayout.xs="column"
                fxLayoutGap="20px">
-            <mat-form-field fxFlex="35">
+            <mat-form-field fxFlex="50">
               <mat-label>Empleado</mat-label>
               <input
                 matInput
@@ -25,7 +25,7 @@
               </mat-error>
             </mat-form-field>
 
-            <mat-form-field fxFlex="35">
+            <mat-form-field fxFlex="50">
               <mat-label>Correo</mat-label>
               <input
                 matInput
@@ -33,18 +33,6 @@
                 formControlName="email">
               <mat-error *ngIf="fieldInvalid('email')">
                 Favor de ingresar correo correctamente
-              </mat-error>
-            </mat-form-field>
-
-            <mat-form-field fxFlex="20">
-              <mat-label>Color</mat-label>
-              <input
-                matInput
-                type="color"
-                formControlName="color"
-              >
-              <mat-error *ngIf="fieldInvalid('color')">
-                Favor de elegir un color
               </mat-error>
             </mat-form-field>
 
@@ -86,7 +74,7 @@
                fxLayout.xs="column"
                fxLayoutGap="20px">
 
-            <ng-select fxFlex="100"
+            <ng-select fxFlex="80"
                        bindLabel="description"
                        placeholder="Permisos"
                        formControlName="permissions_user"
@@ -103,6 +91,18 @@
             <mat-error *ngIf="fieldInvalid('permissions_user')">
               *
             </mat-error>
+
+            <mat-form-field fxFlex="20">
+              <mat-label>Color</mat-label>
+              <input
+                matInput
+                type="color"
+                formControlName="color"
+              >
+              <mat-error *ngIf="fieldInvalid('color')">
+                Favor de elegir un color
+              </mat-error>
+            </mat-form-field>
 
           </div>
 
@@ -123,7 +123,7 @@
         </mat-form-field>
       </div>
       <div fxFlex="50" fxLayoutAlign="center center">
-        <button (click)="openDialogTool(false, null, false, employee.idEmployee)" mat-button color="primary">
+        <button (click)="openDialogTool(true, 0, false, employee.idEmployee)" mat-button color="primary">
           <mat-icon>tool</mat-icon>
           Nueva Herramienta
         </button>
@@ -131,8 +131,8 @@
 
     </div>
 
-    <!--Tabla Accesos-->
-    <div class="mat-elevation-z8">
+    <!--Tabla Products Employee-->
+    <div class="mat-elevation-z8" *ngIf="employee.edit">
       <table mat-table [dataSource]="dataSource" matSort>
 
         <!-- ID Column -->
@@ -179,11 +179,7 @@
               <mat-icon>more_vert</mat-icon>
             </button>
             <mat-menu #menu="matMenu">
-            <button mat-menu-item (click)="openDialogTool(false, row.id, true, employee.idEmployee)">
-              <mat-icon color="info">visibility</mat-icon>
-              Ver
-            </button>
-            <button mat-menu-item (click)="openDialogTool(true, row.id, false, employee.idEmployee)">
+            <button mat-menu-item (click)="openDialogTool(true, row, false, employee.idEmployee)">
               <mat-icon color="primary">edit</mat-icon>
               Editar
             </button>
@@ -212,6 +208,7 @@
                            [showFirstLastButtons]="true">
             </mat-paginator>-->
     </div>
+
   </div>
 
 </mat-dialog-content>

@@ -503,6 +503,28 @@ export class TableComponent implements OnInit, AfterViewInit {
   }
 
   /**
+   * Export Excel Services Finalized
+   */
+  reportFinalizedExcel(){
+    this.validateForm()
+    this.spinner.show()
+    this.taskService.reportServiceFinalizedExcel(this.calendarForm.value).subscribe(res => {
+        let file = this.sharedService.createBlobToExcel(res);
+        let date_initial = this.dateService.getFormatDataDate(this.calendarForm.value.initial_date)
+        let final_date = this.dateService.getFormatDataDate(this.calendarForm.value.final_date)
+
+        fileSaver.saveAs(file, `Reporte-Servicios-Finalizados-${date_initial}-${final_date}`);
+
+        this.spinner.hide()
+      }, (error => {
+        this.spinner.hide()
+        this.sharedService.errorDialog(error)
+      })
+    )
+  }
+
+
+  /**
    * Update Invoiced Table and Calendar
    * @param event
    * @param id

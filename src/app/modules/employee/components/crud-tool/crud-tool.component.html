@@ -17,8 +17,7 @@
 
             <mat-form-field fxFlex="100">
               <mat-label>Producto</mat-label>
-              <mat-select
-                formControlName="product_id">
+              <mat-select formControlName="product_id">
                 <mat-option *ngFor="let product of products" [value]="product.id">
                   {{ product.name}}
                 </mat-option>
@@ -53,6 +52,6 @@
 
 <mat-dialog-actions fxLayoutAlign="end">
   <button (click)="close()" mat-stroked-button color="primary" mat-dialog-close="true">Cancelar</button>
-  <button *ngIf="!tool.idTool" (click)="addTool()" mat-flat-button color="primary" cdkFocusInitial [disabled]="toolForm.invalid">Guardar Herramienta</button>
-  <button *ngIf="tool.idTool && tool.edit" (click)="updateTool()" mat-flat-button color="primary" cdkFocusInitial>Editar</button>
+  <button *ngIf="tool.data === 0 " (click)="addTool()" mat-flat-button color="primary" cdkFocusInitial [disabled]="toolForm.invalid">Guardar Herramienta</button>
+  <button *ngIf="tool.data !== 0 && tool.edit" (click)="updateTool()" mat-flat-button color="primary" cdkFocusInitial>Editar</button>
 </mat-dialog-actions>

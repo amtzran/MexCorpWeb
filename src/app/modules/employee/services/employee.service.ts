@@ -9,7 +9,7 @@ import {
   ModelJob,
   ModelJobCenter, ToolsEmployee,
 } from "../interfaces/employee.interface";
-import {ModelProduct} from "../../catalog/product/interfaces/product.interface";
+import {ModelProduct, Product} from "../../catalog/product/interfaces/product.interface";
 import {reportTask} from "../../task/models/task.interface";
 import {ContractDetail} from "../../catalog/contracts/models/contract.interface";
 
@@ -88,8 +88,8 @@ export class EmployeeService {
   }
 
   // Update Tools By Employee
-  updateTool(id: number, tools: ToolsEmployee): Observable<any> {
-    return this.http.post<any>(`${this.baseUrl}/employees/${id}/product/`, tools)
+  updateTool(tool: Product, tools: ToolsEmployee): Observable<any> {
+    return this.http.post<any>(`${this.baseUrl}/employees/${tool.id}/product/`, tools)
   }
 
   // Update Tools By Employee

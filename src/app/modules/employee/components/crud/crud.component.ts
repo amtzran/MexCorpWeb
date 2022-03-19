@@ -2,17 +2,17 @@ import {Component, Inject, OnInit, ViewChild} from '@angular/core';
 import {FormBuilder, FormGroup, Validators} from "@angular/forms";
 import {MAT_DIALOG_DATA, MatDialog, MatDialogRef} from "@angular/material/dialog";
 import {EmployeeService} from "../../services/employee.service";
-import {Employee, EmployeeDetail, Job, JobCenter} from "../../interfaces/employee.interface";
+import {EmployeeDetail, Job, JobCenter} from "../../interfaces/employee.interface";
 import {ModalResponse} from "../../../../core/utils/ModalResponse";
 import {SharedService} from "../../../../shared/services/shared.service";
 import {NgxSpinnerService} from "ngx-spinner";
 import {DataPermission} from "../../../../shared/interfaces/shared.interface";
-import {Product} from "../../../catalog/product/interfaces/product.interface";
 import {MatTableDataSource} from "@angular/material/table";
 import {MatPaginator} from "@angular/material/paginator";
 import {MatSort} from "@angular/material/sort";
 import {CrudToolComponent} from "../crud-tool/crud-tool.component";
 import {ConfirmComponent} from "../../../../shared/components/confirm/confirm.component";
+import {Product} from "../../../catalog/product/interfaces/product.interface";
 
 @Component({
   selector: 'app-crud',
@@ -81,7 +81,7 @@ export class CrudComponent implements OnInit {
     }
 
     this.dataSource = new MatTableDataSource();
-    this.getToolsPaginator(this.paginator);
+    if (this.employee.edit) this.getToolsPaginator(this.paginator);
 
   }
 
@@ -121,7 +121,6 @@ export class CrudComponent implements OnInit {
       job_center_id: [{value: '', disabled:this.employee.info}, Validators.required],
       job_title_id: [{value: '', disabled:this.employee.info}, Validators.required],
       permissions_user:[{value: [], disabled:this.employee.info}, Validators.required],
-      products_employee:[{value: [], disabled:this.employee.info}],
     });
   }
 
@@ -219,16 +218,16 @@ export class CrudComponent implements OnInit {
   /**
    * Open dialog for add and update Tools.
    * @param edit
-   * @param idTool
+   * @param data
    * @param info
    * @param idEmployee
    */
-  openDialogTool(edit: boolean, idTool: number | null, info: boolean, idEmployee: number): void {
+  openDialogTool(edit: boolean, data: Product | 0, info: boolean, idEmployee: number): void {
     const dialogRef = this.dialog.open(CrudToolComponent, {
       autoFocus: false,
       disableClose: true,
       width: '50vw',
-      data: {edit: edit, idTool: idTool, info: info, idEmployee: idEmployee}
+      data: {edit: edit, data: data, info: info, idEmployee: idEmployee}
     });
     dialogRef.afterClosed().subscribe(res => {
       if (res === ModalResponse.UPDATE) {

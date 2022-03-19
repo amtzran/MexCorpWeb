@@ -31,27 +31,20 @@ export class CrudToolComponent implements OnInit {
     private employeeService: EmployeeService,
     private sharedService: SharedService,
     private spinner: NgxSpinnerService,
-    @Inject(MAT_DIALOG_DATA) public tool : {idTool: number, edit: boolean, info: boolean, idEmployee: number}
+    @Inject(MAT_DIALOG_DATA) public tool : {data: Product, edit: boolean, info: boolean, idEmployee: number}
   ) { }
 
   ngOnInit(): void {
 
     /*Formulario*/
     this.loadToolForm();
+    if(this.tool.data !== 0) this.loadToolById();
+
     this.employeeService.getProducts().subscribe(products => {this.products = products.data})
 
-    if(this.tool.idTool && this.tool.edit){
+    if(this.tool.data !== null && this.tool.edit){
       this.title = 'Editar Cantidad';
       this.toolForm.updateValueAndValidity();
-    }
-
-    if(this.tool.idTool && !this.tool.edit){
-      this.title = 'Información de la Herramienta';
-      this.toolForm.updateValueAndValidity();
-    }
-
-    if(this.tool.idTool){
-      this.loadToolById();
     }
 
   }
@@ -60,31 +53,23 @@ export class CrudToolComponent implements OnInit {
    * Get detail retrieve of one group.
    */
   loadToolById(): void{
-    /*this.spinner.show()
-    this.employeeService.getContractById(this.contract.idContract).subscribe(response => {
-        this.spinner.hide()
-        delete response.data.id;
-        delete response.data.created_at;
-        delete response.data.updated_at;
-        delete response.data.is_active;
-        this.contractForm.setValue(response.data);
-      }, (error => {
-        this.spinner.hide()
-        this.sharedService.errorDialog(error)
-      } )
-    )*/
+    this.toolForm = this.fb.group({
+      product_id:[{value: this.tool.data.id, disabled:this.tool.info}, Validators.required],
+      quantity:[{value: this.tool.data.quantity, disabled:this.tool.info,}, Validators.required],
+    });
   }
-
 
   /**
    * Load the form tool.
    */
   loadToolForm():void{
+
     this.toolForm = this.fb.group({
       product_id:[{value: '', disabled:this.tool.info}, Validators.required],
       quantity:[{value:'', disabled:this.tool.info,}, Validators.required],
     });
   }
+
 
   /**
    * Create Tool By Employee.
@@ -110,7 +95,7 @@ export class CrudToolComponent implements OnInit {
   updateTool(): void {
     this.validateForm()
     this.spinner.show()
-    this.employeeService.updateTool(this.tool.idTool, this.toolForm.value).subscribe(response => {
+    this.employeeService.updateTool(this.tool.data, this.toolForm.value).subscribe(response => {
         this.spinner.hide()
         this.sharedService.showSnackBar(`Se ha actualizado correctamente la herramienta: ${response.data.name}` );
         this.dialogRef.close(ModalResponse.UPDATE);
@@ -145,7 +130,7 @@ export class CrudToolComponent implements OnInit {
    * Close modal.
    */
   close(): void{
-    this.dialogRef.close(ModalResponse.UPDATE);
+    this.dialogRef.close(ModalResponse.CLOSE);
   }
 
 }

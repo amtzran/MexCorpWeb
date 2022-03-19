@@ -71,6 +71,8 @@
           <mat-option value="Finalizado">Finalizado</mat-option>
           <mat-option value="Programado">Programado</mat-option>
           <mat-option value="En Proceso">En Proceso</mat-option>
+          <mat-option value="Facturado">Facturado</mat-option>
+          <mat-option value="No Facturado">No Facturado</mat-option>
         </mat-select>
       </mat-form-field>
 
@@ -114,6 +116,10 @@
         <button mat-menu-item color="warn" (click)="reportFinalizedPdf()" [disabled]="calendarForm.invalid">
           Servicios Finalizados
           <mat-icon mat-list-icon>picture_as_pdf</mat-icon>
+        </button>
+        <button mat-menu-item color="warn" (click)="reportFinalizedExcel()" [disabled]="calendarForm.invalid">
+          Servicios Finalizados (Excel)
+          <mat-icon mat-list-icon>view_list</mat-icon>
         </button>
         <button mat-menu-item color="warn" (click)="downloadReport('pdf')" [disabled]="calendarForm.invalid">
           Tareas

@@ -15,6 +15,7 @@ export interface Product {
   brand?: string;
   cost?: string;
   photo?: string;
+  quantity?: number;
   created_at?: Date;
   updated_at?: Date;
 }
