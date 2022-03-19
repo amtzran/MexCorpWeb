@@ -23,6 +23,7 @@ import {MatNativeDateModule} from "@angular/material/core";
 import {MatTabsModule} from "@angular/material/tabs";
 import {MatTooltipModule} from "@angular/material/tooltip";
 import {MatChipsModule} from "@angular/material/chips";
+import {MatCheckboxModule} from "@angular/material/checkbox";
 
 
 @NgModule({
@@ -31,7 +32,7 @@ import {MatChipsModule} from "@angular/material/chips";
     CommonModule
   ],
   exports:[
-    // Exportar modulos para Material Design
+    // Exportar módulos para Material Design
     MatSidenavModule,
     MatToolbarModule,
     MatButtonModule,
@@ -54,7 +55,8 @@ import {MatChipsModule} from "@angular/material/chips";
     MatNativeDateModule,
     MatTabsModule,
     MatTooltipModule,
-    MatChipsModule
+    MatChipsModule,
+    MatCheckboxModule
   ]
 })
 export class MaterialModule { }

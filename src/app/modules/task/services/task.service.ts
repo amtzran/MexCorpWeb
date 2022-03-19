@@ -198,4 +198,9 @@ export class TaskService {
     return this.http.post<any>(`${this.baseUrl}/tasks-form-report-send-email/`, email)
   }
 
+  // Update Invoice
+  updateInvoice(event: any, id: number) : Observable<any> {
+    return this.http.post<any>(`${this.baseUrl}/tasks/${id}/invoiced/`,  {'invoiced': event.checked} )
+  }
+
 }

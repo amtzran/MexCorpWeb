@@ -47,6 +47,7 @@ export class TableComponent implements OnInit, AfterViewInit {
   changeEvent : boolean = true;
   calendarForm!: FormGroup;
   submit!: boolean;
+  isChecked:boolean = true;
 
   // Values Initials Calendar
   headerToolbar = {
@@ -77,6 +78,7 @@ export class TableComponent implements OnInit, AfterViewInit {
     'customer_name',
     'employee_name',
     'job_center_name',
+    'invoiced',
     'options'];
   dataSource!: MatTableDataSource<Task>;
   totalItems!: number;
@@ -181,11 +183,11 @@ export class TableComponent implements OnInit, AfterViewInit {
           if (element.status === 'En Proceso') color = '#F39C12'
             this.tasks.push({
               id: String(element.id),
-              title: element.title,
+              title: `${element.title} -> Facturado: ${element.invoiced ? 'Si' : 'No'}`,
               start: `${element.initial_date} ${element.initial_hour}`,
               end: `${element.final_date} ${element.final_hour}`,
               backgroundColor: color,
-              borderColor: color
+              borderColor: color,
             })
         })
         this.initCalendar()
@@ -292,6 +294,7 @@ export class TableComponent implements OnInit, AfterViewInit {
     dialogRef.afterClosed().subscribe(res => {
       this.tasks = []
       this.initTaskCalendar()
+      this.getTasksPaginator(this.paginator);
     });
   }
 
@@ -491,6 +494,27 @@ export class TableComponent implements OnInit, AfterViewInit {
 
         fileSaver.saveAs(file, `Reporte-Servicios-Finalizados-${date_initial}-${final_date}`);
 
+        this.spinner.hide()
+      }, (error => {
+        this.spinner.hide()
+        this.sharedService.errorDialog(error)
+      })
+    )
+  }
+
+  /**
+   * Update Invoiced Table and Calendar
+   * @param event
+   * @param id
+   */
+  changeInvoice(event: any, id: number) {
+
+    this.spinner.show()
+    this.taskService.updateInvoice(event, id).subscribe(res => {
+        this.sharedService.showSnackBar(res.message);
+        this.tasks = []
+        this.initTaskCalendar()
+        this.getTasksPaginator(this.paginator);
         this.spinner.hide()
       }, (error => {
         this.spinner.hide()
