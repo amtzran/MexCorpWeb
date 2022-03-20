@@ -141,7 +141,8 @@ export class CrudComponent implements OnInit {
     this.taskService.getTaskById(this.task.idTask).subscribe(response => {
       this.spinner.hide()
       this.dataTask = response.data
-      this.title = `Información de la Tarea | ${response.data.status} | ${response.data.folio}`;
+      this.title = `Información de la Tarea | ${response.data.status} | ${response.data.folio}
+      | ${response.data.invoiced === 1 ? 'Facturado' : 'Sin Facturar'}`;
       // Data Doors by Customer
       this.loadAccess(response.data.customer_id)
       this.taskForm.patchValue({

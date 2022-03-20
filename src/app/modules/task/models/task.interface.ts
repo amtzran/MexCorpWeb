@@ -28,7 +28,7 @@ export interface Task {
   start_task_hour?: string | null;
   end_task_hour?: string | null;
   status?: string;
-  invoiced: boolean
+  invoiced: number
   created_at?: string;
   updated_at?: string;
   comments: null | string;
