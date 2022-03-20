@@ -21,6 +21,7 @@ import {MatPaginator} from "@angular/material/paginator";
 import {MatSort} from "@angular/material/sort";
 import {ConfirmComponent} from "../../../../shared/components/confirm/confirm.component";
 import {ModalResponse} from "../../../../core/utils/ModalResponse";
+import {MatDatepickerInputEvent} from "@angular/material/datepicker";
 
 @Component({
   selector: 'app-table',
@@ -355,6 +356,16 @@ export class TableComponent implements OnInit, AfterViewInit {
     this.taskService.getTasksPaginate(this.taskPaginateForm.value, this.calendarForm.value).subscribe(res => {
       this.getTasksPaginator(this.paginator);
     })
+  }
+
+  /**
+   * Filter By Date in Task
+   * @param event
+   */
+  endChange(event: MatDatepickerInputEvent<any>){
+     this.taskService.getTasksPaginate(this.taskPaginateForm.value, this.calendarForm.value).subscribe(res => {
+       this.getTasksPaginator(this.paginator);
+     })
   }
 
   /**

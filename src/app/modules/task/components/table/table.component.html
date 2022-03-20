@@ -91,7 +91,7 @@
         <mat-label>Ingresar Rango Fecha</mat-label>
         <mat-date-range-input [rangePicker]="picker">
           <input matStartDate formControlName="initial_date" placeholder="Fecha Inicial">
-          <input matEndDate formControlName="final_date" placeholder="Fecha Final">
+          <input matEndDate formControlName="final_date" placeholder="Fecha Final" (dateChange)="endChange($event)">
         </mat-date-range-input>
         <mat-datepicker-toggle matSuffix [for]="picker"></mat-datepicker-toggle>
         <mat-date-range-picker #picker></mat-date-range-picker>

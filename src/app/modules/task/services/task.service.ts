@@ -54,12 +54,16 @@ export class TaskService {
   // get Tasks Table
   getTasksPaginate(filter : paginateGeneral, calendar: CalendarForm){
     let params = new HttpParams();
+    let initial_date = this.dateService.getFormatDataDate(calendar.initial_date)
+    let final_date = this.dateService.getFormatDataDate(calendar.final_date)
     filter.page ? params = params.append('page', filter.page) : null;
     filter.page_size ? params = params.append('page_size', filter.page_size) : null;
     calendar.customer ? params = params.append('customer', calendar.customer) : null;
     calendar.employee ? params = params.append('employee', calendar.employee) : null;
     calendar.job_center ? params = params.append('group', calendar.job_center) : null;
     calendar.status ? params = params.append('status', calendar.status) : null;
+    calendar.initial_date ? params = params.append('initial_date', initial_date) : null;
+    calendar.final_date ? params = params.append('final_date', final_date) : null;
     params = params.append('with_paginate', 'true');
     return this.http.get<ModelTask>(`${this.baseUrl}/tasks/`,{params})
   }
