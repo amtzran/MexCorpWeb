@@ -79,6 +79,7 @@ export class TableComponent implements OnInit, AfterViewInit {
     'customer_name',
     'employee_name',
     'job_center_name',
+    'work_type_name',
     'invoiced',
     'options'];
   dataSource!: MatTableDataSource<Task>;

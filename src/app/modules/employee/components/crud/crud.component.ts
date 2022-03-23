@@ -67,12 +67,12 @@ export class CrudComponent implements OnInit {
     this.loadEmployeeForm();
 
     if(this.employee.idEmployee && this.employee.edit){
-      this.title = 'Editar Cliente';
+      this.title = 'Editar Empleado';
       this.employeeForm.updateValueAndValidity();
     }
 
     if(this.employee.idEmployee && !this.employee.edit){
-      this.title = 'Información del Cliente';
+      this.title = 'Información del Empleado';
       this.employeeForm.updateValueAndValidity();
     }
 
@@ -99,7 +99,7 @@ export class CrudComponent implements OnInit {
         job_center_id: response.data.job_center_id,
         job_title_id: response.data.job_title_id,
         permissions_user: response.data.permissions_user.map( (permission: any) => permission.id),
-        products_employee: response.data.products_employee?.map( (product: any) => product.id)
+        //products_employee: response.data.products_employee?.map( (product: any) => product.id)
       })
       }, (error => {
         this.spinner.hide()

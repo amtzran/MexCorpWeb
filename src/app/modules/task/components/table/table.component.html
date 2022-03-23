@@ -170,8 +170,8 @@
     <ng-container matColumnDef="initial_date">
       <th mat-header-cell *matHeaderCellDef mat-sort-header=""> Fecha</th>
       <td mat-cell *matCellDef="let row">
-        Inicio: {{ row.initial_hour }} -> {{ row.initial_date | date: 'fullDate'}} <br>
-        Fin: {{ row.final_hour }} -> {{ row.final_date | date: 'fullDate'}}
+        Inicio: {{ row.initial_hour }} -> {{ row.initial_date | date: 'shortDate'}} <br>
+        Fin: {{ row.final_hour }} -> {{ row.final_date | date: 'shortDate'}}
       </td>
     </ng-container>
 
@@ -213,6 +213,13 @@
     <ng-container matColumnDef="job_center_name">
       <th mat-header-cell *matHeaderCellDef mat-sort-header=""> Grupo</th>
       <td mat-cell *matCellDef="let row"><span>{{row.job_center_name}}</span>
+      </td>
+    </ng-container>
+
+    <!-- WorkType Column -->
+    <ng-container matColumnDef="work_type_name">
+      <th mat-header-cell *matHeaderCellDef mat-sort-header=""> Tipo trabajo</th>
+      <td mat-cell *matCellDef="let row"><span>{{row.work_type_name}}</span>
       </td>
     </ng-container>
 
