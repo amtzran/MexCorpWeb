@@ -25,6 +25,8 @@ export class TableComponent implements OnInit {
   totalItems!: number;
   pageSize = this.sharedService.pageSize
   productPaginateForm!: FormGroup;
+  products!: Product[];
+  idProduct: number = 0;
   @ViewChild(MatPaginator, {static: true}) paginator!: MatPaginator;
   constructor(private productService: ProductService,
               private formBuilder: FormBuilder,
@@ -41,6 +43,7 @@ export class TableComponent implements OnInit {
     /*Form*/
     this.loadProductFilterForm();
     this.getProductsPaginator(this.paginator);
+    this.loadDataProducts();
   }
 
   ngAfterViewInit() {
@@ -63,15 +66,6 @@ export class TableComponent implements OnInit {
           this.sharedService.errorDialog(error)
         })
       )
-  }
-
-  applyFilter(event: Event) {
-    const filterValue = (event.target as HTMLInputElement).value;
-    this.dataSource.filter = filterValue.trim().toLowerCase();
-
-    if (this.dataSource.paginator) {
-      this.dataSource.paginator.firstPage();
-    }
   }
 
   deleteProduct(product: Product) {
@@ -114,11 +108,28 @@ export class TableComponent implements OnInit {
     });
   }
 
+  /**
+   * Array from service for Products
+   */
+  loadDataProducts(){
+    this.productService.getProductsAll().subscribe(products => {this.products = products.data} )
+  }
+  /**
+   * Filter Customer and Search
+   */
+  filterSelectProduct(idProduct: number){
+    this.productPaginateForm.get('id')?.setValue(idProduct);
+    this.productService.getProducts(this.productPaginateForm.value).subscribe(res => {
+     this.getProductsPaginator(this.paginator);
+    })
+  }
+
   /* Método que permite iniciar los filtros de rutas*/
   loadProductFilterForm(): void {
     this.productPaginateForm = this.formBuilder.group({
       page: [],
-      page_size: this.pageSize
+      page_size: this.pageSize,
+      id: this.idProduct
     })
   }
 

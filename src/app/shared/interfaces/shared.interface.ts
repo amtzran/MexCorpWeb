@@ -34,6 +34,7 @@ export interface DataPermission {
 // Data Paginate
 export interface paginateGeneral {
   page: string,
-  page_size: string
+  page_size: string,
+  id?: 1,
 }
 

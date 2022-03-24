@@ -38,12 +38,14 @@ export class TaskService {
 
   // Get Tasks
   getTasks(
+    idTask: string | number,
     idCustomer: string | number,
     idEmployee: string | number,
     idJobCenter: string | number,
     status: string | number
     ): Observable<ModelTask> {
     let params = new HttpParams();
+    params = params.append('id', idTask)
     params = params.append('customer', idCustomer)
     params = params.append('employee', idEmployee)
     params = params.append('group', idJobCenter)
@@ -58,6 +60,7 @@ export class TaskService {
     let final_date = this.dateService.getFormatDataDate(calendar.final_date)
     filter.page ? params = params.append('page', filter.page) : null;
     filter.page_size ? params = params.append('page_size', filter.page_size) : null;
+    filter.id ? params = params.append('id', filter.id) : null;
     calendar.customer ? params = params.append('customer', calendar.customer) : null;
     calendar.employee ? params = params.append('employee', calendar.employee) : null;
     calendar.job_center ? params = params.append('group', calendar.job_center) : null;
@@ -117,6 +120,13 @@ export class TaskService {
   // Get Work Types
   getWorkTypes() : Observable<ModelWorkType> {
     return this.http.get<ModelWorkType>(`${this.baseUrl}/work-types/?not_paginate=true`)
+  }
+
+  // Get Tasks
+  getTaskAll() : Observable<ModelTask> {
+    let params = new HttpParams();
+    params = params.append('with_paginate', false);
+    return this.http.get<ModelTask>(`${this.baseUrl}/tasks/`, {params})
   }
 
   // Get Door Types By Customer

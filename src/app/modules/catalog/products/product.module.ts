@@ -9,6 +9,7 @@ import {FlexLayoutModule} from "@angular/flex-layout";
 import {ReactiveFormsModule} from "@angular/forms";
 import {NgxSpinnerModule} from "ngx-spinner";
 import {ProductComponent} from "./product.component";
+import {NgSelectModule} from "@ng-select/ng-select";
 
 
 @NgModule({
@@ -23,7 +24,8 @@ import {ProductComponent} from "./product.component";
     MaterialModule,
     FlexLayoutModule,
     ReactiveFormsModule,
-    NgxSpinnerModule
+    NgxSpinnerModule,
+    NgSelectModule
   ]
 })
 export class ProductModule { }

@@ -41,9 +41,11 @@ export class TableComponent implements OnInit, AfterViewInit {
   jobCenters: JobCenter[] = [];
   employees: Employee[] = [];
   workTypes: WorkType[] = [];
+  tasksSelect: Task[] = [];
   idCustomer : number | string = '';
   idEmployee : number | string = '';
   idJobCenter : number | string = '';
+  idTask: number | string = '';
   status : number | string = '';
   changeEvent : boolean = true;
   calendarForm!: FormGroup;
@@ -104,6 +106,7 @@ export class TableComponent implements OnInit, AfterViewInit {
     this.loadDataGroups()
     this.loadDataEmployees()
     this.loadDataWorkTypes()
+    this.loadDataTasks()
 
     forwardRef(() => Calendar)
     // Valuers Initials Calendar
@@ -176,7 +179,7 @@ export class TableComponent implements OnInit, AfterViewInit {
    */
   initTaskCalendar(): void {
     this.spinner.show()
-    this.taskService.getTasks(this.idCustomer, this.idEmployee, this.idJobCenter, this.status)
+    this.taskService.getTasks(this.idTask,this.idCustomer, this.idEmployee, this.idJobCenter, this.status)
       .subscribe(tasks => {
         this.spinner.hide()
         tasks.data.forEach(element => {
@@ -301,10 +304,21 @@ export class TableComponent implements OnInit, AfterViewInit {
   }
 
   /**
+   * Filter By Folio in Task
+   * @param idTask
+   */
+  filterSelectFolio(idTask: number){
+    this.taskPaginateForm.get('id')?.setValue(idTask);
+    this.taskService.getTasksPaginate(this.taskPaginateForm.value, this.calendarForm.value).subscribe(res => {
+      this.getTasksPaginator(this.paginator);
+    })
+  }
+
+  /**
    * Filter Customer and Search
    */
   filterSelectCustomer(idCustomer: number){
-    this.taskService.getTasks(idCustomer, '', '', '').subscribe(res => {
+    this.taskService.getTasks('', idCustomer, '', '','').subscribe(res => {
       this.idCustomer = idCustomer
       this.tasks = []
       this.initTaskCalendar()
@@ -319,7 +333,7 @@ export class TableComponent implements OnInit, AfterViewInit {
    * @param idEmployee
    */
   filterSelectEmployee(idEmployee: number){
-    this.taskService.getTasks('', idEmployee, '', '').subscribe(res => {
+    this.taskService.getTasks('', '', idEmployee, '','').subscribe(res => {
       this.idEmployee = idEmployee
       this.tasks = []
       this.initTaskCalendar()
@@ -334,7 +348,7 @@ export class TableComponent implements OnInit, AfterViewInit {
    * @param idJobCenter
    */
   filterSelectJobCenter(idJobCenter: number){
-    this.taskService.getTasks('', '', idJobCenter,'').subscribe(res => {
+    this.taskService.getTasks('', '', '',idJobCenter,'').subscribe(res => {
       this.idJobCenter = idJobCenter
       this.tasks = []
       this.initTaskCalendar()
@@ -349,7 +363,7 @@ export class TableComponent implements OnInit, AfterViewInit {
    * @param status
    */
   filterSelectStatus(status: number){
-    this.taskService.getTasks('', '', '', status).subscribe(res => {
+    this.taskService.getTasks('', '', '', '', status).subscribe(res => {
       this.status = status
       this.tasks = []
       this.initTaskCalendar()
@@ -394,7 +408,7 @@ export class TableComponent implements OnInit, AfterViewInit {
       employee: [{value: '', disabled:false},],
       job_center: [{value: '', disabled:false},],
       work_type: [{value: '', disabled:false},],
-      status : [{value: '', disabled:false},]
+      status: [{value: '', disabled:false},]
     });
   }
 
@@ -424,6 +438,13 @@ export class TableComponent implements OnInit, AfterViewInit {
    */
   loadDataWorkTypes(){
     this.taskService.getWorkTypes().subscribe(workTypes => {this.workTypes = workTypes.data} )
+  }
+
+  /**
+   * Array from service for Tasks
+   */
+  loadDataTasks(){
+    this.taskService.getTaskAll().subscribe(tasks => {this.tasksSelect = tasks.data} )
   }
 
   /**
@@ -672,7 +693,8 @@ export class TableComponent implements OnInit, AfterViewInit {
   loadTaskFilterForm(): void {
     this.taskPaginateForm = this.formBuilder.group({
       page: [],
-      page_size: this.pageSize
+      page_size: this.pageSize,
+      id: this.idTask
     })
   }
 

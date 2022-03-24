@@ -22,6 +22,7 @@ export class ProductService {
     let params = new HttpParams();
     filter.page ? params = params.append('page', filter.page) : null;
     filter.page_size ? params = params.append('page_size', filter.page_size) : null;
+    filter.id ? params = params.append('id', filter.id) : null;
     return this.http.get<ModelProduct>(`${this.baseUrl}/products/`, {params})
   }
 
@@ -38,6 +39,13 @@ export class ProductService {
   // Delete Product
   deleteProduct(id: number) : Observable<number>{
     return this.http.delete<number>(`${this.baseUrl}/products/${id}`)
+  }
+
+  // Get Products
+  getProductsAll(): Observable<ModelProduct> {
+    let params = new HttpParams();
+    params = params.append('not_paginate',true);
+    return this.http.get<ModelProduct>(`${this.baseUrl}/products/`, {params})
   }
 
 }

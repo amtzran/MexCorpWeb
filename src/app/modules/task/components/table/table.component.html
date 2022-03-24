@@ -19,13 +19,6 @@
          fxLayout.sm="column"
          fxLayoutGap="10px">
 
-      <div fxFlex="100" fxLayoutAlign="center center">
-      <button mat-button color="primary" (click)="openDialogTask(true,null,false,null, false, true, false)">
-        Múltiples Tareas
-        <mat-icon mat-list-icon >task</mat-icon>
-      </button>
-      </div>
-
       <ng-select fxFlex="100"
                  bindLabel="name"
                  placeholder="Clientes"
@@ -105,29 +98,29 @@
 
       <button mat-button color="primary" [matMenuTriggerFor]="menu" [disabled]="calendarForm.invalid">Reportes</button>
       <mat-menu #menu="matMenu">
-        <button mat-menu-item color="warn" (click)="reportTaskPdf()" [disabled]="calendarForm.invalid">
+        <button mat-menu-item (click)="reportTaskPdf()" [disabled]="calendarForm.invalid">
           General Tareas
-          <mat-icon mat-list-icon>picture_as_pdf</mat-icon>
+          <mat-icon mat-list-icon color="warn">picture_as_pdf</mat-icon>
         </button>
-        <button mat-menu-item color="warn" (click)="reportCalendarPdf()" [disabled]="calendarForm.invalid">
+        <button mat-menu-item (click)="reportCalendarPdf()" [disabled]="calendarForm.invalid">
           Calendario
-          <mat-icon mat-list-icon>picture_as_pdf</mat-icon>
+          <mat-icon mat-list-icon color="warn">picture_as_pdf</mat-icon>
         </button>
-        <button mat-menu-item color="warn" (click)="reportFinalizedPdf()" [disabled]="calendarForm.invalid">
+        <button mat-menu-item (click)="reportFinalizedPdf()" [disabled]="calendarForm.invalid">
           Servicios Finalizados
-          <mat-icon mat-list-icon>picture_as_pdf</mat-icon>
+          <mat-icon color="warn" mat-list-icon>picture_as_pdf</mat-icon>
         </button>
-        <button mat-menu-item color="warn" (click)="reportFinalizedExcel()" [disabled]="calendarForm.invalid">
+        <button mat-menu-item (click)="reportFinalizedExcel()" [disabled]="calendarForm.invalid">
           Servicios Finalizados (Excel)
-          <mat-icon mat-list-icon>view_list</mat-icon>
+          <mat-icon mat-list-icon class="colorCheckGreen">view_list</mat-icon>
         </button>
-        <button mat-menu-item color="warn" (click)="downloadReport('pdf')" [disabled]="calendarForm.invalid">
+        <!--<button mat-menu-item color="warn" (click)="downloadReport('pdf')" [disabled]="calendarForm.invalid">
           Tareas
           <mat-icon mat-list-icon>picture_as_pdf</mat-icon>
-        </button>
-        <button mat-menu-item color="primary" (click)="downloadReport('excel')" [disabled]="calendarForm.invalid">
+        </button>-->
+        <button mat-menu-item (click)="downloadReport('excel')" [disabled]="calendarForm.invalid">
           Tareas (Excel)
-          <mat-icon mat-list-icon >view_list</mat-icon>
+          <mat-icon mat-list-icon class="colorCheckGreen">view_list</mat-icon>
         </button>
       </mat-menu>
 
@@ -144,6 +137,33 @@
 <!--End Calendar Events-->
 
 <!--Start Table Events-->
+<div fxLayout="row" fxLayoutGap="20px">
+
+  <div fxFlex="50" fxLayoutAlign="center center">
+    <button mat-button color="primary" (click)="openDialogTask(true,null,false,null, false, true, false)">
+      Múltiples Tareas
+      <mat-icon mat-list-icon >task</mat-icon>
+    </button>
+  </div>
+
+  <div fxFlex="50">
+    <ng-select fxFlex="100"
+               bindLabel="name"
+               placeholder="Folios"
+               [multiple]="false"
+               appendTo="body"
+               [searchable]="true"
+               [clearable]="true"
+               (change)="filterSelectFolio($event)">
+      <ng-option *ngFor="let task of tasksSelect" [value]="task.id">
+        {{task.folio}}
+      </ng-option>
+    </ng-select>
+  </div>
+
+</div>
+
+
 <div class="mat-elevation-z8 container">
   <ngx-spinner></ngx-spinner>
   <table mat-table [dataSource]="dataSource" matSort>
@@ -227,9 +247,13 @@
     <ng-container matColumnDef="invoiced">
       <th mat-header-cell *matHeaderCellDef mat-sort-header=""> Facturación</th>
       <td mat-cell *matCellDef="let row">
-        <mat-checkbox color="primary" *ngIf="row.invoiced === 1; else checkInvoice" [checked]="isChecked" (change)="changeInvoice($event, row.id)">Sí</mat-checkbox>
+        <mat-checkbox  *ngIf="row.invoiced === 1; else checkInvoice" [checked]="isChecked" (change)="changeInvoice($event, row.id)">
+          <span class="colorCheckGreen">Sí</span>
+        </mat-checkbox>
         <ng-template #checkInvoice>
-          <mat-checkbox color="primary" (change)="changeInvoice($event, row.id)">No</mat-checkbox>
+          <mat-checkbox (change)="changeInvoice($event, row.id)">
+            <span class="colorCheckRed">No</span>
+          </mat-checkbox>
         </ng-template>
       </td>
     </ng-container>
@@ -243,10 +267,6 @@
           <mat-icon>more_vert</mat-icon>
         </button>
         <mat-menu #menu="matMenu">
-<!--          <button mat-menu-item (click)="openDialogContract(false, row.id, true)">-->
-<!--            <mat-icon color="info">visibility</mat-icon>-->
-<!--            Ver-->
-<!--          </button>-->
           <button mat-menu-item (click)="updateTask(row)">
             <mat-icon color="primary">edit</mat-icon>
             Editar

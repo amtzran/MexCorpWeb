@@ -6,7 +6,7 @@ import {SharedService} from "../../../../shared/services/shared.service";
 import {NgxSpinnerService} from "ngx-spinner";
 import {ModalResponse} from "../../../../core/utils/ModalResponse";
 import {EmployeeService} from "../../services/employee.service";
-import {Product} from "../../../catalog/product/interfaces/product.interface";
+import {Product} from "../../../catalog/products/interfaces/product.interface";
 
 @Component({
   selector: 'app-crud-tool',

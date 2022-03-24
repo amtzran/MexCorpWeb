@@ -23,7 +23,8 @@ export interface Product {
 // Data Paginate
 export interface ProductPaginate {
   page: string,
-  page_size: string
+  page_size: string,
+  id?: number
 }
 
 export interface ProductDetail {
