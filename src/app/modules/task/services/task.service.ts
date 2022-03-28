@@ -42,7 +42,8 @@ export class TaskService {
     idCustomer: string | number,
     idEmployee: string | number,
     idJobCenter: string | number,
-    status: string | number
+    status: string | number,
+    idWorkType: string | number
     ): Observable<ModelTask> {
     let params = new HttpParams();
     params = params.append('id', idTask)
@@ -50,6 +51,7 @@ export class TaskService {
     params = params.append('employee', idEmployee)
     params = params.append('group', idJobCenter)
     params = params.append('status', status)
+    params = params.append('work_type', idWorkType)
     return this.http.get<ModelTask>(`${this.baseUrl}/tasks/`,{params})
   }
 
@@ -65,6 +67,7 @@ export class TaskService {
     calendar.employee ? params = params.append('employee', calendar.employee) : null;
     calendar.job_center ? params = params.append('group', calendar.job_center) : null;
     calendar.status ? params = params.append('status', calendar.status) : null;
+    calendar.work_type ? params = params.append('work_type', calendar.work_type) : null;
     calendar.initial_date ? params = params.append('initial_date', initial_date) : null;
     calendar.final_date ? params = params.append('final_date', final_date) : null;
     params = params.append('with_paginate', 'true');
@@ -124,9 +127,7 @@ export class TaskService {
 
   // Get Tasks
   getTaskAll() : Observable<ModelTask> {
-    let params = new HttpParams();
-    params = params.append('with_paginate', false);
-    return this.http.get<ModelTask>(`${this.baseUrl}/tasks/`, {params})
+    return this.http.get<ModelTask>(`${this.baseUrl}/tasks/`)
   }
 
   // Get Door Types By Customer

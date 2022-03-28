@@ -71,7 +71,8 @@
 
       <mat-form-field fxFlex="100">
         <mat-label>Tipos de Trabajo</mat-label>
-        <mat-select formControlName="work_type">
+        <mat-select formControlName="work_type"
+                    (selectionChange)="filterSelectWorkType($event.value)">
           <mat-option value="">TODOS</mat-option>
           <mat-option *ngFor="let workType of workTypes" [value]="workType.id">
             {{ workType.name }}

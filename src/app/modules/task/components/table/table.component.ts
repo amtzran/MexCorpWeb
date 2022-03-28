@@ -46,6 +46,7 @@ export class TableComponent implements OnInit, AfterViewInit {
   idEmployee : number | string = '';
   idJobCenter : number | string = '';
   idTask: number | string = '';
+  idWorkType: number | string = '';
   status : number | string = '';
   changeEvent : boolean = true;
   calendarForm!: FormGroup;
@@ -179,7 +180,7 @@ export class TableComponent implements OnInit, AfterViewInit {
    */
   initTaskCalendar(): void {
     this.spinner.show()
-    this.taskService.getTasks(this.idTask,this.idCustomer, this.idEmployee, this.idJobCenter, this.status)
+    this.taskService.getTasks(this.idTask,this.idCustomer, this.idEmployee, this.idJobCenter, this.status, this.idWorkType)
       .subscribe(tasks => {
         this.spinner.hide()
         tasks.data.forEach(element => {
@@ -318,7 +319,7 @@ export class TableComponent implements OnInit, AfterViewInit {
    * Filter Customer and Search
    */
   filterSelectCustomer(idCustomer: number){
-    this.taskService.getTasks('', idCustomer, '', '','').subscribe(res => {
+    this.taskService.getTasks('', idCustomer, '', '','', '').subscribe(res => {
       this.idCustomer = idCustomer
       this.tasks = []
       this.initTaskCalendar()
@@ -333,7 +334,7 @@ export class TableComponent implements OnInit, AfterViewInit {
    * @param idEmployee
    */
   filterSelectEmployee(idEmployee: number){
-    this.taskService.getTasks('', '', idEmployee, '','').subscribe(res => {
+    this.taskService.getTasks('', '', idEmployee, '','', '').subscribe(res => {
       this.idEmployee = idEmployee
       this.tasks = []
       this.initTaskCalendar()
@@ -348,7 +349,7 @@ export class TableComponent implements OnInit, AfterViewInit {
    * @param idJobCenter
    */
   filterSelectJobCenter(idJobCenter: number){
-    this.taskService.getTasks('', '', '',idJobCenter,'').subscribe(res => {
+    this.taskService.getTasks('', '', '',idJobCenter,'', '').subscribe(res => {
       this.idJobCenter = idJobCenter
       this.tasks = []
       this.initTaskCalendar()
@@ -363,8 +364,23 @@ export class TableComponent implements OnInit, AfterViewInit {
    * @param status
    */
   filterSelectStatus(status: number){
-    this.taskService.getTasks('', '', '', '', status).subscribe(res => {
+    this.taskService.getTasks('', '', '', '', status, '').subscribe(res => {
       this.status = status
+      this.tasks = []
+      this.initTaskCalendar()
+    })
+    this.taskService.getTasksPaginate(this.taskPaginateForm.value, this.calendarForm.value).subscribe(res => {
+      this.getTasksPaginator(this.paginator);
+    })
+  }
+
+  /**
+   * Filter By WorkType in Task
+   * @param idWorkType
+   */
+  filterSelectWorkType(idWorkType: number){
+    this.taskService.getTasks('', '', '','','', idWorkType).subscribe(res => {
+      this.idJobCenter = idWorkType
       this.tasks = []
       this.initTaskCalendar()
     })
