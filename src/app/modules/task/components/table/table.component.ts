@@ -22,6 +22,7 @@ import {MatSort} from "@angular/material/sort";
 import {ConfirmComponent} from "../../../../shared/components/confirm/confirm.component";
 import {ModalResponse} from "../../../../core/utils/ModalResponse";
 import {MatDatepickerInputEvent} from "@angular/material/datepicker";
+import {Door} from "../../../customer/doors/interfaces/door.interface";
 
 @Component({
   selector: 'app-table',
@@ -42,12 +43,14 @@ export class TableComponent implements OnInit, AfterViewInit {
   employees: Employee[] = [];
   workTypes: WorkType[] = [];
   tasksSelect: Task[] = [];
+  doors: Door[] = [];
   idCustomer : number | string = '';
   idEmployee : number | string = '';
   idJobCenter : number | string = '';
   idTask: number | string = '';
   idWorkType: number | string = '';
   status : number | string = '';
+  idDoor : number | string = '';
   changeEvent : boolean = true;
   calendarForm!: FormGroup;
   submit!: boolean;
@@ -108,6 +111,7 @@ export class TableComponent implements OnInit, AfterViewInit {
     this.loadDataEmployees()
     this.loadDataWorkTypes()
     this.loadDataTasks()
+    this.loadDataDoors()
 
     forwardRef(() => Calendar)
     // Valuers Initials Calendar
@@ -180,7 +184,8 @@ export class TableComponent implements OnInit, AfterViewInit {
    */
   initTaskCalendar(): void {
     this.spinner.show()
-    this.taskService.getTasks(this.idTask,this.idCustomer, this.idEmployee, this.idJobCenter, this.status, this.idWorkType)
+    this.taskService.getTasks(
+      this.idTask, this.idCustomer, this.idEmployee, this.idJobCenter, this.status, this.idWorkType, this.idDoor)
       .subscribe(tasks => {
         this.spinner.hide()
         tasks.data.forEach(element => {
@@ -316,13 +321,25 @@ export class TableComponent implements OnInit, AfterViewInit {
   }
 
   /**
+   * Filter By Access in Task Table
+   * @param idDoor
+   */
+  filterSelectAccess(idDoor: number){
+    this.taskPaginateForm.get('door_id')?.setValue(idDoor);
+    this.taskService.getTasksPaginate(this.taskPaginateForm.value, this.calendarForm.value).subscribe(res => {
+      this.getTasksPaginator(this.paginator);
+    })
+  }
+
+  /**
    * Filter Customer and Search
    */
   filterSelectCustomer(idCustomer: number){
-    this.taskService.getTasks('', idCustomer, '', '','', '').subscribe(res => {
-      this.idCustomer = idCustomer
-      this.tasks = []
-      this.initTaskCalendar()
+    this.taskService.getTasks('', idCustomer, '', '','', '','')
+      .subscribe(res => {
+        this.idCustomer = idCustomer
+        this.tasks = []
+        this.initTaskCalendar()
     })
     this.taskService.getTasksPaginate(this.taskPaginateForm.value, this.calendarForm.value).subscribe(res => {
       this.getTasksPaginator(this.paginator);
@@ -334,10 +351,11 @@ export class TableComponent implements OnInit, AfterViewInit {
    * @param idEmployee
    */
   filterSelectEmployee(idEmployee: number){
-    this.taskService.getTasks('', '', idEmployee, '','', '').subscribe(res => {
-      this.idEmployee = idEmployee
-      this.tasks = []
-      this.initTaskCalendar()
+    this.taskService.getTasks('', '', idEmployee, '','', '', '')
+      .subscribe(res => {
+        this.idEmployee = idEmployee
+        this.tasks = []
+        this.initTaskCalendar()
     })
     this.taskService.getTasksPaginate(this.taskPaginateForm.value, this.calendarForm.value).subscribe(res => {
       this.getTasksPaginator(this.paginator);
@@ -349,10 +367,11 @@ export class TableComponent implements OnInit, AfterViewInit {
    * @param idJobCenter
    */
   filterSelectJobCenter(idJobCenter: number){
-    this.taskService.getTasks('', '', '',idJobCenter,'', '').subscribe(res => {
-      this.idJobCenter = idJobCenter
-      this.tasks = []
-      this.initTaskCalendar()
+    this.taskService.getTasks('', '', '',idJobCenter,'', '','')
+      .subscribe(res => {
+        this.idJobCenter = idJobCenter
+        this.tasks = []
+        this.initTaskCalendar()
     })
     this.taskService.getTasksPaginate(this.taskPaginateForm.value, this.calendarForm.value).subscribe(res => {
       this.getTasksPaginator(this.paginator);
@@ -364,10 +383,11 @@ export class TableComponent implements OnInit, AfterViewInit {
    * @param status
    */
   filterSelectStatus(status: number){
-    this.taskService.getTasks('', '', '', '', status, '').subscribe(res => {
-      this.status = status
-      this.tasks = []
-      this.initTaskCalendar()
+    this.taskService.getTasks('', '', '', '', status, '', '')
+      .subscribe(res => {
+        this.status = status
+        this.tasks = []
+        this.initTaskCalendar()
     })
     this.taskService.getTasksPaginate(this.taskPaginateForm.value, this.calendarForm.value).subscribe(res => {
       this.getTasksPaginator(this.paginator);
@@ -379,11 +399,27 @@ export class TableComponent implements OnInit, AfterViewInit {
    * @param idWorkType
    */
   filterSelectWorkType(idWorkType: number){
-    this.taskService.getTasks('', '', '','','', idWorkType).subscribe(res => {
-      this.idJobCenter = idWorkType
-      this.tasks = []
-      this.initTaskCalendar()
+    this.taskService.getTasks('', '', '','','', idWorkType, '')
+      .subscribe(res => {
+        this.idJobCenter = idWorkType
+        this.tasks = []
+        this.initTaskCalendar()
     })
+    this.taskService.getTasksPaginate(this.taskPaginateForm.value, this.calendarForm.value).subscribe(res => {
+      this.getTasksPaginator(this.paginator);
+    })
+  }
+
+  /**
+   * Filter Door and Search Calendar
+   */
+  filterSelectDoor(idDoor: number){
+    this.taskService.getTasks('', '', '', '','', '', idDoor)
+      .subscribe(res => {
+        this.idDoor = idDoor
+        this.tasks = []
+        this.initTaskCalendar()
+      })
     this.taskService.getTasksPaginate(this.taskPaginateForm.value, this.calendarForm.value).subscribe(res => {
       this.getTasksPaginator(this.paginator);
     })
@@ -424,7 +460,8 @@ export class TableComponent implements OnInit, AfterViewInit {
       employee: [{value: '', disabled:false},],
       job_center: [{value: '', disabled:false},],
       work_type: [{value: '', disabled:false},],
-      status: [{value: '', disabled:false},]
+      status: [{value: '', disabled:false},],
+      door_id: [{value: '', disabled:false},],
     });
   }
 
@@ -461,6 +498,13 @@ export class TableComponent implements OnInit, AfterViewInit {
    */
   loadDataTasks(){
     this.taskService.getTaskAll().subscribe(tasks => {this.tasksSelect = tasks.data} )
+  }
+
+  /**
+   * Array from service for Doors
+   */
+  loadDataDoors(){
+    this.taskService.getDoorsAll().subscribe(doors => {this.doors = doors.data} )
   }
 
   /**
@@ -710,7 +754,8 @@ export class TableComponent implements OnInit, AfterViewInit {
     this.taskPaginateForm = this.formBuilder.group({
       page: [],
       page_size: this.pageSize,
-      id: this.idTask
+      id: this.idTask,
+      door_id: this.idDoor
     })
   }
 

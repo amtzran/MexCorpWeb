@@ -36,5 +36,6 @@ export interface paginateGeneral {
   page: string,
   page_size: string,
   id?: 1,
+  door_id?: number
 }
 

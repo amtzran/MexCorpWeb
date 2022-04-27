@@ -34,6 +34,21 @@
         </ng-option>
       </ng-select>
 
+      <ng-select fxFlex="100"
+                 bindLabel="name"
+                 placeholder="Accesos"
+                 formControlName="door_id"
+                 [multiple]="false"
+                 appendTo="body"
+                 [searchable]="true"
+                 [clearable]="true"
+                 (change)="filterSelectDoor($event)">
+        <ng-option value="">TODOS</ng-option>
+        <ng-option *ngFor="let door of doors" [value]="door.id">
+          {{door.name}}
+        </ng-option>
+      </ng-select>
+
       <mat-form-field fxFlex="100">
         <mat-label>Empleados</mat-label>
         <mat-select formControlName="employee"
@@ -80,6 +95,29 @@
         </mat-select>
       </mat-form-field>
 
+    </div>
+
+  </div>
+
+</div>
+
+<div fxLayout="row"
+     fxLayoutGap="10px"
+     fxLayout.lg="row"
+     fxLayout.md="column"
+     fxLayout.xs="column"
+     [formGroup]="calendarForm">
+
+  <div class="container"
+       fxFlex="100"
+       fxLayout="column"
+       fxLayout.xs="column">
+
+    <div fxLayout="row"
+         fxLayout.xs="column"
+         fxLayout.sm="column"
+         fxLayoutGap="10px">
+
       <mat-form-field fxFlex="100">
 
         <mat-label>Ingresar Rango Fecha</mat-label>
@@ -97,33 +135,33 @@
 
       <div fxFlex="100" fxLayoutAlign="center center">
 
-      <button mat-button color="primary" [matMenuTriggerFor]="menu" [disabled]="calendarForm.invalid">Reportes</button>
-      <mat-menu #menu="matMenu">
-        <button mat-menu-item (click)="reportTaskPdf()" [disabled]="calendarForm.invalid">
-          General Tareas
-          <mat-icon mat-list-icon color="warn">picture_as_pdf</mat-icon>
-        </button>
-        <button mat-menu-item (click)="reportCalendarPdf()" [disabled]="calendarForm.invalid">
-          Calendario
-          <mat-icon mat-list-icon color="warn">picture_as_pdf</mat-icon>
-        </button>
-        <button mat-menu-item (click)="reportFinalizedPdf()" [disabled]="calendarForm.invalid">
-          Servicios Finalizados
-          <mat-icon color="warn" mat-list-icon>picture_as_pdf</mat-icon>
-        </button>
-        <button mat-menu-item (click)="reportFinalizedExcel()" [disabled]="calendarForm.invalid">
-          Servicios Finalizados (Excel)
-          <mat-icon mat-list-icon class="colorCheckGreen">view_list</mat-icon>
-        </button>
-        <!--<button mat-menu-item color="warn" (click)="downloadReport('pdf')" [disabled]="calendarForm.invalid">
-          Tareas
-          <mat-icon mat-list-icon>picture_as_pdf</mat-icon>
-        </button>-->
-        <button mat-menu-item (click)="downloadReport('excel')" [disabled]="calendarForm.invalid">
-          Tareas (Excel)
-          <mat-icon mat-list-icon class="colorCheckGreen">view_list</mat-icon>
-        </button>
-      </mat-menu>
+        <button mat-button color="primary" [matMenuTriggerFor]="menu" [disabled]="calendarForm.invalid">Reportes</button>
+        <mat-menu #menu="matMenu">
+          <button mat-menu-item (click)="reportTaskPdf()" [disabled]="calendarForm.invalid">
+            General Tareas
+            <mat-icon mat-list-icon color="warn">picture_as_pdf</mat-icon>
+          </button>
+          <button mat-menu-item (click)="reportCalendarPdf()" [disabled]="calendarForm.invalid">
+            Calendario
+            <mat-icon mat-list-icon color="warn">picture_as_pdf</mat-icon>
+          </button>
+          <button mat-menu-item (click)="reportFinalizedPdf()" [disabled]="calendarForm.invalid">
+            Servicios Finalizados
+            <mat-icon color="warn" mat-list-icon>picture_as_pdf</mat-icon>
+          </button>
+          <button mat-menu-item (click)="reportFinalizedExcel()" [disabled]="calendarForm.invalid">
+            Servicios Finalizados (Excel)
+            <mat-icon mat-list-icon class="colorCheckGreen">view_list</mat-icon>
+          </button>
+          <!--<button mat-menu-item color="warn" (click)="downloadReport('pdf')" [disabled]="calendarForm.invalid">
+            Tareas
+            <mat-icon mat-list-icon>picture_as_pdf</mat-icon>
+          </button>-->
+          <button mat-menu-item (click)="downloadReport('excel')" [disabled]="calendarForm.invalid">
+            Tareas (Excel)
+            <mat-icon mat-list-icon class="colorCheckGreen">view_list</mat-icon>
+          </button>
+        </mat-menu>
 
       </div>
 
@@ -161,6 +199,20 @@
       </ng-option>
     </ng-select>
   </div>
+
+  <ng-select fxFlex="100"
+             bindLabel="name"
+             placeholder="Accesos"
+             [multiple]="false"
+             appendTo="body"
+             [searchable]="true"
+             [clearable]="true"
+             (change)="filterSelectAccess($event)">
+    <ng-option value="">TODOS</ng-option>
+    <ng-option *ngFor="let door of doors" [value]="door.id">
+      {{door.name}}
+    </ng-option>
+  </ng-select>
 
 </div>
 

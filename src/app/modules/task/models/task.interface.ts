@@ -132,5 +132,6 @@ export interface CalendarForm {
   employee?: string,
   job_center?: string,
   work_type?: string,
-  status?: string
+  status?: string,
+  door_id?: string
 }

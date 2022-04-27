@@ -13,7 +13,7 @@ import {
 } from "../models/task.interface";
 import {ModelCustomer} from "../../customer/customers/interfaces/customer.interface";
 import {ModelEmployee, ModelJobCenter} from "../../employee/interfaces/employee.interface";
-import {DoorDetailTask, ModelDoorType} from "../../customer/doors/interfaces/door.interface";
+import {Door, DoorDetailTask, ModelDoorType} from "../../customer/doors/interfaces/door.interface";
 import {DateService} from "../../../core/utils/date.service";
 import {paginateGeneral} from "../../../shared/interfaces/shared.interface";
 
@@ -43,7 +43,8 @@ export class TaskService {
     idEmployee: string | number,
     idJobCenter: string | number,
     status: string | number,
-    idWorkType: string | number
+    idWorkType: string | number,
+    idDoor: string | number,
     ): Observable<ModelTask> {
     let params = new HttpParams();
     params = params.append('id', idTask)
@@ -52,6 +53,7 @@ export class TaskService {
     params = params.append('group', idJobCenter)
     params = params.append('status', status)
     params = params.append('work_type', idWorkType)
+    params = params.append('door_id', idDoor)
     return this.http.get<ModelTask>(`${this.baseUrl}/tasks/`,{params})
   }
 
@@ -63,6 +65,7 @@ export class TaskService {
     filter.page ? params = params.append('page', filter.page) : null;
     filter.page_size ? params = params.append('page_size', filter.page_size) : null;
     filter.id ? params = params.append('id', filter.id) : null;
+    filter.door_id ? params = params.append('door_id', filter.door_id) : null;
     calendar.customer ? params = params.append('customer', calendar.customer) : null;
     calendar.employee ? params = params.append('employee', calendar.employee) : null;
     calendar.job_center ? params = params.append('group', calendar.job_center) : null;
@@ -128,6 +131,11 @@ export class TaskService {
   // Get Tasks
   getTaskAll() : Observable<ModelTask> {
     return this.http.get<ModelTask>(`${this.baseUrl}/tasks/`)
+  }
+
+  // Get Doors
+  getDoorsAll() : Observable<DoorDetailTask> {
+    return this.http.get<DoorDetailTask>(`${this.baseUrl}/doors/?not_paginate=true`)
   }
 
   // Get Door Types By Customer
