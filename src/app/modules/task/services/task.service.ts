@@ -65,8 +65,8 @@ export class TaskService {
     filter.page ? params = params.append('page', filter.page) : null;
     filter.page_size ? params = params.append('page_size', filter.page_size) : null;
     filter.id ? params = params.append('id', filter.id) : null;
-    filter.door_id ? params = params.append('door_id', filter.door_id) : null;
     calendar.customer ? params = params.append('customer', calendar.customer) : null;
+    calendar.door_id ? params = params.append('door_id', calendar.door_id) : null;
     calendar.employee ? params = params.append('employee', calendar.employee) : null;
     calendar.job_center ? params = params.append('group', calendar.job_center) : null;
     calendar.status ? params = params.append('status', calendar.status) : null;

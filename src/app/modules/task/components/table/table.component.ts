@@ -111,7 +111,6 @@ export class TableComponent implements OnInit, AfterViewInit {
     this.loadDataEmployees()
     this.loadDataWorkTypes()
     this.loadDataTasks()
-    this.loadDataDoors()
 
     forwardRef(() => Calendar)
     // Valuers Initials Calendar
@@ -321,17 +320,6 @@ export class TableComponent implements OnInit, AfterViewInit {
   }
 
   /**
-   * Filter By Access in Task Table
-   * @param idDoor
-   */
-  filterSelectAccess(idDoor: number){
-    this.taskPaginateForm.get('door_id')?.setValue(idDoor);
-    this.taskService.getTasksPaginate(this.taskPaginateForm.value, this.calendarForm.value).subscribe(res => {
-      this.getTasksPaginator(this.paginator);
-    })
-  }
-
-  /**
    * Filter Customer and Search
    */
   filterSelectCustomer(idCustomer: number){
@@ -341,6 +329,37 @@ export class TableComponent implements OnInit, AfterViewInit {
         this.tasks = []
         this.initTaskCalendar()
     })
+    this.loadAccess(idCustomer)
+    this.taskService.getTasksPaginate(this.taskPaginateForm.value, this.calendarForm.value).subscribe(res => {
+      this.getTasksPaginator(this.paginator);
+    })
+  }
+
+  /**
+   * Function Get Type Access By id Customer
+   * @param idCustomer
+   */
+  loadAccess(idCustomer: number) {
+    this.taskService.getDoorTypes(idCustomer).subscribe(
+      doorTypesByCustomer => {
+        this.doors = doorTypesByCustomer.data
+        if (this.doors.length === 0) {
+          this.sharedService.showSnackBar('No ha Seleccionado ningún Cliente')
+        }
+      }
+    )
+  }
+
+  /**
+   * Filter Door and Search Calendar
+   */
+  filterSelectDoor(idDoor: number){
+    this.taskService.getTasks('', '', '', '','', '', idDoor)
+      .subscribe(res => {
+        this.idDoor = idDoor
+        this.tasks = []
+        this.initTaskCalendar()
+      })
     this.taskService.getTasksPaginate(this.taskPaginateForm.value, this.calendarForm.value).subscribe(res => {
       this.getTasksPaginator(this.paginator);
     })
@@ -405,21 +424,6 @@ export class TableComponent implements OnInit, AfterViewInit {
         this.tasks = []
         this.initTaskCalendar()
     })
-    this.taskService.getTasksPaginate(this.taskPaginateForm.value, this.calendarForm.value).subscribe(res => {
-      this.getTasksPaginator(this.paginator);
-    })
-  }
-
-  /**
-   * Filter Door and Search Calendar
-   */
-  filterSelectDoor(idDoor: number){
-    this.taskService.getTasks('', '', '', '','', '', idDoor)
-      .subscribe(res => {
-        this.idDoor = idDoor
-        this.tasks = []
-        this.initTaskCalendar()
-      })
     this.taskService.getTasksPaginate(this.taskPaginateForm.value, this.calendarForm.value).subscribe(res => {
       this.getTasksPaginator(this.paginator);
     })
@@ -498,13 +502,6 @@ export class TableComponent implements OnInit, AfterViewInit {
    */
   loadDataTasks(){
     this.taskService.getTaskAll().subscribe(tasks => {this.tasksSelect = tasks.data} )
-  }
-
-  /**
-   * Array from service for Doors
-   */
-  loadDataDoors(){
-    this.taskService.getDoorsAll().subscribe(doors => {this.doors = doors.data} )
   }
 
   /**

@@ -200,20 +200,6 @@
     </ng-select>
   </div>
 
-  <ng-select fxFlex="100"
-             bindLabel="name"
-             placeholder="Accesos"
-             [multiple]="false"
-             appendTo="body"
-             [searchable]="true"
-             [clearable]="true"
-             (change)="filterSelectAccess($event)">
-    <ng-option value="">TODOS</ng-option>
-    <ng-option *ngFor="let door of doors" [value]="door.id">
-      {{door.name}}
-    </ng-option>
-  </ng-select>
-
 </div>
 
 
