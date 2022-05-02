@@ -115,7 +115,8 @@ export interface reportTask {
   group?: string | number
   job_center?: string | number
   status?: string | number
-  work_type?: string |number
+  work_type?: string |number,
+  door_id?:string |number,
   initial_date?: string
   final_date?: string,
   type?: string;

@@ -13,7 +13,7 @@ import {
 } from "../models/task.interface";
 import {ModelCustomer} from "../../customer/customers/interfaces/customer.interface";
 import {ModelEmployee, ModelJobCenter} from "../../employee/interfaces/employee.interface";
-import {Door, DoorDetailTask, ModelDoorType} from "../../customer/doors/interfaces/door.interface";
+import {DoorDetailTask, ModelDoorType} from "../../customer/doors/interfaces/door.interface";
 import {DateService} from "../../../core/utils/date.service";
 import {paginateGeneral} from "../../../shared/interfaces/shared.interface";
 
@@ -206,6 +206,7 @@ export class TaskService {
     let employee = String(filterTask.employee)
     let group = String(filterTask.job_center)
     let work_type = String(filterTask.work_type)
+    let door_id = String(filterTask.door_id)
     let params = new HttpParams();
     params = params.append('initial_date', initial_date);
     params = params.append('final_date', final_date);
@@ -213,6 +214,7 @@ export class TaskService {
     params = params.append('employee', employee);
     params = params.append('group', group);
     params = params.append('work_type', work_type)
+    params = params.append('door_id', door_id)
     return this.http.post(`${this.baseUrl}/task-finished-report/`, '',{responseType: 'blob', params})
   }
 
@@ -224,6 +226,7 @@ export class TaskService {
     let employee = String(filterTask.employee)
     let group = String(filterTask.job_center)
     let work_type = String(filterTask.work_type)
+    let door_id = String(filterTask.door_id)
     let params = new HttpParams();
     params = params.append('initial_date', initial_date);
     params = params.append('final_date', final_date);
@@ -231,6 +234,7 @@ export class TaskService {
     params = params.append('employee', employee);
     params = params.append('group', group);
     params = params.append('work_type', work_type)
+    params = params.append('door_id', door_id)
     return this.http.post(`${this.baseUrl}/task-finished-report-excel/`, '',{responseType: 'blob', params})
   }
 
