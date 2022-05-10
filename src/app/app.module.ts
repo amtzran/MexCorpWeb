@@ -10,7 +10,7 @@ import { TokenInterceptor } from "./modules/interceptors/interceptor";
 
 // Add Changes Language My App
 import localeEsMx from '@angular/common/locales/es-MX';
-import { registerLocaleData } from '@angular/common'
+import { registerLocaleData } from '@angular/common';
 registerLocaleData(localeEsMx)
 
 @NgModule({

@@ -56,6 +56,11 @@ export class SideNavComponent implements OnInit {
       route: '/dashboard/employee/list',
       icon: 'engineering'
     },
+ /*   {
+      name: 'Levantamientos',
+      route: '/dashboard/lifting',
+      icon: 'confirmation_number'
+    },*/
     {
       name: 'Tareas',
       route: '/dashboard/task',

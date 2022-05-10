@@ -11,6 +11,8 @@ import {ModalResponse} from "../../../../../core/utils/ModalResponse";
 import {ModelProduct, Product} from "../../interfaces/product.interface";
 import {ProductService} from "../../services/product.service";
 import {CrudComponent} from "../crud/crud.component";
+import * as fileSaver from "file-saver";
+import {DateService} from "../../../../../core/utils/date.service";
 
 @Component({
   selector: 'app-table',
@@ -33,6 +35,7 @@ export class TableComponent implements OnInit {
               private dialog: MatDialog,
               private sharedService: SharedService,
               private spinner: NgxSpinnerService,
+              private dateService: DateService
               ) {}
 
   @ViewChild(MatSort) sort!: MatSort;
@@ -106,6 +109,25 @@ export class TableComponent implements OnInit {
         this.getProductsPaginator(this.paginator);
       }
     });
+  }
+
+  /**
+   * Export Excel Services Finalized
+   */
+  reportProducts(){
+    this.spinner.show()
+    this.productService.reportProducts().subscribe(res => {
+        let file = this.sharedService.createBlobToExcel(res);
+        let date_initial = this.dateService.getFormatDataDate(new Date())
+
+        fileSaver.saveAs(file, `Reporte-Productos-${date_initial}`);
+
+        this.spinner.hide()
+      }, (error => {
+        this.spinner.hide()
+        this.sharedService.errorDialog(error)
+      })
+    )
   }
 
   /**

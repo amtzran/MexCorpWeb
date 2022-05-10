@@ -9,7 +9,7 @@
 
   <div fxLayout="row" class="container">
 
-    <div fxFlex="80">
+    <div fxFlex="60">
       <ng-select fxFlex="100"
                  bindLabel="name"
                  placeholder="Productos"
@@ -30,6 +30,14 @@
         Nuevo Producto
       </button>
     </div>
+
+    <div fxFlex="20" fxLayoutAlign="center center">
+      <button (click)="reportProducts()" mat-button color="primary">
+        Descargar Productos
+        <mat-icon mat-list-icon class="colorCheckGreen">view_list</mat-icon>
+      </button>
+    </div>
+
   </div>
 
 

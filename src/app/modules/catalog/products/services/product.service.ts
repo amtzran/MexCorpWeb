@@ -3,6 +3,7 @@ import {Observable} from "rxjs";
 import {HttpClient, HttpParams} from "@angular/common/http";
 import {environment} from "../../../../../environments/environment";
 import {ModelProduct, ProductDetail, ProductPaginate} from "../interfaces/product.interface";
+import {reportTask} from "../../../task/models/task.interface";
 
 @Injectable({
   providedIn: 'root'
@@ -46,6 +47,11 @@ export class ProductService {
     let params = new HttpParams();
     params = params.append('not_paginate',true);
     return this.http.get<ModelProduct>(`${this.baseUrl}/products/`, {params})
+  }
+
+  // Report Services Finalized
+  reportProducts() : Observable<any> {
+    return this.http.post(`${this.baseUrl}/products-export/`, '',{responseType: 'blob',})
   }
 
 }
