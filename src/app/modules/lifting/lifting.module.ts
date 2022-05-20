@@ -8,12 +8,15 @@ import {ReactiveFormsModule} from "@angular/forms";
 import {MaterialModule} from "../../material/material.module";
 import {FlexLayoutModule} from "@angular/flex-layout";
 import {NgxSpinnerModule} from "ngx-spinner";
+import {CrudComponent } from './components/crud/crud.component';
+import {NgSelectModule} from "@ng-select/ng-select";
 
 
 @NgModule({
   declarations: [
     LiftingComponent,
-    TableComponent
+    TableComponent,
+    CrudComponent
   ],
   imports: [
     CommonModule,
@@ -22,6 +25,7 @@ import {NgxSpinnerModule} from "ngx-spinner";
     FlexLayoutModule,
     ReactiveFormsModule,
     NgxSpinnerModule,
+    NgSelectModule,
   ]
 })
 export class LiftingModule { }

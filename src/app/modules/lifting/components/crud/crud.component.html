@@ -1,0 +1,462 @@
+<h4 mat-dialog-title class="title-subsection">{{title}} <span *ngIf="lifting.idLifting"> | Folio: {{folio}}</span></h4>
+<ngx-spinner></ngx-spinner>
+<mat-divider></mat-divider>
+<br>
+
+<mat-dialog-content class="mat-typography" [formGroup]="liftingForm">
+
+  <mat-card>
+
+    <mat-card-content>
+
+      <div fxLayout="row" fxLayoutGap="20px" fxLayout.xs="column">
+
+        <div class="container" fxFlex="100" fxLayout="column" fxLayout.xs="column">
+
+          <div fxLayout="row"
+               fxLayout.xs="column"
+               fxLayoutGap="10px">
+
+            <ng-select fxFlex="100"
+                       bindLabel="name"
+                       formControlName="customer_id"
+                       placeholder="Cliente"
+                       [multiple]="false"
+                       appendTo="body"
+                       [searchable]="true"
+                       [clearable]="true">
+              <ng-option *ngFor="let customer of customers" [value]="customer.id">
+                {{customer.name}}
+              </ng-option>
+            </ng-select>
+
+            <ng-select fxFlex="100"
+                       bindLabel="name"
+                       formControlName="employee_id"
+                       placeholder="Empleado"
+                       [multiple]="false"
+                       appendTo="body"
+                       [searchable]="true"
+                       [clearable]="true">
+              <ng-option *ngFor="let employee of employees" [value]="employee.id">
+                {{employee.name}}
+              </ng-option>
+            </ng-select>
+
+            <ng-select fxFlex="100"
+                       bindLabel="name"
+                       formControlName="job_center_id"
+                       placeholder="Centro de Trabajo"
+                       [multiple]="false"
+                       appendTo="body"
+                       [searchable]="true"
+                       [clearable]="true">
+              <ng-option *ngFor="let jobCenter of jobCenters" [value]="jobCenter.id">
+                {{jobCenter.name}}
+              </ng-option>
+            </ng-select>
+
+            <ng-select fxFlex="100"
+                       bindLabel="name"
+                       formControlName="work_type_id"
+                       placeholder="Centro de Trabajo"
+                       [multiple]="false"
+                       appendTo="body"
+                       [searchable]="true"
+                       [clearable]="true">
+              <ng-option *ngFor="let workType of workTypes" [value]="workType.id">
+                {{workType.name}}
+              </ng-option>
+            </ng-select>
+
+          </div>
+
+          <mat-card>
+            <span>{{ 'Aluminio' | uppercase }}</span>
+
+            <div fxLayout="row"
+                 fxLayout.xs="column"
+                 fxLayoutGap="10px">
+
+              <mat-form-field fxFlex="100">
+                <mat-label>Línea/ Serie</mat-label>
+                <input
+                  matInput
+                  type="text"
+                  formControlName="series"
+                >
+              </mat-form-field>
+
+              <mat-form-field fxFlex="100">
+                <mat-label>Color</mat-label>
+                <input
+                  matInput
+                  type="text"
+                  formControlName="color"
+                >
+              </mat-form-field>
+
+              <mat-form-field fxFlex="100">
+                <mat-label>Tipo de Cerradura</mat-label>
+                <input
+                  matInput
+                  type="text"
+                  formControlName="lock_type"
+                >
+              </mat-form-field>
+
+              <mat-form-field fxFlex="100">
+                <mat-label>Tipo de Jaladera</mat-label>
+                <input
+                  matInput
+                  type="text"
+                  formControlName="type_of_handle"
+                >
+              </mat-form-field>
+
+            </div>
+            <div fxLayout="row"
+                 fxLayout.xs="column"
+                 fxLayoutGap="10px">
+
+              <section fxFlex="100">
+                <mat-checkbox formControlName="folding">Abatible</mat-checkbox>
+              </section>
+
+              <section fxFlex="100">
+                <mat-checkbox formControlName="sliding">Corrediza</mat-checkbox>
+              </section>
+
+              <section fxFlex="100">
+                <mat-checkbox formControlName="air_system">Sistema áero</mat-checkbox>
+              </section>
+
+              <section fxFlex="100">
+                <mat-checkbox formControlName="smooth_stave">Duela lisa</mat-checkbox>
+              </section>
+
+              <section fxFlex="100">
+                <mat-checkbox formControlName="louver">louver</mat-checkbox>
+              </section>
+
+              <mat-form-field fxFlex="100">
+                <mat-label>Otros</mat-label>
+                <input
+                  matInput
+                  type="text"
+                  formControlName="others"
+                >
+              </mat-form-field>
+
+            </div>
+
+          </mat-card>
+
+          <mat-card>
+            <span>{{ 'Vidrío' | uppercase }}</span>
+
+            <div fxLayout="row"
+                 fxLayout.xs="column"
+                 fxLayoutGap="10px">
+
+              <mat-form-field fxFlex="100">
+                <mat-label>Laminado</mat-label>
+                <input
+                  matInput
+                  type="text"
+                  formControlName="laminate"
+                >
+              </mat-form-field>
+
+              <mat-form-field fxFlex="100">
+                <mat-label>Duovent</mat-label>
+                <input
+                  matInput
+                  type="text"
+                  formControlName="duovent"
+                >
+              </mat-form-field>
+
+              <mat-form-field fxFlex="100">
+                <mat-label>Color</mat-label>
+                <input
+                  matInput
+                  type="text"
+                  formControlName="glass_color"
+                >
+              </mat-form-field>
+
+              <mat-form-field fxFlex="100">
+                <mat-label>Espesor mm</mat-label>
+                <input
+                  matInput
+                  type="text"
+                  formControlName="thickness"
+                >
+              </mat-form-field>
+
+            </div>
+            <div fxLayout="row"
+                 fxLayout.xs="column"
+                 fxLayoutGap="10px">
+
+              <section fxFlex="100">
+                <mat-checkbox formControlName="acrylic">Acrílico</mat-checkbox>
+              </section>
+
+              <section fxFlex="100">
+                <mat-checkbox formControlName="annealing">Recocido</mat-checkbox>
+              </section>
+
+              <section fxFlex="100">
+                <mat-checkbox formControlName="tempered">Templado</mat-checkbox>
+              </section>
+
+              <section fxFlex="100">
+                <mat-checkbox formControlName="polished_edge">Canto Pulido</mat-checkbox>
+              </section>
+
+              <section fxFlex="100">
+                <mat-checkbox formControlName="bowling_song">Canto boleado</mat-checkbox>
+              </section>
+
+              <section fxFlex="100">
+                <mat-checkbox formControlName="dead_edge">Filo muerto</mat-checkbox>
+              </section>
+
+            </div>
+
+          </mat-card>
+
+          <mat-card>
+            <span>{{ 'Puerta Italiana Fachada' | uppercase }}</span>
+
+            <div fxLayout="row"
+                 fxLayout.xs="column"
+                 fxLayoutGap="10px">
+
+              <mat-form-field fxFlex="100">
+                <mat-label>Diámetro de barreno</mat-label>
+                <input
+                  matInput
+                  type="text"
+                  formControlName="hole_diameter"
+                >
+              </mat-form-field>
+
+              <mat-form-field fxFlex="100">
+                <mat-label>Tipo de herraje</mat-label>
+                <input
+                  matInput
+                  type="text"
+                  formControlName="hardware_type"
+                >
+              </mat-form-field>
+
+              <mat-form-field fxFlex="100">
+                <mat-label>Tipo de bisagra (modelo)</mat-label>
+                <input
+                  matInput
+                  type="text"
+                  formControlName="hinge_type"
+                >
+              </mat-form-field>
+
+              <mat-form-field fxFlex="100">
+                <mat-label>Tipo de jaladera (medida)</mat-label>
+                <input
+                  matInput
+                  type="text"
+                  formControlName="type_of_handle_measure"
+                >
+              </mat-form-field>
+
+              <mat-form-field fxFlex="100">
+                <mat-label>Otros</mat-label>
+                <input
+                  matInput
+                  type="text"
+                  formControlName="others_two"
+                >
+              </mat-form-field>
+
+            </div>
+            <div fxLayout="row"
+                 fxLayout.xs="column"
+                 fxLayoutGap="10px">
+
+              <section fxFlex="100">
+                <mat-checkbox formControlName="hangovers">Resaques</mat-checkbox>
+              </section>
+
+              <section fxFlex="100">
+                <mat-checkbox formControlName="top_hardware">Herraje Superior</mat-checkbox>
+              </section>
+
+              <section fxFlex="100">
+                <mat-checkbox formControlName="bottom_hardware">Herraje Inferior</mat-checkbox>
+              </section>
+
+              <section fxFlex="100">
+                <mat-checkbox formControlName="bracket_hardware">Herraje Escuadra</mat-checkbox>
+              </section>
+
+              <section fxFlex="100">
+                <mat-checkbox formControlName="rib_holder">herraje E. portacostilla</mat-checkbox>
+              </section>
+
+              <section fxFlex="100">
+                <mat-checkbox formControlName="turning_point">Punto de Giro</mat-checkbox>
+              </section>
+
+            </div>
+
+          </mat-card>
+
+          <mat-card>
+            <span>{{ 'Barandal/espejos/Medidas' | uppercase }}</span>
+
+            <div fxLayout="row"
+                 fxLayout.xs="column"
+                 fxLayoutGap="10px">
+
+              <mat-form-field fxFlex="100">
+                <mat-label>Tipo de Zoclo</mat-label>
+                <input
+                  matInput
+                  type="text"
+                  formControlName="type_of_zoclo"
+                >
+              </mat-form-field>
+
+              <mat-form-field fxFlex="100">
+                <mat-label>Tipo de herrajes</mat-label>
+                <input
+                  matInput
+                  type="text"
+                  formControlName="type_of_fittings"
+                >
+              </mat-form-field>
+
+              <mat-form-field fxFlex="100">
+                <mat-label>Marco Perimetral</mat-label>
+                <input
+                  matInput
+                  type="text"
+                  formControlName="perimeter_frame"
+                >
+              </mat-form-field>
+
+              <mat-form-field fxFlex="100">
+                <mat-label>Marco Posterior</mat-label>
+                <input
+                  matInput
+                  type="text"
+                  formControlName="back_frame"
+                >
+              </mat-form-field>
+
+              <mat-form-field fxFlex="100">
+                <mat-label>Ancho</mat-label>
+                <input
+                  matInput
+                  type="text"
+                  formControlName="wide"
+                >
+              </mat-form-field>
+
+              <mat-form-field fxFlex="100">
+                <mat-label>Alto</mat-label>
+                <input
+                  matInput
+                  type="text"
+                  formControlName="high"
+                >
+              </mat-form-field>
+
+            </div>
+            <div fxLayout="row"
+                 fxLayout.xs="column"
+                 fxLayoutGap="10px">
+
+              <section fxFlex="100">
+                <mat-checkbox formControlName="attached_to_the_wall">Pegado a muro</mat-checkbox>
+              </section>
+
+              <section fxFlex="100">
+                <mat-checkbox formControlName="glued_to_frame">Pegado a bastidor</mat-checkbox>
+              </section>
+
+              <section fxFlex="100">
+                <mat-checkbox formControlName="quotation">Cotización</mat-checkbox>
+              </section>
+
+              <section fxFlex="100">
+                <mat-checkbox formControlName="manufacturing">Fabricación</mat-checkbox>
+              </section>
+
+            </div>
+
+          </mat-card>
+
+          <div fxLayout="row"
+               fxLayout.xs="column"
+               fxLayoutGap="10px">
+
+            <mat-form-field fxFlex="50">
+              <mat-label>Observaciones</mat-label>
+              <textarea matInput
+                        formControlName="work_description"
+                        placeholder="Observaciones de accesos..."></textarea>
+            </mat-form-field>
+
+            <mat-form-field fxFlex="50">
+
+              <mat-toolbar>
+                <!-- Readonly Input to show File names -->
+                <input matInput readonly name="memberContactNo" placeholder="Foto">
+                <!-- Browse Button -->
+                <button mat-flat-button color="primary">
+                  <mat-icon>image</mat-icon>
+                </button>
+
+              </mat-toolbar>
+              <!-- Fetch selected filed on change -->
+              <input type="file" #UploadFileInput id="fileUploadPhoto" name="myFile" (change)="setFileLogo($event)" accept="image/*">
+
+            </mat-form-field>
+
+          </div>
+
+          <div fxLayout="row"
+               fxLayout.xs="column"
+               fxLayoutGap="10px"
+               *ngIf="imageFile !== null; else divLogo">
+
+            <mat-card fxFlex="100" fxLayoutAlign="center center">
+              <img mat-card-image [src]="imageFile" alt="">
+            </mat-card>
+
+          </div>
+
+          <ng-template #divLogo>
+          </ng-template>
+
+        </div>
+
+      </div>
+
+    </mat-card-content>
+    <mat-card-actions>
+    </mat-card-actions>
+  </mat-card>
+
+</mat-dialog-content>
+
+<mat-dialog-actions fxLayoutAlign="end">
+  <button (click)="close()" mat-stroked-button color="primary" mat-dialog-close="true">Cancelar</button>
+  <!--<button *ngIf="!door.idDoor" (click)="addDoor()" mat-flat-button color="primary" cdkFocusInitial [disabled]="doorForm.invalid">Guardar Acceso</button>-->
+  <button *ngIf="lifting.idLifting && lifting.edit" (click)="updateLifting()" mat-flat-button color="primary">Editar</button>
+</mat-dialog-actions>
+
+

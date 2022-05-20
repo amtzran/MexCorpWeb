@@ -1,7 +1,7 @@
 <div class="container">
   <mat-card fxLayoutAlign="center center">
     <mat-card-title>
-      <mat-card-title>Empleados</mat-card-title>
+      <mat-card-title>Levantamientos</mat-card-title>
     </mat-card-title>
   </mat-card>
 
@@ -32,38 +32,27 @@
       </ng-container>
 
       <!-- Name Column -->
-      <ng-container matColumnDef="name">
+      <ng-container matColumnDef="folio">
         <th mat-header-cell *matHeaderCellDef mat-sort-header=""> Nombre</th>
-        <td mat-cell *matCellDef="let row"> {{row.name}} </td>
+        <td mat-cell *matCellDef="let row"> {{row.folio}} </td>
       </ng-container>
 
       <!-- Name Column -->
-      <ng-container matColumnDef="email">
-        <th mat-header-cell *matHeaderCellDef mat-sort-header=""> Correo</th>
-        <td mat-cell *matCellDef="let row"> {{row.email}} </td>
+      <ng-container matColumnDef="customer">
+        <th mat-header-cell *matHeaderCellDef mat-sort-header=""> Cliente</th>
+        <td mat-cell *matCellDef="let row"> {{row.customer_id}} </td>
       </ng-container>
 
       <!-- Color Column -->
-      <ng-container matColumnDef="color">
-        <th mat-header-cell *matHeaderCellDef mat-sort-header=""> Color</th>
-        <td mat-cell *matCellDef="let row"><input type="color" value="{{row.color}}" disabled></td>
+      <ng-container matColumnDef="employee">
+        <th mat-header-cell *matHeaderCellDef mat-sort-header=""> Empleado</th>
+        <td mat-cell *matCellDef="let row"> {{row.employee_id}} </td>
       </ng-container>
 
       <!-- Puesto Column -->
-      <ng-container matColumnDef="job_title_name">
-        <th mat-header-cell *matHeaderCellDef mat-sort-header=""> Puesto</th>
-        <td mat-cell *matCellDef="let row">{{row.job_title_name}}</td>
-      </ng-container>
-
-      !-- Status Column -->
-      <ng-container matColumnDef="is_active">
-        <th mat-header-cell *matHeaderCellDef mat-sort-header=""> Estatus</th>
-        <td mat-cell *matCellDef="let row">
-          <mat-icon *ngIf="row.is_active === 1; else iconActive">done</mat-icon>
-          <ng-template #iconActive>
-            <mat-icon>block</mat-icon>
-          </ng-template>
-        </td>
+      <ng-container matColumnDef="access">
+        <th mat-header-cell *matHeaderCellDef mat-sort-header=""> Acceso</th>
+        <td mat-cell *matCellDef="let row">{{row.work_type_id}}</td>
       </ng-container>
 
       <!-- Teléfono Column -->
@@ -75,15 +64,15 @@
             <mat-icon>more_vert</mat-icon>
           </button>
           <mat-menu #menu="matMenu">
-            <button mat-menu-item (click)="openDialogEmployee(false, row.id, true)">
+            <button mat-menu-item (click)="openDialogLifting(false, row.id, true)">
               <mat-icon color="info">visibility</mat-icon>
               Ver
             </button>
-            <button mat-menu-item (click)="openDialogEmployee(true, row.id, false)">
+            <button mat-menu-item (click)="openDialogLifting(true, row.id, false)">
               <mat-icon color="primary">edit</mat-icon>
               Editar
             </button>
-            <button *ngIf="row.is_active === 0" mat-menu-item (click)="status(row)">
+        <!--    <button *ngIf="row.is_active === 0" mat-menu-item (click)="status(row)">
               <mat-icon>done</mat-icon>
               Activar
             </button>
@@ -103,7 +92,7 @@
                     (click)="deleteEmployee(row)">
               <mat-icon color="warn">delete</mat-icon>
               Eliminar
-            </button>
+            </button>-->
           </mat-menu>
 
         </td>

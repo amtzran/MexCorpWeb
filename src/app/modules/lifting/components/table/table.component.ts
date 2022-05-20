@@ -11,11 +11,11 @@ import {NgxSpinnerService} from "ngx-spinner";
 import {DateService} from "../../../../core/utils/date.service";
 import {ConfirmComponent} from "../../../../shared/components/confirm/confirm.component";
 import {ActiveComponent} from "../../../../shared/components/active/active.component";
-import {CrudComponent} from "../../../employee/components/crud/crud.component";
 import {ModalResponse} from "../../../../core/utils/ModalResponse";
-import {ProfileUser} from "../../../auth/interfaces/login.interface";
-import {ResetPasswordComponent} from "../../../employee/components/reset-password/reset-password.component";
-import * as fileSaver from "file-saver";
+import {Lifting} from "../../interfaces/lifting.interface";
+import {LiftingService} from "../../services/lifting.service";
+import {CrudComponent} from "../crud/crud.component";
+import {fakeAsync} from "@angular/core/testing";
 
 @Component({
   selector: 'app-table',
@@ -25,15 +25,15 @@ import * as fileSaver from "file-saver";
 })
 export class TableComponent implements OnInit {
 
-  displayedColumns: string[] = ['id', 'name', 'email', 'color', 'job_title_name', 'is_active', 'options'];
-  dataSource!: MatTableDataSource<Employee>;
+  displayedColumns: string[] = ['id', 'folio', 'customer', 'employee', 'access', 'options'];
+  dataSource!: MatTableDataSource<Lifting>;
   totalItems!: number;
   pageSize = this.sharedService.pageSize;
   liftingPaginateForm!: FormGroup;
   @ViewChild(MatPaginator, {static: true}) paginator!: MatPaginator;
   @ViewChild(MatSort) sort!: MatSort;
 
-  constructor(private employeeService: EmployeeService,
+  constructor(private liftingService: LiftingService,
               private formBuilder: FormBuilder,
               private dialog: MatDialog,
               private sharedService: SharedService,
@@ -57,11 +57,11 @@ export class TableComponent implements OnInit {
     const paginator: MatPaginator = event;
     this.liftingPaginateForm.get('page')?.setValue(paginator.pageIndex + 1);
     this.spinner.show()
-    this.employeeService.getEmployees(this.liftingPaginateForm.value)
-      .subscribe(employees => {
+    this.liftingService.getLiftings(this.liftingPaginateForm.value)
+      .subscribe(liftings => {
           this.spinner.hide()
-          this.dataSource.data = employees.data
-          this.totalItems = employees.meta.total;
+          this.dataSource.data = liftings.data
+          this.totalItems = liftings.meta.total;
         }, (error => {
           this.spinner.hide()
           this.sharedService.errorDialog(error)
@@ -69,7 +69,7 @@ export class TableComponent implements OnInit {
       )
   }
 
-  deleteEmployee(employee: Employee) {
+  /*deleteEmployee(employee: Employee) {
     // Show Dialog
     const dialog = this.dialog.open(ConfirmComponent, {
       width: '250vw',
@@ -87,72 +87,28 @@ export class TableComponent implements OnInit {
         }
       })
 
-  }
-
-  status(employee: number) {
-    // Show Dialog
-    const dialog = this.dialog.open(ActiveComponent, {
-      width: '250',
-      data: employee
-    })
-    dialog.afterClosed().subscribe(
-      (result) => {
-        if (result) {
-          this.sharedService.showSnackBar('Status Actualizado')
-          this.getLiftingsPaginator(this.paginator);
-        }
-      })
-  }
+  }*/
 
   /**
-   * Open dialog for add and update group.
+   * Open dialog for add and update lifting.
    * @param edit
-   * @param idEmployee
+   * @param idLifting
    * @param info
    */
-  openDialogEmployee(edit: boolean, idEmployee: number | null, info: boolean): void {
+  openDialogLifting(edit: boolean, idLifting: number | null, info: boolean): void {
     const dialogRef = this.dialog.open(CrudComponent, {
       autoFocus: false,
-      disableClose: true,
-      width: '50vw',
-      data: {edit: edit, idEmployee: idEmployee, info: info}
+      disableClose: false,
+      maxWidth: '100vw',
+      maxHeight: '100vh',
+      width: '95%',
+      data: {edit: edit, idLifting: idLifting, info: info}
     });
     dialogRef.afterClosed().subscribe(res => {
       if (res === ModalResponse.UPDATE) {
         this.getLiftingsPaginator(this.paginator);
       }
     });
-  }
-
-  /**
-   *
-   * @param employee
-   */
-  resetPassword(employee: ProfileUser){
-    const dialogRef = this.dialog.open(ResetPasswordComponent, {
-      autoFocus: false,
-      disableClose: true,
-      width: '50vw',
-      data: employee
-    });
-    dialogRef.afterClosed().subscribe(res => {
-      if (res === ModalResponse.UPDATE) {
-        this.getLiftingsPaginator(this.paginator);
-      }
-    });
-  }
-
-  toolsReport(employee : Employee){
-    this.spinner.show()
-    this.employeeService.exportReportTools(Number(employee.id)).subscribe(res => {
-      this.spinner.hide()
-      let date = this.dateService.getFormatDataDate(new Date())
-      let file = this.sharedService.createBlobToPdf(res);
-      fileSaver.saveAs(file, `Reporte-Herramientas-${employee.name}-${date}`);
-    },error => {
-      this.spinner.hide()
-      this.sharedService.errorDialog(error)
-    })
   }
 
   /* Método que permite iniciar los filtros de rutas*/
