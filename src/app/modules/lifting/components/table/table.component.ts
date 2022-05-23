@@ -1,21 +1,16 @@
 import {Component, OnInit, ViewChild} from '@angular/core';
 import {MatTableDataSource} from "@angular/material/table";
-import {Employee} from "../../../employee/interfaces/employee.interface";
 import {FormBuilder, FormGroup} from "@angular/forms";
 import {MatPaginator} from "@angular/material/paginator";
 import {MatSort} from "@angular/material/sort";
-import {EmployeeService} from "../../../employee/services/employee.service";
 import {MatDialog} from "@angular/material/dialog";
 import {SharedService} from "../../../../shared/services/shared.service";
 import {NgxSpinnerService} from "ngx-spinner";
 import {DateService} from "../../../../core/utils/date.service";
-import {ConfirmComponent} from "../../../../shared/components/confirm/confirm.component";
-import {ActiveComponent} from "../../../../shared/components/active/active.component";
 import {ModalResponse} from "../../../../core/utils/ModalResponse";
-import {Lifting} from "../../interfaces/lifting.interface";
+import {Lifting, Quotation} from "../../interfaces/lifting.interface";
 import {LiftingService} from "../../services/lifting.service";
 import {CrudComponent} from "../crud/crud.component";
-import {fakeAsync} from "@angular/core/testing";
 
 @Component({
   selector: 'app-table',
@@ -25,13 +20,26 @@ import {fakeAsync} from "@angular/core/testing";
 })
 export class TableComponent implements OnInit {
 
-  displayedColumns: string[] = ['id', 'folio', 'customer', 'employee', 'access', 'options'];
+  displayedColumns: string[] = [
+    'id',
+    'folio',
+    'customer',
+    'employee',
+    'job_center',
+    'work_type',
+    'date',
+    'status',
+    'options'];
+  displayedColumnsQuote: string[] = ['id', 'amount', 'options'];
   dataSource!: MatTableDataSource<Lifting>;
+  dataSourceQuote!: MatTableDataSource<Quotation>;
   totalItems!: number;
+  totalItemsQuote!: number;
   pageSize = this.sharedService.pageSize;
   liftingPaginateForm!: FormGroup;
-  @ViewChild(MatPaginator, {static: true}) paginator!: MatPaginator;
-  @ViewChild(MatSort) sort!: MatSort;
+  quotationPaginateForm!: FormGroup;
+  @ViewChild('paginator', {static: true}) paginator!: MatPaginator;
+  @ViewChild('paginatorQuote', {static: true}) paginatorQuote!: MatPaginator;
 
   constructor(private liftingService: LiftingService,
               private formBuilder: FormBuilder,
@@ -44,13 +52,12 @@ export class TableComponent implements OnInit {
   ngOnInit(): void {
     /*Formulario*/
     this.loadLiftingFilterForm();
+    this.loadQuotationFilterForm();
     // Assign the data to the data source for the table to render
     this.dataSource = new MatTableDataSource();
+    this.dataSourceQuote = new MatTableDataSource();
     this.getLiftingsPaginator(this.paginator);
-  }
-
-  ngAfterViewInit() {
-    this.dataSource.sort = this.sort;
+    this.getQuotationsPaginator(this.paginatorQuote)
   }
 
   getLiftingsPaginator(event: any) {
@@ -62,6 +69,22 @@ export class TableComponent implements OnInit {
           this.spinner.hide()
           this.dataSource.data = liftings.data
           this.totalItems = liftings.meta.total;
+        }, (error => {
+          this.spinner.hide()
+          this.sharedService.errorDialog(error)
+        } )
+      )
+  }
+
+  getQuotationsPaginator(event: any) {
+    const paginatorQuote: MatPaginator = event;
+    this.quotationPaginateForm.get('page')?.setValue(paginatorQuote.pageIndex + 1);
+    this.spinner.show()
+    this.liftingService.getQuotations(this.quotationPaginateForm.value)
+      .subscribe(quotations => {
+          this.spinner.hide()
+          this.dataSourceQuote.data = quotations.data
+          this.totalItemsQuote = quotations.meta.total;
         }, (error => {
           this.spinner.hide()
           this.sharedService.errorDialog(error)
@@ -95,7 +118,7 @@ export class TableComponent implements OnInit {
    * @param idLifting
    * @param info
    */
-  openDialogLifting(edit: boolean, idLifting: number | null, info: boolean): void {
+  openDialogLifting(edit: boolean, idLifting: number | '', info: boolean): void {
     const dialogRef = this.dialog.open(CrudComponent, {
       autoFocus: false,
       disableClose: false,
@@ -111,9 +134,50 @@ export class TableComponent implements OnInit {
     });
   }
 
+  /**
+   * Event click show url (Pdf)
+   * @param reportPdf
+   */
+  viewPdf(reportPdf: string){
+    window.open(reportPdf)
+  }
+
+  /**
+   * Event click Quotation
+   * @param row
+   */
+  openQuotation(row: Lifting){
+    this.spinner.show()
+    this.liftingService.addQuotation(row)
+      .subscribe(quote => {
+          this.spinner.hide()
+          console.log(quote);
+        }, (error => {
+          this.spinner.hide()
+          this.sharedService.errorDialog(error)
+        } )
+      )
+  }
+
+  /**
+   * Event click Quotation
+   * @param row
+   */
+  openQuoted(row: Lifting){
+    console.log('Cotizado')
+  }
+
   /* Método que permite iniciar los filtros de rutas*/
   loadLiftingFilterForm(): void {
     this.liftingPaginateForm = this.formBuilder.group({
+      page: [],
+      page_size: [this.pageSize]
+    })
+  }
+
+  /* Método que permite iniciar los filtros de rutas*/
+  loadQuotationFilterForm(): void {
+    this.quotationPaginateForm = this.formBuilder.group({
       page: [],
       page_size: [this.pageSize]
     })

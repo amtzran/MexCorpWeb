@@ -1,117 +1,251 @@
 <div class="container">
-  <mat-card fxLayoutAlign="center center">
-    <mat-card-title>
-      <mat-card-title>Levantamientos</mat-card-title>
-    </mat-card-title>
-  </mat-card>
 
-<!--  <div fxLayout="row">
-    <div fxFlex="80">
-      <mat-form-field appearance="standard">
-        <mat-label>Filtrar Datos Empleados</mat-label>
-        <input autocomplete="nope" matInput (keyup)="applyFilter($event)" placeholder="Buscar en Tabla Empleados" #input>
-      </mat-form-field>
-    </div>
-    <div fxFlex="20" fxLayoutAlign="center center">
-      <button (click)="openDialogEmployee(false, null, false)" mat-button color="primary">
-        <mat-icon>person_add</mat-icon>
-        Nuevo Empleado
-      </button>
-    </div>
-  </div>-->
+  <mat-tab-group mat-align-tabs="start">
 
+    <mat-tab label="Levantamientos">
 
-  <div class="mat-elevation-z8">
-    <ngx-spinner></ngx-spinner>
-    <table mat-table [dataSource]="dataSource" matSort>
+      <mat-card>
+        <mat-card-title>
 
-      <!-- ID Column -->
-      <ng-container matColumnDef="id">
-        <th mat-header-cell *matHeaderCellDef mat-sort-header=""> ID</th>
-        <td mat-cell *matCellDef="let row"> {{row.id}} </td>
-      </ng-container>
+          <div fxFlex="50">
+            <mat-card-title>Levantamientos</mat-card-title>
+          </div>
 
-      <!-- Name Column -->
-      <ng-container matColumnDef="folio">
-        <th mat-header-cell *matHeaderCellDef mat-sort-header=""> Nombre</th>
-        <td mat-cell *matCellDef="let row"> {{row.folio}} </td>
-      </ng-container>
-
-      <!-- Name Column -->
-      <ng-container matColumnDef="customer">
-        <th mat-header-cell *matHeaderCellDef mat-sort-header=""> Cliente</th>
-        <td mat-cell *matCellDef="let row"> {{row.customer_id}} </td>
-      </ng-container>
-
-      <!-- Color Column -->
-      <ng-container matColumnDef="employee">
-        <th mat-header-cell *matHeaderCellDef mat-sort-header=""> Empleado</th>
-        <td mat-cell *matCellDef="let row"> {{row.employee_id}} </td>
-      </ng-container>
-
-      <!-- Puesto Column -->
-      <ng-container matColumnDef="access">
-        <th mat-header-cell *matHeaderCellDef mat-sort-header=""> Acceso</th>
-        <td mat-cell *matCellDef="let row">{{row.work_type_id}}</td>
-      </ng-container>
-
-      <!-- Teléfono Column -->
-      <ng-container matColumnDef="options">
-        <th mat-header-cell *matHeaderCellDef mat-sort-header=""> Opciones</th>
-        <td mat-cell *matCellDef="let row">
-
-          <button mat-icon-button [matMenuTriggerFor]="menu" aria-label="Example icon-button with a menu">
-            <mat-icon>more_vert</mat-icon>
-          </button>
-          <mat-menu #menu="matMenu">
-            <button mat-menu-item (click)="openDialogLifting(false, row.id, true)">
-              <mat-icon color="info">visibility</mat-icon>
-              Ver
+          <div fxFlex="50" fxLayoutAlign="end center">
+            <button (click)="openDialogLifting(false, '', false)" mat-button color="primary">
+              <mat-icon>person_add</mat-icon>
+              Nuevo Levantamiento
             </button>
-            <button mat-menu-item (click)="openDialogLifting(true, row.id, false)">
-              <mat-icon color="primary">edit</mat-icon>
-              Editar
-            </button>
-        <!--    <button *ngIf="row.is_active === 0" mat-menu-item (click)="status(row)">
-              <mat-icon>done</mat-icon>
-              Activar
-            </button>
-            <button *ngIf="row.is_active === 1" mat-menu-item (click)="status(row)">
-              <mat-icon>done</mat-icon>
-              Desactivar
-            </button>
-            <button mat-menu-item (click)="resetPassword(row)">
-              <mat-icon color="primary">restart_alt</mat-icon>
-              Contraseña
-            </button>
-            <button mat-menu-item (click)="toolsReport(row)">
-              <mat-icon color="warn">picture_as_pdf</mat-icon>
-              Recibo de Herramientas
-            </button>
-            <button mat-menu-item
-                    (click)="deleteEmployee(row)">
-              <mat-icon color="warn">delete</mat-icon>
-              Eliminar
-            </button>-->
-          </mat-menu>
+          </div>
+        </mat-card-title>
+      </mat-card>
 
-        </td>
-      </ng-container>
+      <div class="mat-elevation-z8">
+        <ngx-spinner></ngx-spinner>
+        <table mat-table [dataSource]="dataSource" matSort>
 
-      <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
-      <tr mat-row *matRowDef="let row; columns: displayedColumns;"></tr>
+          <!-- ID Column -->
+          <ng-container matColumnDef="id">
+            <th mat-header-cell *matHeaderCellDef mat-sort-header=""> ID</th>
+            <td mat-cell *matCellDef="let row"> {{row.id}} </td>
+          </ng-container>
 
-      <!-- Row shown when there is no matching data.
-      <tr class="mat-row" *matNoDataRow>
-        <td class="mat-cell" colspan="4">No hay datos que mostrar {{ input.value }}</td>
-      </tr>-->
+          <!-- Name Column -->
+          <ng-container matColumnDef="folio">
+            <th mat-header-cell *matHeaderCellDef mat-sort-header=""> Folio</th>
+            <td mat-cell *matCellDef="let row"> {{row.folio}} </td>
+          </ng-container>
 
-    </table>
+          <!-- Name Column -->
+          <ng-container matColumnDef="customer">
+            <th mat-header-cell *matHeaderCellDef mat-sort-header=""> Cliente</th>
+            <td mat-cell *matCellDef="let row"> {{row.customer_name}} </td>
+          </ng-container>
 
-    <mat-paginator #paginator [length]="totalItems"
-                   (page)="getLiftingsPaginator($event)"
-                   [pageSize]="pageSize"
-                   [showFirstLastButtons]="true">
-    </mat-paginator>
-  </div>
+          <!-- Color Column -->
+          <ng-container matColumnDef="employee">
+            <th mat-header-cell *matHeaderCellDef mat-sort-header=""> Empleado</th>
+            <td mat-cell *matCellDef="let row"> {{row.employee_name}} </td>
+          </ng-container>
+
+          <!-- Centro de Trabajo Column -->
+          <ng-container matColumnDef="job_center">
+            <th mat-header-cell *matHeaderCellDef mat-sort-header=""> Centro de Trabajo</th>
+            <td mat-cell *matCellDef="let row">{{row.job_center_name}}</td>
+          </ng-container>
+
+          <!-- Puesto Column -->
+          <ng-container matColumnDef="work_type">
+            <th mat-header-cell *matHeaderCellDef mat-sort-header=""> Tipo de Trabajo</th>
+            <td mat-cell *matCellDef="let row">{{row.work_type_name}}</td>
+          </ng-container>
+
+          <!-- Date Column -->
+          <ng-container matColumnDef="date">
+            <th mat-header-cell *matHeaderCellDef mat-sort-header=""> Fecha</th>
+            <td mat-cell *matCellDef="let row">{{row.date | date : 'shortDate'}}</td>
+          </ng-container>
+
+          <!-- Status Column -->
+          <ng-container matColumnDef="status">
+            <th mat-header-cell *matHeaderCellDef mat-sort-header=""> Estatus</th>
+            <td mat-cell *matCellDef="let row">{{row.status}}</td>
+          </ng-container>
+
+          <!-- Teléfono Column -->
+          <ng-container matColumnDef="options">
+            <th mat-header-cell *matHeaderCellDef mat-sort-header=""> Opciones</th>
+            <td mat-cell *matCellDef="let row">
+
+              <button mat-icon-button [matMenuTriggerFor]="menu" aria-label="Example icon-button with a menu">
+                <mat-icon>more_vert</mat-icon>
+              </button>
+              <mat-menu #menu="matMenu">
+                <button mat-menu-item (click)="openDialogLifting(false, row.id, true)">
+                  <mat-icon color="info">visibility</mat-icon>
+                  Ver
+                </button>
+                <button mat-menu-item (click)="openDialogLifting(true, row.id, false)">
+                  <mat-icon color="primary">edit</mat-icon>
+                  Editar
+                </button>
+                <button *ngIf="row.status === 'Por Cotizar' " mat-menu-item (click)="openQuotation(row)">
+                  <mat-icon color="primary">request_quote</mat-icon>
+                  Crear Cotización
+                </button>
+                <button mat-menu-item (click)="viewPdf(row.report_pdf)">
+                  <mat-icon color="warn">picture_as_pdf</mat-icon>
+                  Reporte Levantamiento
+                </button>
+                <!--<button *ngIf="row.is_active === 0" mat-menu-item (click)="status(row)">
+                      <mat-icon>done</mat-icon>
+                      Activar
+                    </button>
+                    <button *ngIf="row.is_active === 1" mat-menu-item (click)="status(row)">
+                      <mat-icon>done</mat-icon>
+                      Desactivar
+                    </button>
+                    <button mat-menu-item (click)="resetPassword(row)">
+                      <mat-icon color="primary">restart_alt</mat-icon>
+                      Contraseña
+                    </button>
+
+                    <button mat-menu-item
+                            (click)="deleteEmployee(row)">
+                      <mat-icon color="warn">delete</mat-icon>
+                      Eliminar
+                    </button>-->
+              </mat-menu>
+
+            </td>
+          </ng-container>
+
+          <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
+          <tr mat-row *matRowDef="let row; columns: displayedColumns;"></tr>
+
+          <!-- Row shown when there is no matching data.
+          <tr class="mat-row" *matNoDataRow>
+            <td class="mat-cell" colspan="4">No hay datos que mostrar {{ input.value }}</td>
+          </tr>-->
+
+        </table>
+
+        <mat-paginator #paginator [length]="totalItems"
+                       (page)="getLiftingsPaginator($event)"
+                       [pageSize]="pageSize"
+                       [showFirstLastButtons]="true">
+        </mat-paginator>
+      </div>
+
+    </mat-tab>
+
+    <mat-tab label="Cotizaciones">
+      <mat-card>
+        <mat-card-title>
+
+          <div fxFlex="50">
+            <mat-card-title>Cotizaciones</mat-card-title>
+          </div>
+
+       <!--   <div fxFlex="50" fxLayoutAlign="end center">
+            <button (click)="openDialogLifting(false, '', false)" mat-button color="primary">
+              <mat-icon>person_add</mat-icon>
+              Nuevo Levantamiento
+            </button>
+          </div>-->
+
+        </mat-card-title>
+      </mat-card>
+
+      <div class="mat-elevation-z8">
+        <ngx-spinner></ngx-spinner>
+        <table mat-table [dataSource]="dataSourceQuote" matSort>
+
+          <!-- ID Column -->
+          <ng-container matColumnDef="id">
+            <th mat-header-cell *matHeaderCellDef mat-sort-header=""> ID</th>
+            <td mat-cell *matCellDef="let row"> {{row.id}} </td>
+          </ng-container>
+
+          <!-- Amount Column -->
+          <ng-container matColumnDef="amount">
+            <th mat-header-cell *matHeaderCellDef mat-sort-header=""> Monto</th>
+            <td mat-cell *matCellDef="let row"> {{row.amount}} </td>
+          </ng-container>
+
+          <!-- Teléfono Column -->
+          <ng-container matColumnDef="options">
+            <th mat-header-cell *matHeaderCellDef mat-sort-header=""> Opciones</th>
+            <td mat-cell *matCellDef="let row">
+
+              <button mat-icon-button [matMenuTriggerFor]="menu" aria-label="Example icon-button with a menu">
+                <mat-icon>more_vert</mat-icon>
+              </button>
+
+              <mat-menu #menu="matMenu">
+                <!--
+               <button mat-menu-item (click)="openDialogLifting(false, row.id, true)">
+                 <mat-icon color="info">visibility</mat-icon>
+                 Ver
+               </button>
+               <button mat-menu-item (click)="openDialogLifting(true, row.id, false)">
+                 <mat-icon color="primary">edit</mat-icon>
+                 Editar
+               </button>
+               <button *ngIf="row.status === 'Por Cotizar' " mat-menu-item (click)="openQuotation(row)">
+                 <mat-icon color="primary">request_quote</mat-icon>
+                 Cotizar
+               </button>
+               <button *ngIf="row.status === 'Cotizado' " mat-menu-item (click)="openQuoted(row)">
+                 <mat-icon color="primary">request_quote</mat-icon>
+                 Cotizado
+               </button>
+               <button mat-menu-item (click)="viewPdf(row.report_pdf)">
+                 <mat-icon color="warn">picture_as_pdf</mat-icon>
+                 Reporte Levantamiento
+               </button>
+                 <button *ngIf="row.is_active === 0" mat-menu-item (click)="status(row)">
+                     <mat-icon>done</mat-icon>
+                     Activar
+                   </button>
+                   <button *ngIf="row.is_active === 1" mat-menu-item (click)="status(row)">
+                     <mat-icon>done</mat-icon>
+                     Desactivar
+                   </button>
+                   <button mat-menu-item (click)="resetPassword(row)">
+                     <mat-icon color="primary">restart_alt</mat-icon>
+                     Contraseña
+                   </button>
+
+                   <button mat-menu-item
+                           (click)="deleteEmployee(row)">
+                     <mat-icon color="warn">delete</mat-icon>
+                     Eliminar
+                   </button>-->
+              </mat-menu>
+
+            </td>
+          </ng-container>
+
+          <tr mat-header-row *matHeaderRowDef="displayedColumnsQuote"></tr>
+          <tr mat-row *matRowDef="let row; columns: displayedColumnsQuote;"></tr>
+
+          <!-- Row shown when there is no matching data.
+          <tr class="mat-row" *matNoDataRow>
+            <td class="mat-cell" colspan="4">No hay datos que mostrar {{ input.value }}</td>
+          </tr>-->
+
+        </table>
+
+        <mat-paginator #paginatorQuote [length]="totalItemsQuote"
+                       (page)="getQuotationsPaginator($event)"
+                       [pageSize]="pageSize"
+                       [showFirstLastButtons]="true">
+        </mat-paginator>
+      </div>
+
+    </mat-tab>
+
+  </mat-tab-group>
+
 </div>

@@ -1,0 +1,22 @@
+.mat-toolbar-single-row {
+  height: auto !important;
+  background: transparent;
+}
+
+#fileUploadPhotoOne, #fileUploadPhotoTwo {
+  position: absolute;
+  z-index: 9;
+  opacity: 0;
+  height: 100%;
+  width: 100%;
+  left: 0;
+  top: 0;
+  cursor: pointer;
+}
+
+img {
+  width: 100%;
+  max-width: 300px;
+  max-height: 300px;
+  border-radius: 5px;
+}

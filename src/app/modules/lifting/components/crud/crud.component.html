@@ -1,4 +1,7 @@
-<h4 mat-dialog-title class="title-subsection">{{title}} <span *ngIf="lifting.idLifting"> | Folio: {{folio}}</span></h4>
+<h4 mat-dialog-title class="title-subsection">
+  {{title}} <span *ngIf="lifting.idLifting"> | Folio: {{folio}} | Fecha: {{dateNow | date : 'shortDate'}}
+  </span>
+</h4>
 <ngx-spinner></ngx-spinner>
 <mat-divider></mat-divider>
 <br>
@@ -59,7 +62,7 @@
             <ng-select fxFlex="100"
                        bindLabel="name"
                        formControlName="work_type_id"
-                       placeholder="Centro de Trabajo"
+                       placeholder="Tipo de Trabajo"
                        [multiple]="false"
                        appendTo="body"
                        [searchable]="true"
@@ -68,6 +71,19 @@
                 {{workType.name}}
               </ng-option>
             </ng-select>
+
+            <mat-form-field fxFlex="100">
+              <mat-label>Lugar/Acceso</mat-label>
+              <input
+                matInput
+                type="text"
+                placeholder="Lugar"
+                formControlName="place"
+              >
+              <mat-error *ngIf="fieldInvalid('place')">
+                Favor de Ingresar el lugar
+              </mat-error>
+            </mat-form-field>
 
           </div>
 
@@ -120,23 +136,23 @@
                  fxLayoutGap="10px">
 
               <section fxFlex="100">
-                <mat-checkbox formControlName="folding">Abatible</mat-checkbox>
+                <mat-checkbox formControlName="folding" (change)="changeFolding($event)">Abatible</mat-checkbox>
               </section>
 
               <section fxFlex="100">
-                <mat-checkbox formControlName="sliding">Corrediza</mat-checkbox>
+                <mat-checkbox formControlName="sliding" (change)="changeSliding($event)">Corrediza</mat-checkbox>
               </section>
 
               <section fxFlex="100">
-                <mat-checkbox formControlName="air_system">Sistema áero</mat-checkbox>
+                <mat-checkbox formControlName="air_system" (change)="changeAirSystem($event)">Sistema áero</mat-checkbox>
               </section>
 
               <section fxFlex="100">
-                <mat-checkbox formControlName="smooth_stave">Duela lisa</mat-checkbox>
+                <mat-checkbox formControlName="smooth_stave" (change)="changeSmoothStave($event)">Duela lisa</mat-checkbox>
               </section>
 
               <section fxFlex="100">
-                <mat-checkbox formControlName="louver">louver</mat-checkbox>
+                <mat-checkbox formControlName="louver" (change)="changeLouver($event)">louver</mat-checkbox>
               </section>
 
               <mat-form-field fxFlex="100">
@@ -201,27 +217,27 @@
                  fxLayoutGap="10px">
 
               <section fxFlex="100">
-                <mat-checkbox formControlName="acrylic">Acrílico</mat-checkbox>
+                <mat-checkbox formControlName="acrylic" (change)="changeAcrylic($event)">Acrílico</mat-checkbox>
               </section>
 
               <section fxFlex="100">
-                <mat-checkbox formControlName="annealing">Recocido</mat-checkbox>
+                <mat-checkbox formControlName="annealing" (change)="changeAnnealing($event)">Recocido</mat-checkbox>
               </section>
 
               <section fxFlex="100">
-                <mat-checkbox formControlName="tempered">Templado</mat-checkbox>
+                <mat-checkbox formControlName="tempered" (change)="changeTempered($event)">Templado</mat-checkbox>
               </section>
 
               <section fxFlex="100">
-                <mat-checkbox formControlName="polished_edge">Canto Pulido</mat-checkbox>
+                <mat-checkbox formControlName="polished_edge" (change)="changePolishedEdge($event)">Canto Pulido</mat-checkbox>
               </section>
 
               <section fxFlex="100">
-                <mat-checkbox formControlName="bowling_song">Canto boleado</mat-checkbox>
+                <mat-checkbox formControlName="bowling_song" (change)="changeBowlingSong($event)">Canto boleado</mat-checkbox>
               </section>
 
               <section fxFlex="100">
-                <mat-checkbox formControlName="dead_edge">Filo muerto</mat-checkbox>
+                <mat-checkbox formControlName="dead_edge" (change)="changeDeadEdge($event)">Filo muerto</mat-checkbox>
               </section>
 
             </div>
@@ -286,27 +302,27 @@
                  fxLayoutGap="10px">
 
               <section fxFlex="100">
-                <mat-checkbox formControlName="hangovers">Resaques</mat-checkbox>
+                <mat-checkbox formControlName="hangovers" (change)="changeHangovers($event)">Resaques</mat-checkbox>
               </section>
 
               <section fxFlex="100">
-                <mat-checkbox formControlName="top_hardware">Herraje Superior</mat-checkbox>
+                <mat-checkbox formControlName="top_hardware" (change)="changeTopHardware($event)">Herraje Superior</mat-checkbox>
               </section>
 
               <section fxFlex="100">
-                <mat-checkbox formControlName="bottom_hardware">Herraje Inferior</mat-checkbox>
+                <mat-checkbox formControlName="bottom_hardware" (change)="changeBottomHardware($event)">Herraje Inferior</mat-checkbox>
               </section>
 
               <section fxFlex="100">
-                <mat-checkbox formControlName="bracket_hardware">Herraje Escuadra</mat-checkbox>
+                <mat-checkbox formControlName="bracket_hardware" (change)="changeBracketHardware($event)">Herraje Escuadra</mat-checkbox>
               </section>
 
               <section fxFlex="100">
-                <mat-checkbox formControlName="rib_holder">herraje E. portacostilla</mat-checkbox>
+                <mat-checkbox formControlName="rib_holder" (change)="changeRipHolder($event)">herraje E. portacostilla</mat-checkbox>
               </section>
 
               <section fxFlex="100">
-                <mat-checkbox formControlName="turning_point">Punto de Giro</mat-checkbox>
+                <mat-checkbox formControlName="turning_point" (change)="changeTurningPoint($event)">Punto de Giro</mat-checkbox>
               </section>
 
             </div>
@@ -380,41 +396,43 @@
                  fxLayoutGap="10px">
 
               <section fxFlex="100">
-                <mat-checkbox formControlName="attached_to_the_wall">Pegado a muro</mat-checkbox>
+                <mat-checkbox formControlName="attached_to_the_wall" (change)="changeAttached($event)">Pegado a muro</mat-checkbox>
               </section>
 
               <section fxFlex="100">
-                <mat-checkbox formControlName="glued_to_frame">Pegado a bastidor</mat-checkbox>
+                <mat-checkbox formControlName="glued_to_frame" (change)="changeGlued($event)">Pegado a bastidor</mat-checkbox>
               </section>
 
               <section fxFlex="100">
-                <mat-checkbox formControlName="quotation">Cotización</mat-checkbox>
+                <mat-checkbox formControlName="quotation" (change)="changeQuotation($event)">Cotización</mat-checkbox>
               </section>
 
               <section fxFlex="100">
-                <mat-checkbox formControlName="manufacturing">Fabricación</mat-checkbox>
+                <mat-checkbox formControlName="manufacturing" (change)="changeManufacturing($event)">Fabricación</mat-checkbox>
               </section>
 
             </div>
 
           </mat-card>
 
+          <br>
+
           <div fxLayout="row"
                fxLayout.xs="column"
                fxLayoutGap="10px">
 
             <mat-form-field fxFlex="50">
-              <mat-label>Observaciones</mat-label>
+              <mat-label>Descripción del Trabajo</mat-label>
               <textarea matInput
                         formControlName="work_description"
                         placeholder="Observaciones de accesos..."></textarea>
             </mat-form-field>
 
-            <mat-form-field fxFlex="50">
+            <mat-form-field fxFlex="25">
 
               <mat-toolbar>
                 <!-- Readonly Input to show File names -->
-                <input matInput readonly name="memberContactNo" placeholder="Foto">
+                <input matInput readonly name="memberContactNo" placeholder="Foto 1">
                 <!-- Browse Button -->
                 <button mat-flat-button color="primary">
                   <mat-icon>image</mat-icon>
@@ -422,7 +440,23 @@
 
               </mat-toolbar>
               <!-- Fetch selected filed on change -->
-              <input type="file" #UploadFileInput id="fileUploadPhoto" name="myFile" (change)="setFileLogo($event)" accept="image/*">
+              <input type="file" #UploadFileInput id="fileUploadPhotoOne" name="myFile" (change)="setFilePhotoOne($event)" accept="image/*">
+
+            </mat-form-field>
+
+            <mat-form-field fxFlex="25">
+
+              <mat-toolbar>
+                <!-- Readonly Input to show File names -->
+                <input matInput readonly name="memberContactNo" placeholder="Foto 2">
+                <!-- Browse Button -->
+                <button mat-flat-button color="primary">
+                  <mat-icon>image</mat-icon>
+                </button>
+
+              </mat-toolbar>
+              <!-- Fetch selected filed on change -->
+              <input type="file" #UploadFileInput id="fileUploadPhotoTwo" name="myFile" (change)="setFilePhotoTwo($event)" accept="image/*">
 
             </mat-form-field>
 
@@ -455,8 +489,8 @@
 
 <mat-dialog-actions fxLayoutAlign="end">
   <button (click)="close()" mat-stroked-button color="primary" mat-dialog-close="true">Cancelar</button>
-  <!--<button *ngIf="!door.idDoor" (click)="addDoor()" mat-flat-button color="primary" cdkFocusInitial [disabled]="doorForm.invalid">Guardar Acceso</button>-->
-  <button *ngIf="lifting.idLifting && lifting.edit" (click)="updateLifting()" mat-flat-button color="primary">Editar</button>
+  <button *ngIf="!lifting.idLifting" (click)="addLifting()" mat-flat-button color="primary" cdkFocusInitial [disabled]="liftingForm.invalid">Guardar</button>
+  <button *ngIf="lifting.idLifting && lifting.edit" (click)="updateLifting()" mat-flat-button color="primary" [disabled]="liftingForm.invalid">Editar</button>
 </mat-dialog-actions>
 
 

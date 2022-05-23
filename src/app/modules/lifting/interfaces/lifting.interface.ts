@@ -1,3 +1,4 @@
+import {Employee} from "../../employee/interfaces/employee.interface";
 
 export interface ModelLifting {
   data:  Lifting[];
@@ -9,9 +10,13 @@ export interface Lifting {
   id?:                     number;
   folio?:                  string;
   job_center_id:          number;
+  job_center_name?:          string;
   customer_id:            number;
+  customer_name?:          string;
   employee_id:            number;
+  employee_name?:            string;
   work_type_id:           number;
+  work_type_name?:            number;
   date?:                   string;
   place?:                  string;
   series?:                 null;
@@ -62,6 +67,7 @@ export interface Lifting {
   photo_two?:              null;
   photo_three?:            null;
   status?:                 string;
+  report_pdf?: string;
 }
 
 export interface Links {
@@ -97,3 +103,50 @@ export interface LiftingPaginate {
 export interface liftingDetail {
   data: Lifting
 }
+
+export interface ModelQuotation {
+  data:  Quotation[];
+  links: Links;
+  meta:  Meta;
+}
+
+export interface Quotation {
+  id:         number;
+  lifting:    Lifting;
+  concepts:   any[];
+  seller:     Employee;
+  date:       Date;
+  amount:     number;
+  discount:   number;
+  subtotal:   number;
+  tax:        number;
+  total:      number;
+  status:     string;
+  created_at: Date;
+  updated_at: Date;
+}
+
+export interface Links {
+  first: string;
+  last:  string;
+  prev:  null;
+  next:  null;
+}
+
+export interface Meta {
+  current_page: number;
+  from:         number;
+  last_page:    number;
+  links:        Link[];
+  path:         string;
+  per_page:     number;
+  to:           number;
+  total:        number;
+}
+
+export interface Link {
+  url:    null | string;
+  label:  string;
+  active: boolean;
+}
+
