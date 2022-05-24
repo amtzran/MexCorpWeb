@@ -10,13 +10,15 @@ import {FlexLayoutModule} from "@angular/flex-layout";
 import {NgxSpinnerModule} from "ngx-spinner";
 import {CrudComponent } from './components/crud/crud.component';
 import {NgSelectModule} from "@ng-select/ng-select";
+import { ConceptComponent } from './components/concept/concept.component';
 
 
 @NgModule({
   declarations: [
     LiftingComponent,
     TableComponent,
-    CrudComponent
+    CrudComponent,
+    ConceptComponent
   ],
   imports: [
     CommonModule,

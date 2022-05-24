@@ -97,7 +97,8 @@ export interface Link {
 // Data Paginate
 export interface LiftingPaginate {
   page: string,
-  page_size: string
+  page_size: string,
+  quote_id?: number
 }
 
 export interface liftingDetail {
@@ -110,20 +111,30 @@ export interface ModelQuotation {
   meta:  Meta;
 }
 
+export interface  ModelQuotationConcept {
+  data:  QuotationConcept[];
+  links: Links;
+  meta:  Meta;
+}
+
 export interface Quotation {
   id:         number;
   lifting:    Lifting;
   concepts:   any[];
   seller:     Employee;
-  date:       Date;
+  date:       string;
   amount:     number;
   discount:   number;
   subtotal:   number;
   tax:        number;
   total:      number;
   status:     string;
-  created_at: Date;
-  updated_at: Date;
+  created_at: string;
+  updated_at: string;
+}
+
+export interface QuotationtDetail {
+  data: Quotation
 }
 
 export interface Links {
@@ -149,4 +160,24 @@ export interface Link {
   label:  string;
   active: boolean;
 }
+
+export interface QuotationConceptDetail {
+  data: QuotationConcept
+}
+
+export interface QuotationConcept {
+  id?: number;
+  quote_id?:    number;
+  quantity:    number;
+  unit:        string;
+  key:         string;
+  brand:       string;
+  description: string;
+  tax:         number;
+  unit_price:  number;
+  amount?: number;
+  created_at?: string;
+  updated_at?: string
+}
+
 

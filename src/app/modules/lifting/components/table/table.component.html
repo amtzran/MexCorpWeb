@@ -167,13 +167,31 @@
             <td mat-cell *matCellDef="let row"> {{row.id}} </td>
           </ng-container>
 
+          <!-- Date Column -->
+          <ng-container matColumnDef="customer">
+            <th mat-header-cell *matHeaderCellDef mat-sort-header=""> Cliente</th>
+            <td mat-cell *matCellDef="let row"> {{row.lifting.customer_name}} </td>
+          </ng-container>
+
+          <!-- Date Column -->
+          <ng-container matColumnDef="date">
+            <th mat-header-cell *matHeaderCellDef mat-sort-header=""> Fecha</th>
+            <td mat-cell *matCellDef="let row"> {{row.date }} </td>
+          </ng-container>
+
           <!-- Amount Column -->
           <ng-container matColumnDef="amount">
             <th mat-header-cell *matHeaderCellDef mat-sort-header=""> Monto</th>
-            <td mat-cell *matCellDef="let row"> {{row.amount}} </td>
+            <td mat-cell *matCellDef="let row"> {{row.amount | currency:'MX':'$':'1.2-2'}} </td>
           </ng-container>
 
-          <!-- Teléfono Column -->
+          <!-- Status Column -->
+          <ng-container matColumnDef="status">
+            <th mat-header-cell *matHeaderCellDef mat-sort-header=""> Estatus</th>
+            <td mat-cell *matCellDef="let row"> {{row.status}} </td>
+          </ng-container>
+
+          <!-- Settings Column -->
           <ng-container matColumnDef="options">
             <th mat-header-cell *matHeaderCellDef mat-sort-header=""> Opciones</th>
             <td mat-cell *matCellDef="let row">
@@ -183,45 +201,17 @@
               </button>
 
               <mat-menu #menu="matMenu">
-                <!--
-               <button mat-menu-item (click)="openDialogLifting(false, row.id, true)">
-                 <mat-icon color="info">visibility</mat-icon>
-                 Ver
-               </button>
-               <button mat-menu-item (click)="openDialogLifting(true, row.id, false)">
-                 <mat-icon color="primary">edit</mat-icon>
+
+               <button mat-menu-item (click)="openDialogConcept(row)">
+                 <mat-icon matSuffix mat-list-icon color="primary">edit</mat-icon>
                  Editar
                </button>
-               <button *ngIf="row.status === 'Por Cotizar' " mat-menu-item (click)="openQuotation(row)">
-                 <mat-icon color="primary">request_quote</mat-icon>
-                 Cotizar
-               </button>
-               <button *ngIf="row.status === 'Cotizado' " mat-menu-item (click)="openQuoted(row)">
-                 <mat-icon color="primary">request_quote</mat-icon>
-                 Cotizado
-               </button>
-               <button mat-menu-item (click)="viewPdf(row.report_pdf)">
-                 <mat-icon color="warn">picture_as_pdf</mat-icon>
-                 Reporte Levantamiento
-               </button>
-                 <button *ngIf="row.is_active === 0" mat-menu-item (click)="status(row)">
-                     <mat-icon>done</mat-icon>
-                     Activar
-                   </button>
-                   <button *ngIf="row.is_active === 1" mat-menu-item (click)="status(row)">
-                     <mat-icon>done</mat-icon>
-                     Desactivar
-                   </button>
-                   <button mat-menu-item (click)="resetPassword(row)">
-                     <mat-icon color="primary">restart_alt</mat-icon>
-                     Contraseña
-                   </button>
 
-                   <button mat-menu-item
-                           (click)="deleteEmployee(row)">
-                     <mat-icon color="warn">delete</mat-icon>
-                     Eliminar
-                   </button>-->
+                <button mat-menu-item (click)="generateQuote(row)">
+                  <mat-icon matSuffix mat-list-icon color="warn">picture_as_pdf</mat-icon>
+                  Generar Pdf
+                </button>
+
               </mat-menu>
 
             </td>

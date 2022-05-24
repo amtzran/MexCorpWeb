@@ -1,0 +1,270 @@
+<h4 mat-dialog-title class="title-subsection">{{title}} | Fecha: {{dateQuote}} </h4>
+<ngx-spinner></ngx-spinner>
+<mat-divider></mat-divider>
+<br>
+<mat-dialog-content class="mat-typography" [formGroup]="conceptForm">
+
+  <mat-card>
+    <mat-card-content>
+
+      <div fxLayout="row" fxLayoutGap="40px" fxLayout.xs="column">
+
+        <div class="container" fxFlex="100" fxLayout="column" fxLayout.xs="column">
+
+          <div fxLayout="row"
+               fxLayout.xs="column"
+               fxLayoutGap="20px">
+
+            <mat-form-field fxFlex="100">
+              <mat-label>Cantidad</mat-label>
+              <input
+                matInput
+                type="number"
+                min="1"
+                pattern="^[0-9]+"
+                formControlName="quantity">
+              <mat-error *ngIf="fieldInvalid('quantity')">
+                Favor de ingresar cantidad
+              </mat-error>
+            </mat-form-field>
+
+            <mat-form-field fxFlex="100">
+              <mat-label>Impuesto</mat-label>
+              <input
+                matInput
+                type="number"
+                formControlName="tax">
+              <mat-error *ngIf="fieldInvalid('tax')">
+                Favor de ingresar el impuesto
+              </mat-error>
+            </mat-form-field>
+
+            <mat-form-field fxFlex="100">
+              <mat-label>Precio unitario</mat-label>
+              <input
+                matInput
+                type="number"
+                formControlName="unit_price">
+              <mat-error *ngIf="fieldInvalid('tax')">
+                Favor de ingresar el impuesto
+              </mat-error>
+            </mat-form-field>
+
+          </div>
+
+          <div fxLayout="row"
+               fxLayout.xs="column"
+               fxLayoutGap="20px">
+
+            <mat-form-field fxFlex="100">
+              <mat-label>Unidad</mat-label>
+              <input
+                matInput
+                type="text"
+                formControlName="unit">
+              <mat-error *ngIf="fieldInvalid('unit')">
+                Favor de ingresar la unidad
+              </mat-error>
+            </mat-form-field>
+
+            <mat-form-field fxFlex="100">
+              <mat-label>Clave</mat-label>
+              <input
+                matInput
+                type="text"
+                formControlName="key">
+              <mat-error *ngIf="fieldInvalid('key')">
+                Favor de ingresar cantidad
+              </mat-error>
+            </mat-form-field>
+
+            <mat-form-field fxFlex="100">
+              <mat-label>Marca</mat-label>
+              <input
+                matInput
+                type="text"
+                formControlName="brand">
+            </mat-form-field>
+
+          </div>
+
+          <div fxLayout="row"
+               fxLayout.xs="column"
+               fxLayoutGap="20px">
+
+            <mat-form-field fxFlex="100">
+              <mat-label>Descripción</mat-label>
+              <textarea matInput
+                        formControlName="description"
+                        placeholder="Observaciones de accesos..."></textarea>
+            </mat-form-field>
+
+          </div>
+
+        </div>
+
+      </div>
+
+    </mat-card-content>
+
+    <mat-card-actions>
+      <div fxLayout="row" fxLayoutGap="20" fxLayoutAlign="end center">
+        <div fxFlex="50" [formGroup]="discountForm">
+
+          <div fxLayout="row" fxLayoutGap="20">
+
+            <mat-form-field fxFlex="50">
+              <mat-label>Descuento</mat-label>
+              <input
+                matInput
+                type="number"
+                formControlName="discount">
+              <mat-error *ngIf="fieldInvalid('discount')">
+                Favor de ingresar el descuento
+              </mat-error>
+            </mat-form-field>
+
+            <div fxFlex="50">
+              <button (click)="updateDiscount()" mat-flat-button color="primary" [disabled]="discountForm.invalid">Agregar Descuento</button>
+            </div>
+
+          </div>
+
+        </div>
+        <div fxFlex="50" fxLayoutAlign="end center">
+          <div>
+            <button *ngIf="idConcept === '' " (click)="addConcept()" mat-flat-button color="primary" cdkFocusInitial [disabled]="conceptForm.invalid">Agregar Concepto</button>
+          </div>
+          <div>
+            <button *ngIf="idConcept !== '' " (click)="cancelConcept()" mat-flat-button color="warn" >Cancelar Concepto</button>
+          </div>
+          <div>
+            <button *ngIf="idConcept !== '' " (click)="updateConcept()" mat-flat-button color="primary" [disabled]="conceptForm.invalid">Actualizar Concepto</button>
+          </div>
+        </div>
+      </div>
+
+    </mat-card-actions>
+  </mat-card>
+</mat-dialog-content>
+
+<div class="mat-elevation-z8">
+  <ngx-spinner></ngx-spinner>
+  <table mat-table [dataSource]="dataSource" matSort>
+
+    <!-- ID Column -->
+    <ng-container matColumnDef="id">
+      <th mat-header-cell *matHeaderCellDef mat-sort-header=""> ID</th>
+      <td mat-cell *matCellDef="let row"> {{row.id}} </td>
+    </ng-container>
+
+    <!-- Quantity Column -->
+    <ng-container matColumnDef="quantity">
+      <th mat-header-cell *matHeaderCellDef mat-sort-header=""> Cantidad</th>
+      <td mat-cell *matCellDef="let row"> {{row.quantity}} </td>
+    </ng-container>
+
+    <!-- Unit Column -->
+    <ng-container matColumnDef="unit">
+      <th mat-header-cell *matHeaderCellDef mat-sort-header=""> Unidad</th>
+      <td mat-cell *matCellDef="let row"> {{row.unit}} </td>
+    </ng-container>
+
+    <!-- Amount Column -->
+    <ng-container matColumnDef="key">
+      <th mat-header-cell *matHeaderCellDef mat-sort-header=""> Clave</th>
+      <td mat-cell *matCellDef="let row"> {{row.key}} </td>
+    </ng-container>
+
+    <!-- Brand Column -->
+    <ng-container matColumnDef="brand">
+      <th mat-header-cell *matHeaderCellDef mat-sort-header=""> Marca</th>
+      <td mat-cell *matCellDef="let row"> {{row.brand}} </td>
+    </ng-container>
+
+    <!-- Tax Column -->
+    <ng-container matColumnDef="tax">
+      <th mat-header-cell *matHeaderCellDef mat-sort-header=""> Impuesto</th>
+      <td mat-cell *matCellDef="let row"> {{row.tax | percent: '' : '' }} </td>
+    </ng-container>
+
+    <!-- Unit Price Column -->
+    <ng-container matColumnDef="unit_price">
+      <th mat-header-cell *matHeaderCellDef mat-sort-header=""> Precio único</th>
+      <td mat-cell *matCellDef="let row"> {{row.unit_price | currency:'MX':'$':'1.2-2' }} </td>
+    </ng-container>
+
+    <!-- Amount Column -->
+    <ng-container matColumnDef="amount">
+      <th mat-header-cell *matHeaderCellDef mat-sort-header=""> Monto</th>
+      <td mat-cell *matCellDef="let row"> {{row.amount | currency:'MX':'$':'1.2-2'}} </td>
+    </ng-container>
+
+
+    <!-- Settings Column -->
+    <ng-container matColumnDef="options">
+      <th mat-header-cell *matHeaderCellDef mat-sort-header=""> Opciones</th>
+      <td mat-cell *matCellDef="let row">
+
+        <button mat-icon-button [matMenuTriggerFor]="menu" aria-label="Example icon-button with a menu">
+          <mat-icon>more_vert</mat-icon>
+        </button>
+
+        <mat-menu #menu="matMenu">
+
+          <button (click)="getByIdConcept(row)" mat-menu-item >
+            <mat-icon  color="primary">edit</mat-icon>
+            Editar
+          </button>
+
+          <button mat-menu-item>
+            <mat-icon (click)="deleteConcept(row)" color="warn">delete</mat-icon>
+            Eliminar
+          </button>
+
+        </mat-menu>
+
+      </td>
+    </ng-container>
+
+    <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
+    <tr mat-row *matRowDef="let row; columns: displayedColumns;"></tr>
+
+    <!-- Row shown when there is no matching data.
+    <tr class="mat-row" *matNoDataRow>
+      <td class="mat-cell" colspan="4">No hay datos que mostrar {{ input.value }}</td>
+    </tr>-->
+
+  </table>
+
+  <mat-paginator #paginator [length]="totalItems"
+                 (page)="getConceptsPaginator($event)"
+                 [pageSize]="pageSize"
+                 [showFirstLastButtons]="true">
+  </mat-paginator>
+
+  <div fxLayout="row" fxLayoutGap="20" fxLayoutAlign="end center">
+      <div>
+        <h3> Importe: <span class="color-warn"> {{ amount | currency:'MX':'$':'1.2-2'}} </span> | </h3>
+      </div>
+    <div>
+      <h3> &nbsp;Descuento: <span class="color-primary"> {{ discount | currency:'MX':'$':'1.2-2'}} </span> | </h3>
+    </div>
+    <div>
+      <h3> &nbsp;Subtotal: <span class="color-primary"> {{ subTotal | currency:'MX':'$':'1.2-2'}} </span> | </h3>
+    </div>
+    <div>
+      <h3> &nbsp;Impuesto: <span class="color-primary"> {{ tax | currency:'MX':'$':'1.2-2'}} </span> | </h3>
+    </div>
+    <div>
+      <h3>&nbsp;Total: <span class="color-warn"> {{ total | currency:'MX':'$':'1.2-2'}} </span> </h3>
+    </div>
+
+  </div>
+
+</div>
+
+<mat-dialog-actions fxLayoutAlign="end">
+  <button (click)="close()" mat-stroked-button color="warn" mat-dialog-close="true">Cancelar</button>
+</mat-dialog-actions>
+

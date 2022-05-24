@@ -11,6 +11,7 @@ import {ModalResponse} from "../../../../core/utils/ModalResponse";
 import {Lifting, Quotation} from "../../interfaces/lifting.interface";
 import {LiftingService} from "../../services/lifting.service";
 import {CrudComponent} from "../crud/crud.component";
+import {ConceptComponent} from "../concept/concept.component";
 
 @Component({
   selector: 'app-table',
@@ -20,17 +21,8 @@ import {CrudComponent} from "../crud/crud.component";
 })
 export class TableComponent implements OnInit {
 
-  displayedColumns: string[] = [
-    'id',
-    'folio',
-    'customer',
-    'employee',
-    'job_center',
-    'work_type',
-    'date',
-    'status',
-    'options'];
-  displayedColumnsQuote: string[] = ['id', 'amount', 'options'];
+  displayedColumns: string[] = ['id', 'folio', 'customer', 'employee', 'job_center', 'work_type', 'date', 'status', 'options'];
+  displayedColumnsQuote: string[] = ['id', 'customer', 'date', 'status', 'amount', 'options'];
   dataSource!: MatTableDataSource<Lifting>;
   dataSourceQuote!: MatTableDataSource<Quotation>;
   totalItems!: number;
@@ -58,6 +50,7 @@ export class TableComponent implements OnInit {
     this.dataSourceQuote = new MatTableDataSource();
     this.getLiftingsPaginator(this.paginator);
     this.getQuotationsPaginator(this.paginatorQuote)
+    this.updateEventSharedService()
   }
 
   getLiftingsPaginator(event: any) {
@@ -143,20 +136,72 @@ export class TableComponent implements OnInit {
   }
 
   /**
+   * Generate Pdf Quote
+   * @param row
+   */
+  generateQuote(row: Quotation) {
+    this.spinner.show()
+    this.liftingService.generatePdfQuote(row.id)
+      .subscribe(quote => {
+          this.spinner.hide()
+          window.open(quote.quote_pdf)
+        }, (error => {
+          this.spinner.hide()
+          this.sharedService.errorDialog(error)
+        } )
+      )
+  }
+
+  /**
    * Event click Quotation
    * @param row
    */
   openQuotation(row: Lifting){
     this.spinner.show()
     this.liftingService.addQuotation(row)
-      .subscribe(quote => {
+      .subscribe(row => {
           this.spinner.hide()
-          console.log(quote);
+
+        const dialogRef = this.dialog.open(ConceptComponent, {
+          autoFocus: false,
+          disableClose: false,
+          maxWidth: '100vw',
+          maxHeight: '100vh',
+          width: '95%',
+          data: {row: row}
+        });
+
+        dialogRef.afterClosed().subscribe(res => {
+          if (res === ModalResponse.UPDATE) {
+            this.getLiftingsPaginator(this.paginator);
+          }
+        });
+
         }, (error => {
           this.spinner.hide()
           this.sharedService.errorDialog(error)
         } )
       )
+  }
+
+  /**
+   * Open dialog for add and update lifting.
+   * @param row
+   */
+  openDialogConcept(row: Quotation): void {
+    const dialogRef = this.dialog.open(ConceptComponent, {
+      autoFocus: false,
+      disableClose: false,
+      maxWidth: '100vw',
+      maxHeight: '100vh',
+      width: '95%',
+      data: {row: row}
+    });
+    dialogRef.afterClosed().subscribe(res => {
+      if (res === ModalResponse.UPDATE) {
+        this.getLiftingsPaginator(this.paginator);
+      }
+    });
   }
 
   /**
@@ -180,6 +225,15 @@ export class TableComponent implements OnInit {
     this.quotationPaginateForm = this.formBuilder.group({
       page: [],
       page_size: [this.pageSize]
+    })
+  }
+
+  /**
+   * Services Shared for update any Component
+   */
+  updateEventSharedService(){
+    this.sharedService.changeEvent.subscribe(change => {
+      this.getQuotationsPaginator(this.paginatorQuote)
     })
   }
 
