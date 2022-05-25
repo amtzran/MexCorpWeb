@@ -18,6 +18,7 @@ export class ConceptComponent implements OnInit {
 
   title: string = 'Cotización';
   dateQuote: string = '';
+  folio: string | undefined = '';
   amount: number | string = '';
   discount: number | string = '';
   subTotal: number | string = '';
@@ -61,7 +62,7 @@ export class ConceptComponent implements OnInit {
       key:[{value: '', disabled:false}, Validators.required],
       brand:[{value: '', disabled:false},],
       description:[{value: '', disabled:false}, Validators.required],
-      tax:[{value: '', disabled:false}, Validators.required],
+      tax:[{value: 16, disabled:false}, Validators.required],
       unit_price:[{value: '', disabled:false}, Validators.required],
     });
   }
@@ -71,7 +72,7 @@ export class ConceptComponent implements OnInit {
    */
   loadDiscountForm():void{
     this.discountForm = this.formBuilder.group({
-      discount:[{value: '', disabled:false}, Validators.required],
+      discount:[{value: this.quotation.row.discount, disabled:false}, Validators.required],
     });
   }
 
@@ -92,6 +93,7 @@ export class ConceptComponent implements OnInit {
   // Data Quote
   loadDataQuote() {
     this.dateQuote = this.quotation.row.date;
+    this.folio = this.quotation.row.folio;
     this.amount = this.quotation.row.amount;
     this.discount = this.quotation.row.discount;
     this.subTotal = this.quotation.row.subtotal;
@@ -109,6 +111,8 @@ export class ConceptComponent implements OnInit {
       this.sharedService.showSnackBar('Se ha agregado correctamente el concepto.');
       this.getConceptsPaginator(this.paginator);
       this.conceptForm.reset();
+      this.conceptForm.get('quote_id')?.setValue(this.quotation.row.id);
+      this.conceptForm.get('tax')?.setValue(16);
       this.dataQuoteGeneral()
       }, (error => {
         this.spinner.hide()
@@ -127,6 +131,8 @@ export class ConceptComponent implements OnInit {
       this.sharedService.showSnackBar('Se ha actualizado correctamente el concepto.');
       this.getConceptsPaginator(this.paginator);
       this.conceptForm.reset();
+      this.conceptForm.get('quote_id')?.setValue(this.quotation.row.id);
+      this.conceptForm.get('tax')?.setValue(16);
       this.dataQuoteGeneral()
       }, (error => {
         this.spinner.hide()
@@ -221,8 +227,10 @@ export class ConceptComponent implements OnInit {
    * Clean Fields
    */
   cancelConcept() {
-   this.conceptForm.reset();
-   this.idConcept = '';
+    this.conceptForm.reset();
+    this.conceptForm.get('quote_id')?.setValue(this.quotation.row.id);
+    this.conceptForm.get('tax')?.setValue(16);
+    this.idConcept = '';
   }
 
   /**

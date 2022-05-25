@@ -1,3 +1,4 @@
+<ngx-spinner></ngx-spinner>
 <h4 mat-dialog-title class="title-subsection">
   {{title}} <span *ngIf="lifting.idLifting"> | Folio: {{folio}} | Fecha: {{dateNow | date : 'shortDate'}}
   </span>
@@ -480,18 +481,17 @@
 
           <div fxLayout="row"
                fxLayout.xs="column"
-               fxLayoutGap="10px"
-               *ngIf="imageFile !== null; else divLogo">
+               fxLayoutGap="10px">
 
-            <mat-card fxFlex="33" fxLayoutAlign="center center">
+            <mat-card *ngIf="imageFile !== null; else divLogo" fxFlex="33" fxLayoutAlign="center center">
               <img mat-card-image [src]="imageFile" alt="">
             </mat-card>
 
-            <mat-card fxFlex="33" fxLayoutAlign="center center">
+            <mat-card *ngIf="imageFileTwo !== null; else divLogo" fxFlex="33" fxLayoutAlign="center center">
               <img mat-card-image [src]="imageFileTwo" alt="">
             </mat-card>
 
-            <mat-card fxFlex="33" fxLayoutAlign="center center">
+            <mat-card *ngIf="imageFileThree !== null; else divLogo" fxFlex="33" fxLayoutAlign="center center">
               <img mat-card-image [src]="imageFileThree" alt="">
             </mat-card>
 

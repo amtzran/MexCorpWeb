@@ -1,10 +1,15 @@
-<h4 mat-dialog-title class="title-subsection">{{title}} | Fecha: {{dateQuote}} </h4>
+<h4 mat-dialog-title class="title-subsection">{{title}} | Fecha: {{dateQuote}} | Folio: {{folio}}</h4>
 <ngx-spinner></ngx-spinner>
 <mat-divider></mat-divider>
 <br>
 <mat-dialog-content class="mat-typography" [formGroup]="conceptForm">
 
   <mat-card>
+
+    <h3><span class="color-primary"> Cliente: </span> {{quotation.row.lifting.customer_name}}
+      || <span class="color-primary"> Grupo Trabajo: </span>  {{quotation.row.lifting.job_center_name}}
+      || <span class="color-primary"> Vendedor: </span> {{quotation.row.seller.name}} </h3>
+
     <mat-card-content>
 
       <div fxLayout="row" fxLayoutGap="40px" fxLayout.xs="column">
@@ -255,8 +260,8 @@
     <div>
       <h3> &nbsp;Impuesto: <span class="color-primary"> {{ tax | currency:'MX':'$':'1.2-2'}} </span> | </h3>
     </div>
-    <div>
-      <h3>&nbsp;Total: <span class="color-warn"> {{ total | currency:'MX':'$':'1.2-2'}} </span> </h3>
+    <div class="container">
+      <h3>Total: <span class="color-warn"> {{ total | currency:'MX':'$':'1.2-2'}} </span> </h3>
     </div>
 
   </div>
@@ -265,5 +270,6 @@
 
 <mat-dialog-actions fxLayoutAlign="end">
   <button (click)="close()" mat-stroked-button color="warn" mat-dialog-close="true">Cancelar</button>
+  <button (click)="close()" mat-stroked-button color="primary" mat-dialog-close="true">Finalizar</button>
 </mat-dialog-actions>
 

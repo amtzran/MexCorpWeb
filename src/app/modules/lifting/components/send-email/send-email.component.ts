@@ -34,7 +34,6 @@ export class SendEmailComponent implements OnInit {
               @Inject(MAT_DIALOG_DATA) public quotation : {row: Quotation}) { }
 
   ngOnInit(): void {
-    console.log(this.quotation.row)
     this.loadEmailForm()
   }
 

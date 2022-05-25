@@ -121,13 +121,14 @@ export class TableComponent implements OnInit {
   /**
    * Generate Pdf Quote
    * @param row
+   * @param showPdf
    */
-  generateQuote(row: Quotation) {
+  generateQuote(row: Quotation, showPdf: boolean) {
     this.spinner.show()
     this.liftingService.generatePdfQuote(row.id)
       .subscribe(quote => {
           this.spinner.hide()
-          window.open(quote.quote_pdf)
+          if(showPdf) window.open(quote.quote_pdf)
         }, (error => {
           this.spinner.hide()
           this.sharedService.errorDialog(error)
@@ -212,6 +213,7 @@ export class TableComponent implements OnInit {
    * @param row
    */
   sendEmail(row: Quotation): void {
+    this.generateQuote(row, false);
     const dialogRef = this.dialog.open(SendEmailComponent, {
       autoFocus: false,
       disableClose: false,

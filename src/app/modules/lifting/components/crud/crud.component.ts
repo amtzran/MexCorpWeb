@@ -240,7 +240,7 @@ export class CrudComponent implements OnInit {
 
   changeAnnealing(event: any) {
     this.liftingForm.get('annealing')?.setValue(0);
-    if (this.liftingForm.value.annealing === true) this.liftingForm.get('annealing')?.setValue(1);
+    if (event.checked) this.liftingForm.get('annealing')?.setValue(1);
   }
 
   changeTempered(event: any) {

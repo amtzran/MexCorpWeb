@@ -197,25 +197,25 @@
                  Editar
                </button>
 
-                <button mat-menu-item (click)="generateQuote(row)">
+                <button mat-menu-item (click)="generateQuote(row, true)">
                   <mat-icon matSuffix mat-list-icon color="warn">picture_as_pdf</mat-icon>
                   Generar Pdf
                 </button>
 
                 <button *ngIf="row.status === 'Generada' " mat-menu-item
                         (click)="statusPending(row, 'Pendiente por Aprobar')">
-                  <mat-icon matSuffix mat-list-icon color="primary">task</mat-icon>
+                  <mat-icon matSuffix mat-list-icon style="color: orange">task</mat-icon>
                   Enviar a Revisión
                 </button>
 
                 <button *ngIf="row.status === 'Pendiente por Aprobar' " mat-menu-item
                         (click)="statusPending(row, 'Aprobada')">
-                  <mat-icon matSuffix mat-list-icon color="primary">task</mat-icon>
+                  <mat-icon matSuffix mat-list-icon style="color: orange">task</mat-icon>
                   Aprobar
                 </button>
 
                 <button *ngIf="row.status === 'Aprobada' " mat-menu-item (click)="sendEmail(row)">
-                  <mat-icon matSuffix mat-list-icon color="primary">email</mat-icon>
+                  <mat-icon matSuffix mat-list-icon style="color: orange">email</mat-icon>
                   Enviar por Correo
                 </button>
 
