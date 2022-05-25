@@ -2,7 +2,6 @@ import {Component, OnInit, ViewChild} from '@angular/core';
 import {MatTableDataSource} from "@angular/material/table";
 import {FormBuilder, FormGroup} from "@angular/forms";
 import {MatPaginator} from "@angular/material/paginator";
-import {MatSort} from "@angular/material/sort";
 import {MatDialog} from "@angular/material/dialog";
 import {SharedService} from "../../../../shared/services/shared.service";
 import {NgxSpinnerService} from "ngx-spinner";
@@ -12,17 +11,22 @@ import {Lifting, Quotation} from "../../interfaces/lifting.interface";
 import {LiftingService} from "../../services/lifting.service";
 import {CrudComponent} from "../crud/crud.component";
 import {ConceptComponent} from "../concept/concept.component";
+import {ConfirmStatusComponent} from "../confirm-status/confirm-status.component";
+import {SendEmailComponent} from "../send-email/send-email.component";
 
 @Component({
   selector: 'app-table',
   templateUrl: './table.component.html',
-  styles: [
+  styles: [`
+    .color-green {
+      color: green;
+    }`
   ]
 })
 export class TableComponent implements OnInit {
 
   displayedColumns: string[] = ['id', 'folio', 'customer', 'employee', 'job_center', 'work_type', 'date', 'status', 'options'];
-  displayedColumnsQuote: string[] = ['id', 'customer', 'date', 'status', 'amount', 'options'];
+  displayedColumnsQuote: string[] = ['id', 'folio', 'customer', 'date', 'status', 'amount', 'options'];
   dataSource!: MatTableDataSource<Lifting>;
   dataSourceQuote!: MatTableDataSource<Quotation>;
   totalItems!: number;
@@ -45,7 +49,6 @@ export class TableComponent implements OnInit {
     /*Formulario*/
     this.loadLiftingFilterForm();
     this.loadQuotationFilterForm();
-    // Assign the data to the data source for the table to render
     this.dataSource = new MatTableDataSource();
     this.dataSourceQuote = new MatTableDataSource();
     this.getLiftingsPaginator(this.paginator);
@@ -84,26 +87,6 @@ export class TableComponent implements OnInit {
         } )
       )
   }
-
-  /*deleteEmployee(employee: Employee) {
-    // Show Dialog
-    const dialog = this.dialog.open(ConfirmComponent, {
-      width: '250vw',
-      data: employee
-    })
-
-    dialog.afterClosed().subscribe(
-      (result) => {
-        if (result) {
-          this.employeeService.deleteEmployee(employee.id!)
-            .subscribe(resp => {
-              this.sharedService.showSnackBar('Registro Eliminado')
-              this.getLiftingsPaginator(this.paginator);
-            })
-        }
-      })
-
-  }*/
 
   /**
    * Open dialog for add and update lifting.
@@ -159,16 +142,15 @@ export class TableComponent implements OnInit {
   openQuotation(row: Lifting){
     this.spinner.show()
     this.liftingService.addQuotation(row)
-      .subscribe(row => {
+      .subscribe(response => {
           this.spinner.hide()
-
         const dialogRef = this.dialog.open(ConceptComponent, {
           autoFocus: false,
           disableClose: false,
           maxWidth: '100vw',
           maxHeight: '100vh',
           width: '95%',
-          data: {row: row}
+          data: {row: response.data}
         });
 
         dialogRef.afterClosed().subscribe(res => {
@@ -185,7 +167,7 @@ export class TableComponent implements OnInit {
   }
 
   /**
-   * Open dialog for add and update lifting.
+   * Open dialog Concept Quote
    * @param row
    */
   openDialogConcept(row: Quotation): void {
@@ -205,11 +187,44 @@ export class TableComponent implements OnInit {
   }
 
   /**
-   * Event click Quotation
+   * Open dialog Concept Quote
+   * @param row
+   * @param status
+   */
+  statusPending(row: Quotation, status: string): void {
+    const dialogRef = this.dialog.open(ConfirmStatusComponent, {
+      autoFocus: false,
+      disableClose: false,
+      maxWidth: '100vw',
+      maxHeight: '100vh',
+      width: '30%',
+      data: {row: row, status: status}
+    });
+    dialogRef.afterClosed().subscribe(res => {
+      if (res === ModalResponse.UPDATE) {
+        this.getLiftingsPaginator(this.paginator);
+      }
+    });
+  }
+
+  /**
+   * Open dialog Concept Quote
    * @param row
    */
-  openQuoted(row: Lifting){
-    console.log('Cotizado')
+  sendEmail(row: Quotation): void {
+    const dialogRef = this.dialog.open(SendEmailComponent, {
+      autoFocus: false,
+      disableClose: false,
+      maxWidth: '100vw',
+      maxHeight: '100vh',
+      width: '40%',
+      data: {row: row}
+    });
+    dialogRef.afterClosed().subscribe(res => {
+      if (res === ModalResponse.UPDATE) {
+        this.getLiftingsPaginator(this.paginator);
+      }
+    });
   }
 
   /* Método que permite iniciar los filtros de rutas*/

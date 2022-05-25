@@ -21,6 +21,8 @@ export class CrudComponent implements OnInit {
   folio: string | undefined = '' ;
   dateNow: string | undefined = '';
   imageFile: string | null | undefined = '';
+  imageFileTwo: string | null | undefined = '';
+  imageFileThree: string | null | undefined = '';
   liftingForm!: FormGroup;
   fileDataForm = new FormData();
   customers: Customer[] = [];
@@ -39,7 +41,8 @@ export class CrudComponent implements OnInit {
 
   ngOnInit(): void {
     this.imageFile = null
-
+    this.imageFileTwo = null
+    this.imageFileThree = null
     this.loadDataCustomers();
     this.loadDataGroups();
     this.loadDataEmployees();
@@ -121,8 +124,9 @@ export class CrudComponent implements OnInit {
     this.spinner.show()
     this.liftingService.getLiftingById(this.lifting.idLifting).subscribe(response => {
         this.spinner.hide()
-        console.log(response.data)
-        this.imageFile = response.data.photo_one
+        this.imageFile = response.data.photo_one;
+        this.imageFileTwo = response.data.photo_two;
+        this.imageFileThree = response.data.photo_three;
         this.folio = response.data.folio;
         this.dateNow = response.data.date;
         delete response.data.id;
@@ -334,6 +338,13 @@ export class CrudComponent implements OnInit {
           else this.fileDataForm.append(key, value);
         }
 
+        else if (key === 'photo_three') {
+          if (typeof(value) !== 'object') {
+            if (value.startsWith('https')) this.fileDataForm.append(key, '');
+          }
+          else this.fileDataForm.append(key, value);
+        }
+
         else {
           this.fileDataForm.append(key, value);
         }
@@ -358,6 +369,10 @@ export class CrudComponent implements OnInit {
 
   setFilePhotoTwo(e : any){
     this.liftingForm.get('photo_two')?.setValue(e.target.files[0])
+  }
+
+  setFilePhotoThree(e : any){
+    this.liftingForm.get('photo_three')?.setValue(e.target.files[0])
   }
 
   /**

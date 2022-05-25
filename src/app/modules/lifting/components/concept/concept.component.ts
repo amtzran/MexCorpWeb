@@ -42,7 +42,6 @@ export class ConceptComponent implements OnInit {
               @Inject(MAT_DIALOG_DATA) public quotation : {row: Quotation}) { }
 
   ngOnInit(): void {
-    console.log(this.quotation)
     this.loadDataQuote()
     this.loadConceptForm();
     this.loadConceptFilterForm();

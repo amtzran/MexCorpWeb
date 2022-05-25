@@ -119,6 +119,7 @@ export interface  ModelQuotationConcept {
 
 export interface Quotation {
   id:         number;
+  folio?: string;
   lifting:    Lifting;
   concepts:   any[];
   seller:     Employee;

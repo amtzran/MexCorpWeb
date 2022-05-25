@@ -421,14 +421,14 @@
                fxLayout.xs="column"
                fxLayoutGap="10px">
 
-            <mat-form-field fxFlex="50">
+            <mat-form-field fxFlex="40">
               <mat-label>Descripción del Trabajo</mat-label>
               <textarea matInput
                         formControlName="work_description"
                         placeholder="Observaciones de accesos..."></textarea>
             </mat-form-field>
 
-            <mat-form-field fxFlex="25">
+            <mat-form-field fxFlex="20">
 
               <mat-toolbar>
                 <!-- Readonly Input to show File names -->
@@ -444,7 +444,7 @@
 
             </mat-form-field>
 
-            <mat-form-field fxFlex="25">
+            <mat-form-field fxFlex="20">
 
               <mat-toolbar>
                 <!-- Readonly Input to show File names -->
@@ -460,6 +460,22 @@
 
             </mat-form-field>
 
+            <mat-form-field fxFlex="20">
+
+              <mat-toolbar>
+                <!-- Readonly Input to show File names -->
+                <input matInput readonly name="memberContactNo" placeholder="Foto 3">
+                <!-- Browse Button -->
+                <button mat-flat-button color="primary">
+                  <mat-icon>image</mat-icon>
+                </button>
+
+              </mat-toolbar>
+              <!-- Fetch selected filed on change -->
+              <input type="file" #UploadFileInput id="fileUploadPhotoThree" name="myFile" (change)="setFilePhotoThree($event)" accept="image/*">
+
+            </mat-form-field>
+
           </div>
 
           <div fxLayout="row"
@@ -467,8 +483,16 @@
                fxLayoutGap="10px"
                *ngIf="imageFile !== null; else divLogo">
 
-            <mat-card fxFlex="100" fxLayoutAlign="center center">
+            <mat-card fxFlex="33" fxLayoutAlign="center center">
               <img mat-card-image [src]="imageFile" alt="">
+            </mat-card>
+
+            <mat-card fxFlex="33" fxLayoutAlign="center center">
+              <img mat-card-image [src]="imageFileTwo" alt="">
+            </mat-card>
+
+            <mat-card fxFlex="33" fxLayoutAlign="center center">
+              <img mat-card-image [src]="imageFileThree" alt="">
             </mat-card>
 
           </div>

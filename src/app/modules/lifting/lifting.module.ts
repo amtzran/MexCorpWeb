@@ -11,6 +11,8 @@ import {NgxSpinnerModule} from "ngx-spinner";
 import {CrudComponent } from './components/crud/crud.component';
 import {NgSelectModule} from "@ng-select/ng-select";
 import { ConceptComponent } from './components/concept/concept.component';
+import { ConfirmStatusComponent } from './components/confirm-status/confirm-status.component';
+import { SendEmailComponent } from './components/send-email/send-email.component';
 
 
 @NgModule({
@@ -18,7 +20,9 @@ import { ConceptComponent } from './components/concept/concept.component';
     LiftingComponent,
     TableComponent,
     CrudComponent,
-    ConceptComponent
+    ConceptComponent,
+    ConfirmStatusComponent,
+    SendEmailComponent
   ],
   imports: [
     CommonModule,

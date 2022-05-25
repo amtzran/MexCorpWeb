@@ -11,6 +11,7 @@ import {
   QuotationConcept, QuotationConceptDetail, QuotationtDetail
 } from "../interfaces/lifting.interface";
 import {FormGroup} from "@angular/forms";
+import {EmailSend} from "../../task/models/task.interface";
 
 @Injectable({
   providedIn: 'root'
@@ -100,6 +101,16 @@ export class LiftingService {
   // Delete Concept
   deleteConcept(id: number | undefined) : Observable<QuotationConceptDetail> {
     return this.http.delete<QuotationConceptDetail>(`${this.baseUrl}/quote-concepts/${id}`)
+  }
+
+  updateStatus(idQuote : number, status: string) : Observable<QuotationConceptDetail> {
+    let statusObject = {status: status}
+    return this.http.put<QuotationConceptDetail>(`${this.baseUrl}/quotes-status/${idQuote}/`, statusObject)
+  }
+
+  // send email door By Task
+  sendEmail(email: EmailSend) : Observable<any> {
+    return this.http.post<any>(`${this.baseUrl}/quotes-pdf-send-email/`, email)
   }
 
 }

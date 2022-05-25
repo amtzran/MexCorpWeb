@@ -4,3 +4,8 @@
 .color-warn {
   color: red;
 }
+
+.color-green {
+  background-color: green;
+  color: white;
+}

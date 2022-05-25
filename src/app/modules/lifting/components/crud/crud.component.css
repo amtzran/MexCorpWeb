@@ -3,7 +3,7 @@
   background: transparent;
 }
 
-#fileUploadPhotoOne, #fileUploadPhotoTwo {
+#fileUploadPhotoOne, #fileUploadPhotoTwo, #fileUploadPhotoThree {
   position: absolute;
   z-index: 9;
   opacity: 0;

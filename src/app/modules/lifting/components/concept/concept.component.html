@@ -125,22 +125,21 @@
             </mat-form-field>
 
             <div fxFlex="50">
-              <button (click)="updateDiscount()" mat-flat-button color="primary" [disabled]="discountForm.invalid">Agregar Descuento</button>
+              <button (click)="updateDiscount()" mat-flat-button class="color-green" [disabled]="discountForm.invalid">Agregar Descuento</button>
             </div>
 
           </div>
 
         </div>
-        <div fxFlex="50" fxLayoutAlign="end center">
+        <div fxLayout="row" fxLayoutGap="10" fxFlex="50" fxLayoutAlign="end center">
           <div>
             <button *ngIf="idConcept === '' " (click)="addConcept()" mat-flat-button color="primary" cdkFocusInitial [disabled]="conceptForm.invalid">Agregar Concepto</button>
           </div>
-          <div>
-            <button *ngIf="idConcept !== '' " (click)="cancelConcept()" mat-flat-button color="warn" >Cancelar Concepto</button>
+          <div fxLayoutGap="10" *ngIf="idConcept !== '' ">
+            <button  (click)="cancelConcept()" mat-raised-button color="warn" >Cancelar Concepto</button>
+            <button (click)="updateConcept()" mat-raised-button color="primary" [disabled]="conceptForm.invalid">Actualizar Concepto</button>
           </div>
-          <div>
-            <button *ngIf="idConcept !== '' " (click)="updateConcept()" mat-flat-button color="primary" [disabled]="conceptForm.invalid">Actualizar Concepto</button>
-          </div>
+
         </div>
       </div>
 
@@ -185,7 +184,7 @@
     <!-- Tax Column -->
     <ng-container matColumnDef="tax">
       <th mat-header-cell *matHeaderCellDef mat-sort-header=""> Impuesto</th>
-      <td mat-cell *matCellDef="let row"> {{row.tax | percent: '' : '' }} </td>
+      <td mat-cell *matCellDef="let row"> {{ row.tax / 100 | percent }}   </td>
     </ng-container>
 
     <!-- Unit Price Column -->

@@ -1,0 +1,19 @@
+<h1>Cambiar Estatus</h1>
+<hr>
+<p>
+  Está seguro de cambiar el estatus:
+  <span style="color: darkblue">{{quotation.status}}</span>
+  <br>
+  ¿Desea continuar?
+</p>
+<div fxLayout="row" fxLayoutAlign="center center">
+
+  <div fxFlex="50">
+    <button (click)="close()" mat-raised-button color="warn">Cancelar</button>
+  </div>
+  <div fxFlex="50">
+    <button (click)="status()" mat-raised-button color="primary">!De Acuerdo!</button>
+  </div>
+
+</div>
+
