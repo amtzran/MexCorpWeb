@@ -246,6 +246,69 @@
           </div>-->
 
         </mat-card-title>
+
+        <div fxLayout="row"
+             fxLayout.xs="column"
+             fxLayout.sm="column"
+             fxLayoutGap="10px">
+
+          <mat-form-field fxFlex="100">
+            <mat-label>Folios</mat-label>
+            <input type="text"
+                   placeholder="L-1"
+                   aria-label="Number"
+                   matInput
+                   [formControl]="formFolioQuote"
+                   [matAutocomplete]="auto">
+            <mat-autocomplete #auto="matAutocomplete">
+            </mat-autocomplete>
+          </mat-form-field>
+
+
+          <mat-form-field fxFlex="100">
+            <mat-label>Estatus</mat-label>
+            <mat-select
+              (selectionChange)="filterStatusQuote($event.value)">
+              <mat-option value="">TODOS</mat-option>
+              <mat-option value="Generada">Generada</mat-option>
+              <mat-option value="Aprobada">Aprobada</mat-option>
+              <mat-option value="Pendiente por Aprobar">Pendiente por Aprobar</mat-option>
+            </mat-select>
+          </mat-form-field>
+
+          <div fxLayout="row"
+               fxLayout.xs="column"
+               fxLayout.sm="column"
+               fxLayoutGap="10px"
+               [formGroup]="dateFormQuote">
+
+            <mat-form-field fxFlex="100">
+
+              <mat-label>Ingresar Rango Fecha</mat-label>
+              <mat-date-range-input [rangePicker]="pickerQuote">
+                <input matStartDate formControlName="initial_date" placeholder="Fecha Inicial">
+                <input matEndDate formControlName="final_date" placeholder="Fecha Final" (dateChange)="filterDateQuote($event)">
+              </mat-date-range-input>
+              <mat-datepicker-toggle matSuffix [for]="pickerQuote"></mat-datepicker-toggle>
+              <mat-date-range-picker #pickerQuote></mat-date-range-picker>
+            </mat-form-field>
+
+          </div>
+
+          <div fxLayout="row"
+               fxLayout.xs="column"
+               fxLayout.sm="column"
+               fxLayoutGap="10px"
+               [formGroup]="dateForm">
+
+            <button (click)="resetFilterDate()" mat-mini-fab color="primary" >
+              <mat-icon>restart_alt</mat-icon>
+            </button>
+
+          </div>
+
+        </div>
+
       </mat-card>
 
       <div class="mat-elevation-z8">

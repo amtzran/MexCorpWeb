@@ -52,8 +52,9 @@ export class TableComponent implements OnInit {
   tasksSelect: Task[] = [];
   doors: Door[] = [];
   dateForm!: FormGroup;
+  dateFormQuote!: FormGroup;
   formFolio = new FormControl();
-  filteredOptions!: Observable<string[]>;
+  formFolioQuote = new FormControl();
 
   constructor(private liftingService: LiftingService,
               private formBuilder: FormBuilder,
@@ -63,7 +64,8 @@ export class TableComponent implements OnInit {
               private taskService: TaskService,
               private dateService: DateService)
   {
-    this.loadDataFiltersChanges();
+    this.loadFilterFolio();
+    this.loadFilterFolioQuote();
     this.loadDataCustomers();
     this.loadDataEmployees();
     this.loadDataGroups();
@@ -75,6 +77,7 @@ export class TableComponent implements OnInit {
     this.loadLiftingFilterForm();
     this.loadQuotationFilterForm();
     this.lodDateForm();
+    this.lodDateQuoteForm();
     this.dataSource = new MatTableDataSource();
     this.dataSourceQuote = new MatTableDataSource();
     this.getLiftingsPaginator(this.paginator);
@@ -263,7 +266,15 @@ export class TableComponent implements OnInit {
     })
   }
 
-  loadDataFiltersChanges() {
+  // Form for Page table
+  lodDateQuoteForm() : void {
+    this.dateFormQuote = this.formBuilder.group({
+      initial_date: [{value: '', disabled: false}],
+      final_date: [{value: '', disabled: false}],
+    })
+  }
+
+  loadFilterFolio() {
      this.formFolio.valueChanges.pipe(
       debounceTime(500),
       map(value => typeof value === 'string' ? value : value.folio),
@@ -272,6 +283,18 @@ export class TableComponent implements OnInit {
        this.liftingService.getLiftings(this.liftingPaginateForm.value).subscribe(res =>{
          this.getLiftingsPaginator(this.paginator);
        })
+    });
+  }
+
+  loadFilterFolioQuote() {
+    this.formFolioQuote.valueChanges.pipe(
+      debounceTime(500),
+      map(value => typeof value === 'string' ? value : value.folio),
+    ).subscribe(v => {
+      this.quotationPaginateForm.get('folio')?.setValue(v);
+      this.liftingService.getQuotations(this.quotationPaginateForm.value).subscribe(res =>{
+        this.getQuotationsPaginator(this.paginatorQuote);
+      })
     });
   }
 
@@ -331,7 +354,7 @@ export class TableComponent implements OnInit {
   }
 
   /**
-   * Filter By Date in Task
+   * Filter By Date in Lifting
    * @param event
    */
   filterDate(event: MatDatepickerInputEvent<any>){
@@ -351,6 +374,40 @@ export class TableComponent implements OnInit {
       this.getLiftingsPaginator(this.paginator);
     })
   }
+
+  /**
+   * Filter Customers in Quotes
+   * @param status
+   */
+  filterStatusQuote(status: string){
+    this.quotationPaginateForm.get('status')?.setValue(status);
+    this.liftingService.getQuotations(this.liftingPaginateForm.value).subscribe(res =>{
+      this.getQuotationsPaginator(this.paginatorQuote);
+    })
+  }
+
+  /**
+   * Filter By Date in Quotes
+   * @param event
+   */
+  filterDateQuote(event: MatDatepickerInputEvent<any>){
+    let initial_date = this.dateService.getFormatDataDate(this.dateFormQuote.value.initial_date)
+    let final_date = this.dateService.getFormatDataDate(this.dateFormQuote.value.final_date)
+    this.quotationPaginateForm.get('initial_date')?.setValue(initial_date);
+    this.quotationPaginateForm.get('final_date')?.setValue(final_date);
+    this.liftingService.getQuotations(this.liftingPaginateForm.value).subscribe(res =>{
+      this.getQuotationsPaginator(this.paginatorQuote);
+    })
+  }
+
+  resetFilterDateQuote() : void {
+    this.quotationPaginateForm.get('initial_date')?.setValue('');
+    this.quotationPaginateForm.get('final_date')?.setValue('');
+    this.liftingService.getQuotations(this.liftingPaginateForm.value).subscribe(res =>{
+      this.getQuotationsPaginator(this.paginatorQuote);
+    })
+  }
+
 
   /* Método que permite iniciar los filtros de rutas*/
   loadLiftingFilterForm(): void {
@@ -372,7 +429,11 @@ export class TableComponent implements OnInit {
   loadQuotationFilterForm(): void {
     this.quotationPaginateForm = this.formBuilder.group({
       page: [],
-      page_size: [this.pageSize]
+      page_size: [this.pageSize],
+      folio: '',
+      initial_date: '',
+      final_date: '',
+      status: ''
     })
   }
 
