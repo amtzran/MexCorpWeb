@@ -98,7 +98,15 @@ export interface Link {
 export interface LiftingPaginate {
   page: string,
   page_size: string,
-  quote_id?: number
+  quote_id?: number,
+  folio?: string,
+  customer?: string | number,
+  employee?: string | number,
+  group?: string | number,
+  work_type?: string | number,
+  status?: string | number,
+  initial_date?: string,
+  final_date?: string,
 }
 
 export interface liftingDetail {

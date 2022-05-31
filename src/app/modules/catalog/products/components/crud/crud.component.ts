@@ -96,6 +96,8 @@ export class CrudComponent implements OnInit {
       brand:[{value: '', disabled:this.product.info}],
       cost:[{value: '', disabled:this.product.info}],
       photo: [{value: '', disabled:this.product.info}],
+      key: [{value: '', disabled:this.product.info}],
+      unit: [{value: '', disabled:this.product.info}],
     });
   }
 

@@ -16,6 +16,8 @@ export interface Product {
   cost?: string;
   photo?: string;
   quantity?: number;
+  unit?: string;
+  key?: string;
   created_at?: Date;
   updated_at?: Date;
 }

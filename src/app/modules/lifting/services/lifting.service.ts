@@ -31,6 +31,14 @@ export class LiftingService {
     let params = new HttpParams();
     filter.page ? params = params.append('page', filter.page) : null;
     filter.page_size ? params = params.append('page_size', filter.page_size) : null;
+    filter.folio ? params = params.append('folio', filter.folio) : null;
+    filter.customer ? params = params.append('customer', filter.customer) : null;
+    filter.employee ? params = params.append('employee', filter.employee) : null;
+    filter.group ? params = params.append('group', filter.group) : null;
+    filter.work_type ? params = params.append('work_type', filter.work_type) : null;
+    filter.status ? params = params.append('status', filter.status) : null;
+    filter.initial_date ? params = params.append('initial_date', filter.initial_date) : null;
+    filter.final_date ? params = params.append('final_date', filter.final_date) : null;
     return this.http.get<ModelLifting>(`${this.baseUrl}/liftings/`, {params})
   }
 

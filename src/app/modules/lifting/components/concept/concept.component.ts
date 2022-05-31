@@ -8,6 +8,8 @@ import {Quotation, QuotationConcept} from "../../interfaces/lifting.interface";
 import {ModalResponse} from "../../../../core/utils/ModalResponse";
 import {MatTableDataSource} from "@angular/material/table";
 import {MatPaginator} from "@angular/material/paginator";
+import {ProductService} from "../../../catalog/products/services/product.service";
+import {Product} from "../../../catalog/products/interfaces/product.interface";
 
 @Component({
   selector: 'app-concept',
@@ -28,6 +30,7 @@ export class ConceptComponent implements OnInit {
   conceptForm!: FormGroup;
   conceptPaginateForm!: FormGroup;
   discountForm!: FormGroup;
+  products!: Product[];
 
   displayedColumns: string[] = ['id', 'quantity', 'unit', 'key', 'brand', 'tax', 'unit_price', 'amount', 'options'];
   dataSource!: MatTableDataSource<QuotationConcept>;
@@ -40,7 +43,11 @@ export class ConceptComponent implements OnInit {
               private sharedService: SharedService,
               private spinner: NgxSpinnerService,
               private formBuilder: FormBuilder,
-              @Inject(MAT_DIALOG_DATA) public quotation : {row: Quotation}) { }
+              private productService: ProductService,
+              @Inject(MAT_DIALOG_DATA) public quotation : {row: Quotation})
+  {
+    this.loadProducts();
+  }
 
   ngOnInit(): void {
     this.loadDataQuote()
@@ -221,6 +228,27 @@ export class ConceptComponent implements OnInit {
           this.sharedService.errorDialog(error)
         } )
       )
+  }
+
+  loadProducts(): void {
+    this.productService.getProductsAll().subscribe(products => {this.products = products.data} )
+  }
+
+  /**
+   * Event set Data Product
+   * @param idProduct
+   */
+  setDataProduct(idProduct: number){
+    if (idProduct !== undefined) {
+      this.productService.getProductById(idProduct).subscribe(product =>{
+        this.conceptForm.patchValue({
+          key: product.data.key,
+          unit: product.data.unit,
+          brand: product.data.brand,
+          description: product.data.description
+        })
+      })
+    }
   }
 
   /**

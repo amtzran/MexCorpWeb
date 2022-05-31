@@ -22,7 +22,7 @@ import {DateService} from "../../../../../core/utils/date.service";
 })
 export class TableComponent implements OnInit {
 
-  displayedColumns: string[] = ['id', 'name', 'description', 'brand', 'cost','options'];
+  displayedColumns: string[] = ['id', 'key','name', 'description', 'unit', 'brand', 'cost','options'];
   dataSource!: MatTableDataSource<Product>;
   totalItems!: number;
   pageSize = this.sharedService.pageSize

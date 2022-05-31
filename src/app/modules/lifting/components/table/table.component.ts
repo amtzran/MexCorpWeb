@@ -1,11 +1,10 @@
 import {Component, OnInit, ViewChild} from '@angular/core';
 import {MatTableDataSource} from "@angular/material/table";
-import {FormBuilder, FormGroup} from "@angular/forms";
+import {FormBuilder, FormControl, FormGroup} from "@angular/forms";
 import {MatPaginator} from "@angular/material/paginator";
 import {MatDialog} from "@angular/material/dialog";
 import {SharedService} from "../../../../shared/services/shared.service";
 import {NgxSpinnerService} from "ngx-spinner";
-import {DateService} from "../../../../core/utils/date.service";
 import {ModalResponse} from "../../../../core/utils/ModalResponse";
 import {Lifting, Quotation} from "../../interfaces/lifting.interface";
 import {LiftingService} from "../../services/lifting.service";
@@ -13,6 +12,15 @@ import {CrudComponent} from "../crud/crud.component";
 import {ConceptComponent} from "../concept/concept.component";
 import {ConfirmStatusComponent} from "../confirm-status/confirm-status.component";
 import {SendEmailComponent} from "../send-email/send-email.component";
+import {Customer} from "../../../customer/customers/interfaces/customer.interface";
+import {Employee, JobCenter} from "../../../employee/interfaces/employee.interface";
+import {WorkType} from "../../../catalog/work-types/models/work-type.interface";
+import {Task} from "../../../task/models/task.interface";
+import {Door} from "../../../customer/doors/interfaces/door.interface";
+import {TaskService} from "../../../task/services/task.service";
+import {debounceTime, map, Observable, startWith} from "rxjs";
+import {MatDatepickerInputEvent} from "@angular/material/datepicker";
+import {DateService} from "../../../../core/utils/date.service";
 
 @Component({
   selector: 'app-table',
@@ -37,18 +45,36 @@ export class TableComponent implements OnInit {
   @ViewChild('paginator', {static: true}) paginator!: MatPaginator;
   @ViewChild('paginatorQuote', {static: true}) paginatorQuote!: MatPaginator;
 
+  customers: Customer[] = [];
+  jobCenters: JobCenter[] = [];
+  employees: Employee[] = [];
+  workTypes: WorkType[] = [];
+  tasksSelect: Task[] = [];
+  doors: Door[] = [];
+  dateForm!: FormGroup;
+  formFolio = new FormControl();
+  filteredOptions!: Observable<string[]>;
+
   constructor(private liftingService: LiftingService,
               private formBuilder: FormBuilder,
               private dialog: MatDialog,
               private sharedService: SharedService,
               private spinner: NgxSpinnerService,
-              private dateService: DateService,) {
+              private taskService: TaskService,
+              private dateService: DateService)
+  {
+    this.loadDataFiltersChanges();
+    this.loadDataCustomers();
+    this.loadDataEmployees();
+    this.loadDataGroups();
+    this.loadDataWorkTypes();
   }
 
   ngOnInit(): void {
     /*Formulario*/
     this.loadLiftingFilterForm();
     this.loadQuotationFilterForm();
+    this.lodDateForm();
     this.dataSource = new MatTableDataSource();
     this.dataSourceQuote = new MatTableDataSource();
     this.getLiftingsPaginator(this.paginator);
@@ -229,11 +255,116 @@ export class TableComponent implements OnInit {
     });
   }
 
+  // Form for Page table
+  lodDateForm() : void {
+    this.dateForm = this.formBuilder.group({
+      initial_date: [{value: '', disabled: false}],
+      final_date: [{value: '', disabled: false}],
+    })
+  }
+
+  loadDataFiltersChanges() {
+     this.formFolio.valueChanges.pipe(
+      debounceTime(500),
+      map(value => typeof value === 'string' ? value : value.folio),
+    ).subscribe(v => {
+       this.liftingPaginateForm.get('folio')?.setValue(v);
+       this.liftingService.getLiftings(this.liftingPaginateForm.value).subscribe(res =>{
+         this.getLiftingsPaginator(this.paginator);
+       })
+    });
+  }
+
+  /**
+   * Filter Customers in Lifting
+   * @param idCustomer
+   */
+  filterCustomer(idCustomer: number){
+    this.liftingPaginateForm.get('customer')?.setValue(idCustomer);
+    this.liftingService.getLiftings(this.liftingPaginateForm.value).subscribe(res =>{
+      this.getLiftingsPaginator(this.paginator);
+    })
+  }
+
+  /**
+   * Filter Customers in Lifting
+   * @param idEmployee
+   */
+  filterEmployee(idEmployee: number){
+    this.liftingPaginateForm.get('employee')?.setValue(idEmployee);
+    this.liftingService.getLiftings(this.liftingPaginateForm.value).subscribe(res =>{
+      this.getLiftingsPaginator(this.paginator);
+    })
+  }
+
+  /**
+   * Filter Customers in Lifting
+   * @param idGroup
+   */
+  filterGroup(idGroup: number){
+    this.liftingPaginateForm.get('group')?.setValue(idGroup);
+    this.liftingService.getLiftings(this.liftingPaginateForm.value).subscribe(res =>{
+      this.getLiftingsPaginator(this.paginator);
+    })
+  }
+
+  /**
+   * Filter Customers in Lifting
+   * @param idWorkType
+   */
+  filterWorkType(idWorkType: number){
+    this.liftingPaginateForm.get('work_type')?.setValue(idWorkType);
+    this.liftingService.getLiftings(this.liftingPaginateForm.value).subscribe(res =>{
+      this.getLiftingsPaginator(this.paginator);
+    })
+  }
+
+  /**
+   * Filter Customers in Lifting
+   * @param status
+   */
+  filterStatus(status: string){
+    this.liftingPaginateForm.get('status')?.setValue(status);
+    this.liftingService.getLiftings(this.liftingPaginateForm.value).subscribe(res =>{
+      this.getLiftingsPaginator(this.paginator);
+    })
+  }
+
+  /**
+   * Filter By Date in Task
+   * @param event
+   */
+  filterDate(event: MatDatepickerInputEvent<any>){
+    let initial_date = this.dateService.getFormatDataDate(this.dateForm.value.initial_date)
+    let final_date = this.dateService.getFormatDataDate(this.dateForm.value.final_date)
+    this.liftingPaginateForm.get('initial_date')?.setValue(initial_date);
+    this.liftingPaginateForm.get('final_date')?.setValue(final_date);
+    this.liftingService.getLiftings(this.liftingPaginateForm.value).subscribe(res =>{
+      this.getLiftingsPaginator(this.paginator);
+    })
+  }
+
+  resetFilterDate() : void {
+    this.liftingPaginateForm.get('initial_date')?.setValue('');
+    this.liftingPaginateForm.get('final_date')?.setValue('');
+    this.liftingService.getLiftings(this.liftingPaginateForm.value).subscribe(res =>{
+      this.getLiftingsPaginator(this.paginator);
+    })
+  }
+
   /* Método que permite iniciar los filtros de rutas*/
   loadLiftingFilterForm(): void {
     this.liftingPaginateForm = this.formBuilder.group({
       page: [],
-      page_size: [this.pageSize]
+      page_size: [this.pageSize],
+      folio: '',
+      customer: '',
+      employee: '',
+      group: '',
+      work_type: '',
+      status: '',
+      initial_date: '',
+      final_date: ''
     })
   }
 
@@ -243,6 +374,34 @@ export class TableComponent implements OnInit {
       page: [],
       page_size: [this.pageSize]
     })
+  }
+
+  /**
+   * Array from service for Customers
+   */
+  loadDataCustomers(){
+    this.taskService.getCustomers().subscribe(customers => {this.customers = customers.data} )
+  }
+
+  /**
+   * Array from service for Groups
+   */
+  loadDataGroups(){
+    this.taskService.getJobCenters().subscribe(jobCenters => {this.jobCenters = jobCenters.data} )
+  }
+
+  /**
+   * Array from service for Employees
+   */
+  loadDataEmployees(){
+    this.taskService.getEmployees().subscribe(employees => {this.employees = employees.data} )
+  }
+
+  /**
+   * Array from service for Employees
+   */
+  loadDataWorkTypes(){
+    this.taskService.getWorkTypes().subscribe(workTypes => {this.workTypes = workTypes.data} )
   }
 
   /**

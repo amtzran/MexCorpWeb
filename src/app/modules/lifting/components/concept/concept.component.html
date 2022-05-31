@@ -61,6 +61,27 @@
                fxLayout.xs="column"
                fxLayoutGap="20px">
 
+            <ng-select fxFlex="100"
+                       bindLabel="name"
+                       placeholder="Productos"
+                       [multiple]="false"
+                       appendTo="body"
+                       [searchable]="true"
+                       [clearable]="true"
+                       (change)="setDataProduct($event)">
+              <ng-option *ngFor="let product of products" [value]="product.id">
+                {{product.key}} - {{product.name}}
+              </ng-option>
+            </ng-select>
+
+            <mat-form-field fxFlex="100">
+              <mat-label>Clave</mat-label>
+              <input
+                matInput
+                type="text"
+                formControlName="key">
+            </mat-form-field>
+
             <mat-form-field fxFlex="100">
               <mat-label>Unidad</mat-label>
               <input
@@ -69,17 +90,6 @@
                 formControlName="unit">
               <mat-error *ngIf="fieldInvalid('unit')">
                 Favor de ingresar la unidad
-              </mat-error>
-            </mat-form-field>
-
-            <mat-form-field fxFlex="100">
-              <mat-label>Clave</mat-label>
-              <input
-                matInput
-                type="text"
-                formControlName="key">
-              <mat-error *ngIf="fieldInvalid('key')">
-                Favor de ingresar cantidad
               </mat-error>
             </mat-form-field>
 

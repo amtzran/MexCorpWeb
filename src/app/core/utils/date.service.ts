@@ -13,6 +13,10 @@ export class DateService {
   getFormatDate(date: string) {
     return moment(new Date(date)).format('DD-MM-YYYY').toString();
   }
+
+  getFormatDateSimple(date: string) {
+    return moment(new Date(date)).format('DD-MM-YY').toString();
+  }
   /*FormData Fechas*/
   getFormatDataDate(date: any) {
     return moment(new Date(date)).format('YYYY-MM-DD').toString();
