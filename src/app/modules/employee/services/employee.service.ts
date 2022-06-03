@@ -10,8 +10,6 @@ import {
   ModelJobCenter, ToolsEmployee,
 } from "../interfaces/employee.interface";
 import {ModelProduct, Product} from "../../catalog/products/interfaces/product.interface";
-import {reportTask} from "../../task/models/task.interface";
-import {ContractDetail} from "../../catalog/contracts/models/contract.interface";
 
 @Injectable({
   providedIn: 'root'
@@ -47,7 +45,7 @@ export class EmployeeService {
   // Patch Employee
   patchEmployeeStatus(idEmployee: number, status: boolean) : Observable<Employee> {
     let updateFields = {is_active: status}
-    return this.http.patch<Employee>(`${this.baseUrl}/employees/${idEmployee}/`, updateFields)
+    return this.http.patch<Employee>(`${this.baseUrl}/employees/${idEmployee}/active`, updateFields)
   }
 
   // Delete Employee
