@@ -32,7 +32,7 @@ export class ConceptComponent implements OnInit {
   discountForm!: FormGroup;
   products!: Product[];
 
-  displayedColumns: string[] = ['id', 'quantity', 'unit', 'key', 'brand', 'tax', 'unit_price', 'amount', 'options'];
+  displayedColumns: string[] = ['quantity', 'unit', 'key', 'brand', 'description','unit_price', 'amount', 'options'];
   dataSource!: MatTableDataSource<QuotationConcept>;
   @ViewChild('paginator', {static: true}) paginator!: MatPaginator;
   totalItems!: number;
@@ -242,6 +242,7 @@ export class ConceptComponent implements OnInit {
     if (idProduct !== undefined) {
       this.productService.getProductById(idProduct).subscribe(product =>{
         this.conceptForm.patchValue({
+          unit_price: product.data.cost,
           key: product.data.key,
           unit: product.data.unit,
           brand: product.data.brand,
