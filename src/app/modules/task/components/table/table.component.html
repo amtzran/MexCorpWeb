@@ -149,6 +149,10 @@
             Servicios Finalizados
             <mat-icon color="warn" mat-list-icon>picture_as_pdf</mat-icon>
           </button>
+          <button mat-menu-item (click)="reportFinalizedPdfBasic()" [disabled]="calendarForm.invalid">
+            Servicios Finalizados (Básico)
+            <mat-icon color="warn" mat-list-icon>picture_as_pdf</mat-icon>
+          </button>
           <button mat-menu-item (click)="reportFinalizedExcel()" [disabled]="calendarForm.invalid">
             Servicios Finalizados (Excel)
             <mat-icon mat-list-icon class="colorCheckGreen">view_list</mat-icon>
