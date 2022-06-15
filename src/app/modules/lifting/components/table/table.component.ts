@@ -21,6 +21,7 @@ import {TaskService} from "../../../task/services/task.service";
 import {debounceTime, map, Observable, startWith} from "rxjs";
 import {MatDatepickerInputEvent} from "@angular/material/datepicker";
 import {DateService} from "../../../../core/utils/date.service";
+import {ConfirmComponent} from "../../../../shared/components/confirm/confirm.component";
 
 @Component({
   selector: 'app-table',
@@ -463,6 +464,26 @@ export class TableComponent implements OnInit {
    */
   loadDataWorkTypes(){
     this.taskService.getWorkTypes().subscribe(workTypes => {this.workTypes = workTypes.data} )
+  }
+
+  deleteQuote(contact: Quotation) {
+    // Show Dialog
+    const dialog = this.dialog.open(ConfirmComponent, {
+      width: '250',
+      data: contact
+    })
+
+    dialog.afterClosed().subscribe(
+      (result) => {
+        if (result) {
+          this.liftingService.deleteQuote(contact.id!)
+            .subscribe(resp => {
+              this.sharedService.showSnackBar('Registro Eliminado')
+              this.getQuotationsPaginator(this.paginatorQuote)
+            })
+        }
+      })
+
   }
 
   /**

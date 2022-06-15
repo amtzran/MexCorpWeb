@@ -115,6 +115,11 @@ export class LiftingService {
     return this.http.delete<QuotationConceptDetail>(`${this.baseUrl}/quote-concepts/${id}`)
   }
 
+  // Delete Contact
+  deleteQuote(id: number) : Observable<QuotationConceptDetail>{
+    return this.http.delete<QuotationConceptDetail>(`${this.baseUrl}/quotes/${id}`)
+  }
+
   updateStatus(idQuote : number, status: string) : Observable<QuotationConceptDetail> {
     let statusObject = {status: status}
     return this.http.put<QuotationConceptDetail>(`${this.baseUrl}/quotes-status/${idQuote}/`, statusObject)
