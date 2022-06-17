@@ -31,10 +31,12 @@ export class SendEmailComponent implements OnInit {
               private spinner: NgxSpinnerService,
               private taskService: TaskService,
               private liftingService: LiftingService,
+              private customerService: CustomerServiceService,
               @Inject(MAT_DIALOG_DATA) public quotation : {row: Quotation}) { }
 
   ngOnInit(): void {
-    this.loadEmailForm()
+    this.loadEmailForm();
+    this.loadCustomer();
   }
 
   /**
@@ -77,6 +79,21 @@ export class SendEmailComponent implements OnInit {
    */
   close(): void{
     this.dialogRef.close(ModalResponse.CLOSE);
+  }
+
+  /**
+   * Load the form Task.
+   */
+  loadCustomer():void{
+    this.spinner.show()
+    this.customerService.getCustomerById(this.quotation.row.lifting.customer_id).subscribe(res => {
+        this.spinner.hide()
+        this.emailForm.patchValue({email: res.data.email,})
+      }, (error => {
+        this.spinner.hide()
+        this.sharedService.errorDialog(error)
+      })
+    )
   }
 
 }
