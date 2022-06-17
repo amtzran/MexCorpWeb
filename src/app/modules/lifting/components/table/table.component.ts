@@ -35,7 +35,7 @@ import {ConfirmComponent} from "../../../../shared/components/confirm/confirm.co
 export class TableComponent implements OnInit {
 
   displayedColumns: string[] = ['id', 'folio', 'customer', 'employee', 'job_center', 'work_type', 'date', 'status', 'options'];
-  displayedColumnsQuote: string[] = ['id', 'folio', 'customer', 'date', 'status', 'amount', 'options'];
+  displayedColumnsQuote: string[] = ['id', 'folio', 'customer', 'date', 'status', 'total', 'options'];
   dataSource!: MatTableDataSource<Lifting>;
   dataSourceQuote!: MatTableDataSource<Quotation>;
   totalItems!: number;
@@ -466,20 +466,42 @@ export class TableComponent implements OnInit {
     this.taskService.getWorkTypes().subscribe(workTypes => {this.workTypes = workTypes.data} )
   }
 
-  deleteQuote(contact: Quotation) {
+  deleteQuote(quote: Quotation) {
     // Show Dialog
     const dialog = this.dialog.open(ConfirmComponent, {
       width: '250',
-      data: contact
+      data: quote
     })
 
     dialog.afterClosed().subscribe(
       (result) => {
         if (result) {
-          this.liftingService.deleteQuote(contact.id!)
+          this.liftingService.deleteQuote(quote.id!)
             .subscribe(resp => {
               this.sharedService.showSnackBar('Registro Eliminado')
-              this.getQuotationsPaginator(this.paginatorQuote)
+              this.getQuotationsPaginator(this.paginatorQuote);
+              this.getLiftingsPaginator(this.paginator);
+            })
+        }
+      })
+
+  }
+
+  deleteLifting(lifting: Lifting) {
+    // Show Dialog
+    const dialog = this.dialog.open(ConfirmComponent, {
+      width: '250',
+      data: lifting
+    })
+
+    dialog.afterClosed().subscribe(
+      (result) => {
+        if (result) {
+          this.liftingService.deleteLifting(lifting.id!)
+            .subscribe(resp => {
+              this.sharedService.showSnackBar('Registro Eliminado')
+              this.getLiftingsPaginator(this.paginator);
+              this.getQuotationsPaginator(this.paginatorQuote);
             })
         }
       })

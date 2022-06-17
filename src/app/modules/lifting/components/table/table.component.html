@@ -206,6 +206,11 @@
                   Reporte Levantamiento
                 </button>
 
+                <button mat-menu-item (click)="deleteLifting(row)">
+                  <mat-icon color="warn">delete</mat-icon>
+                  Eliminar
+                </button>
+
               </mat-menu>
 
             </td>
@@ -340,10 +345,10 @@
             <td mat-cell *matCellDef="let row"> {{row.date }} </td>
           </ng-container>
 
-          <!-- Amount Column -->
-          <ng-container matColumnDef="amount">
-            <th mat-header-cell *matHeaderCellDef mat-sort-header=""> Monto</th>
-            <td mat-cell *matCellDef="let row"> {{row.amount | currency:'MX':'$':'1.2-2' : 'es-MX'}} </td>
+          <!-- Total Column -->
+          <ng-container matColumnDef="total">
+            <th mat-header-cell *matHeaderCellDef mat-sort-header=""> Total</th>
+            <td mat-cell *matCellDef="let row"> {{row.total | currency:'MX':'$':'1.2-2' : 'es-MX'}} </td>
           </ng-container>
 
           <!-- Status Column -->
