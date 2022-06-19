@@ -68,6 +68,7 @@ export interface Lifting {
   photo_three?:            null;
   status?:                 string;
   report_pdf?: string;
+  applicant?: string;
 }
 
 export interface Links {

@@ -66,6 +66,7 @@ export class CrudComponent implements OnInit {
       work_type_id:[{value: '', disabled:this.lifting.info}, Validators.required],
       date:[{value: '', disabled:this.lifting.info}],
       place:[{value: '', disabled:this.lifting.info}, Validators.required],
+      applicant:[{value: '', disabled:this.lifting.info}],
       series:[{value: '', disabled:this.lifting.info}],
       color: [{value: '', disabled:this.lifting.info},],
       lock_type: [{value: '', disabled:this.lifting.info},],
@@ -155,7 +156,11 @@ export class CrudComponent implements OnInit {
       this.spinner.hide()
       this.sharedService.showSnackBar('Se ha agregado correctamente el levantamiento.');
       this.dialogRef.close(ModalResponse.UPDATE);
-    })
+    }, (error => {
+        this.spinner.hide()
+        this.sharedService.errorDialog(error)
+      } )
+    )
   }
 
   /**
@@ -163,12 +168,16 @@ export class CrudComponent implements OnInit {
    */
   updateLifting(): void {
     this.createFormData(this.liftingForm.value);
-    //this.spinner.show()
+    this.spinner.show()
     this.liftingService.updateLifting(this.lifting.idLifting, this.fileDataForm).subscribe(response => {
       this.spinner.hide()
       this.sharedService.showSnackBar(`Se ha actualizado correctamente el acceso: ${response.data.folio}` );
       this.dialogRef.close(ModalResponse.UPDATE);
-    })
+    }, (error => {
+        this.spinner.hide()
+        this.sharedService.errorDialog(error)
+      } )
+    )
   }
 
   validateCheck() : void {

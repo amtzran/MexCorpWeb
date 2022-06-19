@@ -35,7 +35,7 @@ import {ConfirmComponent} from "../../../../shared/components/confirm/confirm.co
 export class TableComponent implements OnInit {
 
   displayedColumns: string[] = ['id', 'folio', 'customer', 'employee', 'job_center', 'work_type', 'date', 'status', 'options'];
-  displayedColumnsQuote: string[] = ['id', 'folio', 'customer', 'date', 'status', 'total', 'options'];
+  displayedColumnsQuote: string[] = ['id', 'folio', 'customer', 'place', 'applicant', 'date', 'status', 'total', 'options'];
   dataSource!: MatTableDataSource<Lifting>;
   dataSourceQuote!: MatTableDataSource<Quotation>;
   totalItems!: number;
@@ -136,6 +136,7 @@ export class TableComponent implements OnInit {
     dialogRef.afterClosed().subscribe(res => {
       if (res === ModalResponse.UPDATE) {
         this.getLiftingsPaginator(this.paginator);
+        this.getQuotationsPaginator(this.paginatorQuote);
       }
     });
   }
@@ -187,6 +188,7 @@ export class TableComponent implements OnInit {
         dialogRef.afterClosed().subscribe(res => {
           if (res === ModalResponse.UPDATE) {
             this.getLiftingsPaginator(this.paginator);
+            this.getQuotationsPaginator(this.paginatorQuote);
           }
         });
 
@@ -212,7 +214,9 @@ export class TableComponent implements OnInit {
     });
     dialogRef.afterClosed().subscribe(res => {
       if (res === ModalResponse.UPDATE) {
+        console.log(res)
         this.getLiftingsPaginator(this.paginator);
+        this.getQuotationsPaginator(this.paginatorQuote);
       }
     });
   }
@@ -234,6 +238,7 @@ export class TableComponent implements OnInit {
     dialogRef.afterClosed().subscribe(res => {
       if (res === ModalResponse.UPDATE) {
         this.getLiftingsPaginator(this.paginator);
+        this.getQuotationsPaginator(this.paginatorQuote);
       }
     });
   }
@@ -255,6 +260,7 @@ export class TableComponent implements OnInit {
     dialogRef.afterClosed().subscribe(res => {
       if (res === ModalResponse.UPDATE) {
         this.getLiftingsPaginator(this.paginator);
+        this.getQuotationsPaginator(this.paginatorQuote);
       }
     });
   }

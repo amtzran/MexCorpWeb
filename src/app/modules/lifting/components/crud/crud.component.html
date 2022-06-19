@@ -422,14 +422,23 @@
                fxLayout.xs="column"
                fxLayoutGap="10px">
 
-            <mat-form-field fxFlex="40">
+            <mat-form-field fxFlex="35">
               <mat-label>Descripción del Trabajo</mat-label>
               <textarea matInput
                         formControlName="work_description"
                         placeholder="Observaciones de accesos..."></textarea>
             </mat-form-field>
 
-            <mat-form-field fxFlex="20">
+            <mat-form-field fxFlex="20" style="padding-top: 16px !important;">
+              <mat-label>Solicitante</mat-label>
+              <input
+                matInput
+                type="text"
+                formControlName="applicant"
+              >
+            </mat-form-field>
+
+            <mat-form-field fxFlex="15">
 
               <mat-toolbar>
                 <!-- Readonly Input to show File names -->
@@ -445,7 +454,7 @@
 
             </mat-form-field>
 
-            <mat-form-field fxFlex="20">
+            <mat-form-field fxFlex="15">
 
               <mat-toolbar>
                 <!-- Readonly Input to show File names -->
@@ -461,7 +470,7 @@
 
             </mat-form-field>
 
-            <mat-form-field fxFlex="20">
+            <mat-form-field fxFlex="15">
 
               <mat-toolbar>
                 <!-- Readonly Input to show File names -->
