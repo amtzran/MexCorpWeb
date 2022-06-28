@@ -181,7 +181,15 @@ export class TaskService {
     return this.http.post(`${this.baseUrl}/task-summary-report/`, '',{responseType: 'blob', params})
   }
 
-  reportCalendarPdf(filterTask: reportTask) : Observable<any> {
+  /**
+   * Calendar
+   * @param type
+   * @param filterTask
+   */
+  reportCalendarPdf(type: string , filterTask: reportTask) : Observable<any> {
+    let route;
+    if (type === 'Completo') route = 'task-calendar-report';
+    if (type === 'Por-Finalizar') route = 'task-pending-report';
     let initial_date = this.dateService.getFormatDataDate(filterTask.initial_date)
     let final_date = this.dateService.getFormatDataDate(filterTask.final_date)
     let customer = String(filterTask.customer)
@@ -195,11 +203,16 @@ export class TaskService {
     params = params.append('employee', employee);
     params = params.append('group', group);
     params = params.append('work_type', work_type)
-    return this.http.post(`${this.baseUrl}/task-calendar-report/`, '',{responseType: 'blob', params})
+    return this.http.post(`${this.baseUrl}/${route}/`, '',{responseType: 'blob', params})
   }
 
-  // Report Services Finalized
-  reportServiceFinalizedPdf(filterTask: reportTask) : Observable<any> {
+  /**
+   * Report Services Finalized
+    */
+  reportServiceFinalizedPdf(type: string, filterTask: reportTask) : Observable<any> {
+    let route;
+    if (type === 'Completo') route = 'task-finished-report';
+    if (type === 'Basico') route = 'basic-task-finished-report';
     let initial_date = this.dateService.getFormatDataDate(filterTask.initial_date)
     let final_date = this.dateService.getFormatDataDate(filterTask.final_date)
     let customer = String(filterTask.customer)
@@ -215,27 +228,7 @@ export class TaskService {
     params = params.append('group', group);
     params = params.append('work_type', work_type)
     params = params.append('door_id', door_id)
-    return this.http.post(`${this.baseUrl}/task-finished-report/`, '',{responseType: 'blob', params})
-  }
-
-  // Report Services Finalized
-  reportServiceFinalizedBasicPdf(filterTask: reportTask) : Observable<any> {
-    let initial_date = this.dateService.getFormatDataDate(filterTask.initial_date)
-    let final_date = this.dateService.getFormatDataDate(filterTask.final_date)
-    let customer = String(filterTask.customer)
-    let employee = String(filterTask.employee)
-    let group = String(filterTask.job_center)
-    let work_type = String(filterTask.work_type)
-    let door_id = String(filterTask.door_id)
-    let params = new HttpParams();
-    params = params.append('initial_date', initial_date);
-    params = params.append('final_date', final_date);
-    params = params.append('customer', customer);
-    params = params.append('employee', employee);
-    params = params.append('group', group);
-    params = params.append('work_type', work_type)
-    params = params.append('door_id', door_id)
-    return this.http.post(`${this.baseUrl}/basic-task-finished-report/`, '',{responseType: 'blob', params})
+    return this.http.post(`${this.baseUrl}/${route}/`, '',{responseType: 'blob', params})
   }
 
   // Report Services Finalized

@@ -141,15 +141,19 @@
             General Tareas
             <mat-icon mat-list-icon color="warn">picture_as_pdf</mat-icon>
           </button>
-          <button mat-menu-item (click)="reportCalendarPdf()" [disabled]="calendarForm.invalid">
+          <button mat-menu-item (click)="reportCalendarPdf('Completo')" [disabled]="calendarForm.invalid">
             Calendario
             <mat-icon mat-list-icon color="warn">picture_as_pdf</mat-icon>
           </button>
-          <button mat-menu-item (click)="reportFinalizedPdf()" [disabled]="calendarForm.invalid">
+          <button mat-menu-item (click)="reportCalendarPdf('Por-Finalizar')" [disabled]="calendarForm.invalid">
+            Tareas Por Finalizar
+            <mat-icon mat-list-icon color="warn">picture_as_pdf</mat-icon>
+          </button>
+          <button mat-menu-item (click)="reportFinalizedPdf('Completo')" [disabled]="calendarForm.invalid">
             Servicios Finalizados
             <mat-icon color="warn" mat-list-icon>picture_as_pdf</mat-icon>
           </button>
-          <button mat-menu-item (click)="reportFinalizedPdfBasic()" [disabled]="calendarForm.invalid">
+          <button mat-menu-item (click)="reportFinalizedPdf('Basico')" [disabled]="calendarForm.invalid">
             Servicios Finalizados (Básico)
             <mat-icon color="warn" mat-list-icon>picture_as_pdf</mat-icon>
           </button>

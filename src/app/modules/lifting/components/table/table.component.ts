@@ -214,7 +214,6 @@ export class TableComponent implements OnInit {
     });
     dialogRef.afterClosed().subscribe(res => {
       if (res === ModalResponse.UPDATE) {
-        console.log(res)
         this.getLiftingsPaginator(this.paginator);
         this.getQuotationsPaginator(this.paginatorQuote);
       }
@@ -224,16 +223,16 @@ export class TableComponent implements OnInit {
   /**
    * Open dialog Concept Quote
    * @param row
-   * @param status
+   * @param type
    */
-  statusPending(row: Quotation, status: string): void {
+  statusPending(row: Quotation, type: string): void {
     const dialogRef = this.dialog.open(ConfirmStatusComponent, {
       autoFocus: false,
       disableClose: false,
       maxWidth: '100vw',
       maxHeight: '100vh',
       width: '30%',
-      data: {row: row, status: status}
+      data: {row: row, type: type}
     });
     dialogRef.afterClosed().subscribe(res => {
       if (res === ModalResponse.UPDATE) {
@@ -394,6 +393,50 @@ export class TableComponent implements OnInit {
   }
 
   /**
+   * Filter Customers in Lifting
+   * @param idCustomer
+   */
+  filterCustomerQuote(idCustomer: number){
+    this.quotationPaginateForm.get('customer')?.setValue(idCustomer);
+    this.liftingService.getQuotations(this.liftingPaginateForm.value).subscribe(res =>{
+      this.getQuotationsPaginator(this.paginatorQuote);
+    })
+  }
+
+  /**
+   * Filter Customers in Quote
+   * @param idEmployee
+   */
+  filterEmployeeQuote(idEmployee: number){
+    this.quotationPaginateForm.get('employee')?.setValue(idEmployee);
+    this.liftingService.getLiftings(this.liftingPaginateForm.value).subscribe(res =>{
+      this.getQuotationsPaginator(this.paginatorQuote);
+    })
+  }
+
+  /**
+   * Filter Customers in Quote
+   * @param idGroup
+   */
+  filterGroupQuote(idGroup: number){
+    this.quotationPaginateForm.get('group')?.setValue(idGroup);
+    this.liftingService.getLiftings(this.liftingPaginateForm.value).subscribe(res =>{
+      this.getQuotationsPaginator(this.paginatorQuote);
+    })
+  }
+
+  /**
+   * Filter Customers in Quote
+   * @param idWorkType
+   */
+  filterWorkTypeQuote(idWorkType: number){
+    this.quotationPaginateForm.get('work_type')?.setValue(idWorkType);
+    this.liftingService.getLiftings(this.liftingPaginateForm.value).subscribe(res =>{
+      this.getQuotationsPaginator(this.paginatorQuote);
+    })
+  }
+
+  /**
    * Filter By Date in Quotes
    * @param event
    */
@@ -438,6 +481,10 @@ export class TableComponent implements OnInit {
       page: [],
       page_size: [this.pageSize],
       folio: '',
+      customer: '',
+      employee: '',
+      group: '',
+      work_type: '',
       initial_date: '',
       final_date: '',
       status: ''

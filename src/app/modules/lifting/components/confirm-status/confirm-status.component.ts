@@ -5,6 +5,7 @@ import {ModalResponse} from "../../../../core/utils/ModalResponse";
 import {LiftingService} from "../../services/lifting.service";
 import {SharedService} from "../../../../shared/services/shared.service";
 import {NgxSpinnerService} from "ngx-spinner";
+import {FormBuilder, FormGroup, Validators} from "@angular/forms";
 
 @Component({
   selector: 'app-confirm-status',
@@ -14,18 +15,42 @@ import {NgxSpinnerService} from "ngx-spinner";
 })
 export class ConfirmStatusComponent implements OnInit {
 
+  statusForm!: FormGroup;
+  pending = 'Pendiente por Aprobar';
+  approve = 'Aprobada';
+
   constructor(private dialogRef: MatDialogRef<ConfirmStatusComponent>,
               private liftingService: LiftingService,
               private sharedService: SharedService,
               private spinner: NgxSpinnerService,
-              @Inject(MAT_DIALOG_DATA) public quotation : {row: Quotation, status: string}) { }
+              private formBuilder: FormBuilder,
+              @Inject(MAT_DIALOG_DATA) public quotation : {row: Quotation, type: string}) { }
 
   ngOnInit(): void {
+    if (this.quotation.type === 'Pending') this.loadStatusForm();
+    if (this.quotation.type === 'Approve') this.loadStatusForm2();
+  }
+
+  /**
+   * Load the form Task.
+   */
+  loadStatusForm():void{
+    this.statusForm = this.formBuilder.group({
+      status:[{value: this.pending, disabled:false}, [Validators.required]],
+    });
+  }
+
+  loadStatusForm2():void{
+    this.statusForm = this.formBuilder.group({
+      status:[{value: this.approve , disabled:false}, [Validators.required]],
+      delivery_time:[{value: '' , disabled:false}, [Validators.required]],
+      payment_conditions:[{value: '' , disabled:false}, [Validators.required]],
+    });
   }
 
   status(): void {
     this.spinner.show()
-    this.liftingService.updateStatus(this.quotation.row.id, this.quotation.status)
+    this.liftingService.updateStatus(this.quotation.row.id, this.statusForm.value)
       .subscribe(response => {
           this.spinner.hide()
           this.sharedService.showSnackBar('Se ha actualizado correctamente el status.');
@@ -35,6 +60,16 @@ export class ConfirmStatusComponent implements OnInit {
           this.sharedService.errorDialog(error)
         } )
       )
+
+  }
+
+  /**
+   * Validations
+   * @param field
+   */
+  fieldInvalid(field: string) {
+    return this.statusForm.get(field)?.invalid &&
+      this.statusForm.get(field)?.touched
   }
 
   /**

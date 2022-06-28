@@ -269,6 +269,52 @@
             </mat-autocomplete>
           </mat-form-field>
 
+          <ng-select fxFlex="100"
+                     bindLabel="name"
+                     placeholder="Clientes"
+                     [multiple]="false"
+                     appendTo="body"
+                     [searchable]="true"
+                     [clearable]="true"
+                     (change)="filterCustomerQuote($event)">
+            <ng-option value="">TODOS</ng-option>
+            <ng-option *ngFor="let customer of customers" [value]="customer.id">
+              {{customer.name}}
+            </ng-option>
+          </ng-select>
+
+          <mat-form-field fxFlex="100">
+            <mat-label>Empleados</mat-label>
+            <mat-select
+              (selectionChange)="filterEmployeeQuote($event.value)">
+              <mat-option value="">TODOS</mat-option>
+              <mat-option *ngFor="let employee of employees" [value]="employee.id">
+                {{ employee.name }}
+              </mat-option>
+            </mat-select>
+          </mat-form-field>
+
+          <mat-form-field fxFlex="100">
+            <mat-label>Grupos</mat-label>
+            <mat-select
+              (selectionChange)="filterGroupQuote($event.value)">
+              <mat-option value="">TODOS</mat-option>
+              <mat-option *ngFor="let jobCenter of jobCenters" [value]="jobCenter.id">
+                {{ jobCenter.name}}
+              </mat-option>
+            </mat-select>
+          </mat-form-field>
+
+          <mat-form-field fxFlex="100">
+            <mat-label>Tipos de Trabajo</mat-label>
+            <mat-select
+              (selectionChange)="filterWorkTypeQuote($event.value)">
+              <mat-option value="">TODOS</mat-option>
+              <mat-option *ngFor="let workType of workTypes" [value]="workType.id">
+                {{ workType.name }}
+              </mat-option>
+            </mat-select>
+          </mat-form-field>
 
           <mat-form-field fxFlex="100">
             <mat-label>Estatus</mat-label>
@@ -306,7 +352,7 @@
                fxLayoutGap="10px"
                [formGroup]="dateForm">
 
-            <button (click)="resetFilterDate()" mat-mini-fab color="primary" >
+            <button (click)="resetFilterDateQuote()" mat-mini-fab color="primary" >
               <mat-icon>restart_alt</mat-icon>
             </button>
 
@@ -401,13 +447,13 @@
                 </button>
 
                 <button *ngIf="row.status === 'Generada' " mat-menu-item
-                        (click)="statusPending(row, 'Pendiente por Aprobar')">
+                        (click)="statusPending(row,'Pending')">
                   <mat-icon matSuffix mat-list-icon style="color: orange">task</mat-icon>
                   Enviar a Revisión
                 </button>
 
                 <button *ngIf="row.status === 'Pendiente por Aprobar' " mat-menu-item
-                        (click)="statusPending(row, 'Aprobada')">
+                        (click)="statusPending(row, 'Approve')">
                   <mat-icon matSuffix mat-list-icon style="color: orange">task</mat-icon>
                   Aprobar
                 </button>

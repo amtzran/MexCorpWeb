@@ -551,17 +551,18 @@ export class TableComponent implements OnInit, AfterViewInit {
   }
 
   /**
-   * Export Pdf Calendar
+   * Calendar
+   * @param type
    */
-  reportCalendarPdf(){
+  reportCalendarPdf(type : string){
     this.validateForm()
     this.spinner.show()
-    this.taskService.reportCalendarPdf(this.calendarForm.value).subscribe(res => {
+    this.taskService.reportCalendarPdf(type, this.calendarForm.value).subscribe(res => {
         let file = this.sharedService.createBlobToPdf(res);
         let date_initial = this.dateService.getFormatDataDate(this.calendarForm.value.initial_date)
         let final_date = this.dateService.getFormatDataDate(this.calendarForm.value.final_date)
 
-        fileSaver.saveAs(file, `Reporte-Calendario-Tareas-${date_initial}-${final_date}`);
+        fileSaver.saveAs(file, `Reporte-Calendario-Tareas-${type}-${date_initial}-${final_date}`);
 
         this.spinner.hide()
       }, (error => {
@@ -572,38 +573,18 @@ export class TableComponent implements OnInit, AfterViewInit {
   }
 
   /**
-   * Export Pdf Services Finalized
+   * Report Finished
+   * @param type
    */
-  reportFinalizedPdf(){
+  reportFinalizedPdf(type : string){
     this.validateForm()
     this.spinner.show()
-    this.taskService.reportServiceFinalizedPdf(this.calendarForm.value).subscribe(res => {
+    this.taskService.reportServiceFinalizedPdf(type, this.calendarForm.value).subscribe(res => {
         let file = this.sharedService.createBlobToPdf(res);
         let date_initial = this.dateService.getFormatDataDate(this.calendarForm.value.initial_date)
         let final_date = this.dateService.getFormatDataDate(this.calendarForm.value.final_date)
 
-        fileSaver.saveAs(file, `Reporte-Servicios-Finalizados-${date_initial}-${final_date}`);
-
-        this.spinner.hide()
-      }, (error => {
-        this.spinner.hide()
-        this.sharedService.errorDialog(error)
-      })
-    )
-  }
-
-  /**
-   * Export Pdf Services Finalized
-   */
-  reportFinalizedPdfBasic(){
-    this.validateForm()
-    this.spinner.show()
-    this.taskService.reportServiceFinalizedBasicPdf(this.calendarForm.value).subscribe(res => {
-        let file = this.sharedService.createBlobToPdf(res);
-        let date_initial = this.dateService.getFormatDataDate(this.calendarForm.value.initial_date)
-        let final_date = this.dateService.getFormatDataDate(this.calendarForm.value.final_date)
-
-        fileSaver.saveAs(file, `Servicios-Finalizados-Basico-${date_initial}-${final_date}`);
+        fileSaver.saveAs(file, `Reporte-Servicios-Finalizados-${type}-${date_initial}-${final_date}`);
 
         this.spinner.hide()
       }, (error => {

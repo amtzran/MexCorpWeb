@@ -1,9 +1,35 @@
 <ngx-spinner></ngx-spinner>
 <h1>Cambiar Estatus</h1>
 <hr>
+
+<div fxLayout="column" fxLayoutGap="20" *ngIf="quotation.type === 'Approve' "  fxLayoutAlign="center center" [formGroup]="statusForm">
+
+      <mat-form-field fxFlex="100">
+        <mat-label>Tiempo Entrega</mat-label>
+        <input matInput type="delivery_time" formControlName="delivery_time">
+        <button mat-icon-button matSuffix></button>
+        <mat-error *ngIf="fieldInvalid('delivery_time')">
+          Favor de ingresar el Tiempo Entrega
+        </mat-error>
+      </mat-form-field>
+
+      <mat-form-field fxFlex="100">
+        <mat-label>Condiciones de Pago</mat-label>
+        <input matInput type="payment_conditions" formControlName="payment_conditions">
+        <button mat-icon-button matSuffix></button>
+        <mat-error *ngIf="fieldInvalid('payment_conditions')">
+          Favor de ingresar las Condiciones de Pago
+        </mat-error>
+      </mat-form-field>
+
+</div>
+
+<br>
+
 <p>
   Está seguro de cambiar el estatus:
-  <span style="color: darkblue">{{quotation.status}}</span>
+  <span style="color: darkblue" *ngIf="quotation.type === 'Pending' "> {{ pending }} </span>
+  <span style="color: darkblue" *ngIf="quotation.type === 'Approve' "> {{ approve }} </span>
   <br>
   ¿Desea continuar?
 </p>
@@ -13,7 +39,9 @@
     <button (click)="close()" mat-raised-button color="warn">Cancelar</button>
   </div>
   <div fxFlex="50">
-    <button (click)="status()" mat-raised-button color="primary">!De Acuerdo!</button>
+    <button mat-raised-button color="primary"
+            *ngIf="quotation.type === 'Approve' " (click)="status()" [disabled]="statusForm.invalid">!De Acuerdo!</button>
+    <button *ngIf="quotation.type === 'Pending' " (click)="status()" mat-raised-button color="primary">!De Acuerdo!</button>
   </div>
 
 </div>
