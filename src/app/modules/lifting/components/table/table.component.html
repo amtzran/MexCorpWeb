@@ -385,6 +385,24 @@
             <td mat-cell *matCellDef="let row"> {{row.lifting.customer_name}} </td>
           </ng-container>
 
+          <!-- Employee Column -->
+          <ng-container matColumnDef="employee">
+            <th mat-header-cell *matHeaderCellDef mat-sort-header=""> Empleado</th>
+            <td mat-cell *matCellDef="let row"> {{row.lifting.employee_name}} </td>
+          </ng-container>
+
+          <!-- Centro de Trabajo Column -->
+          <ng-container matColumnDef="job_center">
+            <th mat-header-cell *matHeaderCellDef mat-sort-header=""> Centro de Trabajo</th>
+            <td mat-cell *matCellDef="let row">{{row.lifting.job_center_name}}</td>
+          </ng-container>
+
+          <!-- Type Work Column -->
+          <ng-container matColumnDef="work_type">
+            <th mat-header-cell *matHeaderCellDef mat-sort-header=""> Tipo de Trabajo</th>
+            <td mat-cell *matCellDef="let row">{{row.lifting.work_type_name}}</td>
+          </ng-container>
+
           <!-- Place Column -->
           <ng-container matColumnDef="place">
             <th mat-header-cell *matHeaderCellDef mat-sort-header=""> Lugar</th>
