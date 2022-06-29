@@ -196,13 +196,15 @@ export class TaskService {
     let employee = String(filterTask.employee)
     let group = String(filterTask.job_center)
     let work_type = String(filterTask.work_type)
+    let status = String(filterTask.status)
     let params = new HttpParams();
     params = params.append('initial_date', initial_date);
     params = params.append('final_date', final_date);
     params = params.append('customer', customer);
     params = params.append('employee', employee);
     params = params.append('group', group);
-    params = params.append('work_type', work_type)
+    params = params.append('work_type', work_type);
+    params = params.append('status', status);
     return this.http.post(`${this.baseUrl}/${route}/`, '',{responseType: 'blob', params})
   }
 
