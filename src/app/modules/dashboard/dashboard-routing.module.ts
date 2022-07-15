@@ -47,6 +47,13 @@ const routes: Routes = [
     canLoad: [ ValidateTokenGuard ]
   },
   {
+    path: 'portal-accounts/customer/:customer',
+    component: HomeComponent,
+    loadChildren: () => import('../customer/portal-accounts/portal-accounts.module').then(m => m.PortalAccountsModule),
+    canActivate: [ ValidateTokenGuard ],
+    canLoad: [ ValidateTokenGuard ]
+  },
+  {
     path: 'group',
     component: HomeComponent,
     loadChildren: () => import('../catalog/groups/groups.module').then(m => m.GroupsModule),
