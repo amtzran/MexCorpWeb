@@ -190,4 +190,8 @@ export interface QuotationConcept {
   updated_at?: string
 }
 
+export interface EmailSend {
+  quote_id: number,
+  email: string
+}
 

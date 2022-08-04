@@ -1,13 +1,15 @@
 import {Component, Inject, OnInit} from '@angular/core';
 import {FormBuilder, FormGroup, Validators} from "@angular/forms";
 import {MAT_DIALOG_DATA, MatDialogRef} from "@angular/material/dialog";
-import {DoorByTask} from "../../models/task.interface";
+import {DoorByTask, EmailModel, EmailSend} from "../../models/task.interface";
 import {ModalResponse} from "../../../../core/utils/ModalResponse";
 import {SharedService} from "../../../../shared/services/shared.service";
 import {NgxSpinnerService} from "ngx-spinner";
 import {TaskService} from "../../services/task.service";
 import {Customer} from "../../../customer/customers/interfaces/customer.interface";
 import {CustomerServiceService} from "../../../customer/customers/services/customer-service.service";
+import {MatTableDataSource} from "@angular/material/table";
+import {Contract} from "../../../catalog/contracts/models/contract.interface";
 
 @Component({
   selector: 'app-send-email',
@@ -22,6 +24,10 @@ export class SendEmailComponent implements OnInit {
   submit!: boolean;
   emailForm!: FormGroup;
   customer!: Customer;
+  displayedColumns: string[] = ['email','settings'];
+  dataSourceTable: EmailSend[] = [];
+  dataSource!: MatTableDataSource<EmailSend>;
+  totalItems!: number;
 
   constructor(private dialogRef: MatDialogRef<SendEmailComponent>,
               private formBuilder: FormBuilder,
@@ -34,6 +40,8 @@ export class SendEmailComponent implements OnInit {
   ngOnInit(): void {
     this.loadCustomer()
     this.loadEmailForm()
+    this.dataSource = new MatTableDataSource();
+    this.dataSource.data = this.dataSourceTable;
   }
 
   /**
@@ -62,32 +70,49 @@ export class SendEmailComponent implements OnInit {
     });
   }
 
+  add(){
+    if(this.emailForm.get('email')?.valid){
+      let objectForm = this.emailForm.value;
+      this.dataSource.data.push(objectForm);
+      this.emailForm.reset();
+    }
+    this.dataSource.data = this.dataSourceTable;
+  }
+
+  delete(email:EmailModel){
+    this.dataSourceTable.forEach(element => {
+      if(element.email === email.email){
+        const index = this.dataSourceTable.indexOf(element, 0)
+        this.dataSourceTable.splice(index, 1);
+      }
+    });
+    this.dataSource.data = this.dataSourceTable;
+  }
+
   /**
    * Send Email By Door in Task.
    */
   sendEmail(){
-    this.validateForm()
-    this.spinner.show()
-    this.taskService.sendEmail(this.emailForm.value).subscribe(response => {
-        this.spinner.hide()
-        this.sharedService.showSnackBar(`${response.message}` );
-        this.dialogRef.close(ModalResponse.UPDATE);
-      }, (error => {
-        this.spinner.hide()
-        this.sharedService.errorDialog(error)
-      })
-    )
-  }
+    if (this.dataSource.data.length < 1) return;
+    this.spinner.show();
+    this.dataSourceTable.forEach(element => {
 
-  /**
-   * Validate form in general
-   */
-  validateForm(){
-    this.submit = true;
-    if(this.emailForm.invalid){
-      this.sharedService.showSnackBar('Los campos con * son obligatorios.');
-      return
-    }
+       let objectEmail : EmailSend = {
+         task_id: element.task_id,
+         door_id: element.door_id,
+         email: element.email
+       }
+       this.taskService.sendEmail(objectEmail).subscribe(response => {
+           this.spinner.hide()
+           this.sharedService.showSnackBar(`${response.message}` );
+         }, (error => {
+           this.spinner.hide()
+           this.sharedService.errorDialog(error)
+         })
+       )
+    });
+    this.dialogRef.close(ModalResponse.UPDATE);
+
   }
 
   /**
@@ -105,4 +130,5 @@ export class SendEmailComponent implements OnInit {
   close(): void{
     this.dialogRef.close(ModalResponse.CLOSE);
   }
+
 }

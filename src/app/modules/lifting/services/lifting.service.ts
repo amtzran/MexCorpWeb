@@ -3,6 +3,7 @@ import {HttpClient, HttpParams} from "@angular/common/http";
 import {environment} from "../../../../environments/environment";
 import {Observable} from "rxjs";
 import {
+  EmailSend,
   Lifting,
   liftingDetail,
   LiftingPaginate,
@@ -11,7 +12,6 @@ import {
   QuotationConcept, QuotationConceptDetail, QuotationtDetail
 } from "../interfaces/lifting.interface";
 import {FormGroup} from "@angular/forms";
-import {EmailSend} from "../../task/models/task.interface";
 
 @Injectable({
   providedIn: 'root'

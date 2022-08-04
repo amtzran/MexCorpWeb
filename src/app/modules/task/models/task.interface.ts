@@ -136,3 +136,7 @@ export interface CalendarForm {
   status?: string,
   door_id?: string
 }
+
+export interface EmailModel {
+  email: string
+}
