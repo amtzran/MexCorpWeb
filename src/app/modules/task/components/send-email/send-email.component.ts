@@ -74,7 +74,7 @@ export class SendEmailComponent implements OnInit {
     if(this.emailForm.get('email')?.valid){
       let objectForm = this.emailForm.value;
       this.dataSource.data.push(objectForm);
-      this.emailForm.reset();
+      this.emailForm.get('email')?.setValue('');
     }
     this.dataSource.data = this.dataSourceTable;
   }
@@ -109,7 +109,7 @@ export class SendEmailComponent implements OnInit {
            this.spinner.hide()
            this.sharedService.errorDialog(error)
          })
-       )
+       );
     });
     this.dialogRef.close(ModalResponse.UPDATE);
 
