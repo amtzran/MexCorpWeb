@@ -34,7 +34,7 @@ import {ConfirmComponent} from "../../../../shared/components/confirm/confirm.co
 })
 export class TableComponent implements OnInit {
 
-  displayedColumns: string[] = ['id', 'folio', 'customer', 'employee', 'job_center', 'work_type', 'date', 'status', 'options'];
+  displayedColumns: string[] = ['id', 'folio', 'customer', 'place','employee', 'job_center', 'work_type', 'date', 'status', 'options'];
   displayedColumnsQuote: string[] =
     ['id', 'folio', 'customer', 'employee', 'job_center', 'work_type', 'place', 'applicant', 'date', 'status', 'total', 'options'];
   dataSource!: MatTableDataSource<Lifting>;
