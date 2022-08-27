@@ -4,7 +4,8 @@
 
 export const environment = {
   production: false,
-  baseUrl: 'https://api.dev.mexcorp.technology/api/v1'
+  //baseUrl: 'https://api.dev.mexcorp.technology/api/v1'
+  baseUrl: 'https://api.mexcorp.pestwareapp.tech/api/v1'
 };
 
 /*
