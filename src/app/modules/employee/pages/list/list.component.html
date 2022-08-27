@@ -55,7 +55,7 @@
         <td mat-cell *matCellDef="let row">{{row.job_title_name}}</td>
       </ng-container>
 
-      !-- Status Column -->
+      <!-- Status Column -->
       <ng-container matColumnDef="is_active">
         <th mat-header-cell *matHeaderCellDef mat-sort-header=""> Estatus</th>
         <td mat-cell *matCellDef="let row">
@@ -98,6 +98,10 @@
             <button mat-menu-item (click)="toolsReport(row)">
               <mat-icon color="warn">picture_as_pdf</mat-icon>
               Recibo de Herramientas
+            </button>
+            <button mat-menu-item (click)="gafeteReport(row)">
+              <mat-icon color="warn">picture_as_pdf</mat-icon>
+              Gafete
             </button>
             <button mat-menu-item
                     (click)="deleteEmployee(row)">

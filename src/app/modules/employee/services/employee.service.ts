@@ -80,6 +80,11 @@ export class EmployeeService {
     return this.http.post(`${this.baseUrl}/employees-receipt-tools/${id}`, '',{responseType: 'blob'})
   }
 
+  // Report Gafete Employee
+  exportReportGafete(id: number) : Observable<any> {
+    return this.http.post(`${this.baseUrl}/employees-card/${id}`, '',{responseType: 'blob'})
+  }
+
   // Add Tools By Employee
   addTool(id: number, tools: ToolsEmployee): Observable<any> {
     return this.http.post<any>(`${this.baseUrl}/employees/${id}/product/`, tools)

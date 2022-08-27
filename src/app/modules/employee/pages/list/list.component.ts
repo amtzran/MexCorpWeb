@@ -163,6 +163,19 @@ export class ListComponent implements OnInit {
     })
   }
 
+  gafeteReport(employee : Employee){
+    this.spinner.show()
+    this.employeeService.exportReportGafete(Number(employee.id)).subscribe(res => {
+      this.spinner.hide()
+      let date = this.dateService.getFormatDataDate(new Date())
+      let file = this.sharedService.createBlobToPdf(res);
+      fileSaver.saveAs(file, `Gafete-${employee.name}-${date}`);
+    },error => {
+      this.spinner.hide()
+      this.sharedService.errorDialog(error)
+    })
+  }
+
   /* Método que permite iniciar los filtros de rutas*/
   loadEmployeeFilterForm(): void {
     this.employeePaginateForm = this.formBuilder.group({
