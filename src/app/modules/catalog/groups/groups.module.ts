@@ -9,6 +9,8 @@ import {MaterialModule} from "../../../material/material.module";
 import {FlexLayoutModule} from "@angular/flex-layout";
 import {ReactiveFormsModule} from "@angular/forms";
 import {NgxSpinnerModule} from "ngx-spinner";
+import {AgmCoreModule} from "@agm/core";
+import {GooglePlaceModule} from "ngx-google-places-autocomplete";
 
 
 @NgModule({
@@ -23,7 +25,12 @@ import {NgxSpinnerModule} from "ngx-spinner";
     MaterialModule,
     FlexLayoutModule,
     ReactiveFormsModule,
-    NgxSpinnerModule
+    NgxSpinnerModule,
+    AgmCoreModule.forRoot({
+      apiKey: 'AIzaSyDTay1aJA56eD1BRc4m87_2YSSDvPtEIKg',
+      libraries: ['places']
+    }),
+    GooglePlaceModule
   ]
 })
 export class GroupsModule { }

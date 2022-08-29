@@ -65,7 +65,9 @@
 
             <mat-form-field>
               <mat-label> Dirección </mat-label>
-              <input formControlName="address" matInput type="text">
+              <input [options]='options' (onAddressChange)="handleAddressChange($event)"
+                     matInput type="text" formControlName="address" placeholder="" ngx-google-places-autocomplete
+                     #placesRef="ngx-places" >
             </mat-form-field>
 
           </div>
@@ -84,13 +86,19 @@
               <input formControlName="postal_code" matInput type="text">
             </mat-form-field>
 
+            <mat-form-field>
+              <mat-label> Radio </mat-label>
+              <input formControlName="radius" matInput type="text">
+            </mat-form-field>
+
           </div>
 
           <div fxLayout="row"
                fxLayout.xs="column"
                fxLayoutGap="20px">
 
-            <mat-form-field>
+            <div fxFlex="100">
+              <mat-form-field>
 
                 <mat-toolbar>
                   <!-- Readonly Input to show File names -->
@@ -105,7 +113,28 @@
                 <!-- Fetch selected filed on change -->
                 <input type="file" #UploadFileInput id="fileUpload" name="myFile" (change)="setFileLogo($event)" accept="image/*">
 
-            </mat-form-field>
+              </mat-form-field>
+            </div>
+
+          </div>
+
+          <div fxLayout="row"
+               fxLayout.xs="column"
+               fxLayoutGap="20px">
+
+            <div fxFlex="100">
+
+              <agm-map [latitude]="latitude"
+                       [longitude]="longitude"
+                       [zoom]="zoom">
+                <agm-marker [latitude]="latitude"
+                            [longitude]="longitude"
+                            [markerDraggable]="true"
+                            (dragEnd)="markerDragEnd($event)">
+                </agm-marker>
+              </agm-map>
+
+            </div>
 
           </div>
 

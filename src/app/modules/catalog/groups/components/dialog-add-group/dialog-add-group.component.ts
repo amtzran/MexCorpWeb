@@ -1,10 +1,12 @@
-import { Component, OnInit, Inject } from '@angular/core';
+import {Component, OnInit, Inject, ViewChild} from '@angular/core';
 import {FormBuilder, FormGroup, Validators} from "@angular/forms";
 import {GroupService} from "../../services/groups.service";
 import {ModalResponse} from "../../../../../core/utils/ModalResponse";
 import {SharedService} from "../../../../../shared/services/shared.service";
 import {MAT_DIALOG_DATA, MatDialogRef} from "@angular/material/dialog";
 import {NgxSpinnerService} from "ngx-spinner";
+import {GooglePlaceDirective} from "ngx-google-places-autocomplete";
+import {Address} from "ngx-google-places-autocomplete/objects/address";
 
 @Component({
   selector: 'app-dialog-add-group',
@@ -26,6 +28,18 @@ export class DialogAddGroupComponent implements OnInit {
   /*Variables display errors modal*/
   showError!: boolean;
   submit!: boolean;
+  @ViewChild("placesRef") placesRef!: GooglePlaceDirective;
+  options: any = {
+    types: [],
+    componentRestrictions: { country: 'MX' }
+  }
+  //@ViewChild( 'map', { static: true} ) mapElement!: ElementRef;
+  //map!: google.maps.Map;
+  latitude!: number;
+  longitude!: number;
+  zoom!: number;
+  geocoder!: google.maps.Geocoder;
+  addressGoogle: any = '';
 
   constructor(
     private fb: FormBuilder,
@@ -34,7 +48,9 @@ export class DialogAddGroupComponent implements OnInit {
     private _groupService: GroupService,
     private spinner: NgxSpinnerService,
     @Inject(MAT_DIALOG_DATA) public group : {idGroup: number, edit: boolean, info: boolean}
-  ) { }
+  ) {
+    this.geocoder = new google.maps.Geocoder();
+  }
 
   ngOnInit(): void {
 
@@ -63,10 +79,9 @@ export class DialogAddGroupComponent implements OnInit {
       this.groupForm.updateValueAndValidity();
     }
 
-    if(this.group.idGroup){
-      this.loadGroupById();
-    }
+    if(this.group.idGroup) this.loadGroupById();
 
+    this.setCurrentLocation('');
   }
 
   /**
@@ -78,6 +93,8 @@ export class DialogAddGroupComponent implements OnInit {
       this.spinner.hide()
       delete response.data.id;
       delete response.data.is_active;
+      delete response.data.latitude;
+      delete response.data.longitude;
       delete response.data.created_at;
       delete response.data.updated_at;
       this.groupForm.setValue(response.data);
@@ -102,6 +119,9 @@ export class DialogAddGroupComponent implements OnInit {
       city: [{value:'', disabled:this.group.info}],
       postal_code: [{value:'', disabled:this.group.info}],
       logo: [{value:'', disabled:this.group.info}],
+      latitude: [{value:'', disabled:this.group.info}],
+      longitude: [{value:'', disabled:this.group.info}],
+      radius: [{value:'', disabled:this.group.info}],
     });
   }
 
@@ -109,7 +129,9 @@ export class DialogAddGroupComponent implements OnInit {
    * Create a group.
    */
   addGroup(): void {
-    this.validateForm()
+    this.validateForm();
+    this.addAddress();
+    console.log(this.groupForm.value)
     this.createFormData(this.groupForm.value);
     this.spinner.show()
     this._groupService.postGroup(this.fileDataForm).subscribe(response => {
@@ -128,7 +150,8 @@ export class DialogAddGroupComponent implements OnInit {
    */
   updateGroup(): void {
     this.validateForm()
-    this.createFormData(this.groupForm.value)
+    this.addAddress();
+   /* this.createFormData(this.groupForm.value);
     this.spinner.show()
     this._groupService.updateGroup(this.group.idGroup, this.fileDataForm).subscribe(response => {
       this.spinner.hide()
@@ -138,12 +161,62 @@ export class DialogAddGroupComponent implements OnInit {
         this.spinner.hide()
         this.sharedService.errorDialog(error)
     })
-    )
+    )*/
   }
 
   /* File onchange event */
   setFileLogo(e : any){
     this.groupForm.get('logo')?.setValue(e.target.files[0])
+  }
+
+  addAddress() : void {
+    this.groupForm.patchValue({
+      latitude: this.latitude,
+      longitude: this.longitude
+    })
+  }
+
+  public handleAddressChange(address: Address) {
+    /*console.log(`Url: ${address.url}`)*/
+    this.addressGoogle = address.formatted_address;
+    this.latitude = address.geometry.location.lat();
+    this.longitude = address.geometry.location.lng();
+  }
+
+  public setCurrentLocation(data : any){
+    if ('geolocation' in navigator){
+      if (data.address_latitude === null || data.address_longitude === null || data === '') {
+        navigator.geolocation.getCurrentPosition(position => {
+          this.latitude = position.coords.latitude;
+          this.longitude = position.coords.longitude;
+          this.zoom = 15;
+        });
+      }
+      else {
+        navigator.geolocation.getCurrentPosition(position => {
+          this.latitude = data.address_latitude;
+          this.longitude = data.address_longitude;
+          this.zoom = 15;
+        });
+      }
+
+    }
+  }
+
+  markerDragEnd($event: any) {
+    const latlng = {
+      lat: parseFloat($event.latLng.lat()),
+      lng: parseFloat($event.latLng.lng()),
+    };
+
+    this.geocoder.geocode({ location: latlng},
+      (response) => {
+        this.groupForm.get('address')?.patchValue(response[0].formatted_address);
+        //console.log(response.results[0].formatted_address)
+      })
+
+    this.latitude = latlng.lat;
+    this.longitude = latlng.lng;
   }
 
   /**

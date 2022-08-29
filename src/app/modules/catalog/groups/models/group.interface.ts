@@ -19,6 +19,9 @@ export interface Group {
   postal_code: string,
   logo?: string,
   is_active?: boolean,
+  latitude?: number,
+  longitude?: number,
+  radius?: number,
   created_at?: string,
   updated_at?: string,
 }

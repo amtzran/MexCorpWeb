@@ -62,9 +62,14 @@ export class SideNavComponent implements OnInit {
       icon: 'confirmation_number'
     },
     {
+      name: 'Asistencias',
+      route: '/dashboard/attendance',
+      icon: 'schedule'
+    },
+    {
       name: 'Tareas',
       route: '/dashboard/task',
-      icon: 'schedule'
+      icon: 'insert_invitation'
     },
     {
       name: 'Reportes',

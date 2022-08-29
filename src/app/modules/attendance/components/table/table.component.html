@@ -1,0 +1,179 @@
+<div class="container">
+  <mat-card fxLayoutAlign="center center">
+    <mat-card-title>
+      <mat-card-title>Asistencias</mat-card-title>
+    </mat-card-title>
+  </mat-card>
+
+  <hr>
+
+  <div fxLayout="row"
+       fxLayout.xs="column"
+       fxLayout.sm="column"
+       fxLayoutGap="10px" [formGroup]="filterForm">
+
+    <mat-form-field fxFlex="100">
+      <mat-label>Empleados</mat-label>
+      <mat-select formControlName="employee"
+                  (selectionChange)="filterSelectEmployee($event.value)">
+        <mat-option value="">TODOS</mat-option>
+        <mat-option *ngFor="let employee of employees" [value]="employee.id">
+          {{ employee.name }}
+        </mat-option>
+      </mat-select>
+    </mat-form-field>
+
+    <mat-form-field fxFlex="100">
+      <mat-label>Grupos</mat-label>
+      <mat-select formControlName="job_center"
+                  (selectionChange)="filterSelectEmployee($event.value)">
+        <mat-option value="">TODOS</mat-option>
+        <mat-option *ngFor="let jobCenter of jobCenters" [value]="jobCenter.id">
+          {{ jobCenter.name}}
+        </mat-option>
+      </mat-select>
+    </mat-form-field>
+
+    <mat-form-field fxFlex="100">
+
+      <mat-label>Ingresar Rango Fecha</mat-label>
+      <mat-date-range-input [rangePicker]="picker">
+        <input matStartDate formControlName="initial_date" placeholder="Fecha Inicial">
+        <input matEndDate formControlName="final_date" placeholder="Fecha Final" (dateChange)="filterSelectEmployee($event.value)">
+      </mat-date-range-input>
+      <mat-datepicker-toggle matSuffix [for]="picker"></mat-datepicker-toggle>
+      <mat-date-range-picker #picker></mat-date-range-picker>
+      <mat-error *ngIf="fieldInvalid('initial_date')">
+        Favor de ingresar el rango
+      </mat-error>
+
+    </mat-form-field>
+
+  </div>
+
+<!--  <div fxLayout="row">
+    <div fxFlex="80">
+      <mat-form-field appearance="standard">
+        <mat-label>Filtrar Datos Empleados</mat-label>
+        <input autocomplete="nope" matInput (keyup)="applyFilter($event)" placeholder="Buscar en Tabla Empleados" #input>
+      </mat-form-field>
+    </div>
+    <div fxFlex="20" fxLayoutAlign="center center">
+      <button (click)="openDialogEmployee(false, null, false)" mat-button color="primary">
+        <mat-icon>person_add</mat-icon>
+        Nuevo Empleado
+      </button>
+    </div>
+  </div>-->
+
+
+  <div class="mat-elevation-z8">
+    <ngx-spinner></ngx-spinner>
+    <table mat-table [dataSource]="dataSource" matSort>
+
+      <!-- ID Column -->
+      <ng-container matColumnDef="id">
+        <th mat-header-cell *matHeaderCellDef mat-sort-header=""> ID</th>
+        <td mat-cell *matCellDef="let row"> {{row.id}} </td>
+      </ng-container>
+
+      <!-- Name Column -->
+
+      <ng-container matColumnDef="employee_name">
+        <th mat-header-cell *matHeaderCellDef mat-sort-header=""> Empleado</th>
+        <td mat-cell *matCellDef="let row"> {{row.employee_name}} </td>
+      </ng-container>
+
+      <!-- Job Center Column -->
+
+      <ng-container matColumnDef="job_center_name">
+        <th mat-header-cell *matHeaderCellDef mat-sort-header=""> Grupo</th>
+        <td mat-cell *matCellDef="let row"> {{row.job_center_name}} </td>
+      </ng-container>
+
+      <!-- Date Column -->
+      <ng-container matColumnDef="date">
+        <th mat-header-cell *matHeaderCellDef mat-sort-header=""> Fecha</th>
+        <td mat-cell *matCellDef="let row"> {{row.date}} </td>
+      </ng-container>
+
+      <!-- Star Hour Column -->
+      <ng-container matColumnDef="start_hour">
+        <th mat-header-cell *matHeaderCellDef mat-sort-header=""> Hora Inicial</th>
+        <td mat-cell *matCellDef="let row"> {{row.start_hour}} <br>
+          <a target="_blank" href="https://www.google.com/maps/place/{{row.start_latitude}} {{row.start_longitude}}">Localización</a>
+        </td>
+      </ng-container>
+
+      <!-- Star Hour Column -->
+      <ng-container matColumnDef="end_hour">
+        <th mat-header-cell *matHeaderCellDef mat-sort-header=""> Hora Final</th>
+        <td mat-cell *matCellDef="let row"> {{row.end_hour}} <br>
+          <a target="_blank" href="https://www.google.com/maps/place/{{row.end_latitude}} {{row.end_longitude}}">Localización</a>
+        </td>
+      </ng-container>
+
+      <!-- Settings Column -->
+      <ng-container matColumnDef="options">
+        <th mat-header-cell *matHeaderCellDef mat-sort-header=""> Opciones</th>
+        <td mat-cell *matCellDef="let row">
+
+     <!--     <button mat-icon-button [matMenuTriggerFor]="menu" aria-label="Example icon-button with a menu">
+            <mat-icon>more_vert</mat-icon>
+          </button>
+          <mat-menu #menu="matMenu">
+            <button mat-menu-item (click)="openDialogEmployee(false, row.id, true)">
+              <mat-icon color="info">visibility</mat-icon>
+              Ver
+            </button>
+            <button mat-menu-item (click)="openDialogEmployee(true, row.id, false)">
+              <mat-icon color="primary">edit</mat-icon>
+              Editar
+            </button>
+            <button *ngIf="row.is_active === 0" mat-menu-item (click)="status(row)">
+              <mat-icon>done</mat-icon>
+              Activar
+            </button>
+            <button *ngIf="row.is_active === 1" mat-menu-item (click)="status(row)">
+              <mat-icon>done</mat-icon>
+              Desactivar
+            </button>
+            <button mat-menu-item (click)="resetPassword(row)">
+              <mat-icon color="primary">restart_alt</mat-icon>
+              Contraseña
+            </button>
+            <button mat-menu-item (click)="toolsReport(row)">
+              <mat-icon color="warn">picture_as_pdf</mat-icon>
+              Recibo de Herramientas
+            </button>
+            <button mat-menu-item (click)="gafeteReport(row)">
+              <mat-icon color="warn">picture_as_pdf</mat-icon>
+              Gafete
+            </button>
+            <button mat-menu-item
+                    (click)="deleteEmployee(row)">
+              <mat-icon color="warn">delete</mat-icon>
+              Eliminar
+            </button>
+          </mat-menu>-->
+
+        </td>
+      </ng-container>
+
+      <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
+      <tr mat-row *matRowDef="let row; columns: displayedColumns;"></tr>
+
+      <!-- Row shown when there is no matching data. -->
+      <tr class="mat-row" *matNoDataRow>
+        <td class="mat-cell" colspan="4">No hay datos que mostrar</td>
+      </tr>
+    </table>
+
+    <mat-paginator #paginator [length]="totalItems"
+                   (page)="getAttendancesPaginator($event)"
+                   [pageSize]="pageSize"
+                   [showFirstLastButtons]="true">
+    </mat-paginator>
+  </div>
+</div>
+
