@@ -35,8 +35,8 @@ export class DialogAddGroupComponent implements OnInit {
   }
   //@ViewChild( 'map', { static: true} ) mapElement!: ElementRef;
   //map!: google.maps.Map;
-  latitude!: number;
-  longitude!: number;
+  latitude: number = 0;
+  longitude: number = 0;
   zoom!: number;
   geocoder!: google.maps.Geocoder;
   addressGoogle: any = '';
@@ -90,13 +90,15 @@ export class DialogAddGroupComponent implements OnInit {
   loadGroupById(): void{
     this.spinner.show()
     this._groupService.getGroupById(this.group.idGroup).subscribe(response => {
-      this.spinner.hide()
+      console.log(response.data)
+      this.spinner.hide();
       delete response.data.id;
       delete response.data.is_active;
-      delete response.data.latitude;
-      delete response.data.longitude;
       delete response.data.created_at;
       delete response.data.updated_at;
+      this.latitude = response.data.latitude!;
+      this.longitude = response.data.longitude!;
+        this.setCurrentLocation(response.data)
       this.groupForm.setValue(response.data);
     }, (error => {
       this.spinner.hide()
@@ -114,14 +116,14 @@ export class DialogAddGroupComponent implements OnInit {
       reason_social:[{value:'', disabled:this.group.info}, Validators.required],
       rfc:[{value:'', disabled:this.group.info}, Validators.required],
       phone:[{value:'', disabled:this.group.info}],
-      email:[{value:'', disabled:this.group.info}, Validators.required],
+      email:[{value:'', disabled:this.group.info}, [Validators.required, Validators.email]],
       address: [{value:'', disabled:this.group.info}],
       city: [{value:'', disabled:this.group.info}],
       postal_code: [{value:'', disabled:this.group.info}],
       logo: [{value:'', disabled:this.group.info}],
       latitude: [{value:'', disabled:this.group.info}],
       longitude: [{value:'', disabled:this.group.info}],
-      radius: [{value:'', disabled:this.group.info}],
+      radius: [{value:'', disabled:this.group.info}, Validators.required],
     });
   }
 
@@ -141,8 +143,7 @@ export class DialogAddGroupComponent implements OnInit {
     }, (error => {
       this.spinner.hide()
       this.sharedService.errorDialog(error)
-    } )
-    )
+    } ))
   }
 
   /**
@@ -151,7 +152,7 @@ export class DialogAddGroupComponent implements OnInit {
   updateGroup(): void {
     this.validateForm()
     this.addAddress();
-   /* this.createFormData(this.groupForm.value);
+    this.createFormData(this.groupForm.value);
     this.spinner.show()
     this._groupService.updateGroup(this.group.idGroup, this.fileDataForm).subscribe(response => {
       this.spinner.hide()
@@ -160,8 +161,7 @@ export class DialogAddGroupComponent implements OnInit {
     }, (error => {
         this.spinner.hide()
         this.sharedService.errorDialog(error)
-    })
-    )*/
+    }))
   }
 
   /* File onchange event */
@@ -185,7 +185,7 @@ export class DialogAddGroupComponent implements OnInit {
 
   public setCurrentLocation(data : any){
     if ('geolocation' in navigator){
-      if (data.address_latitude === null || data.address_longitude === null || data === '') {
+      if (data.latitude === null || data.longitude === null || data === '') {
         navigator.geolocation.getCurrentPosition(position => {
           this.latitude = position.coords.latitude;
           this.longitude = position.coords.longitude;
@@ -194,8 +194,8 @@ export class DialogAddGroupComponent implements OnInit {
       }
       else {
         navigator.geolocation.getCurrentPosition(position => {
-          this.latitude = data.address_latitude;
-          this.longitude = data.address_longitude;
+          this.latitude = data.latitude;
+          this.longitude = data.latitude;
           this.zoom = 15;
         });
       }

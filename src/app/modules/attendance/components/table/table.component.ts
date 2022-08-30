@@ -76,7 +76,7 @@ export class TableComponent implements OnInit {
    * Filter Customer and Search
    */
   filterSelectEmployee(idEmployee: number){
-    if (this.filterForm.value.final_date !== '') {
+    if (this.filterForm.value.initial_date !== '' && this.filterForm.value.final_date !== '' ) {
       let initial_date = this.dateService.getFormatDataDate(this.filterForm.value.initial_date);
       let final_date = this.dateService.getFormatDataDate(this.filterForm.value.final_date);
       this.filterForm.patchValue({
@@ -87,6 +87,8 @@ export class TableComponent implements OnInit {
     this.attendanceService.getAttendances(this.filterForm.value)
       .subscribe(res => {
         this.getAttendancesPaginator(this.paginator);
+        this.filterForm.get('initial_date')?.setValue('');
+        this.filterForm.get('final_date')?.setValue('');
       })
   }
 
@@ -117,7 +119,7 @@ export class TableComponent implements OnInit {
       page: [],
       page_size: [this.pageSize],
       employee: '',
-      job_center: '',
+      group: '',
       initial_date: '',
       final_date: ''
     })
