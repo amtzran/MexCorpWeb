@@ -7,6 +7,7 @@ import {MAT_DIALOG_DATA, MatDialogRef} from "@angular/material/dialog";
 import {NgxSpinnerService} from "ngx-spinner";
 import {GooglePlaceDirective} from "ngx-google-places-autocomplete";
 import {Address} from "ngx-google-places-autocomplete/objects/address";
+import {MapsAPILoader} from '@agm/core';
 
 @Component({
   selector: 'app-dialog-add-group',
@@ -40,12 +41,14 @@ export class DialogAddGroupComponent implements OnInit {
   zoom!: number;
   geocoder!: google.maps.Geocoder;
   addressGoogle: any = '';
+  circleDraggable: boolean = true;
 
   constructor(
     private fb: FormBuilder,
     private sharedService: SharedService,
     private dialogRef: MatDialogRef<DialogAddGroupComponent>,
     private _groupService: GroupService,
+    private mapsAPILoader: MapsAPILoader,
     private spinner: NgxSpinnerService,
     @Inject(MAT_DIALOG_DATA) public group : {idGroup: number, edit: boolean, info: boolean}
   ) {
@@ -53,6 +56,9 @@ export class DialogAddGroupComponent implements OnInit {
   }
 
   ngOnInit(): void {
+
+    /*Google Maps Marker Dragable*/
+    this.circleDraggable = true;
 
     /*Formulario*/
     this.loadGroupForm();
@@ -64,6 +70,7 @@ export class DialogAddGroupComponent implements OnInit {
     }
 
     if(this.group.idGroup && !this.group.edit){
+      this.circleDraggable = false;
       this.title = 'Información del Grupo';
       this.spinner.show()
       this._groupService.getGroupById(this.group.idGroup).subscribe(
@@ -80,7 +87,19 @@ export class DialogAddGroupComponent implements OnInit {
     }
 
     if(this.group.idGroup) this.loadGroupById();
-    this.setCurrentLocation('');
+  }
+
+  ngAfterViewInit(): void {
+    setTimeout(() => {
+      this.loadMap()
+    }, 1000); 
+  }
+
+  loadMap(){
+    this.mapsAPILoader.load().then(() => {
+      this.geocoder = new google.maps.Geocoder;
+      this.setCurrentLocation();
+    }); 
   }
 
   /**
@@ -96,7 +115,6 @@ export class DialogAddGroupComponent implements OnInit {
       delete response.data.updated_at;
       this.latitude = response.data.latitude!;
       this.longitude = response.data.longitude!;
-      this.setCurrentLocation(response.data)
       this.groupForm.setValue(response.data);
     }, (error => {
       this.spinner.hide()
@@ -181,22 +199,18 @@ export class DialogAddGroupComponent implements OnInit {
     this.longitude = address.geometry.location.lng();
   }
 
-  public setCurrentLocation(data : any){
+  public setCurrentLocation(){
     if ('geolocation' in navigator){
-      if (data.latitude === null || data.longitude === null || data === '') {
-        navigator.geolocation.getCurrentPosition(position => {
-          this.latitude = position.coords.latitude;
-          this.longitude = position.coords.longitude;
-          this.zoom = 15;
-        });
+      if (this.group.idGroup && this.group.edit) {
+        this.latitude = Number(this.groupForm.get('latitude')?.value);
+        this.longitude = Number(this.groupForm.get('longitude')?.value);
+        this.zoom = 17;
       }
       else {
         navigator.geolocation.getCurrentPosition(position => {
-          setTimeout(() => {
-            this.latitude = data.latitude;
-            this.longitude = data.longitude;
-            this.zoom = 15;
-          }, 1000);
+          this.latitude = position.coords.latitude;
+          this.longitude = position.coords.longitude;
+          this.zoom = 17;
         });
       }
 
@@ -204,6 +218,7 @@ export class DialogAddGroupComponent implements OnInit {
   }
 
   markerDragEnd($event: any) {
+    console.log('ok')
     const latlng = {
       lat: parseFloat($event.latLng.lat()),
       lng: parseFloat($event.latLng.lng()),
@@ -217,6 +232,12 @@ export class DialogAddGroupComponent implements OnInit {
 
     this.latitude = latlng.lat;
     this.longitude = latlng.lng;
+  }
+
+  /*Método que permite cambiar el radio(m) del circulo desde el mapa*/
+  changeGeofence(event: any){
+    console.log('changeGeofence');
+    this.groupForm.get('radius')?.setValue(event);
   }
 
   /**

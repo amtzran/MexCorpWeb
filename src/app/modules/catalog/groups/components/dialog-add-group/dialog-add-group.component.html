@@ -87,8 +87,9 @@
             </mat-form-field>
 
             <mat-form-field>
-              <mat-label> Radio Área (Metros)</mat-label>
-              <input formControlName="radius" matInput type="text">
+              <mat-label> Radio Área (Asistencia)</mat-label>
+              <input formControlName="radius" matInput type="number">
+              <span matSuffix>Metros</span>
             </mat-form-field>
 
           </div>
@@ -132,6 +133,12 @@
                             [markerDraggable]="true"
                             (dragEnd)="markerDragEnd($event)">
                 </agm-marker>
+                <agm-circle [latitude]="latitude" [longitude]="longitude" 
+                        [radius]="groupForm.get('radius')?.value"
+                        [fillColor]="'blue'"
+                        [circleDraggable]="circleDraggable"
+                        (radiusChange)="changeGeofence($event)" >
+                </agm-circle>
               </agm-map>
 
             </div>
