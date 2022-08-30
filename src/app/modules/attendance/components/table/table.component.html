@@ -5,51 +5,84 @@
     </mat-card-title>
   </mat-card>
 
-  <hr>
+  <mat-card fxLayoutAlign="center center">
 
-  <div fxLayout="row"
-       fxLayout.xs="column"
-       fxLayout.sm="column"
-       fxLayoutGap="10px" [formGroup]="filterForm">
+    <div class="container" fxFlex="100" fxLayout="column">
 
-    <mat-form-field fxFlex="100">
-      <mat-label>Empleados</mat-label>
-      <mat-select formControlName="employee"
-                  (selectionChange)="filterSelectEmployee($event.value)">
-        <mat-option value="">TODOS</mat-option>
-        <mat-option *ngFor="let employee of employees" [value]="employee.id">
-          {{ employee.name }}
-        </mat-option>
-      </mat-select>
-    </mat-form-field>
+      <div fxLayout="row"
+           fxLayout.xs="column"
+           fxLayout.sm="column"
+           fxLayoutGap="10px" [formGroup]="filterForm">
 
-    <mat-form-field fxFlex="100">
-      <mat-label>Grupos</mat-label>
-      <mat-select formControlName="group"
-                  (selectionChange)="filterSelectEmployee($event.value)">
-        <mat-option value="">TODOS</mat-option>
-        <mat-option *ngFor="let jobCenter of jobCenters" [value]="jobCenter.id">
-          {{ jobCenter.name}}
-        </mat-option>
-      </mat-select>
-    </mat-form-field>
+        <mat-form-field fxFlex="100">
+          <mat-label>Empleados</mat-label>
+          <mat-select formControlName="employee"
+                      (selectionChange)="filterSelectEmployee($event.value)">
+            <mat-option value="">TODOS</mat-option>
+            <mat-option *ngFor="let employee of employees" [value]="employee.id">
+              {{ employee.name }}
+            </mat-option>
+          </mat-select>
+        </mat-form-field>
 
-    <mat-form-field fxFlex="100">
+        <mat-form-field fxFlex="100">
+          <mat-label>Grupos</mat-label>
+          <mat-select formControlName="group"
+                      (selectionChange)="filterSelectEmployee($event.value)">
+            <mat-option value="">TODOS</mat-option>
+            <mat-option *ngFor="let jobCenter of jobCenters" [value]="jobCenter.id">
+              {{ jobCenter.name}}
+            </mat-option>
+          </mat-select>
+        </mat-form-field>
 
-      <mat-label>Ingresar Rango Fecha</mat-label>
-      <mat-date-range-input [rangePicker]="picker">
-        <input matStartDate formControlName="initial_date" placeholder="Fecha Inicial">
-        <input matEndDate formControlName="final_date" placeholder="Fecha Final" (dateChange)="filterSelectEmployee($event.value)">
-      </mat-date-range-input>
-      <mat-datepicker-toggle matSuffix [for]="picker"></mat-datepicker-toggle>
-      <mat-date-range-picker #picker></mat-date-range-picker>
-      <mat-error *ngIf="fieldInvalid('initial_date')">
-        Favor de ingresar el rango
-      </mat-error>
+        <mat-form-field fxFlex="100">
 
-    </mat-form-field>
+          <mat-label>Ingresar Rango Fecha</mat-label>
+          <mat-date-range-input [rangePicker]="picker">
+            <input matStartDate formControlName="initial_date" placeholder="Fecha Inicial">
+            <input matEndDate formControlName="final_date" placeholder="Fecha Final" (dateChange)="filterSelectEmployee($event.value)">
+          </mat-date-range-input>
+          <mat-datepicker-toggle matSuffix [for]="picker"></mat-datepicker-toggle>
+          <mat-date-range-picker #picker></mat-date-range-picker>
+          <mat-error *ngIf="fieldInvalid('initial_date')">
+            Favor de ingresar el rango
+          </mat-error>
 
-  </div>
+        </mat-form-field>
+
+        <div fxFlex="100" fxLayoutAlign="center center">
+          <button mat-mini-fab color="primary" (click)="cleanInput()">
+            <mat-icon>restore</mat-icon>
+          </button>
+        </div>
+
+        <div fxFlex="100" fxLayoutAlign="center center">
+
+          <button mat-button color="primary" [matMenuTriggerFor]="menu" [disabled]="false">Reportes</button>
+          <mat-menu #menu="matMenu">
+            <button mat-menu-item (click)="reportAttendanceExcel()" [disabled]="false">
+              Asistencias
+              <mat-icon mat-list-icon class="colorCheckGreen">view_list</mat-icon>
+            </button>
+            <button mat-menu-item (click)="reportByEmployee('pdf')" [disabled]="false">
+              Empleado (PDF)
+              <mat-icon color="warn" mat-list-icon>picture_as_pdf</mat-icon>
+            </button>
+            <button mat-menu-item (click)="reportByEmployee('excel')" [disabled]="false">
+              Empleado (Excel)
+              <mat-icon mat-list-icon class="colorCheckGreen">view_list</mat-icon>
+            </button>
+
+          </mat-menu>
+
+        </div>
+
+      </div>
+
+    </div>
+
+  </mat-card>
 
 <!--  <div fxLayout="row">
     <div fxFlex="80">
@@ -104,6 +137,25 @@
           <a target="_blank" href="https://www.google.com/maps/place/{{row.start_latitude}} {{row.start_longitude}}">Localización</a>
         </td>
       </ng-container>
+
+
+      <!-- Star Hour Column -->
+      <ng-container matColumnDef="start_meal_hour">
+        <th mat-header-cell *matHeaderCellDef mat-sort-header=""> Hora Comida Inicial</th>
+        <td mat-cell *matCellDef="let row"> {{row.start_meal_hour}} <br>
+          <a target="_blank" href="https://www.google.com/maps/place/{{row.start_meal_latitude}} {{row.start_meal_longitude}}">Localización</a>
+        </td>
+      </ng-container>
+
+
+      <!-- Star Hour Column -->
+      <ng-container matColumnDef="end_meal_hour">
+        <th mat-header-cell *matHeaderCellDef mat-sort-header=""> Hora Comida Final</th>
+        <td mat-cell *matCellDef="let row"> {{row.end_meal_hour}} <br>
+          <a target="_blank" href="https://www.google.com/maps/place/{{row.end_meal_latitude}} {{row.end_meal_latitude}}">Localización</a>
+        </td>
+      </ng-container>
+
 
       <!-- Star Hour Column -->
       <ng-container matColumnDef="end_hour">

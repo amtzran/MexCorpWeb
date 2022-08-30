@@ -10,6 +10,7 @@ import {
   ModelJobCenter, ToolsEmployee,
 } from "../interfaces/employee.interface";
 import {ModelProduct, Product} from "../../catalog/products/interfaces/product.interface";
+import {ModelTurn} from "../../catalog/turns/interfaces/turn.interface";
 
 @Injectable({
   providedIn: 'root'
@@ -66,6 +67,10 @@ export class EmployeeService {
   // Get Jobs
   getJobs() : Observable<ModelJob> {
     return this.http.get<ModelJob>(`${this.baseUrl}/jobs/`)
+  }
+
+  getTurns() : Observable<ModelTurn> {
+    return this.http.get<ModelTurn>(`${this.baseUrl}/turns/`)
   }
 
   // Get Jobs

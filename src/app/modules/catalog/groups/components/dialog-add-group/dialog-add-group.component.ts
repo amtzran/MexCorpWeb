@@ -35,8 +35,8 @@ export class DialogAddGroupComponent implements OnInit {
   }
   //@ViewChild( 'map', { static: true} ) mapElement!: ElementRef;
   //map!: google.maps.Map;
-  latitude: number = 0;
-  longitude: number = 0;
+  latitude!: number;
+  longitude!: number;
   zoom!: number;
   geocoder!: google.maps.Geocoder;
   addressGoogle: any = '';
@@ -80,7 +80,6 @@ export class DialogAddGroupComponent implements OnInit {
     }
 
     if(this.group.idGroup) this.loadGroupById();
-
     this.setCurrentLocation('');
   }
 
@@ -90,7 +89,6 @@ export class DialogAddGroupComponent implements OnInit {
   loadGroupById(): void{
     this.spinner.show()
     this._groupService.getGroupById(this.group.idGroup).subscribe(response => {
-      console.log(response.data)
       this.spinner.hide();
       delete response.data.id;
       delete response.data.is_active;
@@ -98,7 +96,7 @@ export class DialogAddGroupComponent implements OnInit {
       delete response.data.updated_at;
       this.latitude = response.data.latitude!;
       this.longitude = response.data.longitude!;
-        this.setCurrentLocation(response.data)
+      this.setCurrentLocation(response.data)
       this.groupForm.setValue(response.data);
     }, (error => {
       this.spinner.hide()
@@ -133,7 +131,6 @@ export class DialogAddGroupComponent implements OnInit {
   addGroup(): void {
     this.validateForm();
     this.addAddress();
-    console.log(this.groupForm.value)
     this.createFormData(this.groupForm.value);
     this.spinner.show()
     this._groupService.postGroup(this.fileDataForm).subscribe(response => {
@@ -173,7 +170,8 @@ export class DialogAddGroupComponent implements OnInit {
     this.groupForm.patchValue({
       latitude: this.latitude,
       longitude: this.longitude
-    })
+    });
+    if (this.addressGoogle !== '') this.groupForm.get('address')?.setValue(this.addressGoogle);
   }
 
   public handleAddressChange(address: Address) {
@@ -194,9 +192,11 @@ export class DialogAddGroupComponent implements OnInit {
       }
       else {
         navigator.geolocation.getCurrentPosition(position => {
-          this.latitude = data.latitude;
-          this.longitude = data.latitude;
-          this.zoom = 15;
+          setTimeout(() => {
+            this.latitude = data.latitude;
+            this.longitude = data.longitude;
+            this.zoom = 15;
+          }, 1000);
         });
       }
 

@@ -18,6 +18,7 @@ export interface Employee {
   job_center_name?: string;
   job_title_id: number;
   job_title_name?: string;
+  turn_id: number;
   avatar?: string;
   signature?: string;
   is_active?: boolean;

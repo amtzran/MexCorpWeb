@@ -1,11 +1,8 @@
 import {Component, OnInit, ViewChild} from '@angular/core';
 import {MatTableDataSource} from "@angular/material/table";
-import {Contract, Customer, ModelCustomer} from "../../../customer/customers/interfaces/customer.interface";
 import {FormBuilder, FormGroup} from "@angular/forms";
 import {MatPaginator} from "@angular/material/paginator";
 import {MatSort} from "@angular/material/sort";
-import {CustomerType} from "../../../catalog/customer-types/models/customer-type.interface";
-import {EmployeeService} from "../../../employee/services/employee.service";
 import {MatDialog} from "@angular/material/dialog";
 import {SharedService} from "../../../../shared/services/shared.service";
 import {NgxSpinnerService} from "ngx-spinner";
@@ -14,6 +11,7 @@ import {AttendanceService} from "../../services/attendance.service";
 import {Attendance, ModelAttendance} from "../../attendance.interface";
 import {Employee, JobCenter} from "../../../employee/interfaces/employee.interface";
 import {TaskService} from "../../../task/services/task.service";
+import * as fileSaver from "file-saver";
 
 @Component({
   selector: 'app-table',
@@ -23,7 +21,7 @@ import {TaskService} from "../../../task/services/task.service";
 })
 export class TableComponent implements OnInit {
 
-  displayedColumns: string[] = ['id', 'employee_name', 'job_center_name', 'date', 'start_hour', 'end_hour','options'];
+  displayedColumns: string[] = ['id', 'employee_name', 'job_center_name', 'date', 'start_hour', 'start_meal_hour', 'end_meal_hour', 'end_hour','options'];
   dataSource!: MatTableDataSource<Attendance>;
   totalItems!: number;
   pageSize = this.sharedService.pageSize;
@@ -63,6 +61,7 @@ export class TableComponent implements OnInit {
     this.attendanceService.getAttendances(this.filterForm.value)
       .subscribe((attendances : ModelAttendance) => {
           this.spinner.hide()
+        console.log(attendances.data)
           this.dataSource.data = attendances.data
           this.totalItems = attendances.meta.total;
         }, (error => {
@@ -87,9 +86,70 @@ export class TableComponent implements OnInit {
     this.attendanceService.getAttendances(this.filterForm.value)
       .subscribe(res => {
         this.getAttendancesPaginator(this.paginator);
-        this.filterForm.get('initial_date')?.setValue('');
-        this.filterForm.get('final_date')?.setValue('');
       })
+  }
+
+  /**
+   * Export Excel Services Finalized
+   */
+  reportAttendanceExcel(){
+    this.spinner.show()
+    this.attendanceService.reportAttendanceExcel(this.filterForm.value).subscribe((res) => {
+
+      let file = this.sharedService.createBlobToExcel(res);
+      let date_initial = this.dateService.getFormatDataDate(new Date());
+      let final_date = this.dateService.getFormatDataDate(new Date());
+      if (this.filterForm.value.initial_date !== '') {
+        date_initial = this.dateService.getFormatDataDate(this.filterForm.value.initial_date)
+        final_date = this.dateService.getFormatDataDate(this.filterForm.value.final_date)
+      }
+
+      fileSaver.saveAs(file, `Reporte-Asistencia-General-${date_initial}-${final_date}`);
+      this.spinner.hide();
+      this.cleanInput();
+      }, (error => {
+        this.spinner.hide()
+        this.sharedService.errorDialog(error)
+      })
+    )
+  }
+
+  /**
+   * Report Finished
+   * @param type
+   */
+  reportByEmployee(type : string){
+    if(this.filterForm.value.employee === ''){
+      this.sharedService.showSnackBar('El empleado no puede ser vacío');
+      return
+    }
+    if(this.filterForm.value.initial_date === ''){
+      this.sharedService.showSnackBar('El rango de Fechas no puede ser vacío');
+      return
+    }
+    this.spinner.show();
+    this.attendanceService.exportReportByEmployee(this.filterForm.value, type).subscribe(res => {
+        let file : any;
+        if (type === 'excel') file = this.sharedService.createBlobToExcel(res);
+        else file = this.sharedService.createBlobToPdf(res);
+
+        let date_initial = this.dateService.getFormatDataDate(this.filterForm.value.initial_date)
+        let final_date = this.dateService.getFormatDataDate(this.filterForm.value.final_date)
+
+        fileSaver.saveAs(file, `Reporte-Asistencia-Empleado-${type}-${date_initial}-${final_date}`);
+
+        this.spinner.hide();
+        this.cleanInput();
+      }, (error => {
+        this.spinner.hide()
+        this.sharedService.errorDialog(error)
+      })
+    )
+  }
+
+  cleanInput(){
+    this.filterForm.get('initial_date')?.setValue('');
+    this.filterForm.get('final_date')?.setValue('');
   }
 
   /**

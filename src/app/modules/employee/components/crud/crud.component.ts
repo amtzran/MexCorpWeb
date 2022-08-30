@@ -13,6 +13,7 @@ import {MatSort} from "@angular/material/sort";
 import {CrudToolComponent} from "../crud-tool/crud-tool.component";
 import {ConfirmComponent} from "../../../../shared/components/confirm/confirm.component";
 import {Product} from "../../../catalog/products/interfaces/product.interface";
+import {Turn} from "../../../catalog/turns/interfaces/turn.interface";
 
 @Component({
   selector: 'app-crud',
@@ -35,6 +36,7 @@ export class CrudComponent implements OnInit {
   // Fill Selects Job Centers and Jobs
   jobCenters: JobCenter[] = [];
   jobs: Job[] = []
+  turns: Turn[] = [];
   permissions!: DataPermission[];
 
   /**
@@ -61,6 +63,7 @@ export class CrudComponent implements OnInit {
     // Service selects
     this.employeeService.getJobCenters().subscribe(jobCenters => {this.jobCenters = jobCenters.data} )
     this.employeeService.getJobs().subscribe(jobs => {this.jobs = jobs.data} )
+    this.employeeService.getTurns().subscribe(turns => {this.turns = turns.data} )
     this.sharedService.getPermissions().subscribe( permissions => {this.permissions = permissions.data})
 
     /*Formulario*/
@@ -98,6 +101,7 @@ export class CrudComponent implements OnInit {
         color: response.data.color,
         job_center_id: response.data.job_center_id,
         job_title_id: response.data.job_title_id,
+        turn_id: response.data.turn_id,
         permissions_user: response.data.permissions_user.map( (permission: any) => permission.id),
         //products_employee: response.data.products_employee?.map( (product: any) => product.id)
       })
@@ -115,11 +119,12 @@ export class CrudComponent implements OnInit {
     this.employeeForm = this.fb.group({
       name:[{value:null, disabled:this.employee.info}, Validators.required],
       email:[{value:null, disabled:this.employee.info}, [Validators.required, Validators.email]],
-      color:[{value:null, disabled:this.employee.info}, Validators.required],
+      color:[{value: '#000000', disabled:this.employee.info}, Validators.required],
       signature:[{value:'', disabled:this.employee.info}],
       is_active:[{value:true, disabled:this.employee.info}],
       job_center_id: [{value: '', disabled:this.employee.info}, Validators.required],
       job_title_id: [{value: '', disabled:this.employee.info}, Validators.required],
+      turn_id: [{value: '', disabled:this.employee.info}, Validators.required],
       permissions_user:[{value: [], disabled:this.employee.info}, Validators.required],
     });
   }
