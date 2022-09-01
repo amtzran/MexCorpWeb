@@ -61,7 +61,6 @@ export class TableComponent implements OnInit {
     this.attendanceService.getAttendances(this.filterForm.value)
       .subscribe((attendances : ModelAttendance) => {
           this.spinner.hide()
-        console.log(attendances.data)
           this.dataSource.data = attendances.data
           this.totalItems = attendances.meta.total;
         }, (error => {

@@ -22,6 +22,8 @@ export interface Employee {
   avatar?: string;
   signature?: string;
   is_active?: boolean;
+  entry_radius?: boolean;
+  exit_radius?: boolean;
   user_id?: number;
   user_name?: string;
   permissions_user: DataPermission[] | [];

@@ -93,7 +93,7 @@ export class CrudComponent implements OnInit {
    */
   loadEmployeeById(): void{
     this.spinner.show()
-    this.employeeService.getEmployeeById(this.employee.idEmployee).subscribe(response => {
+    this.employeeService.getEmployeeById(this.employee.idEmployee).subscribe((response) => {
       this.spinner.hide()
       this.employeeForm.patchValue({
         name: response.data.name,
@@ -102,6 +102,8 @@ export class CrudComponent implements OnInit {
         job_center_id: response.data.job_center_id,
         job_title_id: response.data.job_title_id,
         turn_id: response.data.turn_id,
+        entry_radius: response.data.entry_radius,
+        exit_radius: response.data.exit_radius,
         permissions_user: response.data.permissions_user.map( (permission: any) => permission.id),
         //products_employee: response.data.products_employee?.map( (product: any) => product.id)
       })
@@ -125,6 +127,8 @@ export class CrudComponent implements OnInit {
       job_center_id: [{value: '', disabled:this.employee.info}, Validators.required],
       job_title_id: [{value: '', disabled:this.employee.info}, Validators.required],
       turn_id: [{value: '', disabled:this.employee.info}, Validators.required],
+      entry_radius:[{value:false, disabled:this.employee.info}],
+      exit_radius:[{value:false, disabled:this.employee.info}],
       permissions_user:[{value: [], disabled:this.employee.info}, Validators.required],
     });
   }

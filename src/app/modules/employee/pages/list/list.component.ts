@@ -80,7 +80,7 @@ export class ListComponent implements OnInit {
   deleteEmployee(employee: Employee) {
     // Show Dialog
     const dialog = this.dialog.open(ConfirmComponent, {
-      width: '250vw',
+      width: '50vw',
       data: employee
     })
 
