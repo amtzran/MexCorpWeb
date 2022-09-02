@@ -5,94 +5,116 @@
     </mat-card-title>
   </mat-card>
 
-  <mat-card fxLayoutGap="10">
-    <div fxLayout="row"  [formGroup]="employeePaginateForm">
+  <mat-card>
+    <div class="container" fxFlex="100" fxLayout="column" [formGroup]="employeePaginateForm">
 
-      <div fxFlex="80" fxLayoutGap="10">
+    <div fxLayout="row"
+         fxLayout.xs="column"
+         fxLayout.sm="column"
+         fxLayoutGap="10px">
 
-        <ng-select fxFlex="100"
-                   bindLabel="name"
-                   placeholder="Empleados"
-                   formControlName="employee"
-                   [multiple]="false"
-                   appendTo="body"
-                   [searchable]="true"
-                   [clearable]="true"
-                   (change)="filterSelect()">
-          <ng-option value="">TODOS</ng-option>
-          <ng-option *ngFor="let employee of employees" [value]="employee.id">
-            {{employee.name}}
-          </ng-option>
-        </ng-select>
+      <ng-select fxFlex="100"
+                 bindLabel="name"
+                 placeholder="Empleados"
+                 formControlName="employee"
+                 [multiple]="false"
+                 appendTo="body"
+                 [searchable]="true"
+                 [clearable]="true"
+                 (change)="filterSelect()">
+        <ng-option value="">TODOS</ng-option>
+        <ng-option *ngFor="let employee of employees" [value]="employee.id">
+          {{employee.name}}
+        </ng-option>
+      </ng-select>
 
-        <ng-select fxFlex="100"
-                   bindLabel="name"
-                   placeholder="Grupos"
-                   formControlName="job_center"
-                   [multiple]="false"
-                   appendTo="body"
-                   [searchable]="true"
-                   [clearable]="true"
-                   (change)="filterSelect()">
-          <ng-option value="">TODOS</ng-option>
-          <ng-option *ngFor="let jobCenter of jobCenters" [value]="jobCenter.id">
-            {{jobCenter.name}}
-          </ng-option>
-        </ng-select>
+      <ng-select fxFlex="100"
+                 bindLabel="name"
+                 placeholder="Grupos"
+                 formControlName="job_center"
+                 [multiple]="false"
+                 appendTo="body"
+                 [searchable]="true"
+                 [clearable]="true"
+                 (change)="filterSelect()">
+        <ng-option value="">TODOS</ng-option>
+        <ng-option *ngFor="let jobCenter of jobCenters" [value]="jobCenter.id">
+          {{jobCenter.name}}
+        </ng-option>
+      </ng-select>
 
-        <ng-select fxFlex="100"
-                   bindLabel="name"
-                   placeholder="Puestos"
-                   formControlName="job_title"
-                   [multiple]="false"
-                   appendTo="body"
-                   [searchable]="true"
-                   [clearable]="true"
-                   (change)="filterSelect()">
-          <ng-option value="">TODOS</ng-option>
-          <ng-option *ngFor="let job of jobs" [value]="job.id">
-            {{job.name}}
-          </ng-option>
-        </ng-select>
 
-        <ng-select fxFlex="100"
-                   bindLabel="name"
-                   placeholder="Turnos"
-                   formControlName="turn"
-                   [multiple]="false"
-                   appendTo="body"
-                   [searchable]="true"
-                   [clearable]="true"
-                   (change)="filterSelect()">
-          <ng-option value="">TODOS</ng-option>
-          <ng-option *ngFor="let turn of turns" [value]="turn.id">
-            {{turn.name}}
-          </ng-option>
-        </ng-select>
+      <ng-select fxFlex="100"
+                 bindLabel="name"
+                 placeholder="Puestos"
+                 formControlName="job_title"
+                 [multiple]="false"
+                 appendTo="body"
+                 [searchable]="true"
+                 [clearable]="true"
+                 (change)="filterSelect()">
+        <ng-option value="">TODOS</ng-option>
+        <ng-option *ngFor="let job of jobs" [value]="job.id">
+          {{job.name}}
+        </ng-option>
+      </ng-select>
 
-        <mat-form-field fxFlex="100">
+      <ng-select fxFlex="100"
+                 bindLabel="name"
+                 placeholder="Turnos"
+                 formControlName="turn"
+                 [multiple]="false"
+                 appendTo="body"
+                 [searchable]="true"
+                 [clearable]="true"
+                 (change)="filterSelect()">
+        <ng-option value="">TODOS</ng-option>
+        <ng-option *ngFor="let turn of turns" [value]="turn.id">
+          {{turn.name}}
+        </ng-option>
+      </ng-select>
 
-          <mat-label>Ingresar Rango Fecha</mat-label>
-          <mat-date-range-input [rangePicker]="picker">
-            <input matStartDate formControlName="initial_date" placeholder="Fecha Inicial">
-            <input matEndDate formControlName="final_date" placeholder="Fecha Final" (dateChange)="filterSelect()">
-          </mat-date-range-input>
-          <mat-datepicker-toggle matSuffix [for]="picker"></mat-datepicker-toggle>
-          <mat-date-range-picker #picker></mat-date-range-picker>
-          <mat-error *ngIf="fieldInvalid('final_date')">
-            Favor de ingresar el rango
-          </mat-error>
+      <mat-form-field fxFlex="100">
 
-        </mat-form-field>
+        <mat-label>Ingresar Rango Fecha</mat-label>
+        <mat-date-range-input [rangePicker]="picker">
+          <input matStartDate formControlName="initial_date" placeholder="Fecha Inicial">
+          <input matEndDate formControlName="final_date" placeholder="Fecha Final" (dateChange)="filterSelect()">
+        </mat-date-range-input>
+        <mat-datepicker-toggle matSuffix [for]="picker"></mat-datepicker-toggle>
+        <mat-date-range-picker #picker></mat-date-range-picker>
+        <mat-error *ngIf="fieldInvalid('final_date')">
+          Favor de ingresar el rango
+        </mat-error>
 
-      </div>
+      </mat-form-field>
 
-      <div fxFlex="20" fxLayoutAlign="center center">
+    </div>
+
+    <div fxLayout="row"
+           fxLayout.xs="column"
+           fxLayout.sm="column"
+           fxLayoutGap="10px">
+
+      <div fxFlex="100">
         <button (click)="openDialogEmployee(false, null, false)" mat-button color="primary">
           <mat-icon>person_add</mat-icon>
           Nuevo Empleado
         </button>
       </div>
+      <div fxFlex="100">
+        <button mat-button color="primary" [matMenuTriggerFor]="menu" [disabled]="false">Reportes</button>
+        <mat-menu #menu="matMenu">
+          <button mat-menu-item (click)="reportEmployeeExcel()" [disabled]="false">
+            Empleados
+            <mat-icon mat-list-icon class="colorCheckGreen">view_list</mat-icon>
+          </button>
+
+        </mat-menu>
+      </div>
+
+      </div>
+
     </div>
 
   </mat-card>

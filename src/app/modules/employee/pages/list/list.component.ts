@@ -193,18 +193,36 @@ export class ListComponent implements OnInit {
    * Filter Customer and Search
    */
   filterSelect(){
-    if (this.employeePaginateForm.value.initial_date !== '' && this.employeePaginateForm.value.final_date !== '' ) {
-    /*  let initial_date = this.dateService.getFormatDataDate(this.filterForm.value.initial_date);
-      let final_date = this.dateService.getFormatDataDate(this.filterForm.value.final_date);
-      this.filterForm.patchValue({
-        initial_date: initial_date,
-        final_date: final_date
-      });*/
-    }
     this.employeeService.getEmployees(this.employeePaginateForm.value)
       .subscribe(res => {
         this.getEmployeesPaginator(this.paginator);
       })
+  }
+
+  /**
+   * Export Excel Services Finalized
+   */
+  reportEmployeeExcel(){
+    this.spinner.show()
+    this.employeeService.reportEmployeesExcel(this.employeePaginateForm.value).subscribe((res) => {
+
+        let file = this.sharedService.createBlobToExcel(res);
+        if (this.employeePaginateForm.value.initial_date !== ''){
+          let date_initial = this.dateService.getFormatDataDate(this.employeePaginateForm.value.initial_date);
+          let final_date = this.dateService.getFormatDataDate(this.employeePaginateForm.value.final_date);
+          fileSaver.saveAs(file, `Reporte-Empleados-${date_initial} a ${final_date}`);
+        }
+        else {
+          let date = this.dateService.getFormatDataDate(new Date());
+          fileSaver.saveAs(file, `Reporte-Empleados-${date}`);
+        }
+
+        this.spinner.hide();
+      }, (error => {
+        this.spinner.hide()
+        this.sharedService.errorDialog(error)
+      })
+    )
   }
 
   /**

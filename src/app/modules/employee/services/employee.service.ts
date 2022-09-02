@@ -12,6 +12,7 @@ import {
 import {ModelProduct, Product} from "../../catalog/products/interfaces/product.interface";
 import {ModelTurn} from "../../catalog/turns/interfaces/turn.interface";
 import {DateService} from "../../../core/utils/date.service";
+import {reportTask} from "../../task/models/task.interface";
 
 @Injectable({
   providedIn: 'root'
@@ -45,6 +46,28 @@ export class EmployeeService {
     initial_date ? params = params.append('initial_date', initial_date) : null;
     final_date ? params = params.append('final_date', final_date) : null;
     return this.http.get<ModelEmployee>(`${this.baseUrl}/employees/`, {params})
+  }
+
+  // Report Attendances
+  reportEmployeesExcel(filter: EmployeePaginate) : Observable<any> {
+    let params = new HttpParams();
+    let employee = String(filter.employee);
+    let job_center = String(filter.job_center);
+    let job_title = String(filter.job_title);
+    let turn = String(filter.turn);
+    let initial_date = '';
+    let final_date = '';
+    if (filter.initial_date !== '' || filter.final_date !== ''){
+      initial_date = this.dateService.getFormatDataDate(filter.initial_date)
+      final_date = this.dateService.getFormatDataDate(filter.final_date)
+    }
+    employee ? params = params.append('employee', employee) : null;
+    job_center ? params = params.append('job_center', job_center) : null;
+    job_title ? params = params.append('job_title', job_title) : null;
+    turn ? params = params.append('turn', turn) : null;
+    initial_date ? params = params.append('initial_date', initial_date) : null;
+    final_date ? params = params.append('final_date', final_date) : null;
+    return this.http.post(`${this.baseUrl}/employees-export/`, '',{responseType: 'blob', params})
   }
 
   // Add Employee
