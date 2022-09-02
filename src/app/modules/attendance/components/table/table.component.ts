@@ -74,14 +74,6 @@ export class TableComponent implements OnInit {
    * Filter Customer and Search
    */
   filterSelectEmployee(idEmployee: number){
-    if (this.filterForm.value.initial_date !== '' && this.filterForm.value.final_date !== '' ) {
-      let initial_date = this.dateService.getFormatDataDate(this.filterForm.value.initial_date);
-      let final_date = this.dateService.getFormatDataDate(this.filterForm.value.final_date);
-      this.filterForm.patchValue({
-        initial_date: initial_date,
-        final_date: final_date
-      });
-    }
     this.attendanceService.getAttendances(this.filterForm.value)
       .subscribe(res => {
         this.getAttendancesPaginator(this.paginator);
@@ -96,16 +88,18 @@ export class TableComponent implements OnInit {
     this.attendanceService.reportAttendanceExcel(this.filterForm.value).subscribe((res) => {
 
       let file = this.sharedService.createBlobToExcel(res);
-      let date_initial = this.dateService.getFormatDataDate(new Date());
-      let final_date = this.dateService.getFormatDataDate(new Date());
-      if (this.filterForm.value.initial_date !== '') {
-        date_initial = this.dateService.getFormatDataDate(this.filterForm.value.initial_date)
-        final_date = this.dateService.getFormatDataDate(this.filterForm.value.final_date)
+      if (this.filterForm.value.initial_date !== ''){
+        let date_initial = this.dateService.getFormatDataDate(this.filterForm.value.initial_date);
+        let final_date = this.dateService.getFormatDataDate(this.filterForm.value.final_date);
+        fileSaver.saveAs(file, `Reporte-Asistencia-General-${date_initial}-${final_date}`);
+      }
+      else {
+        let date = this.dateService.getFormatDataDate(new Date());
+        fileSaver.saveAs(file, `Reporte-Asistencia-General-${date}`);
       }
 
-      fileSaver.saveAs(file, `Reporte-Asistencia-General-${date_initial}-${final_date}`);
       this.spinner.hide();
-      this.cleanInput();
+      //this.cleanInput();
       }, (error => {
         this.spinner.hide()
         this.sharedService.errorDialog(error)
@@ -131,9 +125,8 @@ export class TableComponent implements OnInit {
         let file : any;
         if (type === 'excel') file = this.sharedService.createBlobToExcel(res);
         else file = this.sharedService.createBlobToPdf(res);
-
-        let date_initial = this.dateService.getFormatDataDate(this.filterForm.value.initial_date)
-        let final_date = this.dateService.getFormatDataDate(this.filterForm.value.final_date)
+        let date_initial = this.dateService.getFormatDataDate(this.filterForm.value.initial_date);
+        let final_date = this.dateService.getFormatDataDate(this.filterForm.value.final_date);
 
         fileSaver.saveAs(file, `Reporte-Asistencia-Empleado-${type}-${date_initial}-${final_date}`);
 

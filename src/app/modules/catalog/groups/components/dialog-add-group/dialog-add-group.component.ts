@@ -92,14 +92,14 @@ export class DialogAddGroupComponent implements OnInit {
   ngAfterViewInit(): void {
     setTimeout(() => {
       this.loadMap()
-    }, 1000); 
+    }, 1000);
   }
 
   loadMap(){
     this.mapsAPILoader.load().then(() => {
       this.geocoder = new google.maps.Geocoder;
       this.setCurrentLocation();
-    }); 
+    });
   }
 
   /**
@@ -218,7 +218,6 @@ export class DialogAddGroupComponent implements OnInit {
   }
 
   markerDragEnd($event: any) {
-    console.log('ok')
     const latlng = {
       lat: parseFloat($event.latLng.lat()),
       lng: parseFloat($event.latLng.lng()),

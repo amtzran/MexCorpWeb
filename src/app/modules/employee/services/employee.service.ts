@@ -11,13 +11,15 @@ import {
 } from "../interfaces/employee.interface";
 import {ModelProduct, Product} from "../../catalog/products/interfaces/product.interface";
 import {ModelTurn} from "../../catalog/turns/interfaces/turn.interface";
+import {DateService} from "../../../core/utils/date.service";
 
 @Injectable({
   providedIn: 'root'
 })
 export class EmployeeService {
 
-  constructor( private http: HttpClient) { }
+  constructor(private http: HttpClient,
+              private dateService: DateService) { }
   private baseUrl: string = environment.baseUrl
 
   // Get Employee
@@ -27,9 +29,21 @@ export class EmployeeService {
 
   // Get Employees
   getEmployees(filter: EmployeePaginate): Observable<ModelEmployee> {
+    let initial_date = '';
+    let final_date = '';
+    if (filter.initial_date !== '') {
+      initial_date = this.dateService.getFormatDataDate(filter.initial_date);
+      final_date = this.dateService.getFormatDataDate(filter.final_date);
+    }
     let params = new HttpParams();
     filter.page ? params = params.append('page', filter.page) : null;
     filter.page_size ? params = params.append('page_size', filter.page_size) : null;
+    filter.employee ? params = params.append('employee', filter.employee) : null;
+    filter.job_center ? params = params.append('job_center', filter.job_center) : null;
+    filter.job_title ? params = params.append('job_title', filter.job_title) : null;
+    filter.turn ? params = params.append('turn', filter.turn) : null;
+    initial_date ? params = params.append('initial_date', initial_date) : null;
+    final_date ? params = params.append('final_date', final_date) : null;
     return this.http.get<ModelEmployee>(`${this.baseUrl}/employees/`, {params})
   }
 

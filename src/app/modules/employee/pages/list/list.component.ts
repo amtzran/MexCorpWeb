@@ -3,7 +3,7 @@ import {MatTableDataSource} from "@angular/material/table";
 import {FormBuilder, FormGroup} from "@angular/forms";
 import {MatPaginator} from "@angular/material/paginator";
 import {MatSort} from "@angular/material/sort";
-import {Employee} from "../../interfaces/employee.interface";
+import {Employee, JobCenter} from "../../interfaces/employee.interface";
 import {MatDialog} from "@angular/material/dialog";
 import {EmployeeService} from "../../services/employee.service";
 import {ModalResponse} from "../../../../core/utils/ModalResponse";
@@ -16,6 +16,9 @@ import {ProfileUser} from "../../../auth/interfaces/login.interface";
 import {ResetPasswordComponent} from "../../components/reset-password/reset-password.component";
 import * as fileSaver from "file-saver";
 import {DateService} from "../../../../core/utils/date.service";
+import {TaskService} from "../../../task/services/task.service";
+import {Turn} from "../../../catalog/turns/interfaces/turn.interface";
+import {JobTitle} from "../../../catalog/job-titles/models/job-title.interface";
 
 @Component({
   selector: 'app-list',
@@ -31,13 +34,23 @@ export class ListComponent implements OnInit {
   employeePaginateForm!: FormGroup;
   @ViewChild(MatPaginator, {static: true}) paginator!: MatPaginator;
   @ViewChild(MatSort) sort!: MatSort;
+  jobCenters: JobCenter[] = [];
+  employees: Employee[] = [];
+  turns: Turn[] = [];
+  jobs: any[] = [];
 
   constructor(private employeeService: EmployeeService,
               private formBuilder: FormBuilder,
               private dialog: MatDialog,
               private sharedService: SharedService,
               private spinner: NgxSpinnerService,
-              private dateService: DateService,) {
+              private dateService: DateService,
+              private taskService: TaskService)
+  {
+    this.loadDataEmployees();
+    this.loadDataGroups();
+    this.loadDataTurns();
+    this.loadDataJobTitles();
   }
 
   ngOnInit(): void {
@@ -176,11 +189,71 @@ export class ListComponent implements OnInit {
     })
   }
 
+  /**
+   * Filter Customer and Search
+   */
+  filterSelect(){
+    if (this.employeePaginateForm.value.initial_date !== '' && this.employeePaginateForm.value.final_date !== '' ) {
+    /*  let initial_date = this.dateService.getFormatDataDate(this.filterForm.value.initial_date);
+      let final_date = this.dateService.getFormatDataDate(this.filterForm.value.final_date);
+      this.filterForm.patchValue({
+        initial_date: initial_date,
+        final_date: final_date
+      });*/
+    }
+    this.employeeService.getEmployees(this.employeePaginateForm.value)
+      .subscribe(res => {
+        this.getEmployeesPaginator(this.paginator);
+      })
+  }
+
+  /**
+   * Array from service for Groups
+   */
+  loadDataGroups(){
+    this.taskService.getJobCenters().subscribe(jobCenters => {this.jobCenters = jobCenters.data} )
+  }
+
+  /**
+   * Array from service for Employees
+   */
+  loadDataEmployees(){
+    this.taskService.getEmployees().subscribe(employees => {this.employees = employees.data} )
+  }
+
+  /**
+   * Array from service for Turns
+   */
+  loadDataTurns(){
+    this.employeeService.getTurns().subscribe(turns => {this.turns = turns.data} )
+  }
+
+  /**
+   * Array from service for Turns
+   */
+  loadDataJobTitles(){
+    this.employeeService.getJobs().subscribe(jobTitles => {this.jobs = jobTitles.data} )
+  }
+
+  /**
+   * Validations
+   * @param field
+   */
+  fieldInvalid(field: string) {
+    return this.employeePaginateForm.get(field)?.invalid && this.employeePaginateForm.get(field)?.touched
+  }
+
   /* Método que permite iniciar los filtros de rutas*/
   loadEmployeeFilterForm(): void {
     this.employeePaginateForm = this.formBuilder.group({
       page: [],
-      page_size: [this.pageSize]
+      page_size: [this.pageSize],
+      employee: '',
+      job_center: '',
+      job_title: '',
+      turn: '',
+      initial_date: '',
+      final_date: ''
     })
   }
 

@@ -5,21 +5,97 @@
     </mat-card-title>
   </mat-card>
 
-  <div fxLayout="row">
-    <div fxFlex="80">
-      <mat-form-field appearance="standard">
-        <mat-label>Filtrar Datos Empleados</mat-label>
-        <input autocomplete="nope" matInput (keyup)="applyFilter($event)" placeholder="Buscar en Tabla Empleados" #input>
-      </mat-form-field>
-    </div>
-    <div fxFlex="20" fxLayoutAlign="center center">
-      <button (click)="openDialogEmployee(false, null, false)" mat-button color="primary">
-        <mat-icon>person_add</mat-icon>
-        Nuevo Empleado
-      </button>
-    </div>
-  </div>
+  <mat-card fxLayoutGap="10">
+    <div fxLayout="row"  [formGroup]="employeePaginateForm">
 
+      <div fxFlex="80" fxLayoutGap="10">
+
+        <ng-select fxFlex="100"
+                   bindLabel="name"
+                   placeholder="Empleados"
+                   formControlName="employee"
+                   [multiple]="false"
+                   appendTo="body"
+                   [searchable]="true"
+                   [clearable]="true"
+                   (change)="filterSelect()">
+          <ng-option value="">TODOS</ng-option>
+          <ng-option *ngFor="let employee of employees" [value]="employee.id">
+            {{employee.name}}
+          </ng-option>
+        </ng-select>
+
+        <ng-select fxFlex="100"
+                   bindLabel="name"
+                   placeholder="Grupos"
+                   formControlName="job_center"
+                   [multiple]="false"
+                   appendTo="body"
+                   [searchable]="true"
+                   [clearable]="true"
+                   (change)="filterSelect()">
+          <ng-option value="">TODOS</ng-option>
+          <ng-option *ngFor="let jobCenter of jobCenters" [value]="jobCenter.id">
+            {{jobCenter.name}}
+          </ng-option>
+        </ng-select>
+
+        <ng-select fxFlex="100"
+                   bindLabel="name"
+                   placeholder="Puestos"
+                   formControlName="job_title"
+                   [multiple]="false"
+                   appendTo="body"
+                   [searchable]="true"
+                   [clearable]="true"
+                   (change)="filterSelect()">
+          <ng-option value="">TODOS</ng-option>
+          <ng-option *ngFor="let job of jobs" [value]="job.id">
+            {{job.name}}
+          </ng-option>
+        </ng-select>
+
+        <ng-select fxFlex="100"
+                   bindLabel="name"
+                   placeholder="Turnos"
+                   formControlName="turn"
+                   [multiple]="false"
+                   appendTo="body"
+                   [searchable]="true"
+                   [clearable]="true"
+                   (change)="filterSelect()">
+          <ng-option value="">TODOS</ng-option>
+          <ng-option *ngFor="let turn of turns" [value]="turn.id">
+            {{turn.name}}
+          </ng-option>
+        </ng-select>
+
+        <mat-form-field fxFlex="100">
+
+          <mat-label>Ingresar Rango Fecha</mat-label>
+          <mat-date-range-input [rangePicker]="picker">
+            <input matStartDate formControlName="initial_date" placeholder="Fecha Inicial">
+            <input matEndDate formControlName="final_date" placeholder="Fecha Final" (dateChange)="filterSelect()">
+          </mat-date-range-input>
+          <mat-datepicker-toggle matSuffix [for]="picker"></mat-datepicker-toggle>
+          <mat-date-range-picker #picker></mat-date-range-picker>
+          <mat-error *ngIf="fieldInvalid('final_date')">
+            Favor de ingresar el rango
+          </mat-error>
+
+        </mat-form-field>
+
+      </div>
+
+      <div fxFlex="20" fxLayoutAlign="center center">
+        <button (click)="openDialogEmployee(false, null, false)" mat-button color="primary">
+          <mat-icon>person_add</mat-icon>
+          Nuevo Empleado
+        </button>
+      </div>
+    </div>
+
+  </mat-card>
 
   <div class="mat-elevation-z8">
     <ngx-spinner></ngx-spinner>
@@ -118,7 +194,7 @@
 
       <!-- Row shown when there is no matching data. -->
       <tr class="mat-row" *matNoDataRow>
-        <td class="mat-cell" colspan="4">No hay datos que mostrar {{ input.value }}</td>
+        <td class="mat-cell" colspan="4">No hay datos que mostrar</td>
       </tr>
     </table>
 

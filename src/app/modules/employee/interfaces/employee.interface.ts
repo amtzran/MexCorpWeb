@@ -35,7 +35,13 @@ export interface Employee {
 // Data Paginate
 export interface EmployeePaginate {
   page: string,
-  page_size: string
+  page_size: string,
+  employee: string,
+  job_center: string,
+  job_title: string,
+  turn: string,
+  initial_date: string,
+  final_date: string
 }
 
 export interface EmployeeDetail {
