@@ -104,6 +104,12 @@ export class CrudComponent implements OnInit {
         turn_id: response.data.turn_id,
         entry_radius: response.data.entry_radius,
         exit_radius: response.data.exit_radius,
+        date_admission: response.data.date_admission,
+        nss: response.data.nss,
+        curp: response.data.curp,
+        rfc: response.data.rfc,
+        validity: response.data.validity,
+        phone: response.data.phone,
         permissions_user: response.data.permissions_user.map( (permission: any) => permission.id),
         //products_employee: response.data.products_employee?.map( (product: any) => product.id)
       })
@@ -129,6 +135,12 @@ export class CrudComponent implements OnInit {
       turn_id: [{value: '', disabled:this.employee.info}, Validators.required],
       entry_radius:[{value:false, disabled:this.employee.info}],
       exit_radius:[{value:false, disabled:this.employee.info}],
+      date_admission:[{value:false, disabled:this.employee.info}],
+      nss:[{value:false, disabled:this.employee.info}],
+      curp:[{value:false, disabled:this.employee.info}],
+      rfc:[{value:false, disabled:this.employee.info}],
+      validity:[{value:false, disabled:this.employee.info}],
+      phone:[{value:false, disabled:this.employee.info}],
       permissions_user:[{value: [], disabled:this.employee.info}, Validators.required],
     });
   }

@@ -26,6 +26,12 @@ export interface Employee {
   exit_radius?: boolean;
   user_id?: number;
   user_name?: string;
+  date_admission?: string;
+  nss?: string;
+  curp?: string;
+  rfc?: string;
+  validity?: string;
+  phone?: string;
   permissions_user: DataPermission[] | [];
   products_employee?: any;
   created_at?: string;

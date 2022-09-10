@@ -117,6 +117,13 @@ const routes: Routes = [
     canLoad: [ ValidateTokenGuard ]
   },
   {
+    path: 'supplier',
+    component: HomeComponent,
+    loadChildren: () => import('../catalog/suppliers/supplier.module').then(m => m.SupplierModule),
+    canActivate: [ ValidateTokenGuard ],
+    canLoad: [ ValidateTokenGuard ]
+  },
+  {
     path: 'report',
     component: HomeComponent,
     loadChildren: () => import('../report/report.module').then(m => m.ReportModule),

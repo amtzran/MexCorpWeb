@@ -119,6 +119,11 @@ export class SideNavComponent implements OnInit {
       route: '/dashboard/turn',
       icon: 'hourglass_bottom'
     },
+    {
+      name: 'Proveedores',
+      route: '/dashboard/supplier',
+      icon: 'folder'
+    },
   ]
 
   logout(){
