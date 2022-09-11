@@ -1,9 +1,7 @@
 import {Component, Inject, OnInit} from '@angular/core';
 import {FormBuilder, FormControl, FormGroup, Validators} from "@angular/forms";
-import {DoorType} from "../../../../customer/doors/interfaces/door.interface";
 import {SharedService} from "../../../../../shared/services/shared.service";
 import {MAT_DIALOG_DATA, MatDialogRef} from "@angular/material/dialog";
-import {DoorService} from "../../../../customer/doors/services/door.service";
 import {NgxSpinnerService} from "ngx-spinner";
 import {ModalResponse} from "../../../../../core/utils/ModalResponse";
 import {ProductService} from "../../services/product.service";
@@ -15,7 +13,7 @@ import {ProductService} from "../../services/product.service";
 })
 export class CrudComponent implements OnInit {
 
-  /*Formulario*/
+  /*Form*/
   productForm!: FormGroup;
   /* Variable to store file data */
   fileDataForm = new FormData();
@@ -34,7 +32,7 @@ export class CrudComponent implements OnInit {
     private dialogRef: MatDialogRef<CrudComponent>,
     private productService: ProductService,
     private spinner: NgxSpinnerService,
-    @Inject(MAT_DIALOG_DATA) public product : {idProduct: number, edit: boolean, info: boolean, idCustomer: number}
+    @Inject(MAT_DIALOG_DATA) public product : {category: string,idProduct: number, edit: boolean, info: boolean, idCustomer: number}
   ) { }
 
   ngOnInit(): void {
@@ -98,7 +96,13 @@ export class CrudComponent implements OnInit {
       photo: [{value: '', disabled:this.product.info}],
       key: [{value: '', disabled:this.product.info}],
       unit: [{value: '', disabled:this.product.info}],
+      category: [{value: this.product.category, disabled:this.product.info}],
     });
+    if (this.product.category === 'repair'){
+      this.productForm.addControl('model', new FormControl({value: '', disabled: this.product.info}, []))
+      this.productForm.addControl('location', new FormControl({value: '', disabled: this.product.info}, []))
+      this.productForm.addControl('family', new FormControl({value: '', disabled: this.product.info}, []))
+    }
   }
 
   /**
@@ -110,7 +114,7 @@ export class CrudComponent implements OnInit {
     this.spinner.show()
     this.productService.addProduct(this.fileDataForm).subscribe(response => {
       this.spinner.hide()
-      this.sharedService.showSnackBar('Se ha agregado correctamente el producto.');
+      this.sharedService.showSnackBar(`Se ha agregado correctamente el ${response.data.name}`);
       this.dialogRef.close(ModalResponse.UPDATE);
     })
   }
@@ -122,7 +126,7 @@ export class CrudComponent implements OnInit {
     this.validateForm()
     this.createFormData(this.productForm.value);
     this.spinner.show()
-    this.productService.updateProduct(this.product.idProduct, this.fileDataForm).subscribe(response => {
+    this.productService.updateProduct(this.product.idProduct, this.fileDataForm).subscribe((response) => {
       this.spinner.hide()
       this.sharedService.showSnackBar(`Se ha actualizado correctamente el producto: ${response.data.name}` );
       this.dialogRef.close(ModalResponse.UPDATE);

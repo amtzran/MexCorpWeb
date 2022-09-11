@@ -1,6 +1,6 @@
 // DataSource for Customer
 import {DataPermission, Links, MetaModel} from "../../../shared/interfaces/shared.interface";
-import {Product} from "../../catalog/products/interfaces/product.interface";
+import {Product} from "../../catalog/tools-services/interfaces/product.interface";
 
 export interface ModelEmployee {
   meta: MetaModel;

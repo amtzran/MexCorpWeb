@@ -1,33 +1,51 @@
 <div class="container">
   <mat-card fxLayoutAlign="center center">
     <mat-card-title>
-      <mat-card-title>Productos y Servicios</mat-card-title>
+      <mat-card-title>Herramientas y Servicios</mat-card-title>
     </mat-card-title>
   </mat-card>
 
   <br>
 
-  <div fxLayout="row" class="container">
+  <div fxLayout="row" class="container" fxLayoutGap="10px" [formGroup]="productPaginateForm">
 
-    <div fxFlex="60">
+    <div fxFlex="25">
       <ng-select fxFlex="100"
                  bindLabel="name"
-                 placeholder="Productos"
+                 placeholder="Herramientas"
                  [multiple]="false"
                  appendTo="body"
+                 formControlName="id"
                  [searchable]="true"
                  [clearable]="true"
-                 (change)="filterSelectProduct($event)">
+                 (change)="filterSelect()">
+        <ng-option value="">TODOS</ng-option>
         <ng-option *ngFor="let product of products" [value]="product.id">
           {{product.name}} - {{product.description}}
         </ng-option>
       </ng-select>
     </div>
 
-    <div fxFlex="20" fxLayoutAlign="center center">
-      <button (click)="openDialogProduct(true, null, false)" mat-button color="primary">
+    <mat-form-field fxFlex="25">
+      <mat-label>Categoría</mat-label>
+      <mat-select formControlName="category" (selectionChange)="filterSelect()">
+        <mat-option value="">TODOS</mat-option>
+        <mat-option value="tool">Herramienta</mat-option>
+        <mat-option value="repair">Servicio</mat-option>
+      </mat-select>
+    </mat-form-field>
+
+    <div fxFlex="15" fxLayoutAlign="center center">
+      <button (click)="openDialogProduct('tool',true, null, false)" mat-button color="primary">
+        <mat-icon>construction</mat-icon>
+        Nueva Herramienta
+      </button>
+    </div>
+
+    <div fxFlex="15" fxLayoutAlign="center center">
+      <button (click)="openDialogProduct('repair',true, null, false)" mat-button color="primary">
         <mat-icon>inventory</mat-icon>
-        Nuevo Producto
+        Nuevo Servicio
       </button>
     </div>
 
@@ -44,12 +62,6 @@
   <div class="mat-elevation-z8">
     <ngx-spinner></ngx-spinner>
     <table mat-table [dataSource]="dataSource" matSort>
-
-      <!-- ID Column -->
-      <ng-container matColumnDef="id">
-        <th mat-header-cell *matHeaderCellDef mat-sort-header=""> ID</th>
-        <td mat-cell *matCellDef="let row"> {{row.id}} </td>
-      </ng-container>
 
       <!-- Key Column -->
       <ng-container matColumnDef="key">
@@ -87,6 +99,18 @@
         <td mat-cell *matCellDef="let row"> {{ row.cost | currency: 'MX':'$'}} </td>
       </ng-container>
 
+      <!-- Model Column -->
+      <ng-container matColumnDef="model">
+        <th mat-header-cell *matHeaderCellDef mat-sort-header=""> Modelo</th>
+        <td mat-cell *matCellDef="let row"> {{row.model}} </td>
+      </ng-container>
+
+      <!-- Model Column -->
+      <ng-container matColumnDef="family">
+        <th mat-header-cell *matHeaderCellDef mat-sort-header=""> Familia</th>
+        <td mat-cell *matCellDef="let row"> {{row.family}} </td>
+      </ng-container>
+
       <!-- settings Column -->
       <ng-container matColumnDef="options">
         <th mat-header-cell *matHeaderCellDef mat-sort-header=""> Opciones</th>
@@ -96,11 +120,11 @@
             <mat-icon>more_vert</mat-icon>
           </button>
           <mat-menu #menu="matMenu">
-            <button mat-menu-item (click)="openDialogProduct(false, row.id, true)">
+            <button mat-menu-item (click)="openDialogProduct('tool',false, row.id, true)">
               <mat-icon color="info">visibility</mat-icon>
               Ver
             </button>
-            <button mat-menu-item (click)="openDialogProduct(true, row.id, false)">
+            <button mat-menu-item (click)="openDialogProduct('repair',true, row.id, false)">
               <mat-icon color="primary">edit</mat-icon>
               Editar
             </button>

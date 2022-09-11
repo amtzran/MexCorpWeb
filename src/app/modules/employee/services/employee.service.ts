@@ -9,7 +9,7 @@ import {
   ModelJob,
   ModelJobCenter, ToolsEmployee,
 } from "../interfaces/employee.interface";
-import {ModelProduct, Product} from "../../catalog/products/interfaces/product.interface";
+import {ModelProduct, Product} from "../../catalog/tools-services/interfaces/product.interface";
 import {ModelTurn} from "../../catalog/turns/interfaces/turn.interface";
 import {DateService} from "../../../core/utils/date.service";
 import {reportTask} from "../../task/models/task.interface";

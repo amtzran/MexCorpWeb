@@ -24,6 +24,7 @@ export class ProductService {
     filter.page ? params = params.append('page', filter.page) : null;
     filter.page_size ? params = params.append('page_size', filter.page_size) : null;
     filter.id ? params = params.append('id', filter.id) : null;
+    filter.category ? params = params.append('category', filter.category) : null;
     return this.http.get<ModelProduct>(`${this.baseUrl}/products/`, {params})
   }
 

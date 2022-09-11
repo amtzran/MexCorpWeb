@@ -22,13 +22,13 @@ import {DateService} from "../../../../../core/utils/date.service";
 })
 export class TableComponent implements OnInit {
 
-  displayedColumns: string[] = ['id', 'key','name', 'description', 'unit', 'brand', 'cost','options'];
+  displayedColumns: string[] = ['key','name', 'description', 'unit', 'brand', 'cost', 'model', 'family','options'];
   dataSource!: MatTableDataSource<Product>;
   totalItems!: number;
   pageSize = this.sharedService.pageSize
   productPaginateForm!: FormGroup;
   products!: Product[];
-  idProduct: number = 0;
+  idProduct: string = '';
   @ViewChild(MatPaginator, {static: true}) paginator!: MatPaginator;
   constructor(private productService: ProductService,
               private formBuilder: FormBuilder,
@@ -93,16 +93,17 @@ export class TableComponent implements OnInit {
 
   /**
    * Open dialog for add and update product.
+   * @param category
    * @param edit
    * @param idProduct
    * @param info
    */
-  openDialogProduct(edit: boolean, idProduct: number | null, info: boolean): void {
+  openDialogProduct(category: string, edit: boolean, idProduct: number | null, info: boolean): void {
     const dialogRef = this.dialog.open(CrudComponent, {
       autoFocus: false,
       disableClose: true,
       width: '50vw',
-      data: {edit: edit, idProduct: idProduct, info: info}
+      data: {category: category, edit: edit, idProduct: idProduct, info: info}
     });
     dialogRef.afterClosed().subscribe(res => {
       if (res === ModalResponse.UPDATE) {
@@ -139,8 +140,7 @@ export class TableComponent implements OnInit {
   /**
    * Filter Customer and Search
    */
-  filterSelectProduct(idProduct: number){
-    this.productPaginateForm.get('id')?.setValue(idProduct);
+  filterSelect(){
     this.productService.getProducts(this.productPaginateForm.value).subscribe(res => {
      this.getProductsPaginator(this.paginator);
     })
@@ -151,7 +151,8 @@ export class TableComponent implements OnInit {
     this.productPaginateForm = this.formBuilder.group({
       page: [],
       page_size: this.pageSize,
-      id: this.idProduct
+      id: this.idProduct,
+      category: ''
     })
   }
 

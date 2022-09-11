@@ -1,4 +1,4 @@
-// DataSource for Contract
+// DataSource for Product
 import {Links, MetaModel} from "../../../../shared/interfaces/shared.interface";
 
 export interface ModelProduct {
@@ -18,6 +18,9 @@ export interface Product {
   quantity?: number;
   unit?: string;
   key?: string;
+  model?: string;
+  family?: string;
+  location?: string;
   created_at?: Date;
   updated_at?: Date;
 }
@@ -26,7 +29,8 @@ export interface Product {
 export interface ProductPaginate {
   page: string,
   page_size: string,
-  id?: number
+  id?: number,
+  category?: string
 }
 
 export interface ProductDetail {

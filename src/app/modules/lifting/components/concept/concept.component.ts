@@ -8,8 +8,8 @@ import {Quotation, QuotationConcept} from "../../interfaces/lifting.interface";
 import {ModalResponse} from "../../../../core/utils/ModalResponse";
 import {MatTableDataSource} from "@angular/material/table";
 import {MatPaginator} from "@angular/material/paginator";
-import {ProductService} from "../../../catalog/products/services/product.service";
-import {Product} from "../../../catalog/products/interfaces/product.interface";
+import {ProductService} from "../../../catalog/tools-services/services/product.service";
+import {Product} from "../../../catalog/tools-services/interfaces/product.interface";
 
 @Component({
   selector: 'app-concept',

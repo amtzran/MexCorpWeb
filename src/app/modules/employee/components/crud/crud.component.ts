@@ -12,7 +12,7 @@ import {MatPaginator} from "@angular/material/paginator";
 import {MatSort} from "@angular/material/sort";
 import {CrudToolComponent} from "../crud-tool/crud-tool.component";
 import {ConfirmComponent} from "../../../../shared/components/confirm/confirm.component";
-import {Product} from "../../../catalog/products/interfaces/product.interface";
+import {Product} from "../../../catalog/tools-services/interfaces/product.interface";
 import {Turn} from "../../../catalog/turns/interfaces/turn.interface";
 import {DateService} from "../../../../core/utils/date.service";
 

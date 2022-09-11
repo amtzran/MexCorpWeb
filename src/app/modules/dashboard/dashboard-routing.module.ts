@@ -105,7 +105,7 @@ const routes: Routes = [
   {
     path: 'product',
     component: HomeComponent,
-    loadChildren: () => import('../catalog/products/product.module').then(m => m.ProductModule),
+    loadChildren: () => import('../catalog/tools-services/product.module').then(m => m.ProductModule),
     canActivate: [ ValidateTokenGuard ],
     canLoad: [ ValidateTokenGuard ]
   },
