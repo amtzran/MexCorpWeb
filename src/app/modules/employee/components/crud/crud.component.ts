@@ -14,6 +14,7 @@ import {CrudToolComponent} from "../crud-tool/crud-tool.component";
 import {ConfirmComponent} from "../../../../shared/components/confirm/confirm.component";
 import {Product} from "../../../catalog/products/interfaces/product.interface";
 import {Turn} from "../../../catalog/turns/interfaces/turn.interface";
+import {DateService} from "../../../../core/utils/date.service";
 
 @Component({
   selector: 'app-crud',
@@ -56,6 +57,7 @@ export class CrudComponent implements OnInit {
     private employeeService: EmployeeService,
     private spinner: NgxSpinnerService,
     private dialog: MatDialog,
+    private dateService: DateService,
     @Inject(MAT_DIALOG_DATA) public employee : {idEmployee: number, edit: boolean, info: boolean}
   ) { }
 
@@ -94,6 +96,7 @@ export class CrudComponent implements OnInit {
   loadEmployeeById(): void{
     this.spinner.show()
     this.employeeService.getEmployeeById(this.employee.idEmployee).subscribe((response) => {
+      console.log(response)
       this.spinner.hide()
       this.employeeForm.patchValue({
         name: response.data.name,
@@ -104,11 +107,11 @@ export class CrudComponent implements OnInit {
         turn_id: response.data.turn_id,
         entry_radius: response.data.entry_radius,
         exit_radius: response.data.exit_radius,
-        date_admission: response.data.date_admission,
+        date_admission: this.dateService.getFormatDateSetInputRangePicker(response.data.date_admission!),
         nss: response.data.nss,
         curp: response.data.curp,
         rfc: response.data.rfc,
-        validity: response.data.validity,
+        validity: this.dateService.getFormatDateSetInputRangePicker(response.data.validity!),
         phone: response.data.phone,
         permissions_user: response.data.permissions_user.map( (permission: any) => permission.id),
         //products_employee: response.data.products_employee?.map( (product: any) => product.id)
@@ -135,12 +138,12 @@ export class CrudComponent implements OnInit {
       turn_id: [{value: '', disabled:this.employee.info}, Validators.required],
       entry_radius:[{value:false, disabled:this.employee.info}],
       exit_radius:[{value:false, disabled:this.employee.info}],
-      date_admission:[{value:false, disabled:this.employee.info}],
-      nss:[{value:false, disabled:this.employee.info}],
-      curp:[{value:false, disabled:this.employee.info}],
-      rfc:[{value:false, disabled:this.employee.info}],
-      validity:[{value:false, disabled:this.employee.info}],
-      phone:[{value:false, disabled:this.employee.info}],
+      date_admission:[{value:'', disabled:this.employee.info}, Validators.required],
+      nss:[{value:'', disabled:this.employee.info}],
+      curp:[{value:'', disabled:this.employee.info}],
+      rfc:[{value:'', disabled:this.employee.info}],
+      validity:[{value:'', disabled:this.employee.info}, Validators.required],
+      phone:[{value:'', disabled:this.employee.info}],
       permissions_user:[{value: [], disabled:this.employee.info}, Validators.required],
     });
   }
@@ -158,8 +161,7 @@ export class CrudComponent implements OnInit {
       }, (error => {
         this.spinner.hide()
         this.sharedService.errorDialog(error)
-      } )
-    )
+      }))
   }
 
   /**
@@ -184,6 +186,16 @@ export class CrudComponent implements OnInit {
    */
   validateForm(){
     this.submit = true;
+    if (this.employeeForm.value.date_admission !== '') {
+      let dateAdmission = this.dateService.getFormatDataDate(this.employeeForm.value.date_admission);
+      this.employeeForm.get('date_admission')?.setValue(dateAdmission);
+    }
+
+    if (this.employeeForm.value.validity !== '') {
+      let validity = this.dateService.getFormatDataDate(this.employeeForm.value.validity);
+      this.employeeForm.get('validity')?.setValue(validity);
+    }
+
     if(this.employeeForm.invalid){
       this.sharedService.showSnackBar('Los campos con * son obligatorios.');
       return

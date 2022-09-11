@@ -110,7 +110,7 @@ export class SideNavComponent implements OnInit {
       icon: 'work'
     },
     {
-      name: 'Productos',
+      name: 'Herramientas',
       route: '/dashboard/product',
       icon: 'inventory'
     },
