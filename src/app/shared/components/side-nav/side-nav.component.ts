@@ -72,6 +72,11 @@ export class SideNavComponent implements OnInit {
       icon: 'insert_invitation'
     },
     {
+      name: 'Inventario',
+      route: '/dashboard/inventory',
+      icon: 'inventory'
+    },
+    {
       name: 'Reportes',
       route: '/dashboard/report',
       icon: 'show_chart'

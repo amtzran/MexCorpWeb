@@ -176,7 +176,7 @@
 
 <mat-dialog-actions fxLayoutAlign="end">
   <button (click)="close()" mat-stroked-button color="primary" mat-dialog-close="true">Cancelar</button>
-  <button *ngIf="!product.idProduct" (click)="addProduct()" mat-flat-button color="primary" cdkFocusInitial [disabled]="productForm.invalid">Guardar Producto</button>
+  <button *ngIf="!product.idProduct" (click)="addProduct()" mat-flat-button color="primary" cdkFocusInitial [disabled]="productForm.invalid">Guardar</button>
   <button *ngIf="product.idProduct && product.edit" (click)="updateProduct()" mat-flat-button color="primary" cdkFocusInitial>Editar</button>
 </mat-dialog-actions>
 

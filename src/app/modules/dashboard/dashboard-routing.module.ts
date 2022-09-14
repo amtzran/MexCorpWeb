@@ -33,6 +33,13 @@ const routes: Routes = [
     canLoad: [ ValidateTokenGuard ]
   },
   {
+    path:'inventory',
+    component: HomeComponent,
+    loadChildren: () => import('../inventory/inventory.module').then(m => m.InventoryModule),
+    canActivate: [ ValidateTokenGuard ],
+    canLoad: [ ValidateTokenGuard ]
+  },
+  {
     path: 'doors/customer/:customer',
     component: HomeComponent,
     loadChildren: () => import('../customer/doors/door.module').then(m => m.DoorModule),

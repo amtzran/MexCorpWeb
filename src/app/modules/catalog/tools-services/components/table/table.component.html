@@ -1,7 +1,7 @@
 <div class="container">
   <mat-card fxLayoutAlign="center center">
     <mat-card-title>
-      <mat-card-title>Herramientas y Servicios</mat-card-title>
+      <mat-card-title>Herramientas y Refacciones</mat-card-title>
     </mat-card-title>
   </mat-card>
 
@@ -31,7 +31,7 @@
       <mat-select formControlName="category" (selectionChange)="filterSelect()">
         <mat-option value="">TODOS</mat-option>
         <mat-option value="tool">Herramienta</mat-option>
-        <mat-option value="repair">Servicio</mat-option>
+        <mat-option value="repair">Refacción</mat-option>
       </mat-select>
     </mat-form-field>
 
@@ -45,13 +45,13 @@
     <div fxFlex="15" fxLayoutAlign="center center">
       <button (click)="openDialogProduct('repair',true, null, false)" mat-button color="primary">
         <mat-icon>inventory</mat-icon>
-        Nuevo Servicio
+        Nueva Refacción
       </button>
     </div>
 
     <div fxFlex="20" fxLayoutAlign="center center">
       <button (click)="reportProducts()" mat-button color="primary">
-        Descargar Productos
+        Descargar Herramientas
         <mat-icon mat-list-icon class="colorCheckGreen">view_list</mat-icon>
       </button>
     </div>
