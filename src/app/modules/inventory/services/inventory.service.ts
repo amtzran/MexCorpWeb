@@ -2,6 +2,7 @@ import { Injectable } from '@angular/core';
 import {Observable} from "rxjs";
 import {HttpClient, HttpParams} from "@angular/common/http";
 import {
+  ConceptDetail,
   ConceptPaginate,
   EntryDetail,
   EntryPaginate, ModelConcept,
@@ -10,6 +11,8 @@ import {
 import {environment} from "../../../../environments/environment";
 import {ModelJobCenter} from "../../employee/interfaces/employee.interface";
 import {ModelSupplier} from "../../catalog/suppliers/interfaces/suppliers.interface";
+import {ModelProduct} from "../../catalog/tools-services/interfaces/product.interface";
+import {QuotationConceptDetail} from "../../lifting/interfaces/lifting.interface";
 
 @Injectable({
   providedIn: 'root'
@@ -29,16 +32,6 @@ export class InventoryService {
     filter.initial_date ? params = params.append('initial_date', filter.initial_date) : null;
     filter.final_date ? params = params.append('final_date', filter.final_date) : null;
     return this.http.get<ModelEntry>(`${this.baseUrl}/inventory/entries/`, {params})
-  }
-
-  // Get Entries
-  getConcepts(filter: ConceptPaginate): Observable<ModelConcept> {
-    console.log(filter)
-    let params = new HttpParams();
-    filter.page ? params = params.append('page', filter.page) : null;
-    filter.page_size ? params = params.append('page_size', filter.page_size) : null;
-    filter.entrie_id ? params = params.append('entrie_id', filter.entrie_id) : null;
-    return this.http.get<ModelConcept>(`${this.baseUrl}/inventory/entrie-concepts/`, {params})
   }
 
   // Get Entry
@@ -61,6 +54,36 @@ export class InventoryService {
     return this.http.delete<EntryDetail>(`${this.baseUrl}/inventory/entries/${id}`)
   }
 
+  // Get Concepts
+  getConcepts(filter: ConceptPaginate): Observable<ModelConcept> {
+    console.log(filter)
+    let params = new HttpParams();
+    filter.page ? params = params.append('page', filter.page) : null;
+    filter.page_size ? params = params.append('page_size', filter.page_size) : null;
+    filter.entrie_id ? params = params.append('entrie_id', filter.entrie_id) : null;
+    return this.http.get<ModelConcept>(`${this.baseUrl}/inventory/entrie-concepts/`, {params})
+  }
+
+  // Add Concept
+  addConcept(concept: ConceptDetail): Observable<ConceptDetail> {
+    return this.http.post<ConceptDetail>(`${this.baseUrl}/inventory/entrie-concepts/`, concept);
+  }
+
+  // Get Concept
+  getConceptById(id: number) : Observable<ConceptDetail> {
+    return this.http.get<ConceptDetail>(`${this.baseUrl}/inventory/entrie-concepts/${id}`)
+  }
+
+  // Update Concept
+  updateConcept(idConcept: number, concept: ConceptDetail) : Observable<ConceptDetail> {
+    return this.http.put<ConceptDetail>(`${this.baseUrl}/inventory/entrie-concepts/${idConcept}/`, concept)
+  }
+
+  // Delete Concept
+  deleteConcept(id: number | undefined) : Observable<ConceptDetail> {
+    return this.http.delete<ConceptDetail>(`${this.baseUrl}/inventory/entrie-concepts/${id}`)
+  }
+
   // Get Job Centers
   getJobCenters() : Observable<ModelJobCenter> {
     return this.http.get<ModelJobCenter>(`${this.baseUrl}/groups/`)
@@ -69,6 +92,13 @@ export class InventoryService {
   // Get Job Centers
   getSuppliers() : Observable<ModelSupplier> {
     return this.http.get<ModelSupplier>(`${this.baseUrl}/suppliers/`)
+  }
+
+  // Get Products
+  getProductsAll(): Observable<ModelProduct> {
+    let params = new HttpParams();
+    params = params.append('not_paginate',true);
+    return this.http.get<ModelProduct>(`${this.baseUrl}/products/`, {params})
   }
 
 }

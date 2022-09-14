@@ -64,7 +64,7 @@ export class EntryComponent implements OnInit {
     this.dialog.open(CrudComponent, {
       autoFocus: false,
       disableClose: false,
-      maxWidth: '100vw',
+      maxWidth: '80vw',
       maxHeight: '100vh',
       width: '95%',
       data: {edit: edit, idEntry: idEntry, info: info}

@@ -46,6 +46,7 @@ export interface Concept {
   id:         number;
   entrie_id:  number;
   product_id: number;
+  product_name: string;
   quantity:   number;
   unit_price: number;
   amount:     number;
@@ -55,4 +56,8 @@ export interface Concept {
 
 export interface EntryDetail {
   data: Entry
+}
+
+export interface ConceptDetail {
+  data: Concept
 }

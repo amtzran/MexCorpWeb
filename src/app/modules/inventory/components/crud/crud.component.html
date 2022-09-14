@@ -4,10 +4,7 @@
 <br>
 <mat-dialog-content class="mat-typography" [formGroup]="form">
 
-  <mat-card>
-    <mat-card-content>
-
-      <div fxLayout="row" fxLayoutGap="40px" fxLayout.xs="column">
+  <div fxLayout="row" fxLayoutGap="40px" fxLayout.xs="column">
 
         <div class="container" fxFlex="100" fxLayout="column" fxLayout.xs="column">
 
@@ -45,14 +42,50 @@
 
           </div>
 
+          <div fxLayout="row"
+               fxLayout.xs="column"
+               fxLayoutGap="20px" *ngIf="entry.idEntry">
+
+            <ng-select fxFlex="60"
+                       bindLabel="name"
+                       placeholder="Productos"
+                       [multiple]="false"
+                       appendTo="body"
+                       [searchable]="true"
+                       formControlName="product_id"
+                       [clearable]="true"
+                       (change)="setDataProduct($event)">
+              <ng-option value="">TODOS</ng-option>
+              <ng-option *ngFor="let product of products" [value]="product.id">{{product.name}}</ng-option>
+            </ng-select>
+
+            <mat-form-field fxFlex="20">
+              <mat-label>Cantidad</mat-label>
+              <input
+                matInput
+                type="text"
+                formControlName="quantity">
+              <mat-error *ngIf="fieldInvalid('quantity')">
+                Favor de ingresar la cantidad
+              </mat-error>
+            </mat-form-field>
+
+            <mat-form-field fxFlex="20">
+              <mat-label>Precio unitario</mat-label>
+              <input
+                matInput
+                type="text"
+                formControlName="unit_price">
+              <mat-error *ngIf="fieldInvalid('unit_price')">
+                Favor de ingresar el precio
+              </mat-error>
+            </mat-form-field>
+
+          </div>
+
         </div>
 
       </div>
-
-    </mat-card-content>
-    <mat-card-actions>
-    </mat-card-actions>
-  </mat-card>
 
   <div class="mat-elevation-z8" *ngIf="entry.idEntry">
     <ngx-spinner></ngx-spinner>
@@ -65,28 +98,34 @@
       </ng-container>
 
 
-      <!-- supplier Column -->
+      <!-- Entry Column -->
       <ng-container matColumnDef="entrie_id">
         <th mat-header-cell *matHeaderCellDef mat-sort-header=""> Entrada</th>
         <td mat-cell *matCellDef="let row"> {{row.entrie_id}} </td>
       </ng-container>
 
-      <!-- Group Column -->
+      <!-- Product Column -->
       <ng-container matColumnDef="product_name">
         <th mat-header-cell *matHeaderCellDef mat-sort-header=""> Producto</th>
         <td mat-cell *matCellDef="let row"> {{row.product_name}} </td>
       </ng-container>
 
-      <!-- Employee Column -->
+      <!-- Quantity Column -->
       <ng-container matColumnDef="quantity">
         <th mat-header-cell *matHeaderCellDef mat-sort-header=""> Cantidad</th>
         <td mat-cell *matCellDef="let row"> {{row.quantity}} </td>
       </ng-container>
 
-      <!-- Amount Column -->
+      <!-- Unit Price Column -->
       <ng-container matColumnDef="unit_price">
         <th mat-header-cell *matHeaderCellDef mat-sort-header=""> Precio unitario</th>
-        <td mat-cell *matCellDef="let row"> {{row.unit_price}} </td>
+        <td mat-cell *matCellDef="let row"> {{row.unit_price | currency:'MX':'$':'1.2-2'}} </td>
+      </ng-container>
+
+      <!-- Amount Column -->
+      <ng-container matColumnDef="amount">
+        <th mat-header-cell *matHeaderCellDef mat-sort-header=""> Monto</th>
+        <td mat-cell *matCellDef="let row"> {{row.amount | currency:'MX':'$':'1.2-2'}} </td>
       </ng-container>
 
       <!-- Date Column -->
@@ -96,30 +135,27 @@
       </ng-container>
 
 
-      <!-- Teléfono Column -->
+      <!-- Setting Column -->
       <ng-container matColumnDef="options">
         <th mat-header-cell *matHeaderCellDef mat-sort-header=""> Opciones</th>
         <td mat-cell *matCellDef="let row">
 
-        <!--  <button mat-icon-button [matMenuTriggerFor]="menu" aria-label="Example icon-button with a menu">
+          <button mat-icon-button [matMenuTriggerFor]="menu" aria-label="Example icon-button with a menu">
             <mat-icon>more_vert</mat-icon>
           </button>
           <mat-menu #menu="matMenu">
-            <button mat-menu-item (click)="openDialog(false, row.id, true)">
-              <mat-icon color="info">visibility</mat-icon>
-              Ver
-            </button>
-            <button mat-menu-item (click)="openDialog(true, row.id, false)">
+
+            <button mat-menu-item (click)="getByIdConcept('update', row)">
               <mat-icon color="primary">edit</mat-icon>
               Editar
             </button>
 
-            <button mat-menu-item (click)="delete(row)">
+            <button mat-menu-item (click)="getByIdConcept('delete', row)">
               <mat-icon color="warn">delete</mat-icon>
               Eliminar
             </button>
 
-          </mat-menu>-->
+          </mat-menu>
 
         </td>
       </ng-container>
@@ -138,6 +174,21 @@
                    [pageSize]="pageSize"
                    [showFirstLastButtons]="true">
     </mat-paginator>
+
+    <div fxLayout="row" fxLayoutGap="20" fxLayoutAlign="end center">
+   <!--   <div>
+        <h3> Importe: <span class="color-warn"> {{ amount | currency:'MX':'$':'1.2-2'}} </span> | </h3>
+      </div>
+      <div>
+        <h3> Precio unitario: <span class="color-primary"> {{ unitPrice | currency:'MX':'$':'1.2-2'}} </span> | </h3>
+      </div>-->
+
+      <div class="container">
+        <h3>Total: <span class="color-warn"> {{ total | currency:'MX':'$':'1.2-2'}} </span> </h3>
+      </div>
+
+    </div>
+
   </div>
 
 </mat-dialog-content>
@@ -145,6 +196,8 @@
 <mat-dialog-actions fxLayoutAlign="end">
   <button (click)="close()" mat-stroked-button color="primary" mat-dialog-close="true">Cancelar</button>
   <button *ngIf="!entry.idEntry" (click)="add()" mat-flat-button color="primary" cdkFocusInitial [disabled]="form.invalid">Guardar {{menuTitle}}</button>
-  <button *ngIf="entry.idEntry && entry.edit" (click)="update()" mat-flat-button color="primary" cdkFocusInitial>Editar</button>
+  <button *ngIf="entry.idEntry && entry.edit && !idConcept" [disabled]="form.invalid" (click)="saveConcept()" mat-flat-button color="primary" cdkFocusInitial>Agregar Concepto</button>
+  <button *ngIf="type === 'update' " [disabled]="form.invalid" (click)="updateConcept()" mat-flat-button color="primary" cdkFocusInitial>Editar Concepto</button>
+  <button *ngIf="type === 'delete' " (click)="deleteConcept()" mat-flat-button color="primary" cdkFocusInitial>Eliminar Concepto</button>
 </mat-dialog-actions>
 
