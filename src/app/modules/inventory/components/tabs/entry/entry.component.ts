@@ -9,6 +9,8 @@ import {NgxSpinnerService} from "ngx-spinner";
 import {InventoryService} from "../../../services/inventory.service";
 import {CrudComponent} from "../../crud/crud.component";
 import {ConfirmComponent} from "../../../../../shared/components/confirm/confirm.component";
+import {Employee, JobCenter} from "../../../../employee/interfaces/employee.interface";
+import {Supplier} from "../../../../catalog/suppliers/interfaces/suppliers.interface";
 
 @Component({
   selector: 'app-entry',
@@ -24,12 +26,20 @@ export class EntryComponent implements OnInit {
   pageSize = this.sharedService.pageSize;
   paginateForm!: FormGroup;
   @ViewChild('paginator', {static: true}) paginator!: MatPaginator;
+  employees!: Employee[];
+  jobCenters!: JobCenter[];
+  suppliers!: Supplier[];
 
   constructor(private sharedService: SharedService,
               private formBuilder: FormBuilder,
               private dialog: MatDialog,
               private spinner: NgxSpinnerService,
-              private inventoryService : InventoryService) { }
+              private inventoryService : InventoryService)
+  {
+    this.loadDataEmployees();
+    this.loadDataSuppliers();
+    this.loadDataGroups();
+  }
 
   ngOnInit(): void {
     this.loadFilterForm();
@@ -91,6 +101,15 @@ export class EntryComponent implements OnInit {
 
   }
 
+  /**
+   * Filter Customer and Search
+   */
+  filterSelect(){
+    this.inventoryService.getEntries(this.paginateForm.value)
+      .subscribe(res => {
+        this.getEntriesPaginator(this.paginator);
+      })
+  }
 
   /**
    * Upload Data Table
@@ -101,9 +120,31 @@ export class EntryComponent implements OnInit {
       page_size: [this.pageSize],
       employee: '',
       group: '',
+      supplier: '',
       initial_date: '',
       final_date: ''
     })
+  }
+
+  /**
+   * Array from service for Employees
+   */
+  loadDataEmployees(){
+    this.inventoryService.getEmployees().subscribe(employees => {this.employees = employees.data} )
+  }
+
+  /**
+   * Array from service for Groups
+   */
+  loadDataSuppliers(){
+    this.inventoryService.getSuppliers().subscribe(suppliers => {this.suppliers = suppliers.data} )
+  }
+
+  /**
+   * Array from service for Groups
+   */
+  loadDataGroups(){
+    this.inventoryService.getJobCenters().subscribe(jobCenters => {this.jobCenters = jobCenters.data} )
   }
 
   /**

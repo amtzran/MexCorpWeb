@@ -37,7 +37,7 @@ export class CrudComponent implements OnInit {
   unitPrice: number = 0;
   total: number = 0;
 
-  displayedColumns: string[] = ['id', 'entrie_id', 'product_name', 'quantity', 'unit_price', 'amount', 'date', 'options'];
+  displayedColumns: string[] = ['id', 'product_name', 'quantity', 'unit_price', 'amount', 'date', 'options'];
   dataSource!: MatTableDataSource<Concept>;
   totalItems!: number;
   pageSize = this.sharedService.pageSize;

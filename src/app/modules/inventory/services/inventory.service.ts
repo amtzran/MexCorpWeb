@@ -9,28 +9,36 @@ import {
   ModelEntry
 } from "../interfaces/inventory.interface";
 import {environment} from "../../../../environments/environment";
-import {ModelJobCenter} from "../../employee/interfaces/employee.interface";
+import {ModelEmployee, ModelJobCenter} from "../../employee/interfaces/employee.interface";
 import {ModelSupplier} from "../../catalog/suppliers/interfaces/suppliers.interface";
 import {ModelProduct} from "../../catalog/tools-services/interfaces/product.interface";
-import {QuotationConceptDetail} from "../../lifting/interfaces/lifting.interface";
+import {DateService} from "../../../core/utils/date.service";
 
 @Injectable({
   providedIn: 'root'
 })
 export class InventoryService {
 
-  constructor( private http: HttpClient) { }
+  constructor(private http: HttpClient,
+              private dateService: DateService) { }
   private baseUrl: string = environment.baseUrl
 
   // Get Entries
   getEntries(filter: EntryPaginate): Observable<ModelEntry> {
+    let initial_date = '';
+    let final_date = '';
+    if (filter.final_date !== '') {
+      initial_date = this.dateService.getFormatDataDate(filter.initial_date);
+      final_date = this.dateService.getFormatDataDate(filter.final_date);
+    }
     let params = new HttpParams();
     filter.page ? params = params.append('page', filter.page) : null;
     filter.page_size ? params = params.append('page_size', filter.page_size) : null;
     filter.employee ? params = params.append('employee', filter.employee) : null;
     filter.group ? params = params.append('group', filter.group) : null;
-    filter.initial_date ? params = params.append('initial_date', filter.initial_date) : null;
-    filter.final_date ? params = params.append('final_date', filter.final_date) : null;
+    filter.supplier ? params = params.append('supplier', filter.supplier) : null;
+    initial_date ? params = params.append('initial_date', initial_date) : null;
+    final_date ? params = params.append('final_date', final_date) : null;
     return this.http.get<ModelEntry>(`${this.baseUrl}/inventory/entries/`, {params})
   }
 
@@ -82,6 +90,11 @@ export class InventoryService {
   // Delete Concept
   deleteConcept(id: number | undefined) : Observable<ConceptDetail> {
     return this.http.delete<ConceptDetail>(`${this.baseUrl}/inventory/entrie-concepts/${id}`)
+  }
+
+  // Get Employees
+  getEmployees() : Observable<ModelEmployee> {
+    return this.http.get<ModelEmployee>(`${this.baseUrl}/employees/?not_paginate=true`)
   }
 
   // Get Job Centers

@@ -14,7 +14,7 @@
            fxLayout.sm="column"
            fxLayoutGap="10px" [formGroup]="filterForm">
 
-        <mat-form-field fxFlex="100">
+   <!--     <mat-form-field fxFlex="100">
           <mat-label>Empleados</mat-label>
           <mat-select formControlName="employee"
                       (selectionChange)="filterSelectEmployee($event.value)">
@@ -23,7 +23,22 @@
               {{ employee.name }}
             </mat-option>
           </mat-select>
-        </mat-form-field>
+        </mat-form-field>-->
+
+        <ng-select fxFlex="100"
+                   bindLabel="name"
+                   placeholder="Empleados"
+                   formControlName="employee"
+                   [multiple]="false"
+                   appendTo="body"
+                   [searchable]="true"
+                   [clearable]="true"
+                   (change)="filterSelectEmployee($event)">
+          <ng-option value="">TODOS</ng-option>
+          <ng-option *ngFor="let employee of employees" [value]="employee.id">
+            {{employee.name}}
+          </ng-option>
+        </ng-select>
 
         <mat-form-field fxFlex="100">
           <mat-label>Grupos</mat-label>

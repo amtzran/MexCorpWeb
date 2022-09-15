@@ -12,10 +12,61 @@
   <div fxLayout="row"
        fxLayout.xs="column"
        fxLayout.sm="column"
-       fxLayoutGap="10px">
+       fxLayoutGap="10px" [formGroup]="paginateForm">
 
-      <div fxFlex>1</div>
-    <div fxFlex>2</div>
+    <ng-select fxFlex="100"
+               bindLabel="name"
+               placeholder="Empleados"
+               formControlName="employee"
+               [multiple]="false"
+               appendTo="body"
+               [searchable]="true"
+               [clearable]="true"
+               (change)="filterSelect()">
+      <ng-option value="">TODOS</ng-option>
+      <ng-option *ngFor="let employee of employees" [value]="employee.id">
+        {{employee.name}}
+      </ng-option>
+    </ng-select>
+
+    <ng-select fxFlex="100"
+               bindLabel="name"
+               placeholder="Proveedores"
+               formControlName="supplier"
+               [multiple]="false"
+               appendTo="body"
+               [searchable]="true"
+               [clearable]="true"
+               (change)="filterSelect()">
+      <ng-option value="">TODOS</ng-option>
+      <ng-option *ngFor="let supplier of suppliers" [value]="supplier.id">
+        {{supplier.name}}
+      </ng-option>
+    </ng-select>
+
+    <mat-form-field fxFlex="100">
+      <mat-label>Grupos</mat-label>
+      <mat-select formControlName="group"
+                  (selectionChange)="filterSelect()">
+        <mat-option value="">TODOS</mat-option>
+        <mat-option *ngFor="let jobCenter of jobCenters" [value]="jobCenter.id">
+          {{ jobCenter.name}}
+        </mat-option>
+      </mat-select>
+    </mat-form-field>
+
+    <mat-form-field fxFlex="100">
+
+      <mat-label>Ingresar Rango Fecha</mat-label>
+      <mat-date-range-input [rangePicker]="picker">
+        <input matStartDate formControlName="initial_date" placeholder="Fecha Inicial">
+        <input matEndDate formControlName="final_date" placeholder="Fecha Final" (dateChange)="filterSelect()">
+      </mat-date-range-input>
+      <mat-datepicker-toggle matSuffix [for]="picker"></mat-datepicker-toggle>
+      <mat-date-range-picker #picker></mat-date-range-picker>
+
+    </mat-form-field>
+
   </div>
 
 </mat-card>
