@@ -17,8 +17,7 @@ import {ConfirmComponent} from "../../../../shared/components/confirm/confirm.co
 import * as moment from "moment";
 import {SendEmailComponent} from "../send-email/send-email.component";
 import {ImageDetailComponent} from "../image-detail/image-detail.component";
-import {Product, ProductDetail} from "../../../catalog/tools-services/interfaces/product.interface";
-import {Concept} from "../../../inventory/interfaces/inventory.interface";
+import {Product} from "../../../catalog/tools-services/interfaces/product.interface";
 
 @Component({
   selector: 'app-crud',
@@ -50,6 +49,7 @@ export class CrudComponent implements OnInit {
   doorTypes!:  DoorType[];
   products!: Product[];
   taskId!: number;
+  jobCenterId!: number;
   dataTask!: Task;
 
   /**
@@ -98,10 +98,7 @@ export class CrudComponent implements OnInit {
     this.taskService.getEmployees().subscribe(employees => {this.employees = employees.data} )
 
     // Type Customers
-    this.taskService.getWorkTypes().subscribe(workTypes => {this.workTypes = workTypes.data} )
-
-    // Products Repair
-    this.taskService.getProductsAll().subscribe(products => {this.products = products.data} )
+    this.taskService.getWorkTypes().subscribe(workTypes => {this.workTypes = workTypes.data} );
 
     /*Formulario*/
     this.loadTaskForm();
@@ -159,6 +156,8 @@ export class CrudComponent implements OnInit {
         final_date: this.dateService.getFormatDateSetInputRangePicker(response.data.final_date!)
       });
       this.dataSourceProducts.data = response.data.products;
+      this.jobCenterId = response.data.job_center_id;
+      this.loadDataProducts(response.data.job_center_id);
       this.spinner.hide();
     }, (error => {
         this.spinner.hide()
@@ -382,7 +381,6 @@ export class CrudComponent implements OnInit {
     if (this.productForm.invalid) return;
     this.spinner.show()
     this.taskService.addProductByTask(this.taskId, this.productForm.value).subscribe((response) => {
-        console.log(response)
         this.spinner.hide()
         this.sharedService.showSnackBar(`Se ha agregado correctamente la refacción`);
         this.loadTaskById();
@@ -436,6 +434,14 @@ export class CrudComponent implements OnInit {
    */
   selectCustomer(idCustomer: number): void {
     this.loadAccess(idCustomer)
+  }
+
+  /**
+   * Event OnChange for get id Select
+   * @param event
+   */
+  selectJobCenter(event: any) {
+    this.loadDataProducts(event);
   }
 
   /**
@@ -546,6 +552,8 @@ export class CrudComponent implements OnInit {
   close(): void{
     this.dialogRef.close(ModalResponse.CLOSE);
   }
+
+  loadDataProducts(id: number) {this.taskService.getProductsAll(id).subscribe(products => {this.products = products.data} )}
 
   /**
    * Function for set value in select multiple with json

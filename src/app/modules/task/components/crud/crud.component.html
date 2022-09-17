@@ -49,8 +49,7 @@
 
             <mat-form-field fxFlex="100">
               <mat-label>Grupos</mat-label>
-              <mat-select
-                formControlName="job_center_id">
+              <mat-select formControlName="job_center_id" (selectionChange)="selectJobCenter($event.value)">
                 <mat-option *ngFor="let jobCenter of jobCenters" [value]="jobCenter.id">
                   {{ jobCenter.name}}
                 </mat-option>
