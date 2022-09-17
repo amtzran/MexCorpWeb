@@ -151,7 +151,6 @@ export class TaskService {
 
   // Get Repairs
   getProductsAll(id : number) : Observable<ModelProduct> {
-    console.log(id)
     let params = new HttpParams();
     params = params.append('not_paginate',true);
     params = params.append('category','repair');

@@ -107,9 +107,11 @@ export class InventoryService {
   }
 
   // Get Products
-  getProductsAll(): Observable<ModelProduct> {
+  getProductsAll(id: number): Observable<ModelProduct> {
     let params = new HttpParams();
     params = params.append('not_paginate',true);
+    params = params.append('category','repair');
+    id ? params = params.append('job_center', id) : null;
     return this.http.get<ModelProduct>(`${this.baseUrl}/products/`, {params})
   }
 

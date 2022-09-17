@@ -55,7 +55,6 @@ export class CrudComponent implements OnInit {
   {
     this.loadDataGroups();
     this.loadDataSuppliers();
-    this.loadProducts();
   }
 
   ngOnInit(): void {
@@ -142,6 +141,7 @@ export class CrudComponent implements OnInit {
         job_center_id: response.data.job_center.id,
         entrie_id: this.entry.idEntry
       });
+      this.loadProducts(response.data.job_center.id!)
       this.validateInput();
       this.spinner.hide();
     }, (error => {
@@ -311,10 +311,19 @@ export class CrudComponent implements OnInit {
   }
 
   /**
-   * Array from service for Groups
+   * Array from service for Products
+   * @param id
    */
-  loadProducts(): void {
-    this.inventoryService.getProductsAll().subscribe(products => {this.products = products.data} )
+  loadProducts(id: number): void {
+    this.inventoryService.getProductsAll(id).subscribe(products => {this.products = products.data} )
+  }
+
+  /**
+   * Event OnChange for get id Select
+   * @param event
+   */
+  selectJobCenter(event: any) {
+    this.loadProducts(event);
   }
 
   /**

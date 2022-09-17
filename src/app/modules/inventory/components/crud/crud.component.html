@@ -33,6 +33,7 @@
                        appendTo="body"
                        [searchable]="true"
                        formControlName="job_center_id"
+                       (change)="selectJobCenter($event)"
                        [clearable]="true">
               <ng-option value="">TODOS</ng-option>
               <ng-option *ngFor="let jobCenter of jobCenters" [value]="jobCenter.id">
