@@ -17,7 +17,7 @@ import {ConfirmComponent} from "../../../../shared/components/confirm/confirm.co
 import * as moment from "moment";
 import {SendEmailComponent} from "../send-email/send-email.component";
 import {ImageDetailComponent} from "../image-detail/image-detail.component";
-import {Product} from "../../../catalog/tools-services/interfaces/product.interface";
+import {Product, ProductDetail} from "../../../catalog/tools-services/interfaces/product.interface";
 import {Concept} from "../../../inventory/interfaces/inventory.interface";
 
 @Component({
@@ -384,12 +384,35 @@ export class CrudComponent implements OnInit {
     this.taskService.addProductByTask(this.taskId, this.productForm.value).subscribe((response) => {
         console.log(response)
         this.spinner.hide()
-        this.sharedService.showSnackBar(`Se ha agregado correctamente la refacción` );
+        this.sharedService.showSnackBar(`Se ha agregado correctamente la refacción`);
         this.loadTaskById();
       }, (error => {
         this.spinner.hide()
         this.sharedService.errorDialog(error)
       }))
+  }
+
+  deleteProductByTask(product: any) {
+    // Show Dialog
+    const dialog = this.dialog.open(ConfirmComponent, {
+      width: '50vw',
+      data: product
+    })
+
+    dialog.afterClosed().subscribe(
+      (result) => {
+        if (result) {
+          this.taskService.deleteProductByTask(this.taskId, product.product_id!)
+            .subscribe(resp => {
+              this.sharedService.showSnackBar('Registro Eliminado');
+              this.loadTaskById();
+            }, (error => {
+              this.spinner.hide()
+              this.sharedService.errorDialog(error)
+            }))
+        }
+      })
+
   }
 
   /**
