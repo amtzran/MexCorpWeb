@@ -54,7 +54,6 @@ export class EntryComponent implements OnInit {
     this.spinner.show()
     this.inventoryService.getEntries(this.paginateForm.value)
       .subscribe((entries) => {
-        console.log(entries)
           this.spinner.hide()
           this.dataSource.data = entries.data
           this.totalItems = entries.meta.total;

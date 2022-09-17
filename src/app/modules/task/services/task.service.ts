@@ -13,9 +13,15 @@ import {
 } from "../models/task.interface";
 import {ModelCustomer} from "../../customer/customers/interfaces/customer.interface";
 import {ModelEmployee, ModelJobCenter} from "../../employee/interfaces/employee.interface";
-import {DoorDetailTask, ModelDoorType} from "../../customer/doors/interfaces/door.interface";
+import {
+  DoorDetailTask,
+  ModelDoorType,
+  ProductByTask,
+  ProductByTaskDetail
+} from "../../customer/doors/interfaces/door.interface";
 import {DateService} from "../../../core/utils/date.service";
 import {paginateGeneral} from "../../../shared/interfaces/shared.interface";
+import {ModelProduct, Product, ProductDetail} from "../../catalog/tools-services/interfaces/product.interface";
 
 @Injectable({
   providedIn: 'root'
@@ -34,6 +40,11 @@ export class TaskService {
   // Get Task By Doors
   getTaskByIdDoors(id: number) : Observable<DoorDetailTask> {
     return this.http.get<DoorDetailTask>(`${this.baseUrl}/tasks-doors-finished/${id}`)
+  }
+
+  // Get Task By Doors
+  getProductsByTask(id: number) : Observable<ProductByTaskDetail> {
+    return this.http.get<ProductByTaskDetail>(`${this.baseUrl}/tasks/${id}/product`)
   }
 
   // Get Tasks
@@ -136,6 +147,24 @@ export class TaskService {
   // Get Doors
   getDoorsAll() : Observable<DoorDetailTask> {
     return this.http.get<DoorDetailTask>(`${this.baseUrl}/doors/?not_paginate=true`)
+  }
+
+  // Get Repairs
+  getProductsAll() : Observable<ModelProduct> {
+    let params = new HttpParams();
+    params = params.append('not_paginate',true);
+    params = params.append('category','repair');
+    return this.http.get<ModelProduct>(`${this.baseUrl}/products/`, {params});
+  }
+
+  // Add Product by Task
+  addProductByTask(id : number , productByTask: ProductByTask): Observable<TaskDetail> {
+    return this.http.post<TaskDetail>(`${this.baseUrl}/tasks/${id}/product`, productByTask)
+  }
+
+  // Delete Product by Task
+  deleteProductByTask(id: number, idProduct: number) : Observable<TaskDetail>{
+    return this.http.delete<TaskDetail>(`${this.baseUrl}/tasks/${id}/product/${idProduct}`)
   }
 
   // Get Door Types By Customer

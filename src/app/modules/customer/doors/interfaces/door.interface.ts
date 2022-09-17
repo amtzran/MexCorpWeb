@@ -26,6 +26,15 @@ export interface Door {
   updated_at?: Date;
 }
 
+export interface ProductByTask {
+  product_id: number,
+  quantity: number
+}
+
+export interface ProductByTaskDetail {
+  data: ProductByTask
+}
+
 // Data Paginate
 export interface DoorPaginate {
   page: string,

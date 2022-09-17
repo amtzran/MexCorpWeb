@@ -17,16 +17,20 @@ import {ConfirmComponent} from "../../../../shared/components/confirm/confirm.co
 import * as moment from "moment";
 import {SendEmailComponent} from "../send-email/send-email.component";
 import {ImageDetailComponent} from "../image-detail/image-detail.component";
+import {Product} from "../../../catalog/tools-services/interfaces/product.interface";
+import {Concept} from "../../../inventory/interfaces/inventory.interface";
 
 @Component({
   selector: 'app-crud',
   templateUrl: './crud.component.html',
-  styles: []
+  styles: [],
+  styleUrls: ['./crud.component.css']
 })
 export class CrudComponent implements OnInit {
 
   /*Formulario*/
   taskForm!: FormGroup;
+  productForm!: FormGroup;
   // Date Range
   initialDate: string = '';
   finalDate: string = '';
@@ -44,6 +48,7 @@ export class CrudComponent implements OnInit {
   employees!: Employee[];
   workTypes!: WorkType[];
   doorTypes!:  DoorType[];
+  products!: Product[];
   taskId!: number;
   dataTask!: Task;
 
@@ -57,6 +62,9 @@ export class CrudComponent implements OnInit {
   doorPaginateForm!: FormGroup;
   @ViewChild(MatPaginator, {static: true}) paginator!: MatPaginator;
   @ViewChild(MatSort) sort!: MatSort;
+
+  displayedColumnsProducts: string[] = ['id', 'product', 'quantity', 'options'];
+  dataSourceProducts!: MatTableDataSource<any>;
 
   constructor(
     private fb: FormBuilder,
@@ -92,8 +100,12 @@ export class CrudComponent implements OnInit {
     // Type Customers
     this.taskService.getWorkTypes().subscribe(workTypes => {this.workTypes = workTypes.data} )
 
+    // Products Repair
+    this.taskService.getProductsAll().subscribe(products => {this.products = products.data} )
+
     /*Formulario*/
     this.loadTaskForm();
+    this.loadProductForm();
 
     /**
      * If show type form
@@ -103,34 +115,23 @@ export class CrudComponent implements OnInit {
       this.taskForm.updateValueAndValidity();
     }
 
-    if(this.task.idTask && !this.task.edit){
-      this.taskForm.updateValueAndValidity();
-    }
-
-    if(this.task.idTask && !this.task.eventDrag){
-      this.loadTaskById();
-    }
-
-    if(this.task.idTask && this.task.eventDrag){
-      this.loadTaskByIdDrag();
-    }
-
-    if (this.task.calendar != null){
-      this.loadTaskFormDate()
-    }
+    if(this.task.idTask && !this.task.edit) this.taskForm.updateValueAndValidity();
+    if(this.task.idTask && !this.task.eventDrag) this.loadTaskById();
+    if(this.task.idTask && this.task.eventDrag) this.loadTaskByIdDrag();
+    if (this.task.calendar != null) this.loadTaskFormDate()
 
     // Assign the data to the data source for the table to render
     this.dataSource = new MatTableDataSource();
-    /*Formulario*/
+    this.dataSourceProducts = new MatTableDataSource();
     //this.loadDoorFilterForm();
+
+    //this.getProductsPaginator(this.paginatorProducts);
     if (this.task.info) this.getDoorsPaginator(this.paginator);
   }
 
   // Data Customers
   loadDataCustomers(){
-    this.taskService.getCustomers().subscribe(customers => {
-      this.customers = customers.data
-    } )
+    this.taskService.getCustomers().subscribe(customers => {this.customers = customers.data} );
   }
 
   /**
@@ -138,8 +139,7 @@ export class CrudComponent implements OnInit {
    */
   loadTaskById(): void{
     this.spinner.show()
-    this.taskService.getTaskById(this.task.idTask).subscribe(response => {
-      this.spinner.hide()
+    this.taskService.getTaskById(this.task.idTask).subscribe((response) => {
       this.dataTask = response.data
       this.title = `Información de la Tarea | ${response.data.status} | ${response.data.folio}
       | ${response.data.invoiced === 1 ? 'Facturado' : 'Sin Facturar'}`;
@@ -157,7 +157,9 @@ export class CrudComponent implements OnInit {
         final_hour: response.data.final_hour,
         initial_date: this.dateService.getFormatDateSetInputRangePicker(response.data.initial_date!),
         final_date: this.dateService.getFormatDateSetInputRangePicker(response.data.final_date!)
-      })
+      });
+      this.dataSourceProducts.data = response.data.products;
+      this.spinner.hide();
     }, (error => {
         this.spinner.hide()
         this.sharedService.errorDialog(error)
@@ -230,6 +232,16 @@ export class CrudComponent implements OnInit {
         ]
       ))
     }
+  }
+
+  /**
+   * Load the form Task. from Button
+   */
+  loadProductForm():void{
+    this.productForm = this.fb.group({
+      product_id:[{value:'', disabled:false}, Validators.required],
+      quantity:[{value:'', disabled:false}, Validators.required],
+    });
   }
 
   /**
@@ -360,6 +372,24 @@ export class CrudComponent implements OnInit {
           )
         }
     })
+  }
+
+  /**
+   *
+   */
+  saveProductByTask() {
+    //this.validateForm()
+    if (this.productForm.invalid) return;
+    this.spinner.show()
+    this.taskService.addProductByTask(this.taskId, this.productForm.value).subscribe((response) => {
+        console.log(response)
+        this.spinner.hide()
+        this.sharedService.showSnackBar(`Se ha agregado correctamente la refacción` );
+        this.loadTaskById();
+      }, (error => {
+        this.spinner.hide()
+        this.sharedService.errorDialog(error)
+      }))
   }
 
   /**

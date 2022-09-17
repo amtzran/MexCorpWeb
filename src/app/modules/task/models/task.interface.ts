@@ -1,5 +1,6 @@
 import {Links} from "../../../shared/interfaces/shared.interface";
 import {Door} from "../../customer/doors/interfaces/door.interface";
+import {Product} from "../../catalog/tools-services/interfaces/product.interface";
 
 export interface ModelTask {
   meta: MetaModel;
@@ -34,6 +35,7 @@ export interface Task {
   comments: null | string;
   dates?: [];
   doors: Door[] | [];
+  products: Product[] | [];
 }
 
 export interface EmailSend {
