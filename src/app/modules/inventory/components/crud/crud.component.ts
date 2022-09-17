@@ -31,11 +31,11 @@ export class CrudComponent implements OnInit {
   suppliers!: Supplier[];
   jobCenters!: JobCenter[];
   products!: Product[];
-  idConcept!: number;
   type: string = 'add';
   amount: number = 0;
-  unitPrice: number = 0;
   total: number = 0;
+  idConcept!: number;
+  idEntry!: number;
 
   displayedColumns: string[] = ['id', 'product_name', 'quantity', 'unit_price', 'amount', 'date', 'options'];
   dataSource!: MatTableDataSource<Concept>;
@@ -55,6 +55,7 @@ export class CrudComponent implements OnInit {
   {
     this.loadDataGroups();
     this.loadDataSuppliers();
+    this.loadProducts();
   }
 
   ngOnInit(): void {
@@ -71,7 +72,7 @@ export class CrudComponent implements OnInit {
     }
 
     if(this.entry.idEntry) {
-      this.loadProducts();
+      this.idEntry = this.entry.idEntry;
       this.loadEntryById();
       this.loadConceptFilterForm();
       this.dataSource = new MatTableDataSource();
@@ -94,15 +95,19 @@ export class CrudComponent implements OnInit {
   }
 
   /**
-   * Create Comment.
+   * Create Entry.
    */
   add(): void {
     this.validateForm()
     this.spinner.show()
     this.inventoryService.addEntry(this.form.value).subscribe((response) => {
+        this.idEntry = response.data.id;
+        this.form.get('entrie_id')?.setValue(response.data.id);
         this.spinner.hide()
         this.sharedService.showSnackBar(`Se ha agregado correctamente el ${this.menuTitle}.`);
         this.sharedService.updateComponent();
+        this.cleanInputConcept();
+        this.loadEntryByIdNew(response.data.id);
       }, (error => {
         this.spinner.hide()
         this.sharedService.errorDialog(error)
@@ -113,7 +118,22 @@ export class CrudComponent implements OnInit {
   /**
    * Get detail retrieve of one group.
    */
-  loadEntryById(): void{
+  loadEntryByIdNew(id: number): void{
+    this.spinner.show()
+    this.inventoryService.getEntryById(id).subscribe((response) => {
+      this.total = response.data.total;
+      this.validateInput();
+      this.spinner.hide();
+    }, (error => {
+      this.spinner.hide()
+      this.sharedService.errorDialog(error)
+    }))
+  }
+
+  /**
+   * Get detail retrieve of one group.
+   */
+  loadEntryById(): void {
     this.spinner.show()
     this.inventoryService.getEntryById(this.entry.idEntry).subscribe((response) => {
       this.total = response.data.total;
@@ -122,12 +142,7 @@ export class CrudComponent implements OnInit {
         job_center_id: response.data.job_center.id,
         entrie_id: this.entry.idEntry
       });
-      this.form.get('product_id')?.setValidators([Validators.required]);
-      this.form.get('product_id')?.updateValueAndValidity();
-      this.form.get('quantity')?.setValidators([Validators.required]);
-      this.form.get('quantity')?.updateValueAndValidity();
-      this.form.get('unit_price')?.setValidators([Validators.required]);
-      this.form.get('unit_price')?.updateValueAndValidity();
+      this.validateInput();
       this.spinner.hide();
     }, (error => {
       this.spinner.hide()
@@ -156,7 +171,7 @@ export class CrudComponent implements OnInit {
 
   /**
    * update Concept.
-   */
+
   updateConcept(): void {
     this.spinner.show()
     this.inventoryService.updateConcept(this.idConcept, this.form.value).subscribe(response => {
@@ -171,6 +186,7 @@ export class CrudComponent implements OnInit {
         this.sharedService.errorDialog(error)
       } ))
   }
+   */
 
   /**
    * Delete Concept
@@ -249,6 +265,15 @@ export class CrudComponent implements OnInit {
     this.form.get('product_id')?.setValue('');
     this.form.get('quantity')?.setValue('');
     this.form.get('unit_price')?.setValue('');
+  }
+
+  validateInput() {
+    this.form.get('product_id')?.setValidators([Validators.required]);
+    this.form.get('product_id')?.updateValueAndValidity();
+    this.form.get('quantity')?.setValidators([Validators.required]);
+    this.form.get('quantity')?.updateValueAndValidity();
+    this.form.get('unit_price')?.setValidators([Validators.required]);
+    this.form.get('unit_price')?.updateValueAndValidity();
   }
 
   /**

@@ -64,7 +64,6 @@ export class InventoryService {
 
   // Get Concepts
   getConcepts(filter: ConceptPaginate): Observable<ModelConcept> {
-    console.log(filter)
     let params = new HttpParams();
     filter.page ? params = params.append('page', filter.page) : null;
     filter.page_size ? params = params.append('page_size', filter.page_size) : null;

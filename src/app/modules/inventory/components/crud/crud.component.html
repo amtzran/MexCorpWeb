@@ -44,7 +44,7 @@
 
           <div fxLayout="row"
                fxLayout.xs="column"
-               fxLayoutGap="20px" *ngIf="entry.idEntry">
+               fxLayoutGap="20px" *ngIf="idEntry">
 
             <ng-select fxFlex="60"
                        bindLabel="name"
@@ -87,7 +87,7 @@
 
       </div>
 
-  <div class="mat-elevation-z8" *ngIf="entry.idEntry">
+  <div class="mat-elevation-z8" *ngIf="idEntry">
     <ngx-spinner></ngx-spinner>
     <table mat-table [dataSource]="dataSource" matSort>
 
@@ -138,10 +138,10 @@
           </button>
           <mat-menu #menu="matMenu">
 
-            <button mat-menu-item (click)="getByIdConcept('update', row)">
+          <!--  <button mat-menu-item (click)="getByIdConcept('update', row)">
               <mat-icon color="primary">edit</mat-icon>
               Editar
-            </button>
+            </button>-->
 
             <button mat-menu-item (click)="getByIdConcept('delete', row)">
               <mat-icon color="warn">delete</mat-icon>
@@ -188,9 +188,9 @@
 
 <mat-dialog-actions fxLayoutAlign="end">
   <button (click)="close()" mat-stroked-button color="primary" mat-dialog-close="true">Cancelar</button>
-  <button *ngIf="!entry.idEntry" (click)="add()" mat-flat-button color="primary" cdkFocusInitial [disabled]="form.invalid">Guardar {{menuTitle}}</button>
-  <button *ngIf="entry.idEntry && entry.edit && !idConcept" [disabled]="form.invalid" (click)="saveConcept()" mat-flat-button color="primary" cdkFocusInitial>Agregar Concepto</button>
-  <button *ngIf="type === 'update' " [disabled]="form.invalid" (click)="updateConcept()" mat-flat-button color="primary" cdkFocusInitial>Editar Concepto</button>
+  <button *ngIf="!idEntry" (click)="add()" mat-flat-button color="primary" cdkFocusInitial [disabled]="form.invalid">Guardar {{menuTitle}}</button>
+  <button *ngIf="idEntry && type === 'add' " [disabled]="form.invalid" (click)="saveConcept()" mat-flat-button color="primary" cdkFocusInitial>Agregar Concepto</button>
+  <!--<button *ngIf="type === 'update' " [disabled]="form.invalid" (click)="updateConcept()" mat-flat-button color="primary" cdkFocusInitial>Editar Concepto</button>-->
   <button *ngIf="type === 'delete' " (click)="deleteConcept()" mat-flat-button color="primary" cdkFocusInitial>Eliminar Concepto</button>
 </mat-dialog-actions>
 

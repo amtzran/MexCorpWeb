@@ -45,6 +45,7 @@ export class EntryComponent implements OnInit {
     this.loadFilterForm();
     this.dataSource = new MatTableDataSource();
     this.getEntriesPaginator(this.paginator);
+    this.updateEventSharedService()
   }
 
   getEntriesPaginator(event: any) {
