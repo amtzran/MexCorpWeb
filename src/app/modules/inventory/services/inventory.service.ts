@@ -155,7 +155,6 @@ export class InventoryService {
     let params = new HttpParams();
     filter.page ? params = params.append('page', filter.page) : null;
     filter.page_size ? params = params.append('page_size', filter.page_size) : null;
-    filter.warehouse ? params = params.append('warehouse', filter.warehouse) : null;
     filter.product ? params = params.append('product', filter.product) : null;
     filter.employee ? params = params.append('employee', filter.employee) : null;
     filter.movement ? params = params.append('movement', filter.movement) : null;

@@ -78,7 +78,6 @@ export class MovementComponent implements OnInit {
     this.paginateForm = this.formBuilder.group({
       page: [],
       page_size: [this.pageSize],
-      warehouse: '',
       product: '',
       movement: '',
       employee: '',
