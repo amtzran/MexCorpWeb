@@ -6,7 +6,7 @@ import {
   ConceptPaginate,
   EntryDetail,
   EntryPaginate, ModelConcept,
-  ModelEntry
+  ModelEntry, ModelMovement, ModelWarehouse, ModelWarehouseInventory, StockPaginate
 } from "../interfaces/inventory.interface";
 import {environment} from "../../../../environments/environment";
 import {ModelEmployee, ModelJobCenter} from "../../employee/interfaces/employee.interface";
@@ -114,5 +114,57 @@ export class InventoryService {
     id ? params = params.append('job_center', id) : null;
     return this.http.get<ModelProduct>(`${this.baseUrl}/products/`, {params})
   }
+
+  // Get Stocks
+  getStocks(filter: StockPaginate): Observable<ModelWarehouseInventory> {
+    let initial_date = '';
+    let final_date = '';
+    if (filter.final_date !== '') {
+      initial_date = this.dateService.getFormatDataDate(filter.initial_date);
+      final_date = this.dateService.getFormatDataDate(filter.final_date);
+    }
+    let params = new HttpParams();
+    filter.page ? params = params.append('page', filter.page) : null;
+    filter.page_size ? params = params.append('page_size', filter.page_size) : null;
+    filter.warehouse ? params = params.append('warehouse', filter.warehouse) : null;
+    filter.product ? params = params.append('product', filter.product) : null;
+    initial_date ? params = params.append('initial_date', initial_date) : null;
+    final_date ? params = params.append('final_date', final_date) : null;
+    return this.http.get<ModelWarehouseInventory>(`${this.baseUrl}/inventory/stock/`, {params})
+  }
+
+  getRepairsAll(): Observable<ModelProduct> {
+    let params = new HttpParams();
+    params = params.append('not_paginate',true);
+    params = params.append('category','repair');
+    return this.http.get<ModelProduct>(`${this.baseUrl}/products/`, {params})
+  }
+
+  getWarehouses() : Observable<ModelWarehouse> {
+    return this.http.get<ModelWarehouse>(`${this.baseUrl}/inventory/warehouses/`)
+  }
+
+  // Get Stocks
+  getMovements(filter: StockPaginate): Observable<ModelMovement> {
+    let initial_date = '';
+    let final_date = '';
+    if (filter.final_date !== '') {
+      initial_date = this.dateService.getFormatDataDate(filter.initial_date);
+      final_date = this.dateService.getFormatDataDate(filter.final_date);
+    }
+    let params = new HttpParams();
+    filter.page ? params = params.append('page', filter.page) : null;
+    filter.page_size ? params = params.append('page_size', filter.page_size) : null;
+    filter.warehouse ? params = params.append('warehouse', filter.warehouse) : null;
+    filter.product ? params = params.append('product', filter.product) : null;
+    filter.employee ? params = params.append('employee', filter.employee) : null;
+    filter.movement ? params = params.append('movement', filter.movement) : null;
+    filter.origin ? params = params.append('origin', filter.origin) : null;
+    filter.destiny ? params = params.append('destiny', filter.destiny) : null;
+    initial_date ? params = params.append('initial_date', initial_date) : null;
+    final_date ? params = params.append('final_date', final_date) : null;
+    return this.http.get<ModelMovement>(`${this.baseUrl}/inventory/movements/`, {params})
+  }
+
 
 }

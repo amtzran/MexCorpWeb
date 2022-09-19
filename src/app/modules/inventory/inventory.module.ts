@@ -11,6 +11,8 @@ import {NgxSpinnerModule} from "ngx-spinner";
 import {NgSelectModule} from "@ng-select/ng-select";
 import {TableComponent} from "./components/table/table.component";
 import { EntryComponent } from './components/tabs/entry/entry.component';
+import { StockComponent } from './components/tabs/stock/stock.component';
+import { MovementComponent } from './components/tabs/movement/movement.component';
 
 
 @NgModule({
@@ -18,7 +20,9 @@ import { EntryComponent } from './components/tabs/entry/entry.component';
     InventoryComponent,
     TableComponent,
     CrudComponent,
-    EntryComponent
+    EntryComponent,
+    StockComponent,
+    MovementComponent
   ],
   imports: [
     CommonModule,
