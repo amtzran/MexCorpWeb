@@ -166,7 +166,7 @@ export class InventoryService {
     return this.http.get<ModelMovement>(`${this.baseUrl}/inventory/movements/`, {params})
   }
 
-  // Report Services Finalized
+  // Report Stocks
   reportStocksAll(filter: StockPaginate) : Observable<any> {
     let initial_date = '', final_date = '';
     if (filter.initial_date !== '' || filter.final_date !== ''){
@@ -185,5 +185,27 @@ export class InventoryService {
     return this.http.post(`${this.baseUrl}/inventory/stock-export/`, '',{responseType: 'blob', params})
   }
 
+// Report Stocks
+  reportMovementsAll(filter: StockPaginate) : Observable<any> {
+    let initial_date = '', final_date = '';
+    if (filter.initial_date !== '' || filter.final_date !== ''){
+      initial_date = this.dateService.getFormatDataDate(filter.initial_date)
+      final_date = this.dateService.getFormatDataDate(filter.final_date)
+    }
+    let employee = String(filter.employee);
+    let product = String(filter.product);
+    let origin = String(filter.origin);
+    let destiny = String(filter.destiny);
+    let movement = String(filter.movement);
+    let params = new HttpParams();
+    params = params.append('employee', employee);
+    params = params.append('product', product);
+    params = params.append('origin', origin);
+    params = params.append('destiny', destiny);
+    params = params.append('movement', movement);
+    initial_date ? params = params.append('initial_date', initial_date) : null;
+    final_date ? params = params.append('final_date', final_date) : null;
+    return this.http.post(`${this.baseUrl}/inventory/movements-export/`, '',{responseType: 'blob', params})
+  }
 
 }

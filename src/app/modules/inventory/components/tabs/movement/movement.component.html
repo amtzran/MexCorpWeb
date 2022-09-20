@@ -1,9 +1,9 @@
-<mat-card>
+<mat-card [formGroup]="paginateForm">
 
   <div fxLayout="row"
        fxLayout.xs="column"
        fxLayout.sm="column"
-       fxLayoutGap="10px" [formGroup]="paginateForm">
+       fxLayoutGap="10px">
 
     <ng-select fxFlex="100"
                bindLabel="name"
@@ -70,10 +70,20 @@
       <mat-select formControlName="movement"
                   (selectionChange)="filterSelect()">
         <mat-option value="">TODOS</mat-option>
+        <mat-option value="entrie">Entrada</mat-option>
+        <mat-option value="je">Traspaso Grupo a Empleado</mat-option>
+        <mat-option value="ej">Traspaso Empleado a Grupo</mat-option>
       </mat-select>
     </mat-form-field>
 
-    <mat-form-field fxFlex="100">
+  </div>
+
+  <div fxLayout="row"
+       fxLayout.xs="column"
+       fxLayout.sm="column"
+       fxLayoutGap="10px">
+
+    <mat-form-field fxFlex="50">
 
       <mat-label>Ingresar Rango Fecha</mat-label>
       <mat-date-range-input [rangePicker]="picker">
@@ -84,6 +94,13 @@
       <mat-date-range-picker #picker></mat-date-range-picker>
 
     </mat-form-field>
+
+    <div fxFlex="50" fxLayoutAlign="center center">
+      <button (click)="reportMovements()" mat-button color="primary">
+        Descargar
+        <mat-icon mat-list-icon class="colorCheckGreen">view_list</mat-icon>
+      </button>
+    </div>
 
   </div>
 

@@ -9,6 +9,8 @@ import {NgxSpinnerService} from "ngx-spinner";
 import {InventoryService} from "../../../services/inventory.service";
 import {Product} from "../../../../catalog/tools-services/interfaces/product.interface";
 import {Employee} from "../../../../employee/interfaces/employee.interface";
+import * as fileSaver from "file-saver";
+import {DateService} from "../../../../../core/utils/date.service";
 
 @Component({
   selector: 'app-movement',
@@ -32,7 +34,8 @@ export class MovementComponent implements OnInit {
               private formBuilder: FormBuilder,
               private dialog: MatDialog,
               private spinner: NgxSpinnerService,
-              private inventoryService : InventoryService)
+              private inventoryService : InventoryService,
+              private dateService: DateService)
   {
     this.loadDataProducts();
     this.loadDataWarehouses();
@@ -86,6 +89,31 @@ export class MovementComponent implements OnInit {
       initial_date: '',
       final_date: ''
     })
+  }
+
+  /**
+   * Export Stock
+   */
+  reportMovements(){
+
+    this.spinner.show()
+    this.inventoryService.reportMovementsAll(this.paginateForm.value).subscribe(res => {
+      let file = this.sharedService.createBlobToExcel(res);
+      if (this.paginateForm.value.initial_date !== ''){
+        let date_initial = this.dateService.getFormatDataDate(this.paginateForm.value.initial_date);
+        let final_date = this.dateService.getFormatDataDate(this.paginateForm.value.final_date);
+        fileSaver.saveAs(file, `Reporte-Movimientos-General-${date_initial}-${final_date}`);
+      }
+      else {
+        let date = this.dateService.getFormatDataDate(new Date());
+        fileSaver.saveAs(file, `Reporte-Movimientos-General-${date}`);
+      }
+
+      this.spinner.hide();
+    }, (error => {
+      this.spinner.hide()
+      this.sharedService.errorDialog(error)
+    }))
   }
 
   /**
