@@ -13,6 +13,7 @@ import {ModelEmployee, ModelJobCenter} from "../../employee/interfaces/employee.
 import {ModelSupplier} from "../../catalog/suppliers/interfaces/suppliers.interface";
 import {ModelProduct} from "../../catalog/tools-services/interfaces/product.interface";
 import {DateService} from "../../../core/utils/date.service";
+import {reportTask} from "../../task/models/task.interface";
 
 @Injectable({
   providedIn: 'root'
@@ -163,6 +164,25 @@ export class InventoryService {
     initial_date ? params = params.append('initial_date', initial_date) : null;
     final_date ? params = params.append('final_date', final_date) : null;
     return this.http.get<ModelMovement>(`${this.baseUrl}/inventory/movements/`, {params})
+  }
+
+  // Report Services Finalized
+  reportStocksAll(filter: StockPaginate) : Observable<any> {
+    let initial_date = '', final_date = '';
+    if (filter.initial_date !== '' || filter.final_date !== ''){
+      initial_date = this.dateService.getFormatDataDate(filter.initial_date)
+      final_date = this.dateService.getFormatDataDate(filter.final_date)
+    }
+    let employee = String(filter.employee);
+    let warehouse = String(filter.warehouse);
+    let product = String(filter.product);
+    let params = new HttpParams();
+    params = params.append('warehouse', warehouse);
+    params = params.append('employee', employee);
+    params = params.append('product', product);
+    initial_date ? params = params.append('initial_date', initial_date) : null;
+    final_date ? params = params.append('final_date', final_date) : null;
+    return this.http.post(`${this.baseUrl}/inventory/stock-export/`, '',{responseType: 'blob', params})
   }
 
 
