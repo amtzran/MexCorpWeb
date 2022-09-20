@@ -19,7 +19,7 @@ import {DateService} from "../../../../../core/utils/date.service";
 })
 export class StockComponent implements OnInit {
 
-  displayedColumns: string[] = ['id', 'warehouse', 'repair', 'date'];
+  displayedColumns: string[] = ['id', 'warehouse', 'stock', 'repair', 'date'];
   dataSource!: MatTableDataSource<Warehouse>;
   totalItems!: number;
   pageSize = this.sharedService.pageSize;

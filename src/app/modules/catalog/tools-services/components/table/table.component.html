@@ -96,7 +96,7 @@
       <!-- Descripción Column -->
       <ng-container matColumnDef="cost">
         <th mat-header-cell *matHeaderCellDef mat-sort-header=""> Precio</th>
-        <td mat-cell *matCellDef="let row"> {{ row.cost | currency: 'MX':'$'}} </td>
+        <td mat-cell *matCellDef="let row"> {{ row.cost | currency:'MX':'$':'1.2-2'}} </td>
       </ng-container>
 
       <!-- Model Column -->
