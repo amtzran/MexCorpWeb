@@ -13,7 +13,6 @@ import {ModelEmployee, ModelJobCenter} from "../../employee/interfaces/employee.
 import {ModelSupplier} from "../../catalog/suppliers/interfaces/suppliers.interface";
 import {ModelProduct} from "../../catalog/tools-services/interfaces/product.interface";
 import {DateService} from "../../../core/utils/date.service";
-import {reportTask} from "../../task/models/task.interface";
 
 @Injectable({
   providedIn: 'root'
@@ -105,15 +104,6 @@ export class InventoryService {
   // Get Job Centers
   getSuppliers() : Observable<ModelSupplier> {
     return this.http.get<ModelSupplier>(`${this.baseUrl}/suppliers/`)
-  }
-
-  // Get Products
-  getProductsAll(id: number): Observable<ModelProduct> {
-    let params = new HttpParams();
-    params = params.append('not_paginate',true);
-    params = params.append('category','repair');
-    id ? params = params.append('job_center', id) : null;
-    return this.http.get<ModelProduct>(`${this.baseUrl}/products/`, {params})
   }
 
   // Get Stocks

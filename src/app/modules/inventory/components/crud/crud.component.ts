@@ -59,22 +59,22 @@ export class CrudComponent implements OnInit {
 
   ngOnInit(): void {
     this.loadForm();
+    this.idEntry = this.entry.idEntry;
+    this.loadConceptFilterForm();
+    this.dataSource = new MatTableDataSource();
 
-    if(this.entry.idEntry && this.entry.edit){
+    if(this.idEntry && this.entry.edit){
       this.title = `Editar ${this.menuTitle}`;
       this.form.updateValueAndValidity();
     }
 
-    if(this.entry.idEntry && !this.entry.edit){
+    if(this.idEntry && !this.entry.edit){
       this.title = `Información del ${this.menuTitle}`;
       this.form.updateValueAndValidity();
     }
 
-    if(this.entry.idEntry) {
-      this.idEntry = this.entry.idEntry;
+    if(this.idEntry) {
       this.loadEntryById();
-      this.loadConceptFilterForm();
-      this.dataSource = new MatTableDataSource();
       this.getConceptsPaginator(this.paginatorConcept);
     }
   }
@@ -122,6 +122,7 @@ export class CrudComponent implements OnInit {
     this.inventoryService.getEntryById(id).subscribe((response) => {
       this.total = response.data.total;
       this.validateInput();
+      this.loadProducts();
       this.spinner.hide();
     }, (error => {
       this.spinner.hide()
@@ -134,14 +135,14 @@ export class CrudComponent implements OnInit {
    */
   loadEntryById(): void {
     this.spinner.show()
-    this.inventoryService.getEntryById(this.entry.idEntry).subscribe((response) => {
+    this.inventoryService.getEntryById(this.idEntry).subscribe((response) => {
       this.total = response.data.total;
       this.form.patchValue({
         supplier_id: response.data.supplier.id,
         job_center_id: response.data.job_center.id,
         entrie_id: this.entry.idEntry
       });
-      this.loadProducts(response.data.job_center.id!)
+      this.loadProducts()
       this.validateInput();
       this.spinner.hide();
     }, (error => {
@@ -230,12 +231,14 @@ export class CrudComponent implements OnInit {
   }
 
   getConceptsPaginator(event: any) {
-    const paginatorConcept: MatPaginator = event;
-    this.paginateForm.get('page')?.setValue(paginatorConcept.pageIndex + 1);
     this.spinner.show()
+    if (event !== undefined) {
+      const paginatorConcept: MatPaginator = event;
+      this.paginateForm.get('page')?.setValue(paginatorConcept.pageIndex + 1);
+    }
+    if (!this.entry.idEntry) this.paginateForm.get('entrie_id')?.setValue(this.idEntry);
     this.inventoryService.getConcepts(this.paginateForm.value)
       .subscribe((concepts) => {
-          console.log(concepts)
           this.spinner.hide()
           this.dataSource.data = concepts.data
           this.totalItems = concepts.meta.total;
@@ -292,7 +295,9 @@ export class CrudComponent implements OnInit {
    */
   loadConceptFilterForm(): void {
     this.paginateForm = this.formBuilder.group({
-      entrie_id: this.entry.idEntry,
+      page: [],
+      page_size: [this.pageSize],
+      entrie_id: this.idEntry,
     })
   }
 
@@ -312,10 +317,9 @@ export class CrudComponent implements OnInit {
 
   /**
    * Array from service for Products
-   * @param id
    */
-  loadProducts(id: number): void {
-    this.inventoryService.getProductsAll(id).subscribe(products => {this.products = products.data} )
+  loadProducts(): void {
+    this.inventoryService.getRepairsAll().subscribe(products => {this.products = products.data} )
   }
 
   /**
@@ -323,7 +327,7 @@ export class CrudComponent implements OnInit {
    * @param event
    */
   selectJobCenter(event: any) {
-    this.loadProducts(event);
+    //this.loadProducts(event);
   }
 
   /**
