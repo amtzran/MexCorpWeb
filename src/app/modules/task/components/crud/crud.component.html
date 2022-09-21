@@ -386,8 +386,8 @@
   <div fxFlex="60" fxLayoutAlign="end">
     <button (click)="close()" mat-stroked-button color="primary" mat-dialog-close="true">Cancelar</button>
     <button *ngIf="task.editCustom" (click)="updateTaskCustom()" mat-flat-button color="primary">Editar Finalizado</button>
-    <button *ngIf="!task.idTask" (click)="addTask()" mat-flat-button color="primary" cdkFocusInitial [disabled]="taskForm.invalid">Guardar Tarea</button>
-    <button *ngIf="task.idTask && task.edit" (click)="updateTask()" mat-flat-button color="primary" cdkFocusInitial>Editar</button>
+    <button *ngIf="!taskId" (click)="addTask()" mat-flat-button color="primary" cdkFocusInitial [disabled]="taskForm.invalid">Guardar Tarea</button>
+    <button *ngIf="taskId && task.edit" (click)="updateTask()" mat-flat-button color="primary" cdkFocusInitial>Editar</button>
   </div>
 
 </mat-dialog-actions>

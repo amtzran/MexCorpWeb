@@ -1,22 +1,14 @@
 <div fxLayout="column" fxLayoutAlign="center center">
 
-  <div *ngIf="data.status === 401;">
-    <h1>Permisos No Autorizados</h1>
+  <div *ngIf="data.status === 400 || data.status === 401 else error">
+    <h1>No ser realizó la acción Por:</h1>
     <hr>
     <p>
       {{ data.error.message }}
     </p>
   </div>
 
-  <div *ngIf="data.status === 400;">
-    <h1>Acciones no realizadas</h1>
-    <hr>
-    <p>
-      {{ data.error.message }}
-    </p>
-  </div>
-
-  <div *ngIf="data.status === 0 || data.status === 500">
+  <ng-template #error>
 
     <h1>Algo salió Mal</h1>
     <hr>
@@ -26,7 +18,7 @@
       Ó verifica tu conexión a internet
     </p>
 
-  </div>
+  </ng-template>
 
   <div fxFlex="100">
     <button mat-button (click)="cancel()" color="warn">De acuerdo</button>

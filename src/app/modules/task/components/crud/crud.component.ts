@@ -136,7 +136,7 @@ export class CrudComponent implements OnInit {
    */
   loadTaskById(): void{
     this.spinner.show()
-    this.taskService.getTaskById(this.task.idTask).subscribe((response) => {
+    this.taskService.getTaskById(this.taskId).subscribe((response) => {
       this.dataTask = response.data
       this.title = `Información de la Tarea | ${response.data.status} | ${response.data.folio}
       | ${response.data.invoiced === 1 ? 'Facturado' : 'Sin Facturar'}`;
@@ -162,8 +162,7 @@ export class CrudComponent implements OnInit {
     }, (error => {
         this.spinner.hide()
         this.sharedService.errorDialog(error)
-      })
-    )
+      }))
   }
 
   /**
@@ -286,9 +285,11 @@ export class CrudComponent implements OnInit {
     }
     else {
       this.taskService.addTask(this.taskForm.value).subscribe(response => {
+          this.taskId = response.data.id!;
+          this.task.edit = true;
           this.spinner.hide()
           this.sharedService.showSnackBar(`Se ha agregado correctamente la Tarea: ${response.data.title}`);
-          this.dialogRef.close(ModalResponse.UPDATE);
+          this.loadTaskById();
         }, (error => {
           this.spinner.hide()
           this.sharedService.errorDialog(error)
@@ -309,7 +310,7 @@ export class CrudComponent implements OnInit {
     let finalDate = this.dateService.getFormatDateSetInputRangePicker(this.taskForm.value.final_date);
     this.taskForm.get('initial_date')?.setValue(initialDate);
     this.taskForm.get('final_date')?.setValue(finalDate);
-    this.taskService.updateTask(this.task.idTask, this.taskForm.value).subscribe(response => {
+    this.taskService.updateTask(this.taskId, this.taskForm.value).subscribe(response => {
       this.spinner.hide()
       this.sharedService.showSnackBar(`Se ha actualizado correctamente la Tarea: ${response.data.title}` );
       this.dialogRef.close(ModalResponse.UPDATE);
