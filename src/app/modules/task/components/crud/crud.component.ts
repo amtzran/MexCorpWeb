@@ -63,7 +63,7 @@ export class CrudComponent implements OnInit {
   @ViewChild(MatPaginator, {static: true}) paginator!: MatPaginator;
   @ViewChild(MatSort) sort!: MatSort;
 
-  displayedColumnsProducts: string[] = ['id', 'product', 'quantity', 'options'];
+  displayedColumnsProducts: string[] = ['id', 'product', 'quantity', 'status', 'options'];
   dataSourceProducts!: MatTableDataSource<any>;
 
   constructor(
