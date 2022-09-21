@@ -101,12 +101,12 @@ export class CrudComponent implements OnInit {
     this.spinner.show()
     this.inventoryService.addEntry(this.form.value).subscribe((response) => {
         this.idEntry = response.data.id;
-        this.form.get('entrie_id')?.setValue(response.data.id);
+        this.form.get('entrie_id')?.setValue(this.idEntry);
         this.spinner.hide()
         this.sharedService.showSnackBar(`Se ha agregado correctamente el ${this.menuTitle}.`);
         this.sharedService.updateComponent();
         this.cleanInputConcept();
-        this.loadEntryByIdNew(response.data.id);
+        this.loadEntryByIdNew(this.idEntry);
       }, (error => {
         this.spinner.hide()
         this.sharedService.errorDialog(error)
@@ -140,7 +140,7 @@ export class CrudComponent implements OnInit {
       this.form.patchValue({
         supplier_id: response.data.supplier.id,
         job_center_id: response.data.job_center.id,
-        entrie_id: this.entry.idEntry
+        entrie_id: this.idEntry
       });
       this.loadProducts()
       this.validateInput();
@@ -192,9 +192,9 @@ export class CrudComponent implements OnInit {
   /**
    * Delete Concept
    */
-  deleteConcept() {
+  deleteConcept(type: string, row: Concept) {
     this.spinner.show()
-    this.inventoryService.deleteConcept(this.idConcept)
+    this.inventoryService.deleteConcept(row.id)
       .subscribe(response => {
           this.spinner.hide()
           this.sharedService.showSnackBar('Se ha eliminado correctamente el concepto.');
@@ -202,28 +202,6 @@ export class CrudComponent implements OnInit {
           this.cleanInputConcept();
           this.getConceptsPaginator(this.paginatorConcept);
           this.loadEntryById();
-        }, (error => {
-          this.spinner.hide()
-          this.sharedService.errorDialog(error)
-        } )
-      )
-  }
-
-  /**
-   *  @param type
-   * @param row
-   */
-  getByIdConcept(type: string, row: Concept) {
-    this.spinner.show()
-    this.inventoryService.getConceptById(row.id).subscribe((response) => {
-          this.idConcept = response.data.id;
-          this.type = type;
-          this.form.patchValue({
-            product_id: response.data.product_id,
-            quantity: response.data.quantity,
-            unit_price: response.data.unit_price
-          });
-          this.spinner.hide();
         }, (error => {
           this.spinner.hide()
           this.sharedService.errorDialog(error)

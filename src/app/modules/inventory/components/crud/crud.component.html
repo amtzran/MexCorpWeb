@@ -144,7 +144,7 @@
               Editar
             </button>-->
 
-            <button mat-menu-item (click)="getByIdConcept('delete', row)">
+            <button mat-menu-item (click)="deleteConcept('delete', row)">
               <mat-icon color="warn">delete</mat-icon>
               Eliminar
             </button>
@@ -192,6 +192,5 @@
   <button *ngIf="!idEntry" (click)="add()" mat-flat-button color="primary" cdkFocusInitial [disabled]="form.invalid">Guardar {{menuTitle}}</button>
   <button *ngIf="idEntry && type === 'add' " [disabled]="form.invalid" (click)="saveConcept()" mat-flat-button color="primary" cdkFocusInitial>Agregar Concepto</button>
   <!--<button *ngIf="type === 'update' " [disabled]="form.invalid" (click)="updateConcept()" mat-flat-button color="primary" cdkFocusInitial>Editar Concepto</button>-->
-  <button *ngIf="type === 'delete' " (click)="deleteConcept()" mat-flat-button color="primary" cdkFocusInitial>Eliminar Concepto</button>
 </mat-dialog-actions>
 
