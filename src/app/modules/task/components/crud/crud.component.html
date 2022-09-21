@@ -335,10 +335,16 @@
           <td mat-cell *matCellDef="let row"> {{row.product_name}} </td>
         </ng-container>
 
-        <!-- Name Column -->
+        <!-- Quantity Column -->
         <ng-container matColumnDef="quantity">
-          <th mat-header-cell *matHeaderCellDef mat-sort-header=""> Cantidad</th>
+          <th mat-header-cell *matHeaderCellDef mat-sort-header=""> Cantidad Asignada</th>
           <td mat-cell *matCellDef="let row"> {{row.quantity}} </td>
+        </ng-container>
+
+        <!-- Quantity Column -->
+        <ng-container matColumnDef="amount_spent">
+          <th mat-header-cell *matHeaderCellDef mat-sort-header=""> Cantidad Utilizada</th>
+          <td mat-cell *matCellDef="let row"> {{row.amount_spent}} </td>
         </ng-container>
 
         <!-- Status Column -->
