@@ -1,0 +1,52 @@
+<ngx-spinner></ngx-spinner>
+
+<h4 mat-dialog-title class="title-subsection">{{title}} : {{data.product_name}}</h4>
+<mat-divider></mat-divider>
+<br>
+
+<div fxLayout="row" fxLayoutGap="10px" fxLayout.sm="column" fxLayout.xs="column" [formGroup]="receiveForm">
+
+  <div fxFlex="100">
+
+    <mat-dialog-content class="mat-typography">
+
+      <mat-card>
+        <mat-card-content>
+
+          <div fxLayout="column" fxLayoutGap="20px" fxLayout.xs="column">
+
+            <mat-form-field>
+              <mat-label>Devolución</mat-label>
+              <input matInput type="number" formControlName="refund">
+              <button mat-icon-button matSuffix></button>
+              <mat-error *ngIf="fieldInvalid('refund')">
+                Favor de ingresar la devolución
+              </mat-error>
+            </mat-form-field>
+
+          </div>
+
+        </mat-card-content>
+        <mat-card-actions>
+        </mat-card-actions>
+      </mat-card>
+    </mat-dialog-content>
+
+  </div>
+
+</div>
+
+<hr>
+
+<div fxLayout="row" fxLayoutGap="10px" fxLayout.sm="column" fxLayout.xs="column" fxLayoutAlign="end center">
+
+  <div fxLayoutAlign="center center">
+    <button (click)="close()" mat-raised-button color="warn" mat-dialog-close="true">Cancelar</button>
+  </div>
+  <mat-divider></mat-divider>
+  <div fxLayoutAlign="center center">
+    <button (click)="save()" mat-raised-button color="primary" [disabled]="receiveForm.invalid">Enviar</button>
+  </div>
+
+</div>
+

@@ -18,6 +18,7 @@ import * as moment from "moment";
 import {SendEmailComponent} from "../send-email/send-email.component";
 import {ImageDetailComponent} from "../image-detail/image-detail.component";
 import {Product} from "../../../catalog/tools-services/interfaces/product.interface";
+import {ReceivePartComponent} from "../receive-part/receive-part.component";
 
 @Component({
   selector: 'app-crud',
@@ -63,7 +64,7 @@ export class CrudComponent implements OnInit {
   @ViewChild(MatPaginator, {static: true}) paginator!: MatPaginator;
   @ViewChild(MatSort) sort!: MatSort;
 
-  displayedColumnsProducts: string[] = ['id', 'product', 'quantity', 'amount_spent', 'status', 'options'];
+  displayedColumnsProducts: string[] = ['id', 'product', 'quantity', 'amount_spent', 'refund', 'status', 'options'];
   dataSourceProducts!: MatTableDataSource<any>;
 
   constructor(
@@ -103,6 +104,7 @@ export class CrudComponent implements OnInit {
     /*Formulario*/
     this.loadTaskForm();
     this.loadProductForm();
+    this.updateEventSharedService();
 
     /**
      * If show type form
@@ -414,6 +416,15 @@ export class CrudComponent implements OnInit {
 
   }
 
+  receivePartsByConcept(product: any) {
+    // Show Dialog
+    this.dialog.open(ReceivePartComponent, {
+      width: '50vw',
+      data: product
+    })
+
+  }
+
   /**
    * Value Submit Before send
    */
@@ -536,6 +547,15 @@ export class CrudComponent implements OnInit {
       data: doorTask
     })
 
+  }
+
+  /**
+   * Services Shared for update any Component
+   */
+  updateEventSharedService(){
+    this.sharedService.changeEvent.subscribe(change => {
+     this.loadTaskById();
+    })
   }
 
   /**
