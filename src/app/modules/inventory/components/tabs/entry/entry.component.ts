@@ -20,7 +20,7 @@ import {Supplier} from "../../../../catalog/suppliers/interfaces/suppliers.inter
 })
 export class EntryComponent implements OnInit {
 
-  displayedColumns: string[] = ['id', 'supplier', 'group', 'employee', 'amount', 'date', 'options'];
+  displayedColumns: string[] = ['id', 'supplier', 'group', 'employee', 'amount', 'comments', 'date', 'options'];
   dataSource!: MatTableDataSource<Entry>;
   totalItems!: number;
   pageSize = this.sharedService.pageSize;

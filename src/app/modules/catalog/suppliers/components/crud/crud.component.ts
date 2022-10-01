@@ -77,6 +77,7 @@ export class CrudComponent implements OnInit {
   loadContractForm():void{
     this.supplierForm = this.fb.group({
       name:[{value:null, disabled:this.supplier.info}, Validators.required],
+      description:[{value:null, disabled:this.supplier.info}, ],
     });
   }
 

@@ -25,6 +25,8 @@ export class ProductService {
     filter.page_size ? params = params.append('page_size', filter.page_size) : null;
     filter.id ? params = params.append('id', filter.id) : null;
     filter.category ? params = params.append('category', filter.category) : null;
+    filter.brand ? params = params.append('brand', filter.brand) : null;
+    filter.description ? params = params.append('description', filter.description) : null;
     return this.http.get<ModelProduct>(`${this.baseUrl}/products/`, {params})
   }
 
@@ -51,8 +53,12 @@ export class ProductService {
   }
 
   // Report Services Finalized
-  reportProducts() : Observable<any> {
-    return this.http.post(`${this.baseUrl}/products-export/`, '',{responseType: 'blob',})
+  reportProducts(filter: ProductPaginate) : Observable<any> {
+    let params = new HttpParams();
+    filter.category ? params = params.append('category', filter.category) : null;
+    filter.brand ? params = params.append('brand', filter.brand) : null;
+    filter.description ? params = params.append('description', filter.description) : null;
+    return this.http.post(`${this.baseUrl}/products-export/`, '',{responseType: 'blob', params})
   }
 
 }

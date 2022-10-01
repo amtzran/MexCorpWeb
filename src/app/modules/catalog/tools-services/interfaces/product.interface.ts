@@ -30,7 +30,9 @@ export interface ProductPaginate {
   page: string,
   page_size: string,
   id?: number,
-  category?: string
+  category?: string,
+  brand?: string,
+  description?: string
 }
 
 export interface ProductDetail {

@@ -5,59 +5,94 @@
     </mat-card-title>
   </mat-card>
 
-  <br>
+  <mat-card>
+  <div class="container" fxFlex="100" fxLayout="column" [formGroup]="productPaginateForm">
 
-  <div fxLayout="row" class="container" fxLayoutGap="10px" [formGroup]="productPaginateForm">
+    <div fxLayout="row"
+         fxLayout.xs="column"
+         fxLayout.sm="column"
+         fxLayoutGap="10px">
 
-    <div fxFlex="25">
-      <ng-select fxFlex="100"
-                 bindLabel="name"
-                 placeholder="Herramientas"
-                 [multiple]="false"
-                 appendTo="body"
-                 formControlName="id"
-                 [searchable]="true"
-                 [clearable]="true"
-                 (change)="filterSelect()">
-        <ng-option value="">TODOS</ng-option>
-        <ng-option *ngFor="let product of products" [value]="product.id">
-          {{product.name}} - {{product.description}}
-        </ng-option>
-      </ng-select>
+      <div fxFlex="100">
+        <ng-select fxFlex="100"
+                   bindLabel="name"
+                   placeholder="Herramientas"
+                   [multiple]="false"
+                   appendTo="body"
+                   formControlName="id"
+                   [searchable]="true"
+                   [clearable]="true"
+                   (change)="filterSelect()">
+          <ng-option value="">TODOS</ng-option>
+          <ng-option *ngFor="let product of products" [value]="product.id">
+            {{product.name}} - {{product.description}}
+          </ng-option>
+        </ng-select>
+      </div>
+
+      <mat-form-field fxFlex="100">
+        <mat-label>Categoría</mat-label>
+        <mat-select formControlName="category" (selectionChange)="filterSelect()">
+          <mat-option value="">TODOS</mat-option>
+          <mat-option value="tool">Herramienta</mat-option>
+          <mat-option value="repair">Refacción</mat-option>
+        </mat-select>
+      </mat-form-field>
+
+      <mat-form-field fxFlex="100">
+
+        <mat-label>Marca</mat-label>
+        <input
+          matInput
+          type="text"
+          formControlName="brand"
+          (change)="filterSelect()">
+
+      </mat-form-field>
+
+      <mat-form-field fxFlex="100">
+
+        <mat-label>Descripción</mat-label>
+        <input
+          matInput
+          type="text"
+          formControlName="description"
+          (change)="filterSelect()">
+
+      </mat-form-field>
+
     </div>
 
-    <mat-form-field fxFlex="25">
-      <mat-label>Categoría</mat-label>
-      <mat-select formControlName="category" (selectionChange)="filterSelect()">
-        <mat-option value="">TODOS</mat-option>
-        <mat-option value="tool">Herramienta</mat-option>
-        <mat-option value="repair">Refacción</mat-option>
-      </mat-select>
-    </mat-form-field>
+    <div fxLayout="row"
+         fxLayout.xs="column"
+         fxLayout.sm="column"
+         fxLayoutGap="10px">
 
-    <div fxFlex="15" fxLayoutAlign="center center">
-      <button (click)="openDialogProduct('tool',true, null, false)" mat-button color="primary">
-        <mat-icon>construction</mat-icon>
-        Nueva Herramienta
-      </button>
-    </div>
+      <div fxFlex="100" fxLayoutAlign="center center">
+        <button (click)="openDialogProduct('tool',true, null, false)" mat-button color="primary">
+          <mat-icon>construction</mat-icon>
+          Nueva Herramienta
+        </button>
+      </div>
 
-    <div fxFlex="15" fxLayoutAlign="center center">
-      <button (click)="openDialogProduct('repair',true, null, false)" mat-button color="primary">
-        <mat-icon>inventory</mat-icon>
-        Nueva Refacción
-      </button>
-    </div>
+      <div fxFlex="100" fxLayoutAlign="center center">
+        <button (click)="openDialogProduct('repair',true, null, false)" mat-button color="primary">
+          <mat-icon>inventory</mat-icon>
+          Nueva Refacción
+        </button>
+      </div>
 
-    <div fxFlex="20" fxLayoutAlign="center center">
-      <button (click)="reportProducts()" mat-button color="primary">
-        Descargar Herramientas
-        <mat-icon mat-list-icon class="colorCheckGreen">view_list</mat-icon>
-      </button>
+      <div fxFlex="100" fxLayoutAlign="center center">
+        <button (click)="reportProducts()" mat-button color="primary">
+          Descargar Herramientas
+          <mat-icon mat-list-icon class="colorCheckGreen">view_list</mat-icon>
+        </button>
+      </div>
+
     </div>
 
   </div>
-
+  </mat-card>
 
   <div class="mat-elevation-z8">
     <ngx-spinner></ngx-spinner>

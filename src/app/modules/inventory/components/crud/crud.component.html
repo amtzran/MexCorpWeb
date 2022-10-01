@@ -84,6 +84,17 @@
 
           </div>
 
+          <div fxLayout="row"
+               fxLayout.xs="column"
+               fxLayoutGap="20px" >
+
+            <mat-form-field fxFlex="100">
+              <mat-label>Observaciones</mat-label>
+              <textarea type="text" matInput formControlName="comments"></textarea>
+            </mat-form-field>
+
+          </div>
+
         </div>
 
       </div>
@@ -170,12 +181,6 @@
     </mat-paginator>
 
     <div fxLayout="row" fxLayoutGap="20" fxLayoutAlign="end center">
-   <!--   <div>
-        <h3> Importe: <span class="color-warn"> {{ amount | currency:'MX':'$':'1.2-2'}} </span> | </h3>
-      </div>
-      <div>
-        <h3> Precio unitario: <span class="color-primary"> {{ unitPrice | currency:'MX':'$':'1.2-2'}} </span> | </h3>
-      </div>-->
 
       <div class="container">
         <h3>Total: <span class="color-warn"> {{ total | currency:'MX':'$':'1.2-2'}} </span> </h3>

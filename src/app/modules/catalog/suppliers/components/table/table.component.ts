@@ -20,7 +20,7 @@ import {CrudComponent} from "../crud/crud.component";
 })
 export class TableComponent implements OnInit {
 
-  displayedColumns: string[] = ['id', 'name', 'options'];
+  displayedColumns: string[] = ['id', 'name', 'description', 'options'];
   dataSource!: MatTableDataSource<Supplier>;
   totalItems!: number;
   pageSize = this.sharedService.pageSize

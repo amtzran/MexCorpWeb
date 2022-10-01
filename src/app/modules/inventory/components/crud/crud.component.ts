@@ -90,6 +90,7 @@ export class CrudComponent implements OnInit {
       entrie_id:[{value:'', disabled:this.entry.info},[]],
       quantity:[{value:'', disabled:this.entry.info},[]],
       unit_price:[{value:'', disabled:this.entry.info},[]],
+      comments:[{value:'', disabled:this.entry.info},[]],
     });
   }
 
@@ -140,6 +141,7 @@ export class CrudComponent implements OnInit {
       this.form.patchValue({
         supplier_id: response.data.supplier.id,
         job_center_id: response.data.job_center.id,
+        comments: response.data.comments,
         entrie_id: this.idEntry
       });
       this.loadProducts()

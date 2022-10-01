@@ -117,7 +117,7 @@ export class TableComponent implements OnInit {
    */
   reportProducts(){
     this.spinner.show()
-    this.productService.reportProducts().subscribe(res => {
+    this.productService.reportProducts(this.productPaginateForm.value).subscribe(res => {
         let file = this.sharedService.createBlobToExcel(res);
         let date_initial = this.dateService.getFormatDataDate(new Date())
 
@@ -152,7 +152,9 @@ export class TableComponent implements OnInit {
       page: [],
       page_size: this.pageSize,
       id: this.idProduct,
-      category: ''
+      category: '',
+      brand: '',
+      description: ''
     })
   }
 

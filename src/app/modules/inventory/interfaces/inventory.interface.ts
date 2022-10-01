@@ -39,6 +39,7 @@ export interface Entry {
   employee:   Employee;
   concepts:   Concept[];
   total:      number;
+  comments: string;
   created_at: Date;
   updated_at: Date;
 }
