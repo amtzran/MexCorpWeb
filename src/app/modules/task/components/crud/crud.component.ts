@@ -286,6 +286,7 @@ export class CrudComponent implements OnInit {
       )
     }
     else {
+      console.log(this.taskForm.value)
       this.taskService.addTask(this.taskForm.value).subscribe(response => {
           this.taskId = response.data.id!;
           this.task.edit = true;
@@ -374,6 +375,32 @@ export class CrudComponent implements OnInit {
           )
         }
     })
+  }
+
+  /**
+   * delete a task.
+   */
+  closeTask(): void {
+    // Show Dialog
+    const dialog = this.dialog.open(ConfirmComponent, {
+      width: '250',
+      data: {data: this.task, close: true}
+    })
+
+    dialog.afterClosed().subscribe(
+      (result) => {
+        if (result) {
+          this.spinner.show()
+          this.taskService.closeTask(this.task.idTask).subscribe(response => {
+              this.spinner.hide()
+              this.sharedService.showSnackBar(`Se ha cerrado correctamente la Tarea`);
+              this.sharedService.updateComponent()
+            }, (error => {
+              this.spinner.hide()
+              this.sharedService.errorDialog(error)
+            }))
+          }
+        })
   }
 
   /**

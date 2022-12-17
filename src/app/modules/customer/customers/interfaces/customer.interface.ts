@@ -25,6 +25,8 @@ export interface Customer {
   user_id?: number;
   user_name?: string;
   is_active?: boolean;
+  date_end_agreement?: string,
+  date_start_agreement?: string,
   created_at?: Date;
   updated_at?: Date;
 }

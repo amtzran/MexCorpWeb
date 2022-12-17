@@ -11,7 +11,7 @@ import {MessageDelete} from "../../interfaces/shared.interface";
 export class ConfirmComponent implements OnInit {
 
   constructor(private dialogRef: MatDialogRef<ConfirmComponent>,
-              @Inject(MAT_DIALOG_DATA) public data: MessageDelete) { }
+              @Inject(MAT_DIALOG_DATA) public data: any) { }
 
   ngOnInit(): void {
   }

@@ -3,9 +3,10 @@ import {FormBuilder, FormGroup, Validators} from "@angular/forms";
 import {MAT_DIALOG_DATA, MatDialogRef} from "@angular/material/dialog";
 import {ModalResponse} from "../../../../../core/utils/ModalResponse";
 import {CustomerServiceService} from "../../services/customer-service.service";
-import {Contract, ContractDetail, TypeCustomer} from "../../interfaces/customer.interface";
+import {Contract, TypeCustomer} from "../../interfaces/customer.interface";
 import {SharedService} from "../../../../../shared/services/shared.service";
 import {NgxSpinnerService} from "ngx-spinner";
+import {DateService} from "../../../../../core/utils/date.service";
 
 @Component({
   selector: 'app-crud',
@@ -28,6 +29,8 @@ export class CrudComponent implements OnInit {
   // Fill Selects Contracts and Type customer
   contracts: Contract[] = [];
   typeCustomers: TypeCustomer[] = []
+  startDate: string = '';
+  endDate: string = '';
 
   constructor(
     private fb: FormBuilder,
@@ -35,6 +38,7 @@ export class CrudComponent implements OnInit {
     private dialogRef: MatDialogRef<CrudComponent>,
     private _customerService: CustomerServiceService,
     private spinner: NgxSpinnerService,
+    private dateService: DateService,
     @Inject(MAT_DIALOG_DATA) public customer : {idCustomer: number, edit: boolean, info: boolean}
   ) { }
 
@@ -76,17 +80,32 @@ export class CrudComponent implements OnInit {
    */
   loadGroupById(): void{
     this.spinner.show()
-    this._customerService.getCustomerById(this.customer.idCustomer).subscribe(response => {
+    this._customerService.getCustomerById(this.customer.idCustomer).subscribe((response) => {
       this.spinner.hide()
-      delete response.data.id;
-      delete response.data.is_active;
-      delete response.data.contract_name;
-      delete response.data.customer_type_name;
-      delete response.data.user_id;
-      delete response.data.user_name;
-      delete response.data.created_at;
-      delete response.data.updated_at;
-      this.customerForm.setValue(response.data);
+      let dateStart = null;
+      if (response.data.date_start_agreement !== null) {
+        dateStart = this.dateService.getFormatDateSetInputRangePicker(response.data.date_start_agreement!)
+      }
+      let dateEnd = null;
+      if (response.data.date_end_agreement !== null) {
+        dateEnd = this.dateService.getFormatDateSetInputRangePicker(response.data.date_end_agreement!)
+      }
+
+      this.customerForm.patchValue({
+        address: response.data.address,
+        city: response.data.city,
+        contract_id: response.data.contract_id,
+        customer_type_id: response.data.customer_type_id,
+        date_end_agreement: dateEnd,
+        date_start_agreement: dateStart,
+        email: response.data.email,
+        name: response.data.name,
+        phone: response.data.phone,
+        postal_code: response.data.postal_code,
+        reason_social: response.data.reason_social,
+        rfc: response.data.rfc
+      })
+      //this.customerForm.setValue(response.data);
       }, (error => {
         this.spinner.hide()
         this.sharedService.errorDialog(error)
@@ -107,6 +126,8 @@ export class CrudComponent implements OnInit {
       address: [{value:'', disabled:this.customer.info}],
       city: [{value:'', disabled:this.customer.info}],
       postal_code: [{value:'', disabled:this.customer.info}],
+      date_start_agreement: [{value: null, disabled:this.customer.info}],
+      date_end_agreement: [{value: null, disabled:this.customer.info}],
       contract_id: [{value: '', disabled:this.customer.info}, Validators.required],
       customer_type_id: [{value: '', disabled:this.customer.info}, Validators.required],
     });
@@ -155,6 +176,20 @@ export class CrudComponent implements OnInit {
       this.sharedService.showSnackBar('Los campos con * son obligatorios.');
       return
     }
+    if (this.customerForm.value.date_start_agreement !== null)
+    {
+      this.startDate = this.dateService.getFormatDataDate(this.customerForm.get('date_start_agreement')?.value)
+      this.customerForm.get('date_start_agreement')?.setValue(this.startDate)
+    }
+    else this.customerForm.get('date_start_agreement')?.setValue(null);
+
+    if (this.customerForm.value.date_end_agreement !== null)
+    {
+    this.endDate = this.dateService.getFormatDataDate(this.customerForm.get('date_end_agreement')?.value)
+    this.customerForm.get('date_end_agreement')?.setValue(this.endDate)
+    }
+    else this.customerForm.get('date_end_agreement')?.setValue(null);
+
   }
 
   /**

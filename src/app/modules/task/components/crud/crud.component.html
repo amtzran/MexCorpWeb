@@ -122,11 +122,11 @@
 
             <mat-form-field fxFlex="100">
               <mat-label>Comentarios</mat-label>
-              <input
+              <textarea
                 matInput
                 type="text"
                 formControlName="comments"
-              >
+              ></textarea>
             </mat-form-field>
 
           </div>
@@ -405,6 +405,7 @@
 
   <div fxFlex="40">
     <button *ngIf="task.idTask" (click)="deleteTask()" mat-stroked-button color="warn" mat-dialog-close="true">Eliminar</button>
+    <button *ngIf="task.idTask" (click)="closeTask()" mat-stroked-button color="warn" mat-dialog-close="true">Cerrar Tarea</button>
   </div>
 
   <div fxFlex="60" fxLayoutAlign="end">

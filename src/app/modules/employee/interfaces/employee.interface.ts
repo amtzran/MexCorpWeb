@@ -32,6 +32,7 @@ export interface Employee {
   rfc?: string;
   validity?: string;
   phone?: string;
+  observations: string;
   permissions_user: DataPermission[] | [];
   products_employee?: any;
   created_at?: string;

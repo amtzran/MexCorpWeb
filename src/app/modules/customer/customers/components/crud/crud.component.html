@@ -137,6 +137,30 @@
 
           </div>
 
+          <div fxLayout="row"
+               fxLayout.xs="column"
+               fxLayoutGap="20px">
+
+            <mat-form-field class="example-full-width" appearance="fill">
+              <mat-label>Inicio Convenio</mat-label>
+              <input matInput [matDatepicker]="pickerAdmission" formControlName="date_start_agreement">
+              <mat-hint>MM/DD/YYYY</mat-hint>
+              <mat-datepicker-toggle matSuffix [for]="pickerAdmission"></mat-datepicker-toggle>
+              <mat-datepicker #pickerAdmission></mat-datepicker>
+
+            </mat-form-field>
+
+            <mat-form-field class="example-full-width" appearance="fill">
+              <mat-label>Fin Convenio</mat-label>
+              <input matInput [matDatepicker]="pickerAdmissionEnd" formControlName="date_end_agreement">
+              <mat-hint>MM/DD/YYYY</mat-hint>
+              <mat-datepicker-toggle matSuffix [for]="pickerAdmissionEnd"></mat-datepicker-toggle>
+              <mat-datepicker #pickerAdmissionEnd></mat-datepicker>
+
+            </mat-form-field>
+
+          </div>
+
         </div>
 
       </div>

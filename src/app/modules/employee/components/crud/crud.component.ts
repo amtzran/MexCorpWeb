@@ -96,7 +96,10 @@ export class CrudComponent implements OnInit {
   loadEmployeeById(): void{
     this.spinner.show()
     this.employeeService.getEmployeeById(this.employee.idEmployee).subscribe((response) => {
-      console.log(response)
+      let dateAdmission = null;
+      if (response.data.date_admission !== null) dateAdmission = this.dateService.getFormatDateSetInputRangePicker(response.data.date_admission!)
+      let dateValidity = null;
+      if (response.data.date_admission !== null) dateValidity = this.dateService.getFormatDateSetInputRangePicker(response.data.validity!)
       this.spinner.hide()
       this.employeeForm.patchValue({
         name: response.data.name,
@@ -107,12 +110,13 @@ export class CrudComponent implements OnInit {
         turn_id: response.data.turn_id,
         entry_radius: response.data.entry_radius,
         exit_radius: response.data.exit_radius,
-        date_admission: this.dateService.getFormatDateSetInputRangePicker(response.data.date_admission!),
+        date_admission: dateAdmission,
         nss: response.data.nss,
         curp: response.data.curp,
         rfc: response.data.rfc,
-        validity: this.dateService.getFormatDateSetInputRangePicker(response.data.validity!),
+        validity: dateValidity,
         phone: response.data.phone,
+        observations: response.data.observations,
         permissions_user: response.data.permissions_user.map( (permission: any) => permission.id),
         //products_employee: response.data.products_employee?.map( (product: any) => product.id)
       })
@@ -138,11 +142,12 @@ export class CrudComponent implements OnInit {
       turn_id: [{value: '', disabled:this.employee.info}, Validators.required],
       entry_radius:[{value:false, disabled:this.employee.info}],
       exit_radius:[{value:false, disabled:this.employee.info}],
-      date_admission:[{value:'', disabled:this.employee.info}, Validators.required],
+      date_admission:[{value: null, disabled:this.employee.info},],
       nss:[{value:'', disabled:this.employee.info}],
       curp:[{value:'', disabled:this.employee.info}],
       rfc:[{value:'', disabled:this.employee.info}],
-      validity:[{value:'', disabled:this.employee.info}, Validators.required],
+      validity:[{value: null, disabled:this.employee.info}, ],
+      observations:[{value: '', disabled:this.employee.info}, ],
       phone:[{value:'', disabled:this.employee.info}],
       permissions_user:[{value: [], disabled:this.employee.info}, Validators.required],
     });
@@ -168,7 +173,7 @@ export class CrudComponent implements OnInit {
    * Update a employee.
    */
   updateEmployee(): void {
-    this.validateForm()
+    this.validateForm();
     this.spinner.show()
     this.employeeService.updateEmployee(this.employee.idEmployee, this.employeeForm.value).subscribe(response => {
       this.spinner.hide()
@@ -186,16 +191,6 @@ export class CrudComponent implements OnInit {
    */
   validateForm(){
     this.submit = true;
-    if (this.employeeForm.value.date_admission !== '') {
-      let dateAdmission = this.dateService.getFormatDataDate(this.employeeForm.value.date_admission);
-      this.employeeForm.get('date_admission')?.setValue(dateAdmission);
-    }
-
-    if (this.employeeForm.value.validity !== '') {
-      let validity = this.dateService.getFormatDataDate(this.employeeForm.value.validity);
-      this.employeeForm.get('validity')?.setValue(validity);
-    }
-
     if(this.employeeForm.invalid){
       this.sharedService.showSnackBar('Los campos con * son obligatorios.');
       return

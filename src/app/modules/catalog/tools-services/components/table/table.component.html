@@ -25,7 +25,7 @@
                    (change)="filterSelect()">
           <ng-option value="">TODOS</ng-option>
           <ng-option *ngFor="let product of products" [value]="product.id">
-            {{product.name}} - {{product.description}}
+            {{product.name}} - {{product.description}} - {{product.brand}} - {{product.model}}
           </ng-option>
         </ng-select>
       </div>

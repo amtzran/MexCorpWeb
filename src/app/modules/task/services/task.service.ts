@@ -119,6 +119,11 @@ export class TaskService {
     return this.http.delete<Task>(`${this.baseUrl}/tasks/${id}`)
   }
 
+  // Delete Task
+  closeTask(id: number) : Observable<Task>{
+    return this.http.post<Task>(`${this.baseUrl}/tasks/${id}/close`,{})
+  }
+
   // Get Customer
   getCustomers() : Observable<ModelCustomer> {
     return this.http.get<ModelCustomer>(`${this.baseUrl}/customers/?not_paginate=true`)
