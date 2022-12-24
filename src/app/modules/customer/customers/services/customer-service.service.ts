@@ -57,7 +57,9 @@ export class CustomerServiceService {
 
   // Get Type Customer
   getTypeCustomers() : Observable<ModelTypeCustomer> {
-    return this.http.get<ModelTypeCustomer>(`${this.baseUrl}/customer-types/`)
+    let params = new HttpParams();
+    params = params.append('not_paginate',true);
+    return this.http.get<ModelTypeCustomer>(`${this.baseUrl}/customer-types/`, {params})
   }
 
   // Report Customers
