@@ -10,13 +10,17 @@ import {FlexLayoutModule} from "@angular/flex-layout";
 import {ReactiveFormsModule} from "@angular/forms";
 import {NgxSpinnerModule} from "ngx-spinner";
 import {NgSelectModule} from "@ng-select/ng-select";
+import { ExtrasComponent } from './components/extras/extras.component';
+import { AttendanceTabComponent } from './components/attendance-tab/attendance-tab.component';
 
 
 @NgModule({
   declarations: [
     AttendanceComponent,
     TableComponent,
-    CrudComponent
+    CrudComponent,
+    ExtrasComponent,
+    AttendanceTabComponent
   ],
   imports: [
     CommonModule,

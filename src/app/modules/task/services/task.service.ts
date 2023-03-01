@@ -48,16 +48,20 @@ export class TaskService {
   }
 
   // Get Tasks
-  getTasks(
-    idTask: string | number,
-    idCustomer: string | number,
-    idEmployee: string | number,
-    idJobCenter: string | number,
-    status: string | number,
-    idWorkType: string | number,
-    idDoor: string | number,
-    ): Observable<ModelTask> {
+  getTasks(filter : paginateGeneral,
+          idTask: string | number,
+          idCustomer: string | number,
+          idEmployee: string | number,
+          idJobCenter: string | number,
+          status: string | number,
+          idWorkType: string | number,
+          idDoor: string | number,
+      ): Observable<ModelTask> {
+    //let initial_date = this.dateService.getFormatDataDate(filter.initial_date)
+    //let final_date = this.dateService.getFormatDataDate(filter.final_date)
     let params = new HttpParams();
+    filter.initial_date ? params = params.append('initial_date', filter.initial_date) : null;
+    filter.final_date ? params = params.append('final_date', filter.final_date) : null;
     params = params.append('id', idTask)
     params = params.append('customer', idCustomer)
     params = params.append('employee', idEmployee)

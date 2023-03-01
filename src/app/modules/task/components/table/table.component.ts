@@ -58,9 +58,11 @@ export class TableComponent implements OnInit, AfterViewInit {
 
   // Values Initials Calendar
   headerToolbar = {
-    left: 'prev,next,today,changeRange',
+    //left: 'prev,next,today,changeRange',
+    left: 'prevCustom,nextCustom,todayCustom,changeRange',
     center: 'title',
-    right: 'dayGridMonth,timeGridWeek,timeGridDay,listWeek,listDay'
+    //right: 'dayGridMonth,timeGridWeek,timeGridDay,listWeek,listDay'
+    right: 'monthCustomView,weekCustomView,listCustomView,dayCustomView,todayCustomView'
   }
 
   // Values in Spanish Buttons
@@ -117,7 +119,9 @@ export class TableComponent implements OnInit, AfterViewInit {
     this.initCalendar()
     // Events From Api
     this.initTaskCalendar()
-
+    setTimeout(() => {
+      this.getCurrentDates();
+    }, 750);
     //Update Main Component
     this.updateEventSharedService()
 
@@ -155,12 +159,60 @@ export class TableComponent implements OnInit, AfterViewInit {
       slotMinTime: '08:00:00',
       slotMaxTime: '20:00:00',
       customButtons: {
+        prevCustom: {
+          click: this.prevMethod.bind(this),
+          icon: 'fc-icon fc-icon-chevron-left'
+        },
+        nextCustom: {
+          click: this.nextMethod.bind(this),
+          icon: 'fc-icon fc-icon-chevron-right'
+        },
+        todayCustom: {
+          text: 'Hoy',
+          click: this.todayMethod.bind(this),
+          //icon: 'fc-icon fc-icon-chevron-left'
+        },
         changeRange: {
           text: '12/24',
-          click: this.customFunction.bind(this)
-        }
+          click: this.customFunction.bind(this),
+        },
+        monthCustomView: {
+          text: 'Mes',
+          click: this.monthView.bind(this),
+        },
+        weekCustomView: {
+          text: 'Semana',
+          click: this.weekView.bind(this),
+        },
+        listCustomView: {
+          text: 'Lista Semana',
+          click: this.listWeekDayView.bind(this),
+        },
+        dayCustomView: {
+          text: 'Lista Día',
+          click: this.listDayView.bind(this),
+        },
+        todayCustomView: {
+          text: 'Día',
+          click: this.dayView.bind(this),
+        },
       },
     };
+  }
+
+  /**
+   *
+   */
+  getCurrentDates() {
+    let calendarApi = this.calendarComponent.getApi();
+    let modeView = calendarApi.view;
+    let startDate = this.dateService.getFormatDataDate(modeView.currentStart);
+    let endDate = this.dateService.getFormatDataDate(modeView.currentEnd);
+    this.calendarForm.patchValue({
+      initial_date: startDate,
+      final_date: endDate,
+    });
+    this.initTaskCalendar();
   }
 
   /**
@@ -178,14 +230,63 @@ export class TableComponent implements OnInit, AfterViewInit {
     }
   }
 
+  nextMethod() {
+    let calendarApi = this.calendarComponent.getApi();
+    calendarApi.next();
+    this.getCurrentDates();
+  }
+
+  prevMethod() {
+    let calendarApi = this.calendarComponent.getApi();
+    calendarApi.prev();
+    this.getCurrentDates();
+  }
+
+  todayMethod() {
+    let calendarApi = this.calendarComponent.getApi();
+    calendarApi.today();
+    this.getCurrentDates();
+  }
+
+  monthView() {
+    let calendarApi = this.calendarComponent.getApi();
+    calendarApi.changeView('dayGridMonth');
+    this.getCurrentDates();
+  }
+
+  weekView() {
+    let calendarApi = this.calendarComponent.getApi();
+    calendarApi.changeView('timeGridWeek');
+    this.getCurrentDates();
+  }
+
+  listWeekDayView() {
+    let calendarApi = this.calendarComponent.getApi();
+    calendarApi.changeView('listWeek');
+    this.getCurrentDates();
+  }
+
+  listDayView() {
+    let calendarApi = this.calendarComponent.getApi();
+    calendarApi.changeView('listDay');
+    this.getCurrentDates();
+  }
+
+  dayView() {
+    let calendarApi = this.calendarComponent.getApi();
+    calendarApi.changeView('timeGridDay');
+    this.getCurrentDates();
+  }
+
   /**
    * Service for tasks in Calendar
    */
   initTaskCalendar(): void {
     this.spinner.show()
     this.taskService.getTasks(
-      this.idTask, this.idCustomer, this.idEmployee, this.idJobCenter, this.status, this.idWorkType, this.idDoor)
+      this.calendarForm.value,this.idTask, this.idCustomer, this.idEmployee, this.idJobCenter, this.status, this.idWorkType, this.idDoor)
       .subscribe(tasks => {
+        this.tasks = [];
         this.spinner.hide()
         tasks.data.forEach(element => {
           let color = element.color
@@ -302,7 +403,7 @@ export class TableComponent implements OnInit, AfterViewInit {
       data: {edit: edit, idTask: idTask, info: info, calendar, eventDrag: eventDrag, multiple: multiple, editCustom: editCustom}
     });
     dialogRef.afterClosed().subscribe(res => {
-      this.tasks = []
+      //this.tasks = []
       this.initTaskCalendar()
       this.getTasksPaginator(this.paginator);
     });
@@ -323,10 +424,10 @@ export class TableComponent implements OnInit, AfterViewInit {
    * Filter Customer and Search
    */
   filterSelectCustomer(idCustomer: number){
-    this.taskService.getTasks('', idCustomer, '', '','', '','')
+    this.taskService.getTasks(this.calendarForm.value,'', idCustomer, '', '','', '','')
       .subscribe(res => {
         this.idCustomer = idCustomer
-        this.tasks = []
+        //this.tasks = []
         this.initTaskCalendar()
     })
     this.loadAccess(idCustomer)
@@ -354,10 +455,10 @@ export class TableComponent implements OnInit, AfterViewInit {
    * Filter Door and Search Calendar
    */
   filterSelectDoor(idDoor: number){
-    this.taskService.getTasks('', '', '', '','', '', idDoor)
+    this.taskService.getTasks(this.calendarForm.value,'', '', '', '','', '', idDoor)
       .subscribe(res => {
         this.idDoor = idDoor
-        this.tasks = []
+        //this.tasks = []
         this.initTaskCalendar()
       })
     this.taskService.getTasksPaginate(this.taskPaginateForm.value, this.calendarForm.value).subscribe(res => {
@@ -370,10 +471,10 @@ export class TableComponent implements OnInit, AfterViewInit {
    * @param idEmployee
    */
   filterSelectEmployee(idEmployee: number){
-    this.taskService.getTasks('', '', idEmployee, '','', '', '')
+    this.taskService.getTasks(this.calendarForm.value,'', '', idEmployee, '','', '', '')
       .subscribe(res => {
         this.idEmployee = idEmployee
-        this.tasks = []
+        //this.tasks = []
         this.initTaskCalendar()
     })
     this.taskService.getTasksPaginate(this.taskPaginateForm.value, this.calendarForm.value).subscribe(res => {
@@ -386,10 +487,10 @@ export class TableComponent implements OnInit, AfterViewInit {
    * @param idJobCenter
    */
   filterSelectJobCenter(idJobCenter: number){
-    this.taskService.getTasks('', '', '',idJobCenter,'', '','')
+    this.taskService.getTasks(this.calendarForm.value,'', '', '',idJobCenter,'', '','')
       .subscribe(res => {
         this.idJobCenter = idJobCenter
-        this.tasks = []
+        //this.tasks = []
         this.initTaskCalendar()
     })
     this.taskService.getTasksPaginate(this.taskPaginateForm.value, this.calendarForm.value).subscribe(res => {
@@ -402,10 +503,10 @@ export class TableComponent implements OnInit, AfterViewInit {
    * @param status
    */
   filterSelectStatus(status: number){
-    this.taskService.getTasks('', '', '', '', status, '', '')
+    this.taskService.getTasks(this.calendarForm.value,'', '', '', '', status, '', '')
       .subscribe(res => {
         this.status = status
-        this.tasks = []
+        //this.tasks = []
         this.initTaskCalendar()
     })
     this.taskService.getTasksPaginate(this.taskPaginateForm.value, this.calendarForm.value).subscribe(res => {
@@ -418,10 +519,10 @@ export class TableComponent implements OnInit, AfterViewInit {
    * @param idWorkType
    */
   filterSelectWorkType(idWorkType: number){
-    this.taskService.getTasks('', '', '','','', idWorkType, '')
+    this.taskService.getTasks(this.calendarForm.value,'', '', '','','', idWorkType, '')
       .subscribe(res => {
         this.idJobCenter = idWorkType
-        this.tasks = []
+        //this.tasks = []
         this.initTaskCalendar()
     })
     this.taskService.getTasksPaginate(this.taskPaginateForm.value, this.calendarForm.value).subscribe(res => {
@@ -444,7 +545,7 @@ export class TableComponent implements OnInit, AfterViewInit {
    */
   updateEventSharedService(){
     this.sharedService.changeEvent.subscribe(change => {
-      this.tasks = []
+      //this.tasks = []
       // Valuers Initials Calendar
       this.initCalendar()
       // Events From Api
@@ -626,7 +727,6 @@ export class TableComponent implements OnInit, AfterViewInit {
     this.spinner.show()
     this.taskService.updateInvoice(event, id).subscribe(res => {
         this.sharedService.showSnackBar(res.message);
-        this.tasks = []
         this.initTaskCalendar()
         this.getTasksPaginator(this.paginator);
         this.spinner.hide()
@@ -659,7 +759,7 @@ export class TableComponent implements OnInit, AfterViewInit {
   getTasksPaginator(event: any) {
     const paginator: MatPaginator = event;
     this.taskPaginateForm.get('page')?.setValue(paginator.pageIndex + 1);
-    this.spinner.show()
+    //this.spinner.show()
     this.taskService.getTasksPaginate(this.taskPaginateForm.value, this.calendarForm.value)
       .subscribe(
         (tasks: ModelTask) => {
@@ -754,7 +854,7 @@ export class TableComponent implements OnInit, AfterViewInit {
       page: [],
       page_size: this.pageSize,
       id: this.idTask,
-      door_id: this.idDoor
+      door_id: this.idDoor,
     })
   }
 

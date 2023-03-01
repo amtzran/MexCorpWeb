@@ -1,4 +1,4 @@
-import {Links, MetaModel} from "../../shared/interfaces/shared.interface";
+import {Links, MetaModel} from "../../../shared/interfaces/shared.interface";
 
 export interface ModelAttendance {
   meta: MetaModel;

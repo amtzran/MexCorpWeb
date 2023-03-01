@@ -443,7 +443,7 @@
               <span [ngStyle]="{ color: 'orange' }" *ngIf="row.status === 'Pendiente por Aprobar' ">
                 {{row.status}}
               </span>
-              <span [ngStyle]="{ color: 'green' }" *ngIf="row.status === 'Aprobada' ">
+              <span [ngStyle]="{ color: 'green' }" *ngIf="row.status === 'Enviado' ">
                 {{row.status}}
               </span>
             </td>
@@ -482,7 +482,7 @@
                   Aprobar
                 </button>
 
-                <button *ngIf="row.status === 'Aprobada' " mat-menu-item (click)="sendEmail(row)">
+                <button *ngIf="row.status === 'Enviado' " mat-menu-item (click)="sendEmail(row)">
                   <mat-icon matSuffix mat-list-icon style="color: orange">email</mat-icon>
                   Enviar por Correo
                 </button>

@@ -2,23 +2,23 @@ import { Injectable } from '@angular/core';
 import {HttpClient, HttpParams} from "@angular/common/http";
 import {environment} from "../../../../environments/environment";
 import {Observable} from "rxjs";
-import {ModelAttendance} from "../interfaces/attendance.interface";
 import {paginateGeneral} from "../../../shared/interfaces/shared.interface";
 import {reportTask} from "../../task/models/task.interface";
 import {DateService} from "../../../core/utils/date.service";
+import {ModelExtras} from "../interfaces/extras.interface";
 
 @Injectable({
   providedIn: 'root'
 })
-export class AttendanceService {
+export class ExtrasService {
 
   constructor(private http: HttpClient,
               private dateService: DateService) {}
 
   private baseUrl: string = environment.baseUrl
 
-  // Get Attendances
-  getAttendances(filter: paginateGeneral): Observable<ModelAttendance> {
+  // Get Extras
+  getExtras(filter: paginateGeneral): Observable<ModelExtras> {
     let initial_date = '';
     let final_date = '';
     if (filter.final_date !== '') {
@@ -32,7 +32,7 @@ export class AttendanceService {
     filter.group ? params = params.append('group', filter.group) : null;
     initial_date ? params = params.append('initial_date', initial_date) : null;
     final_date ? params = params.append('final_date', final_date) : null;
-    return this.http.get<ModelAttendance>(`${this.baseUrl}/attendances/`, {params})
+    return this.http.get<ModelExtras>(`${this.baseUrl}/attendances-extras/`, {params})
   }
 
   // Report Attendances
