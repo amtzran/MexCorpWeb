@@ -84,6 +84,7 @@ export class CrudComponent implements OnInit {
       description:[{value:'', disabled:this.workType.info}],
       cost_one:[{value:'', disabled:this.workType.info}],
       cost_two:[{value:'', disabled:this.workType.info}],
+      delivery_certificate:[{value:false, disabled:this.workType.info}],
     });
   }
 

@@ -55,6 +55,17 @@
         <td mat-cell *matCellDef="let row"> {{row.cost_two | currency: 'MX':'$'}} </td>
       </ng-container>
 
+      <!-- Delivery Certificate Column -->
+      <ng-container matColumnDef="delivery_certificate">
+        <th mat-header-cell *matHeaderCellDef mat-sort-header> Acta de Entrega</th>
+        <td mat-cell *matCellDef="let row">
+          <mat-icon *ngIf="row.delivery_certificate === 1; else iconActive">done</mat-icon>
+          <ng-template #iconActive>
+            <mat-icon>block</mat-icon>
+          </ng-template>
+        </td>
+      </ng-container>
+
       <!-- Teléfono Column -->
       <ng-container matColumnDef="options">
         <th mat-header-cell *matHeaderCellDef mat-sort-header> Opciones</th>

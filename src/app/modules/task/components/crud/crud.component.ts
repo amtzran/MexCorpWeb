@@ -154,6 +154,8 @@ export class CrudComponent implements OnInit {
         work_type_id: response.data.work_type_id,
         initial_hour: response.data.initial_hour,
         final_hour: response.data.final_hour,
+        purchase_order: response.data.purchase_order,
+        warranty_time: response.data.warranty_time,
         initial_date: this.dateService.getFormatDateSetInputRangePicker(response.data.initial_date!),
         final_date: this.dateService.getFormatDateSetInputRangePicker(response.data.final_date!)
       });
@@ -187,7 +189,9 @@ export class CrudComponent implements OnInit {
         initial_hour: this.task.calendar.initial_hour,
         final_hour: this.task.calendar.final_hour,
         initial_date: this.task.calendar.initial_date,
-        final_date: this.task.calendar.final_date
+        final_date: this.task.calendar.final_date,
+        purchase_order: response.data.purchase_order,
+        warranty_time: response.data.warranty_time,
       })
       }, (error => {
         this.spinner.hide()
@@ -210,6 +214,8 @@ export class CrudComponent implements OnInit {
       initial_hour: [{value: '', disabled:this.task.info}, Validators.required],
       final_hour: [{value: '', disabled:this.task.info}, Validators.required],
       comments: [{value: '', disabled:false},],
+      purchase_order: [{value: '', disabled:false},],
+      warranty_time: [{value: '', disabled:false},],
       dates: [{value: [], disabled:this.task.info}, Validators.required],
     });
     if (!this.task.multiple) {
@@ -260,6 +266,8 @@ export class CrudComponent implements OnInit {
       initial_hour: [{value: this.task.calendar.initial_hour, disabled:this.task.info}, Validators.required],
       final_hour: [{value: this.task.calendar.final_hour, disabled:this.task.info}, Validators.required],
       comments: [{value: '', disabled:this.task.info},],
+      purchase_order: [{value: '', disabled:this.task.info},],
+      warranty_time: [{value: '', disabled:this.task.info},],
     });
   }
 
@@ -332,6 +340,8 @@ export class CrudComponent implements OnInit {
     this.spinner.show()
 
     this.dataTask.title = this.taskForm.value.title
+    this.dataTask.purchase_order = this.taskForm.value.purchase_order
+    this.dataTask.warranty_time = this.taskForm.value.warranty_time
     this.dataTask.job_center_id = this.taskForm.value.job_center_id
     this.dataTask.work_type_id = this.taskForm.value.work_type_id
     this.dataTask.employee_id = this.taskForm.value.employee_id

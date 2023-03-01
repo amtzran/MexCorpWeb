@@ -33,6 +33,8 @@ export interface Task {
   created_at?: string;
   updated_at?: string;
   comments: null | string;
+  purchase_order?: null | string;
+  warranty_time?: null | string;
   dates?: [];
   doors: Door[] | [];
   products: Product[] | [];

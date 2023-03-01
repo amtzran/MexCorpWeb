@@ -120,6 +120,29 @@
                fxLayout.sm="column"
                fxLayoutGap="20px">
 
+              <mat-form-field fxFlex="100">
+                <mat-label># Orden de Compra</mat-label>
+                <input
+                  matInput
+                  type="text"
+                  formControlName="purchase_order">
+              </mat-form-field>
+
+              <mat-form-field fxFlex="100">
+                <mat-label>Tiempo de Garantía</mat-label>
+                <input
+                  matInput
+                  type="text"
+                  formControlName="warranty_time">
+              </mat-form-field>
+
+          </div>
+
+          <div fxLayout="row"
+               fxLayout.xs="column"
+               fxLayout.sm="column"
+               fxLayoutGap="20px">
+
             <mat-form-field fxFlex="100">
               <mat-label>Comentarios</mat-label>
               <textarea
@@ -240,6 +263,13 @@
                     (click)="viewPdf(row.report_pdf)"
                     #tooltip="matTooltip"
                     matTooltip="Descargar Reporte">
+              <mat-icon>picture_as_pdf</mat-icon>
+            </button>
+            <button color="warn" mat-button
+                    (click)="viewPdf(row.delivery_certificate_pdf)"
+                    #tooltip="matTooltip"
+                    *ngIf="row.delivery_certificate_pdf"
+                    matTooltip="Descargar Acta Entrega">
               <mat-icon>picture_as_pdf</mat-icon>
             </button>
             <button color="primary" mat-button

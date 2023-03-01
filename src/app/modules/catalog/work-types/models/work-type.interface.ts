@@ -15,6 +15,7 @@ export interface WorkType {
   is_active?: boolean;
   cost_one?: number;
   cost_two?: number;
+  delivery_certificate?: boolean;
   created_at?: Date;
   updated_at?: Date;
 }
