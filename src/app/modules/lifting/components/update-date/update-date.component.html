@@ -1,0 +1,36 @@
+<ngx-spinner></ngx-spinner>
+<h1>Actualizar Fecha</h1>
+<hr>
+
+<div fxLayout="column" fxLayoutGap="20"   fxLayoutAlign="center center" [formGroup]="statusForm">
+
+  <mat-form-field fxFlex="100">
+    <mat-label>Fecha</mat-label>
+    <input matInput [matDatepicker]="pickerDate" formControlName="date">
+    <mat-hint>MM/DD/YYYY</mat-hint>
+    <mat-datepicker-toggle matSuffix [for]="pickerDate"></mat-datepicker-toggle>
+    <mat-datepicker #pickerDate></mat-datepicker>
+  </mat-form-field>
+
+  <mat-form-field fxFlex="100">
+    <mat-label>Observaciones</mat-label>
+    <textarea matInput
+              formControlName="observations"
+              placeholder="Observaciones..."></textarea>
+  </mat-form-field>
+
+</div>
+
+<br>
+<div fxLayout="row" fxLayoutAlign="center center">
+
+  <div fxFlex="50">
+    <button (click)="close()" mat-raised-button color="warn">Cancelar</button>
+  </div>
+  <div fxFlex="50">
+    <button [disabled]="statusForm.invalid" (click)="update()" mat-raised-button color="primary">!De Acuerdo!</button>
+  </div>
+
+</div>
+
+

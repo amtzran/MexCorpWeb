@@ -22,6 +22,7 @@ import {debounceTime, map, Observable, startWith} from "rxjs";
 import {MatDatepickerInputEvent} from "@angular/material/datepicker";
 import {DateService} from "../../../../core/utils/date.service";
 import {ConfirmComponent} from "../../../../shared/components/confirm/confirm.component";
+import {UpdateDateComponent} from "../update-date/update-date.component";
 
 @Component({
   selector: 'app-table',
@@ -256,6 +257,27 @@ export class TableComponent implements OnInit {
       maxWidth: '100vw',
       maxHeight: '100vh',
       width: '40%',
+      data: {row: row}
+    });
+    dialogRef.afterClosed().subscribe(res => {
+      if (res === ModalResponse.UPDATE) {
+        this.getLiftingsPaginator(this.paginator);
+        this.getQuotationsPaginator(this.paginatorQuote);
+      }
+    });
+  }
+
+  /**
+   * Open dialog Concept Quote
+   * @param row
+   */
+  editDialogConcept(row: Quotation): void {
+    const dialogRef = this.dialog.open(UpdateDateComponent, {
+      autoFocus: false,
+      disableClose: false,
+      maxWidth: '100vw',
+      maxHeight: '100vh',
+      width: '60%',
       data: {row: row}
     });
     dialogRef.afterClosed().subscribe(res => {

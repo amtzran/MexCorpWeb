@@ -138,4 +138,8 @@ export class LiftingService {
     return this.http.post<any>(`${this.baseUrl}/quotes-pdf-send-email/`, email)
   }
 
+  updateDate(idQuote : number, data: any) : Observable<QuotationConceptDetail> {
+    return this.http.put<QuotationConceptDetail>(`${this.baseUrl}/quotes-data/${idQuote}/`, data)
+  }
+
 }

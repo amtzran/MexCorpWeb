@@ -13,6 +13,7 @@ import {NgSelectModule} from "@ng-select/ng-select";
 import { ConceptComponent } from './components/concept/concept.component';
 import { ConfirmStatusComponent } from './components/confirm-status/confirm-status.component';
 import { SendEmailComponent } from './components/send-email/send-email.component';
+import { UpdateDateComponent } from './components/update-date/update-date.component';
 
 
 @NgModule({
@@ -22,7 +23,8 @@ import { SendEmailComponent } from './components/send-email/send-email.component
     CrudComponent,
     ConceptComponent,
     ConfirmStatusComponent,
-    SendEmailComponent
+    SendEmailComponent,
+    UpdateDateComponent
   ],
   imports: [
     CommonModule,
