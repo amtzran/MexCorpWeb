@@ -32,7 +32,8 @@ export interface ProductPaginate {
   id?: number,
   category?: string,
   brand?: string,
-  description?: string
+  description?: string,
+  key?: string
 }
 
 export interface ProductDetail {

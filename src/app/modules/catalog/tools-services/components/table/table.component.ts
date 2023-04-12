@@ -152,6 +152,7 @@ export class TableComponent implements OnInit {
       page: [],
       page_size: this.pageSize,
       id: this.idProduct,
+      key: '',
       category: '',
       brand: '',
       description: ''

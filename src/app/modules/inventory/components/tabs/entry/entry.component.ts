@@ -11,6 +11,8 @@ import {CrudComponent} from "../../crud/crud.component";
 import {ConfirmComponent} from "../../../../../shared/components/confirm/confirm.component";
 import {Employee, JobCenter} from "../../../../employee/interfaces/employee.interface";
 import {Supplier} from "../../../../catalog/suppliers/interfaces/suppliers.interface";
+import * as fileSaver from "file-saver";
+import {DateService} from "../../../../../core/utils/date.service";
 
 @Component({
   selector: 'app-entry',
@@ -34,7 +36,8 @@ export class EntryComponent implements OnInit {
               private formBuilder: FormBuilder,
               private dialog: MatDialog,
               private spinner: NgxSpinnerService,
-              private inventoryService : InventoryService)
+              private inventoryService : InventoryService,
+              private dateService: DateService)
   {
     this.loadDataEmployees();
     this.loadDataSuppliers();
@@ -124,6 +127,38 @@ export class EntryComponent implements OnInit {
       initial_date: '',
       final_date: ''
     })
+  }
+
+  cleanInput(){
+    this.paginateForm.get('initial_date')?.setValue('');
+    this.paginateForm.get('final_date')?.setValue('');
+    this.getEntriesPaginator(this.paginator);
+
+  }
+
+  /**
+   * Export Entries
+   */
+  reportEntries(){
+
+    this.spinner.show()
+    this.inventoryService.reportEntriesAll(this.paginateForm.value).subscribe(res => {
+      let file = this.sharedService.createBlobToExcel(res);
+      if (this.paginateForm.value.initial_date !== ''){
+        let date_initial = this.dateService.getFormatDataDate(this.paginateForm.value.initial_date);
+        let final_date = this.dateService.getFormatDataDate(this.paginateForm.value.final_date);
+        fileSaver.saveAs(file, `Reporte-Entradas-General-${date_initial}-${final_date}`);
+      }
+      else {
+        let date = this.dateService.getFormatDataDate(new Date());
+        fileSaver.saveAs(file, `Reporte-Entradas-General-${date}`);
+      }
+
+      this.spinner.hide();
+    }, (error => {
+      this.spinner.hide()
+      this.sharedService.errorDialog(error)
+    }))
   }
 
   /**

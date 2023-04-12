@@ -27,6 +27,7 @@ export class ProductService {
     filter.category ? params = params.append('category', filter.category) : null;
     filter.brand ? params = params.append('brand', filter.brand) : null;
     filter.description ? params = params.append('description', filter.description) : null;
+    filter.key ? params = params.append('key', filter.key) : null;
     return this.http.get<ModelProduct>(`${this.baseUrl}/products/`, {params})
   }
 

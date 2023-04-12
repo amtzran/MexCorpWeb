@@ -68,11 +68,13 @@ export interface StockPaginate {
   page: string,
   page_size: string,
   warehouse?: string | number,
+  supplier?: string | number,
   product?: string | number,
   employee?: string | number,
   origin?: string | number,
   destiny?: string | number,
   movement?: string | number,
+  group?: string | number,
   initial_date?: string,
   final_date?: string,
 }

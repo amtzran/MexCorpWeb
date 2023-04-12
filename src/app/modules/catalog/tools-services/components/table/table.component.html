@@ -13,6 +13,16 @@
          fxLayout.sm="column"
          fxLayoutGap="10px">
 
+      <mat-form-field fxFlex="100">
+        <mat-label>Clave</mat-label>
+        <input
+          matInput
+          type="text"
+          formControlName="key"
+          (change)="filterSelect()"
+        >
+      </mat-form-field>
+
       <div fxFlex="100">
         <ng-select fxFlex="100"
                    bindLabel="name"
@@ -25,7 +35,7 @@
                    (change)="filterSelect()">
           <ng-option value="">TODOS</ng-option>
           <ng-option *ngFor="let product of products" [value]="product.id">
-            {{product.name}} - {{product.description}} - {{product.brand}} - {{product.model}}
+            {{product.key}} - {{product.name}} - {{product.description}} - {{product.brand}} - {{product.model}}
           </ng-option>
         </ng-select>
       </div>

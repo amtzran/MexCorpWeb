@@ -157,6 +157,25 @@ export class InventoryService {
   }
 
   // Report Stocks
+  reportEntriesAll(filter: StockPaginate) : Observable<any> {
+    let initial_date = '', final_date = '';
+    if (filter.initial_date !== '' || filter.final_date !== ''){
+      initial_date = this.dateService.getFormatDataDate(filter.initial_date)
+      final_date = this.dateService.getFormatDataDate(filter.final_date)
+    }
+    let employee = String(filter.employee);
+    let supplier = String(filter.supplier);
+    let group = String(filter.group);
+    let params = new HttpParams();
+    params = params.append('supplier', supplier);
+    params = params.append('employee', employee);
+    params = params.append('group', group);
+    initial_date ? params = params.append('initial_date', initial_date) : null;
+    final_date ? params = params.append('final_date', final_date) : null;
+    return this.http.post(`${this.baseUrl}/inventory/entries-export/`, '',{responseType: 'blob', params})
+  }
+
+  // Report Stocks
   reportStocksAll(filter: StockPaginate) : Observable<any> {
     let initial_date = '', final_date = '';
     if (filter.initial_date !== '' || filter.final_date !== ''){
