@@ -14,6 +14,7 @@ import { ConceptComponent } from './components/concept/concept.component';
 import { ConfirmStatusComponent } from './components/confirm-status/confirm-status.component';
 import { SendEmailComponent } from './components/send-email/send-email.component';
 import { UpdateDateComponent } from './components/update-date/update-date.component';
+import {AngularEditorModule} from "@kolkov/angular-editor";
 
 
 @NgModule({
@@ -34,6 +35,7 @@ import { UpdateDateComponent } from './components/update-date/update-date.compon
     ReactiveFormsModule,
     NgxSpinnerModule,
     NgSelectModule,
+    AngularEditorModule
   ]
 })
 export class LiftingModule { }
