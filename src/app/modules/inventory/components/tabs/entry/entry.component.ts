@@ -84,6 +84,17 @@ export class EntryComponent implements OnInit {
     });
   }
 
+  reportEntryPdf(entry : Entry){
+    this.spinner.show()
+    this.inventoryService.exportPdfEntry(Number(entry.id)).subscribe(res => {
+      this.spinner.hide()
+      window.open(res.entrie_pdf, '_blank')
+    },error => {
+      this.spinner.hide()
+      this.sharedService.errorDialog(error)
+    })
+  }
+
   delete(data: Entry) {
     // Show Dialog
     const dialog = this.dialog.open(ConfirmComponent, {

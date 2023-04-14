@@ -217,4 +217,9 @@ export class InventoryService {
     return this.http.post(`${this.baseUrl}/inventory/movements-export/`, '',{responseType: 'blob', params})
   }
 
+  // Report Tools Employee
+  exportPdfEntry(id: number) : Observable<any> {
+    return this.http.get(`${this.baseUrl}/inventory/entries-pdf/${id}`, {});
+  }
+
 }

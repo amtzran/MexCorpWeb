@@ -145,6 +145,12 @@
                     <mat-icon color="info">visibility</mat-icon>
                     Ver
                   </button>
+
+                  <button mat-menu-item (click)="reportEntryPdf(row)" [disabled]="false">
+                    <mat-icon color="warn" mat-list-icon>picture_as_pdf</mat-icon>
+                    Entrada (PDF)
+                  </button>
+
                   <button mat-menu-item (click)="openDialog(true, row.id, false)">
                     <mat-icon color="primary">edit</mat-icon>
                     Editar
