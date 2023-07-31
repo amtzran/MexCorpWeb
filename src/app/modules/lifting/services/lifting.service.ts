@@ -60,6 +60,10 @@ export class LiftingService {
     return this.http.post<any>(`${this.baseUrl}/quotes/`, quote)
   }
 
+  saveQuote(data: any) : Observable<any> {
+    return this.http.post<any>(`${this.baseUrl}/quotes/new`, data)
+  }
+
   generatePdfQuote(id: number | null) : Observable<any> {
     return this.http.get<any>(`${this.baseUrl}/quotes-pdf/${id}`)
   }

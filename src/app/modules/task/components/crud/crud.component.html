@@ -434,12 +434,13 @@
 <mat-dialog-actions fxLayoutAlign="center">
 
   <div fxFlex="40">
-    <button *ngIf="task.idTask" (click)="deleteTask()" mat-stroked-button color="warn" mat-dialog-close="true">Eliminar</button>
+    <button *ngIf="task.idTask" (click)="deleteTask()" mat-stroked-button color="warn">Eliminar</button>
     <button *ngIf="task.idTask" (click)="closeTask()" mat-stroked-button color="warn" mat-dialog-close="true">Cerrar Tarea</button>
   </div>
 
   <div fxFlex="60" fxLayoutAlign="end">
     <button (click)="close()" mat-stroked-button color="primary" mat-dialog-close="true">Cancelar</button>
+    <button *ngIf="taskId" (click)="templatePdf(taskId)" mat-stroked-button color="warn">Plantilla</button>
     <button *ngIf="task.editCustom" (click)="updateTaskCustom()" mat-flat-button color="primary">Editar Finalizado</button>
     <button *ngIf="!taskId" (click)="addTask()" mat-flat-button color="primary" cdkFocusInitial [disabled]="taskForm.invalid">Guardar Tarea</button>
     <button *ngIf="taskId && task.edit" (click)="updateTask()" mat-flat-button color="primary" cdkFocusInitial>Editar</button>

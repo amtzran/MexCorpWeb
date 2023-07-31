@@ -611,6 +611,21 @@ export class CrudComponent implements OnInit {
     this.dialogRef.close(ModalResponse.CLOSE);
   }
 
+  /**
+   *@param id
+   */
+  templatePdf(id: any) : void  {
+    this.spinner.show()
+    this.taskService.getTemplateTask(id).subscribe((response) => {
+      window.open(response.task_pdf, '_blank')
+      this.spinner.hide()
+      this.sharedService.showSnackBar(`Se creó la plantilla correctamente`);
+    }, (error => {
+      this.spinner.hide()
+      this.sharedService.errorDialog(error)
+    }))
+  }
+
   loadDataProducts(id: number) {this.taskService.getProductsAll(id).subscribe(products => {this.products = products.data} )}
 
   /**

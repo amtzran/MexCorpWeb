@@ -15,6 +15,7 @@ import { ConfirmStatusComponent } from './components/confirm-status/confirm-stat
 import { SendEmailComponent } from './components/send-email/send-email.component';
 import { UpdateDateComponent } from './components/update-date/update-date.component';
 import {AngularEditorModule} from "@kolkov/angular-editor";
+import { CrudQuoteComponent } from './components/crud-quote/crud-quote.component';
 
 
 @NgModule({
@@ -25,7 +26,8 @@ import {AngularEditorModule} from "@kolkov/angular-editor";
     ConceptComponent,
     ConfirmStatusComponent,
     SendEmailComponent,
-    UpdateDateComponent
+    UpdateDateComponent,
+    CrudQuoteComponent
   ],
   imports: [
     CommonModule,

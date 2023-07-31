@@ -39,6 +39,7 @@ export class CrudComponent implements OnInit {
   jobs: Job[] = []
   turns: Turn[] = [];
   permissions!: DataPermission[];
+  object : any;
 
   /**
    * Table Tools Files
@@ -99,7 +100,7 @@ export class CrudComponent implements OnInit {
       let dateAdmission = null;
       if (response.data.date_admission !== null) dateAdmission = this.dateService.getFormatDateSetInputRangePicker(response.data.date_admission!)
       let dateValidity = null;
-      if (response.data.date_admission !== null) dateValidity = this.dateService.getFormatDateSetInputRangePicker(response.data.validity!)
+      if (response.data.validity !== null) dateValidity = this.dateService.getFormatDateSetInputRangePicker(response.data.validity!)
       this.spinner.hide()
       this.employeeForm.patchValue({
         name: response.data.name,
@@ -190,6 +191,25 @@ export class CrudComponent implements OnInit {
    * Validate form in general
    */
   validateForm(){
+    this.object = this.employeeForm.value
+
+    if (this.employeeForm.value.date_admission === ''
+      || this.employeeForm.value.date_admission === null
+      || this.employeeForm.value.date_admission === '1969-12-31') {
+      this.employeeForm.value.date_admission = null;
+    }
+    else {
+      this.object.date_admission = this.dateService.getFormatDataDate(this.employeeForm.get('date_admission')?.value)
+    }
+
+    if (this.employeeForm.value.validity === ''
+      || this.employeeForm.value.validity === null
+      || this.employeeForm.value.validity === '1969-12-31') {
+      this.employeeForm.value.validity = null;
+    }
+    else {
+      this.object.validity = this.dateService.getFormatDataDate(this.employeeForm.get('validity')?.value)
+    }
     this.submit = true;
     if(this.employeeForm.invalid){
       this.sharedService.showSnackBar('Los campos con * son obligatorios.');

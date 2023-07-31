@@ -249,12 +249,12 @@
             <mat-card-title>Cotizaciones</mat-card-title>
           </div>
 
-       <!--   <div fxFlex="50" fxLayoutAlign="end center">
-            <button (click)="openDialogLifting(false, '', false)" mat-button color="primary">
+          <div fxFlex="50" fxLayoutAlign="end center">
+            <button (click)="openDialogQuote(false, '', false)" mat-button color="primary">
               <mat-icon>person_add</mat-icon>
-              Nuevo Levantamiento
+              Nueva Cotización
             </button>
-          </div>-->
+          </div>
 
         </mat-card-title>
 
@@ -388,37 +388,52 @@
           <!-- Date Column -->
           <ng-container matColumnDef="customer">
             <th mat-header-cell *matHeaderCellDef mat-sort-header=""> Cliente</th>
-            <td mat-cell *matCellDef="let row"> {{row.lifting.customer_name}} </td>
+            <td mat-cell *matCellDef="let row">
+              <span *ngIf="row.lifting !== null">{{row.lifting?.customer_name}}</span>
+              <span *ngIf="row.lifting === null">{{row.cutomer_id?.name}}</span>
+            </td>
           </ng-container>
 
           <!-- Employee Column -->
           <ng-container matColumnDef="employee">
             <th mat-header-cell *matHeaderCellDef mat-sort-header=""> Empleado</th>
-            <td mat-cell *matCellDef="let row"> {{row.lifting.employee_name}} </td>
+            <td mat-cell *matCellDef="let row">
+              <span *ngIf="row.lifting !== null">{{row.lifting?.employee_name}}</span>
+              <span *ngIf="row.lifting === null">{{row.employee_id?.name}}</span>
+            </td>
           </ng-container>
 
           <!-- Centro de Trabajo Column -->
           <ng-container matColumnDef="job_center">
             <th mat-header-cell *matHeaderCellDef mat-sort-header=""> Centro de Trabajo</th>
-            <td mat-cell *matCellDef="let row">{{row.lifting.job_center_name}}</td>
+            <td mat-cell *matCellDef="let row">
+              <span *ngIf="row.lifting !== null">{{row.lifting.job_center_name}}</span>
+              <span *ngIf="row.lifting === null">{{row.job_center_id?.name}}</span>
+            </td>
           </ng-container>
 
           <!-- Type Work Column -->
           <ng-container matColumnDef="work_type">
             <th mat-header-cell *matHeaderCellDef mat-sort-header=""> Tipo de Trabajo</th>
-            <td mat-cell *matCellDef="let row">{{row.lifting.work_type_name}}</td>
+            <td mat-cell *matCellDef="let row">
+              <span *ngIf="row.lifting !== null">{{row.lifting.work_type_name}}</span>
+            </td>
           </ng-container>
 
           <!-- Place Column -->
           <ng-container matColumnDef="place">
             <th mat-header-cell *matHeaderCellDef mat-sort-header=""> Lugar</th>
-            <td mat-cell *matCellDef="let row"> {{row.lifting.place}} </td>
+            <td mat-cell *matCellDef="let row">
+              <span *ngIf="row.lifting !== null">{{row.lifting.place}}</span>
+            </td>
           </ng-container>
 
           <!-- Applicant Column -->
           <ng-container matColumnDef="applicant">
             <th mat-header-cell *matHeaderCellDef mat-sort-header=""> Solicitante</th>
-            <td mat-cell *matCellDef="let row"> {{row.lifting.applicant}} </td>
+            <td mat-cell *matCellDef="let row">
+              <span *ngIf="row.lifting !== null">{{row.lifting.applicant}}</span>
+            </td>
           </ng-container>
 
           <!-- Date Column -->

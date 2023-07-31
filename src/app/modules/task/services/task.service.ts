@@ -307,4 +307,8 @@ export class TaskService {
     return this.http.post<any>(`${this.baseUrl}/tasks/refund/product/${id}`, data)
   }
 
+  getTemplateTask(id : number) : Observable<any> {
+    return this.http.get<any>(`${this.baseUrl}/tasks/${id}/pdf`, {});
+  }
+
 }

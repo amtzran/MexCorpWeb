@@ -1,0 +1,122 @@
+<h4 mat-dialog-title class="title-subsection">{{title}}</h4>
+<ngx-spinner></ngx-spinner>
+<mat-divider></mat-divider>
+<br>
+<mat-dialog-content class="mat-typography" [formGroup]="quoteForm">
+
+  <mat-card>
+    <mat-card-content>
+
+      <div fxLayout="row" fxLayoutGap="40px" fxLayout.xs="column">
+
+        <div class="container" fxFlex="100" fxLayout="column" fxLayout.xs="column">
+
+          <div fxLayout="row"
+               fxLayout.xs="column"
+               fxLayoutGap="20px">
+
+            <ng-select fxFlex="100"
+                       bindLabel="name"
+                       placeholder="Clientes"
+                       formControlName="customer_id"
+                       [multiple]="false"
+                       appendTo="body"
+                       [searchable]="true"
+                       [clearable]="true">
+              <ng-option *ngFor="let customer of customers" [value]="customer.id">
+                {{customer.name}}
+              </ng-option>
+            </ng-select>
+
+            <mat-error *ngIf="fieldInvalid('customer_id')">
+              Favor de Seleccionar un Cliente
+            </mat-error>
+
+            <ng-select fxFlex="100"
+                       bindLabel="name"
+                       placeholder="Vendedores"
+                       formControlName="seller_id"
+                       [multiple]="false"
+                       appendTo="body"
+                       [searchable]="true"
+                       [clearable]="true">
+              <ng-option *ngFor="let employee of employees" [value]="employee.id">
+                {{employee.name}}
+              </ng-option>
+            </ng-select>
+
+            <mat-error *ngIf="fieldInvalid('seller_id')">
+              Favor de Seleccionar un Empleado
+            </mat-error>
+
+          </div>
+
+          <div fxLayout="row"
+               fxLayout.xs="column"
+               fxLayoutGap="20px">
+
+            <ng-select fxFlex="100"
+                       bindLabel="name"
+                       placeholder="Grupos"
+                       formControlName="job_center_id"
+                       [multiple]="false"
+                       appendTo="body"
+                       [searchable]="true"
+                       [clearable]="true">
+              <ng-option *ngFor="let jobCenter of jobCenters" [value]="jobCenter.id">
+                {{jobCenter.name}}
+              </ng-option>
+            </ng-select>
+
+            <mat-error *ngIf="fieldInvalid('job_center_id')">
+              Favor de Seleccionar un Grupo
+            </mat-error>
+
+            <mat-form-field fxFlex="100" class="example-full-width" appearance="fill">
+              <mat-label>Fecha Entrega</mat-label>
+              <input matInput [matDatepicker]="pickerAdmission" formControlName="delivery_time">
+              <!--<mat-hint>MM/DD/YYYY</mat-hint>-->
+              <mat-datepicker-toggle matSuffix [for]="pickerAdmission"></mat-datepicker-toggle>
+              <mat-datepicker #pickerAdmission></mat-datepicker>
+
+            </mat-form-field>
+
+          </div>
+
+          <div fxLayout="row"
+               fxLayout.xs="column"
+               fxLayoutGap="20px">
+
+            <mat-form-field fxFlex="100">
+              <mat-label>Condiciones de Pago</mat-label>
+              <textarea matInput
+                        formControlName="payment_conditions"
+                        placeholder="Condiciones..."></textarea>
+            </mat-form-field>
+
+            <mat-form-field fxFlex="100">
+              <mat-label>Observaciones</mat-label>
+              <textarea matInput
+                        formControlName="observations"
+                        placeholder="Observaciones..."></textarea>
+            </mat-form-field>
+
+          </div>
+
+        </div>
+
+      </div>
+
+    </mat-card-content>
+    <mat-card-actions>
+    </mat-card-actions>
+  </mat-card>
+</mat-dialog-content>
+
+<mat-dialog-actions fxLayoutAlign="end">
+  <button (click)="close()" mat-stroked-button color="primary" mat-dialog-close="true">Cancelar</button>
+  <button (click)="save()" mat-flat-button color="primary" cdkFocusInitial [disabled]="quoteForm.invalid">Guardar</button>
+ <!-- <ng-template #buttonEdit>
+    <button (click)="updateTool()" mat-flat-button color="primary" cdkFocusInitial>Editar</button>
+  </ng-template>-->
+</mat-dialog-actions>

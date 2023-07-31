@@ -141,6 +141,8 @@ export interface Quotation {
   status:     string;
   created_at: string;
   updated_at: string;
+  customer_id: any;
+  job_center_id: any;
 }
 
 export interface QuotationtDetail {

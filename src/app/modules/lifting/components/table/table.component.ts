@@ -23,6 +23,7 @@ import {MatDatepickerInputEvent} from "@angular/material/datepicker";
 import {DateService} from "../../../../core/utils/date.service";
 import {ConfirmComponent} from "../../../../shared/components/confirm/confirm.component";
 import {UpdateDateComponent} from "../update-date/update-date.component";
+import {CrudQuoteComponent} from "../crud-quote/crud-quote.component";
 
 @Component({
   selector: 'app-table',
@@ -144,6 +145,30 @@ export class TableComponent implements OnInit {
     });
   }
 
+
+  /**
+   * Open dialog for add and update lifting.
+   * @param edit
+   * @param idQuote
+   * @param info
+   */
+  openDialogQuote(edit: boolean, idQuote: number | '', info: boolean): void {
+    const dialogRef = this.dialog.open(CrudQuoteComponent, {
+      autoFocus: false,
+      disableClose: false,
+      maxWidth: '100vw',
+      maxHeight: '100vh',
+      width: '95%',
+      data: {edit: edit, idQuote: idQuote, info: info}
+    });
+    dialogRef.afterClosed().subscribe(res => {
+      if (res === ModalResponse.UPDATE) {
+        this.getLiftingsPaginator(this.paginator);
+        this.getQuotationsPaginator(this.paginatorQuote);
+      }
+    });
+  }
+
   /**
    * Event click show url (Pdf)
    * @param reportPdf
@@ -160,7 +185,7 @@ export class TableComponent implements OnInit {
   generateQuote(row: Quotation, showPdf: boolean) {
     this.spinner.show()
     this.liftingService.generatePdfQuote(row.id)
-      .subscribe(quote => {
+      .subscribe((quote) => {
           this.spinner.hide()
           if(showPdf) window.open(quote.quote_pdf)
         }, (error => {
