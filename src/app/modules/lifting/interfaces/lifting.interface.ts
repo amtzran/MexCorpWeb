@@ -143,6 +143,7 @@ export interface Quotation {
   updated_at: string;
   customer_id: any;
   job_center_id: any;
+  quote_without_lifting_id: any
 }
 
 export interface QuotationtDetail {

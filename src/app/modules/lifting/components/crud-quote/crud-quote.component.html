@@ -87,6 +87,42 @@
                fxLayout.xs="column"
                fxLayoutGap="20px">
 
+            <ng-select fxFlex="100"
+                       bindLabel="name"
+                       placeholder="Tipos de Trabajo"
+                       formControlName="work_type_id"
+                       [multiple]="false"
+                       appendTo="body"
+                       [searchable]="true"
+                       [clearable]="true">
+              <ng-option *ngFor="let workType of workTypes" [value]="workType.id">
+                {{workType.name}}
+              </ng-option>
+            </ng-select>
+
+            <mat-error *ngIf="fieldInvalid('work_typer_id')">
+              Favor de Seleccionar un Tipo de Trabajo
+            </mat-error>
+
+            <mat-form-field fxFlex="100">
+              <mat-label>Lugar</mat-label>
+              <input
+                matInput
+                type="text"
+                placeholder="Lugar"
+                formControlName="place"
+              >
+              <mat-error *ngIf="fieldInvalid('place')">
+                Favor de Ingresar el lugar
+              </mat-error>
+            </mat-form-field>
+
+          </div>
+
+          <div fxLayout="row"
+               fxLayout.xs="column"
+               fxLayoutGap="20px">
+
             <mat-form-field fxFlex="100">
               <mat-label>Condiciones de Pago</mat-label>
               <textarea matInput
@@ -95,10 +131,75 @@
             </mat-form-field>
 
             <mat-form-field fxFlex="100">
+              <mat-label>Solicitante</mat-label>
+              <input
+                matInput
+                type="text"
+                placeholder="Solicitante"
+                formControlName="applicant"
+              >
+              <mat-error *ngIf="fieldInvalid('applicant')">
+                Favor de Ingresar el solicitante
+              </mat-error>
+            </mat-form-field>
+
+
+          </div>
+
+          <div fxLayout="row"
+               fxLayout.xs="column"
+               fxLayoutGap="20px">
+
+            <mat-form-field fxFlex="100">
               <mat-label>Observaciones</mat-label>
               <textarea matInput
                         formControlName="observations"
                         placeholder="Observaciones..."></textarea>
+            </mat-form-field>
+
+          </div>
+
+          <div fxLayout="row"
+               fxLayout.xs="column"
+               fxLayoutGap="20px">
+
+            <mat-form-field fxFlex="100">
+
+              <mat-toolbar>
+                <input matInput readonly name="memberContactNo" placeholder="Foto 1">
+                <button mat-flat-button color="primary">
+                  <mat-icon>image</mat-icon>
+                </button>
+
+              </mat-toolbar>
+              <input type="file" #UploadFileInput id="fileUploadPhoto" name="myFile" (change)="setFileOne($event)" accept="image/*">
+
+            </mat-form-field>
+
+            <mat-form-field fxFlex="100">
+
+              <mat-toolbar>
+                <input matInput readonly name="memberContactNo" placeholder="Foto 2">
+                <button mat-flat-button color="primary">
+                  <mat-icon>image</mat-icon>
+                </button>
+
+              </mat-toolbar>
+              <input type="file" #UploadFileInput id="fileUploadPhotoTwo" name="myFile" (change)="setFileTwo($event)" accept="image/*">
+
+            </mat-form-field>
+
+            <mat-form-field fxFlex="100">
+
+              <mat-toolbar>
+                <input matInput readonly name="memberContactNo" placeholder="Foto 3">
+                <button mat-flat-button color="primary">
+                  <mat-icon>image</mat-icon>
+                </button>
+
+              </mat-toolbar>
+              <input type="file" #UploadFileInput id="fileUploadPhotoThree" name="myFile" (change)="setFileThree($event)" accept="image/*">
+
             </mat-form-field>
 
           </div>

@@ -60,7 +60,7 @@ export class LiftingService {
     return this.http.post<any>(`${this.baseUrl}/quotes/`, quote)
   }
 
-  saveQuote(data: any) : Observable<any> {
+  saveQuote(data: FormData) : Observable<any> {
     return this.http.post<any>(`${this.baseUrl}/quotes/new`, data)
   }
 

@@ -8,10 +8,10 @@
 
     <h3><span class="color-primary"> Cliente: </span>
       <span *ngIf="quotation.row.lifting !== null">{{quotation.row.lifting.customer_name}}</span>
-      <span *ngIf="quotation.row.lifting === null">{{quotation.row.customer_id.name}}</span>
+      <span *ngIf="quotation.row.lifting === null">{{quotation.row.quote_without_lifting_id.customer_name}}</span>
       || <span class="color-primary"> Grupo Trabajo: </span>
       <span *ngIf="quotation.row.lifting !== null">{{quotation.row.lifting.job_center_name}}</span>
-      <span *ngIf="quotation.row.lifting === null">{{quotation.row.job_center_id.name}}</span>
+      <span *ngIf="quotation.row.lifting === null">{{quotation.row.quote_without_lifting_id.job_center_name}}</span>
       || <span class="color-primary"> Vendedor: </span> {{quotation.row.seller.name}} </h3>
 
     <mat-card-content>

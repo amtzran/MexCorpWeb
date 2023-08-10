@@ -74,6 +74,7 @@ export class TaskService {
 
   // get Tasks Table
   getTasksPaginate(filter : paginateGeneral, calendar: CalendarForm){
+    console.log(calendar)
     let params = new HttpParams();
     let initial_date = this.dateService.getFormatDataDate(calendar.initial_date)
     let final_date = this.dateService.getFormatDataDate(calendar.final_date)
@@ -226,6 +227,7 @@ export class TaskService {
    * @param filterTask
    */
   reportCalendarPdf(type: string , filterTask: reportTask) : Observable<any> {
+    console.log(filterTask)
     let route;
     if (type === 'Completo') route = 'task-calendar-report';
     if (type === 'Por-Finalizar') route = 'task-pending-report';
@@ -236,6 +238,7 @@ export class TaskService {
     let group = String(filterTask.job_center)
     let work_type = String(filterTask.work_type)
     let status = String(filterTask.status)
+    let door_id = String(filterTask.door_id)
     let params = new HttpParams();
     params = params.append('initial_date', initial_date);
     params = params.append('final_date', final_date);
@@ -244,6 +247,7 @@ export class TaskService {
     params = params.append('group', group);
     params = params.append('work_type', work_type);
     params = params.append('status', status);
+    params = params.append('door_id', door_id);
     return this.http.post(`${this.baseUrl}/${route}/`, '',{responseType: 'blob', params})
   }
 
