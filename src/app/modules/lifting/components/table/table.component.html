@@ -390,7 +390,8 @@
             <th mat-header-cell *matHeaderCellDef mat-sort-header=""> Cliente</th>
             <td mat-cell *matCellDef="let row">
               <span *ngIf="row.lifting !== null">{{row.lifting?.customer_name}}</span>
-              <span *ngIf="row.lifting === null">{{row.cutomer_id?.name}}</span>
+             <!-- <span *ngIf="row.lifting === null">{{row.cutomer_id?.name}}</span>-->
+              <span *ngIf="row.quote_without_lifting_id !== null">{{row.quote_without_lifting_id?.customer_name}}</span>
             </td>
           </ng-container>
 
@@ -399,7 +400,7 @@
             <th mat-header-cell *matHeaderCellDef mat-sort-header=""> Empleado</th>
             <td mat-cell *matCellDef="let row">
               <span *ngIf="row.lifting !== null">{{row.lifting?.employee_name}}</span>
-              <span *ngIf="row.lifting === null">{{row.employee_id?.name}}</span>
+             <!-- <span *ngIf="row.lifting === null">{{row.employee_id?.name}}</span>-->
               <span *ngIf="row.quote_without_lifting_id !== null">{{row.quote_without_lifting_id?.employee_name}}</span>
             </td>
           </ng-container>
@@ -409,7 +410,7 @@
             <th mat-header-cell *matHeaderCellDef mat-sort-header=""> Centro de Trabajo</th>
             <td mat-cell *matCellDef="let row">
               <span *ngIf="row.lifting !== null">{{row.lifting.job_center_name}}</span>
-              <span *ngIf="row.lifting === null">{{row.job_center_id?.name}}</span>
+              <!--<span *ngIf="row.lifting === null">{{row.job_center_id?.name}}</span>-->
               <span *ngIf="row.quote_without_lifting_id !== null">{{row.quote_without_lifting_id?.job_center_name}}</span>
             </td>
           </ng-container>
@@ -419,6 +420,8 @@
             <th mat-header-cell *matHeaderCellDef mat-sort-header=""> Tipo de Trabajo</th>
             <td mat-cell *matCellDef="let row">
               <span *ngIf="row.lifting !== null">{{row.lifting.work_type_name}}</span>
+              <!--<span *ngIf="row.lifting === null">{{row.work_type_id?.name}}</span>-->
+              <span *ngIf="row.quote_without_lifting_id !== null">{{row.quote_without_lifting_id?.work_type_name}}</span>
             </td>
           </ng-container>
 

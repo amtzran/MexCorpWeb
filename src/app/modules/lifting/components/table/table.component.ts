@@ -111,7 +111,6 @@ export class TableComponent implements OnInit {
     this.spinner.show()
     this.liftingService.getQuotations(this.quotationPaginateForm.value)
       .subscribe(quotations => {
-        console.log(quotations.data)
           this.spinner.hide()
           this.dataSourceQuote.data = quotations.data
           this.totalItemsQuote = quotations.meta.total;

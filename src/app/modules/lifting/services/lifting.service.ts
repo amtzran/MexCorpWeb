@@ -134,11 +134,13 @@ export class LiftingService {
   }
 
   updateStatus(idQuote : number, form: FormGroup) : Observable<QuotationConceptDetail> {
+    console.log(form)
     return this.http.put<QuotationConceptDetail>(`${this.baseUrl}/quotes-status/${idQuote}/`, form)
   }
 
   // send email door By Task
   sendEmail(email: EmailSend) : Observable<any> {
+    console.log(email)
     return this.http.post<any>(`${this.baseUrl}/quotes-pdf-send-email/`, email)
   }
 

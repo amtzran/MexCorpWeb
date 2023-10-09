@@ -27,6 +27,7 @@ export class ConfirmStatusComponent implements OnInit {
               @Inject(MAT_DIALOG_DATA) public quotation : {row: Quotation, type: string}) { }
 
   ngOnInit(): void {
+    console.log(this.quotation.row)
     if (this.quotation.type === 'Pending') this.loadStatusForm();
     if (this.quotation.type === 'Approve') this.loadStatusForm2();
   }

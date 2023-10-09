@@ -30,6 +30,7 @@ export class SendEmailComponent implements OnInit {
   dataSourceTable: EmailSend[] = [];
   dataSource!: MatTableDataSource<EmailSend>;
   totalItems!: number;
+  customerId: number = 0;
 
   constructor(private dialogRef: MatDialogRef<SendEmailComponent>,
               private formBuilder: FormBuilder,
@@ -41,6 +42,8 @@ export class SendEmailComponent implements OnInit {
               @Inject(MAT_DIALOG_DATA) public quotation : {row: Quotation}) { }
 
   ngOnInit(): void {
+    if (this.quotation.row.lifting === null) this.customerId = this.quotation.row.quote_without_lifting_id.customer_id
+    else this.customerId = this.quotation.row.lifting.customer_id;
     this.loadEmailForm();
     this.loadCustomer();
     this.dataSource = new MatTableDataSource();
@@ -121,7 +124,7 @@ export class SendEmailComponent implements OnInit {
    */
   loadCustomer():void{
     this.spinner.show()
-    this.customerService.getCustomerById(this.quotation.row.lifting.customer_id).subscribe(res => {
+    this.customerService.getCustomerById(this.customerId).subscribe(res => {
         this.spinner.hide()
         this.emailForm.patchValue({email: res.data.email,})
       }, (error => {
