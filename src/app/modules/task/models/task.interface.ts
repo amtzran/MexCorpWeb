@@ -29,7 +29,8 @@ export interface Task {
   start_task_hour?: string | null;
   end_task_hour?: string | null;
   status?: string;
-  invoiced: number
+  invoiced: number;
+  blocked: number
   created_at?: string;
   updated_at?: string;
   comments: null | string;
@@ -43,7 +44,8 @@ export interface Task {
 export interface EmailSend {
   task_id: number,
   door_id: number,
-  email: string
+  email: string,
+  message: string,
 }
 
 export interface DoorByTask {

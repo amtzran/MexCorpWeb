@@ -315,4 +315,8 @@ export class TaskService {
     return this.http.get<any>(`${this.baseUrl}/tasks/${id}/pdf`, {});
   }
 
+  getReportCompleteTask(id : number) : Observable<any> {
+    return this.http.get<any>(`${this.baseUrl}/tasks/${id}/pdf-general`, {});
+  }
+
 }

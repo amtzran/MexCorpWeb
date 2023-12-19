@@ -67,6 +67,7 @@ export class SendEmailComponent implements OnInit {
       task_id:[{value: this.data.taskId , disabled:false},],
       door_id:[{value: this.data.doorTask.id , disabled:false},],
       email:[{value: '' , disabled:false}, [Validators.required, Validators.email]],
+      message:[{value: '' , disabled:false}, []],
     });
   }
 
@@ -100,7 +101,8 @@ export class SendEmailComponent implements OnInit {
        let objectEmail : EmailSend = {
          task_id: element.task_id,
          door_id: element.door_id,
-         email: element.email
+         email: element.email,
+         message: element.message,
        }
        this.taskService.sendEmail(objectEmail).subscribe(response => {
            this.spinner.hide()

@@ -141,7 +141,7 @@ export class CrudComponent implements OnInit {
     this.taskService.getTaskById(this.taskId).subscribe((response) => {
       this.dataTask = response.data
       this.title = `Información de la Tarea | ${response.data.status} | ${response.data.folio}
-      | ${response.data.invoiced === 1 ? 'Facturado' : 'Sin Facturar'}`;
+      | ${response.data.invoiced === 1 ? 'Facturado' : 'Sin Facturar'} | ${response.data.blocked === 1 ? 'Bloqueada' : ''}`;
       // Data Doors by Customer
       this.loadAccess(response.data.customer_id)
       this.taskForm.patchValue({
@@ -571,6 +571,29 @@ export class CrudComponent implements OnInit {
       data: {doorTask: doorTask, taskId: taskId}
     })
 
+  }
+
+  /**
+   * Send with email pdf report complete
+   */
+  sendPdfComplete(){
+    // Show Dialog
+    const dialog = this.dialog.open(SendEmailComponent, {
+      width: '40vw',
+      data: {doorTask: null, taskId: this.taskId}
+    })
+  }
+
+  /**
+   * Download pdf report complete
+   */
+  viewPdfComplete(){
+    this.taskService.getReportCompleteTask(this.taskId).subscribe((response) => {
+      window.open(response.general_pdf)
+    }, (error => {
+      this.spinner.hide()
+      this.sharedService.errorDialog(error)
+    }))
   }
 
   /**

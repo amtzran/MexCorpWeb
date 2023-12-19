@@ -81,6 +81,7 @@
           <mat-option value="En Proceso">En Proceso</mat-option>
           <mat-option value="Facturado">Facturado</mat-option>
           <mat-option value="No Facturado">No Facturado</mat-option>
+          <mat-option value="Bloqueadas">Bloqueadas</mat-option>
         </mat-select>
       </mat-form-field>
 
@@ -255,6 +256,9 @@
         <span [ngStyle]="{ color: 'green' }" *ngIf="row.status === 'Finalizado' ">
           {{row.status}}
         </span>
+        <p [ngStyle]="{ color: 'red' }" *ngIf="row.blocked === 1 ">
+          Bloqueada
+        </p>
       </td>
     </ng-container>
 
