@@ -602,7 +602,9 @@ export class TableComponent implements OnInit, AfterViewInit {
    * Array from service for Tasks
    */
   loadDataTasks(){
-    this.taskService.getTaskAll().subscribe(tasks => {this.tasksSelect = tasks.data} )
+    this.taskService.getTaskAll().subscribe(tasks => {
+      console.log(tasks.data)
+      this.tasksSelect = tasks.data} )
   }
 
   /**

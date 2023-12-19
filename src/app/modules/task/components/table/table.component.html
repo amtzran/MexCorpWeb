@@ -204,7 +204,7 @@
                [clearable]="true"
                (change)="filterSelectFolio($event)">
       <ng-option *ngFor="let task of tasksSelect" [value]="task.id">
-        {{task.folio}}
+        {{task.folio}} - {{task.customer_name}}
       </ng-option>
     </ng-select>
   </div>

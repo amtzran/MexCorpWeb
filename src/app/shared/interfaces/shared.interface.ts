@@ -35,7 +35,7 @@ export interface DataPermission {
 export interface paginateGeneral {
   page: string,
   page_size: string,
-  id?: 1,
+  id?: number | string,
   door_id?: number,
   employee?: number,
   group?: number,

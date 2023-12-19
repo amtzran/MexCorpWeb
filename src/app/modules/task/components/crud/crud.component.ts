@@ -140,6 +140,7 @@ export class CrudComponent implements OnInit {
     this.spinner.show()
     this.taskService.getTaskById(this.taskId).subscribe((response) => {
       this.dataTask = response.data
+      console.log(response.data)
       this.title = `Información de la Tarea | ${response.data.status} | ${response.data.folio}
       | ${response.data.invoiced === 1 ? 'Facturado' : 'Sin Facturar'} | ${response.data.blocked === 1 ? 'Bloqueada' : ''}`;
       // Data Doors by Customer
@@ -265,7 +266,7 @@ export class CrudComponent implements OnInit {
       final_date: [{value: this.task.calendar.final_date, disabled:this.task.info}, Validators.required],
       initial_hour: [{value: this.task.calendar.initial_hour, disabled:this.task.info}, Validators.required],
       final_hour: [{value: this.task.calendar.final_hour, disabled:this.task.info}, Validators.required],
-      comments: [{value: '', disabled:this.task.info},],
+      comments: [{value: '', disabled:false},],
       purchase_order: [{value: '', disabled:this.task.info},],
       warranty_time: [{value: '', disabled:this.task.info},],
     });
@@ -294,7 +295,6 @@ export class CrudComponent implements OnInit {
       )
     }
     else {
-      console.log(this.taskForm.value)
       this.taskService.addTask(this.taskForm.value).subscribe(response => {
           this.taskId = response.data.id!;
           this.task.edit = true;
@@ -337,7 +337,6 @@ export class CrudComponent implements OnInit {
    */
   updateTaskCustom(): void {
     this.setValueSubmit()
-    this.spinner.show()
 
     this.dataTask.title = this.taskForm.value.title
     this.dataTask.purchase_order = this.taskForm.value.purchase_order
@@ -346,8 +345,10 @@ export class CrudComponent implements OnInit {
     this.dataTask.work_type_id = this.taskForm.value.work_type_id
     this.dataTask.employee_id = this.taskForm.value.employee_id
     this.dataTask.comments = this.taskForm.value.comments
-    this.dataTask.doors = this.dataTask.doors.map( (door: any) => door.id)
+    this.dataTask.doors = this.dataTask.doors.map( (door: any) => door.id);
+    if (this.taskForm.value.doors !== undefined) this.dataTask.doors = this.taskForm.value.doors.map( (door: any) => door.id)
 
+    this.spinner.show()
     this.taskService.updateTask(this.task.idTask, this.dataTask).subscribe(response => {
         this.spinner.hide()
         this.sharedService.showSnackBar(`Se ha actualizado correctamente la Tarea: ${response.data.title}` );
@@ -542,14 +543,6 @@ export class CrudComponent implements OnInit {
       this.dataSource.paginator.firstPage();
     }
   }
-
- /* /!* Método que permite iniciar los filtros de rutas*!/
-  loadDoorFilterForm(): void {
-    this.doorPaginateForm = this.fb.group({
-      page: [],
-      page_size: this.pageSize
-    })
-  }*/
 
   /**
    * Event click show url (Pdf)
