@@ -35,7 +35,7 @@ export class SendEmailComponent implements OnInit {
               private spinner: NgxSpinnerService,
               private taskService: TaskService,
               private customerService: CustomerServiceService,
-              @Inject(MAT_DIALOG_DATA) public data : { doorTask: DoorByTask, taskId: number }) { }
+              @Inject(MAT_DIALOG_DATA) public data : { doorTask: DoorByTask, taskId: number, customerId: number }) { }
 
   ngOnInit(): void {
     this.loadCustomer()
@@ -49,7 +49,7 @@ export class SendEmailComponent implements OnInit {
    */
   loadCustomer():void{
     this.spinner.show()
-    this.customerService.getCustomerById(this.data.doorTask.customer_id).subscribe(res => {
+    this.customerService.getCustomerById(this.data.customerId).subscribe(res => {
       this.spinner.hide()
       this.emailForm.patchValue({email: res.data.email,})
       }, (error => {
@@ -63,12 +63,20 @@ export class SendEmailComponent implements OnInit {
    * Load the form Task.
    */
   loadEmailForm():void{
-    this.emailForm = this.formBuilder.group({
-      task_id:[{value: this.data.taskId , disabled:false},],
-      door_id:[{value: this.data.doorTask.id , disabled:false},],
-      email:[{value: '' , disabled:false}, [Validators.required, Validators.email]],
-      message:[{value: '' , disabled:false}, []],
-    });
+    if (this.data.doorTask) {
+      this.emailForm = this.formBuilder.group({
+        task_id:[{value: this.data.taskId , disabled:false},],
+        door_id:[{value: this.data.doorTask.id , disabled:false},],
+        email:[{value: '' , disabled:false}, [Validators.required, Validators.email]],
+        message:[{value: '' , disabled:false}, []],
+      });
+    } else {
+      this.emailForm = this.formBuilder.group({
+        task_id:[{value: this.data.taskId , disabled:false},],
+        email:[{value: '' , disabled:false}, [Validators.required, Validators.email]],
+        message:[{value: '' , disabled:false}, []],
+      });
+    }
   }
 
   add(){

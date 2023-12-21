@@ -301,7 +301,8 @@ export class TaskService {
 
   // send email door By Task
   sendEmail(email: EmailSend) : Observable<any> {
-    return this.http.post<any>(`${this.baseUrl}/tasks-form-report-send-email/`, email)
+    if (email.door_id) return this.http.post<any>(`${this.baseUrl}/tasks-form-report-send-email/`, email)
+    else return this.http.post<any>(`${this.baseUrl}/tasks-form-all-report-send-email/`, email)
   }
 
   // Update Invoice

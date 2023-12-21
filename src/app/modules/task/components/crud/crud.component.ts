@@ -561,7 +561,7 @@ export class CrudComponent implements OnInit {
     // Show Dialog
     const dialog = this.dialog.open(SendEmailComponent, {
       width: '40vw',
-      data: {doorTask: doorTask, taskId: taskId}
+      data: {doorTask: doorTask, taskId: taskId, customerId: doorTask.customer_id}
     })
 
   }
@@ -573,7 +573,7 @@ export class CrudComponent implements OnInit {
     // Show Dialog
     const dialog = this.dialog.open(SendEmailComponent, {
       width: '40vw',
-      data: {doorTask: null, taskId: this.taskId}
+      data: {doorTask: null, taskId: this.taskId, customerId: this.dataTask.customer_id}
     })
   }
 
@@ -581,7 +581,9 @@ export class CrudComponent implements OnInit {
    * Download pdf report complete
    */
   viewPdfComplete(){
+    this.spinner.show()
     this.taskService.getReportCompleteTask(this.taskId).subscribe((response) => {
+      this.spinner.hide()
       window.open(response.general_pdf)
     }, (error => {
       this.spinner.hide()
