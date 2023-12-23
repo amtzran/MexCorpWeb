@@ -140,7 +140,6 @@ export class CrudComponent implements OnInit {
     this.spinner.show()
     this.taskService.getTaskById(this.taskId).subscribe((response) => {
       this.dataTask = response.data
-      console.log(response.data)
       this.title = `Información de la Tarea | ${response.data.status} | ${response.data.folio}
       | ${response.data.invoiced === 1 ? 'Facturado' : 'Sin Facturar'} | ${response.data.blocked === 1 ? 'Bloqueada' : ''}`;
       // Data Doors by Customer
@@ -378,12 +377,11 @@ export class CrudComponent implements OnInit {
           this.taskService.deleteTask(this.task.idTask).subscribe(response => {
             this.spinner.hide()
             this.sharedService.showSnackBar(`Se ha eliminado correctamente la Tarea`);
-            this.sharedService.updateComponent()
+            this.close()
             }, (error => {
               this.spinner.hide()
               this.sharedService.errorDialog(error)
-            })
-          )
+            }))
         }
     })
   }

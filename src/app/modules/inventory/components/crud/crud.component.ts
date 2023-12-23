@@ -292,7 +292,7 @@ export class CrudComponent implements OnInit {
    * Array from service for Suppliers
    */
   loadDataSuppliers(){
-    this.inventoryService.getSuppliers().subscribe(suppliers => {this.suppliers = suppliers.data} )
+    this.inventoryService.getSuppliersNotPaginate().subscribe(suppliers => {this.suppliers = suppliers.data} )
   }
 
   /**

@@ -106,6 +106,10 @@ export class InventoryService {
     return this.http.get<ModelSupplier>(`${this.baseUrl}/suppliers/`)
   }
 
+  getSuppliersNotPaginate() : Observable<ModelSupplier> {
+    return this.http.get<ModelSupplier>(`${this.baseUrl}/suppliers/?not_paginate=true`)
+  }
+
   // Get Stocks
   getStocks(filter: StockPaginate): Observable<ModelWarehouseInventory> {
     let initial_date = '';
