@@ -124,11 +124,18 @@
     </ng-container>
 
     <!-- Group Column -->
-    <ng-container matColumnDef="transfer">
-      <th mat-header-cell *matHeaderCellDef mat-sort-header=""> Origen / Destino</th>
+    <ng-container matColumnDef="origin_name">
+      <th mat-header-cell *matHeaderCellDef mat-sort-header=""> Origen</th>
       <td mat-cell *matCellDef="let row">
-        Origen : {{row.origin_name}} <br>
-        Destino: {{row.destiny_name}}
+        {{row.origin_name}}
+      </td>
+    </ng-container>
+
+    <!-- Group Column -->
+    <ng-container matColumnDef="destiny_name">
+      <th mat-header-cell *matHeaderCellDef mat-sort-header=""> Destino</th>
+      <td mat-cell *matCellDef="let row">
+        {{row.destiny_name}}
       </td>
     </ng-container>
 
@@ -139,8 +146,20 @@
     </ng-container>
 
     <!-- Group Column -->
+    <ng-container matColumnDef="input">
+      <th mat-header-cell *matHeaderCellDef mat-sort-header=""> Entrada</th>
+      <td mat-cell *matCellDef="let row"> {{row.input}} </td>
+    </ng-container>
+
+    <!-- Group Column -->
+    <ng-container matColumnDef="output">
+      <th mat-header-cell *matHeaderCellDef mat-sort-header=""> Salida</th>
+      <td mat-cell *matCellDef="let row"> {{row.output}} </td>
+    </ng-container>
+
+    <!-- Group Column -->
     <ng-container matColumnDef="quantity">
-      <th mat-header-cell *matHeaderCellDef mat-sort-header=""> Cantidad</th>
+      <th mat-header-cell *matHeaderCellDef mat-sort-header=""> Total</th>
       <td mat-cell *matCellDef="let row"> {{row.quantity}} </td>
     </ng-container>
 

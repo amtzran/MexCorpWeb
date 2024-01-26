@@ -10,6 +10,7 @@ import {MatTableDataSource} from "@angular/material/table";
 import {MatPaginator} from "@angular/material/paginator";
 import {ProductService} from "../../../catalog/tools-services/services/product.service";
 import {Product} from "../../../catalog/tools-services/interfaces/product.interface";
+import { NgSelectComponent } from '@ng-select/ng-select';
 
 @Component({
   selector: 'app-concept',
@@ -35,6 +36,7 @@ export class ConceptComponent implements OnInit {
   displayedColumns: string[] = ['quantity', 'unit', 'key', 'brand', 'description','unit_price', 'amount', 'options'];
   dataSource!: MatTableDataSource<QuotationConcept>;
   @ViewChild('paginator', {static: true}) paginator!: MatPaginator;
+  @ViewChild(NgSelectComponent) ngSelectComponent!: NgSelectComponent;
   totalItems!: number;
   pageSize = this.sharedService.pageSize;
 
@@ -119,6 +121,7 @@ export class ConceptComponent implements OnInit {
       this.sharedService.showSnackBar('Se ha agregado correctamente el concepto.');
       this.getConceptsPaginator(this.paginator);
       this.conceptForm.reset();
+      this.ngSelectComponent.handleClearClick();
       this.conceptForm.get('quote_id')?.setValue(this.quotation.row.id);
       this.conceptForm.get('tax')?.setValue(16);
       this.dataQuoteGeneral()

@@ -20,7 +20,7 @@ import {DateService} from "../../../../../core/utils/date.service";
 })
 export class MovementComponent implements OnInit {
 
-  displayedColumns: string[] = ['id', 'movement', 'transfer', 'product', 'quantity', 'date', 'employee'];
+  displayedColumns: string[] = ['id', 'movement', 'origin_name', 'destiny_name', 'product', 'input', 'output', 'quantity', 'date', 'employee'];
   dataSource!: MatTableDataSource<Movement>;
   totalItems!: number;
   pageSize = this.sharedService.pageSize;
