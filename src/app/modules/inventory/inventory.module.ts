@@ -13,6 +13,8 @@ import {TableComponent} from "./components/table/table.component";
 import { EntryComponent } from './components/tabs/entry/entry.component';
 import { StockComponent } from './components/tabs/stock/stock.component';
 import { MovementComponent } from './components/tabs/movement/movement.component';
+import { OutputComponent } from './components/tabs/output/output.component';
+import { CrudOutputComponent } from './components/crud-output/crud-output.component';
 
 
 @NgModule({
@@ -22,7 +24,9 @@ import { MovementComponent } from './components/tabs/movement/movement.component
     CrudComponent,
     EntryComponent,
     StockComponent,
-    MovementComponent
+    MovementComponent,
+    OutputComponent,
+    CrudOutputComponent
   ],
   imports: [
     CommonModule,

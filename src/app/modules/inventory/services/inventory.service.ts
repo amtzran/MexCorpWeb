@@ -6,7 +6,7 @@ import {
   ConceptPaginate,
   EntryDetail,
   EntryPaginate, ModelConcept,
-  ModelEntry, ModelMovement, ModelWarehouse, ModelWarehouseInventory, StockPaginate
+  ModelEntry, ModelMovement, ModelOutput, ModelOutputConcept, ModelWarehouse, ModelWarehouseInventory, OutputConceptDetail, OutputConceptPaginate, OutputDetail, StockPaginate
 } from "../interfaces/inventory.interface";
 import {environment} from "../../../../environments/environment";
 import {ModelEmployee, ModelJobCenter} from "../../employee/interfaces/employee.interface";
@@ -224,6 +224,89 @@ export class InventoryService {
   // Report Tools Employee
   exportPdfEntry(id: number) : Observable<any> {
     return this.http.get(`${this.baseUrl}/inventory/entries-pdf/${id}`, {});
+  }
+
+  // Get Outputs
+  getOutputs(filter: EntryPaginate): Observable<ModelOutput> {
+    let initial_date = '';
+    let final_date = '';
+    if (filter.final_date !== '') {
+      initial_date = this.dateService.getFormatDataDate(filter.initial_date);
+      final_date = this.dateService.getFormatDataDate(filter.final_date);
+    }
+    let params = new HttpParams();
+    filter.page ? params = params.append('page', filter.page) : null;
+    filter.page_size ? params = params.append('page_size', filter.page_size) : null;
+    filter.employee ? params = params.append('employee', filter.employee) : null;
+    filter.group ? params = params.append('group', filter.group) : null;
+    initial_date ? params = params.append('initial_date', initial_date) : null;
+    final_date ? params = params.append('final_date', final_date) : null;
+    return this.http.get<ModelOutput>(`${this.baseUrl}/inventory/outputs/`, {params})
+  }
+
+  reportOutputsAll(filter: StockPaginate) : Observable<any> {
+    let initial_date = '', final_date = '';
+    if (filter.initial_date !== '' || filter.final_date !== ''){
+      initial_date = this.dateService.getFormatDataDate(filter.initial_date)
+      final_date = this.dateService.getFormatDataDate(filter.final_date)
+    }
+    let employee = String(filter.employee);
+    let group = String(filter.group);
+    let params = new HttpParams();
+    params = params.append('employee', employee);
+    params = params.append('group', group);
+    initial_date ? params = params.append('initial_date', initial_date) : null;
+    final_date ? params = params.append('final_date', final_date) : null;
+    return this.http.post(`${this.baseUrl}/inventory/outputs-export/`, '',{responseType: 'blob', params})
+  }
+
+  // Get Output
+  getOutputById(id: number) : Observable<OutputDetail> {
+    return this.http.get<OutputDetail>(`${this.baseUrl}/inventory/outputs/${id}`)
+  }
+
+  // Add Output
+  addOutput(output: OutputDetail): Observable<OutputDetail> {
+    return this.http.post<OutputDetail>(`${this.baseUrl}/inventory/outputs/`, output)
+  }
+
+  // Update Output
+  updateOutput(idOutput: number, output: OutputDetail) : Observable<OutputDetail> {
+    return this.http.put<OutputDetail>(`${this.baseUrl}/inventory/outputs/${idOutput}/`, output)
+  }
+
+  // Delete Output
+  deleteOutput(id: number) : Observable<OutputDetail>{
+    return this.http.delete<OutputDetail>(`${this.baseUrl}/inventory/outputs/${id}`)
+  }
+
+  // Get Output Concepts
+  getOutputConcepts(filter: OutputConceptPaginate): Observable<ModelOutputConcept> {
+    let params = new HttpParams();
+    filter.page ? params = params.append('page', filter.page) : null;
+    filter.page_size ? params = params.append('page_size', filter.page_size) : null;
+    filter.output_id ? params = params.append('output_id', filter.output_id) : null;
+    return this.http.get<ModelOutputConcept>(`${this.baseUrl}/inventory/output-concepts/`, {params})
+  }
+
+  // Add Output Concept
+  addOutputConcept(concept: OutputConceptDetail): Observable<OutputConceptDetail> {
+    return this.http.post<OutputConceptDetail>(`${this.baseUrl}/inventory/output-concepts/`, concept);
+  }
+
+  // Get Output Concept
+  getOutputConceptById(id: number) : Observable<OutputConceptDetail> {
+    return this.http.get<OutputConceptDetail>(`${this.baseUrl}/inventory/output-concepts/${id}`)
+  }
+
+  // Update Output Concept
+  updateOutputConcept(idConcept: number, concept: OutputConceptDetail) : Observable<OutputConceptDetail> {
+    return this.http.put<OutputConceptDetail>(`${this.baseUrl}/inventory/output-concepts/${idConcept}/`, concept)
+  }
+
+  // Delete Output Concept
+  deleteOutputConcept(id: number | undefined) : Observable<OutputConceptDetail> {
+    return this.http.delete<OutputConceptDetail>(`${this.baseUrl}/inventory/output-concepts/${id}`)
   }
 
 }

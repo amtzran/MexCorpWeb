@@ -20,8 +20,20 @@ export interface ConceptPaginate {
   entrie_id: string
 }
 
+export interface OutputConceptPaginate {
+  page: string,
+  page_size: string,
+  output_id: string
+}
+
 export interface ModelEntry {
   data:  Entry[];
+  links: Links;
+  meta:  Meta;
+}
+
+export interface ModelOutput {
+  data:  Output[];
   links: Links;
   meta:  Meta;
 }
@@ -32,12 +44,30 @@ export interface ModelConcept {
   meta:  Meta;
 }
 
+export interface ModelOutputConcept {
+  data:  OutputConcept[];
+  links: Links;
+  meta:  Meta;
+}
+
 export interface Entry {
   id:         number;
   supplier:   Supplier;
   job_center: JobCenter;
   employee:   Employee;
   concepts:   Concept[];
+  total:      number;
+  comments: string;
+  created_at: Date;
+  updated_at: Date;
+}
+
+export interface Output {
+  id:         number;
+  destination: string;
+  job_center: JobCenter;
+  employee:   Employee;
+  concepts:   OutputConcept[];
   total:      number;
   comments: string;
   created_at: Date;
@@ -56,12 +86,32 @@ export interface Concept {
   updated_at: Date;
 }
 
+export interface OutputConcept {
+  id:         number;
+  output_id:  number;
+  product_id: number;
+  product_name: string;
+  quantity:   number;
+  unit_price: number;
+  amount:     number;
+  created_at: Date;
+  updated_at: Date;
+}
+
 export interface EntryDetail {
   data: Entry
 }
 
+export interface OutputDetail {
+  data: Output
+}
+
 export interface ConceptDetail {
   data: Concept
+}
+
+export interface OutputConceptDetail {
+  data: OutputConcept
 }
 
 export interface StockPaginate {
